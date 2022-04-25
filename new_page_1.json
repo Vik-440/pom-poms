@@ -1,0 +1,146 @@
+[               
+{"ur_phone": 4567},
+                    {"phone_client" : [381234567]},
+
+{"ur_second_name":"дер"},
+                    {"second_name_client" : ["Дереза"]},
+
+{"ur_team":"тор"},
+                    {"name_team" : ["Торнадо", "Торонто"]},
+
+{"ur_sity":"тер"},
+                    {"sity" : ["Теребовля", "Тернопіль"]},
+
+{"ur_kolor":"ора"},
+                    {"name_color" : ["Оранжевий"]},
+
+{"ur_kod":"190-B2"},
+                    {"kod_model" : ["190-B20", "190-B21", "190-B22", "190-B23", "190-B24", "190-B25",
+                        "190-B2173", "190-B2345-70/30"]},
+
+
+{"sl_pnone":381234567},
+                    {
+                    "id_client" : 123, 
+                    "phone_client" : 381234567,
+                    "second_name_client" : "Дереза", 
+                    "first_name_client" : "Коза", 
+                    "surname__client" : "Василівна", 
+                    "sity" : "Теребовля",
+                    "NP_number" : 159, 
+                    "name_team" : "Торнадо", 
+                    "coach" : false, 
+                    "zip_code" : null,
+                    "street_house_apartment" : null, 
+                    "comment_client" :null
+                    },
+                    
+{"sl_second_name":"Дереза"},
+                    {
+                    "id_client" : 123, 
+                    "phone_client" : 381234567,
+                    "second_name_client" : "Дереза", 
+                    "first_name_client" : "Коза", 
+                    "surname__client" : "Василівна", 
+                    "sity" : "Теребовля",
+                    "NP_number" : 159, 
+                    "name_team" : "Торнадо", 
+                    "coach" : false, 
+                    "zip_code" : null,
+                    "street_house_apartment" : null, 
+                    "comment_client" :null
+                    },
+                    {
+                    "id_client" : 36, 
+                    "phone_client" : 381654567,
+                    "second_name_client" : "Береза", 
+                    "first_name_client" : "Тереза", 
+                    "surname__client" : "Петрівна", 
+                    "sity" : "Буча",
+                    "NP_number" : 15, 
+                    "name_team" : "ТаносНеНадо", 
+                    "coach" : null, 
+                    "zip_code" : null,
+                    "street_house_apartment" : null, 
+                    "comment_client" :null
+                    },
+
+{"sl_kod":"190-B23"},
+                    {
+                    "id_model" : 122,
+                    "kod_model":"190-B23",
+                    "id_color_1":"Оранжевий",
+                    "id_color_part_1":100,
+                    "id_color_2":"Оранжевий",
+                    "id_color_part_2":0,
+                    "id_color_3":"Оранжевий",
+                    "id_color_part_3":0,
+                    "id_color_4":"Оранжевий",
+                    "id_color_part_4":0,
+                    "price_model":390,
+                    "comment_model":null
+                    },
+                    {},
+
+{"sl_id_model":
+    {"kod_model":"190-B23",
+    "id_color_1":"Оранжевий",
+    "id_color_part_1":100,
+    "id_color_2":"Оранжевий",
+    "id_color_part_2":0,
+    "id_color_3":"Оранжевий",
+    "id_color_part_3":0,
+    "id_color_4":"Оранжевий",
+    "id_color_part_4":0,
+    "price_model":390,
+    "comment_model":null}
+},
+                    {"id_model" : 122},
+
+
+{"sl_id_client":
+    {"phone_client":381234567,
+    "second_name_client":"Дереза",
+    "first_name_client":"Коза",
+    "surname__client":null,
+    "id_sity" : "Теребовля",
+    "NP_number" : 159,
+    "id_team" : "Торнадо",
+    "coach" : false,
+    "zip_code" : null,
+    "street_house_apartment" : null,
+    "comment_client" : null}
+},
+                    {"id_client" : 43},
+
+
+{"sl_id_recipient":
+    {"phone_client":381234567,
+    "second_name_client":"Дереза",
+    "first_name_client":"Коза",
+    "surname__client":null,
+    "id_sity" : "Теребовля",
+    "NP_number" : 159,
+    "id_team" : "Торнадо",
+    "coach" : false,
+    "zip_code" : null,
+    "street_house_apartment" : null,
+    "comment_client" : null}
+},
+                    {"recipient" : 43},
+
+
+{
+    "id_new_order" : 542,
+    "data_order" : "2022-04-04",
+    "id_client" : 16,
+    "id_recipient" : 16,
+    "id_model_order" : [122, 21, 17, 114, 7],
+    "quantity_pars_order" : [2, 4, 2, 5, 15],
+    "data_plane_order" : "2022-05-01",
+    "data_send_order" : "2022-05-04",
+    "discont_order" : 50,
+    "sum_payment" : 5930
+},
+                    {"Order" : "OK"}
+]

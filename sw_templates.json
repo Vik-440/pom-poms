@@ -1,0 +1,125 @@
+[
+    {
+        "id_order": 537,
+        "data_order": "2022-02-17",
+        "kolor_model": "Бірюзовий",
+        "kod_model": "190-B21",
+        "comment_model": null,
+        "kolor_cell_model_mat": "треба дописати код - модель помпонів",
+        "quantity_pars_model": 2,
+        "kolor_cell_pars": "треба дописати код - наявність матеріалів",
+        "phase_1_model": true,
+        "phase_2_model": false,
+        "phase_3_model": false,
+        "sum_payment": 680,
+        "real_money": 300,
+        "sity": "Кам’янське",
+        "data_plane_order": "2022-04-15",
+        "fulfilled_order": false,
+        "comment_order": null
+    },
+    {
+        "id_order": 538,
+        "data_order": "2022-02-18",
+        "kolor_model": "Червоний",
+        "kod_model": "170-70",
+        "comment_model": null,
+        "kolor_cell_model_mat": "треба дописати код - модель помпонів",
+        "quantity_pars_model": 3,
+        "kolor_cell_pars": "треба дописати код - наявність матеріалів",
+        "phase_1_model": false,
+        "phase_2_model": false,
+        "phase_3_model": false,
+        "sum_payment": 840,
+        "real_money": 0,
+        "sity": "Львів",
+        "data_plane_order": "2022-03-23",
+        "fulfilled_order": false,
+        "comment_order": null
+    },
+    {
+        "id_order": 539,
+        "data_order": "2022-02-19",
+        "kolor_model": [
+            "Синій",
+            "Бірюзовий",
+            "Білий + Синій"
+        ],
+        "kod_model": [
+            "190-B09",
+            "190-73",
+            "230-7780"
+        ],
+        "comment_model": [
+            null,
+            null,
+            null
+        ],
+        "kolor_cell_model_mat": "треба дописати код - модель помпонів",
+        "quantity_pars_model": [
+            5,
+            7,
+            9
+        ],
+        "kolor_cell_pars": "треба дописати код - наявність матеріалів",
+        "phase_1_model": [
+            true,
+            true,
+            true
+        ],
+        "phase_2_model": [
+            false,
+            false,
+            true
+        ],
+        "phase_3_model": [
+            false,
+            false,
+            true
+        ],
+        "sum_payment": 6930,
+        "real_money": 2000,
+        "sity": "Київ",
+        "data_plane_order": "2022-03-23",
+        "fulfilled_order": false,
+        "comment_order": null
+    },
+    {
+        "id_order": 540,
+        "data_order": "2022-02-22",
+        "kolor_model": "Срібний_гол + Рожевий",
+        "kod_model": "272-4578-70/30",
+        "comment_model": null,
+        "kolor_cell_model_mat": "треба дописати код - модель помпонів",
+        "quantity_pars_model": 11,
+        "kolor_cell_pars": "треба дописати код - наявність матеріалів",
+        "phase_1_model": true,
+        "phase_2_model": true,
+        "phase_3_model": false,
+        "sum_payment": 3080,
+        "real_money": 3080,
+        "sity": "Київ",
+        "data_plane_order": "2022-03-24",
+        "fulfilled_order": false,
+        "comment_order": null
+    },
+    {
+        "id_order": 541,
+        "data_order": "2022-02-23",
+        "kolor_model": "Малиновий",
+        "kod_model": "190-B05",
+        "comment_model": null,
+        "kolor_cell_model_mat": "треба дописати код - модель помпонів",
+        "quantity_pars_model": 5,
+        "kolor_cell_pars": "треба дописати код - наявність матеріалів",
+        "phase_1_model": true,
+        "phase_2_model": false,
+        "phase_3_model": false,
+        "sum_payment": 1950,
+        "real_money": 1950,
+        "sity": "Ровно",
+        "data_plane_order": "2022-03-25",
+        "fulfilled_order": false,
+        "comment_order": null
+    }
+]
