@@ -114,7 +114,7 @@ class directory_of_outlay_class(Base):
     outlay_class = Column('outlay_class', String)
 
 
-engine = create_engine('postgresql+psycopg2://postgres:123123@localhost/postgres')
+engine = create_engine('postgresql+psycopg2://tcjukcve:vUJC-YJ0isoZ5NvtvvtiBjD75n-vaqfJ@hattie.db.elephantsql.com/tcjukcve')
 
 Base.metadata.create_all(engine)
 

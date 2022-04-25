@@ -11,9 +11,10 @@ from sqlalchemy.ext.declarative import declarative_base
 from data_pompom_create import directory_of_order, directory_of_client, directory_of_team, directory_of_model
 from data_pompom_create import directory_of_group, directory_of_payment, directory_of_sity, directory_of_color
 from data_pompom_create import directory_of_outlay, directory_of_outlay_class
+from data_pompom_create import engine
 
-log_pass_sql = 'postgresql+psycopg2://postgres:123123@localhost/postgres'
-engine = create_engine(log_pass_sql)
+# log_pass_sql = 'postgresql+psycopg2://postgres:123123@localhost/postgres'
+# engine = create_engine(log_pass_sql)
 
 Session = sessionmaker(engine)
 Session.configure(bind=engine)
