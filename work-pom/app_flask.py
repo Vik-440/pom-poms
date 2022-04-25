@@ -1,7 +1,5 @@
 from flask import Flask,jsonify,request
 import json
-
-from psycopg2 import Date
 from _1_main_json import return_data_from_mainpage
 from _2_new_order_json import return_data_from_new_order, return_data_from_new_order_post
 
