@@ -87,6 +87,19 @@ def new_order ():
         # return data_json # returning a JSON response
         return data
 
+@app.route('/material', methods=['GET', 'POST'])
+def new_order ():
+    if request.method == 'POST':
+        # request.data = request.get_json()
+        # data=return_data_from_new_order_post(request.data)
+        data={"testdata" : "Test-POST-OK"}
+        return data
+    else:                           ######## потрібновіддати: Номер наступного ордеру, дата зайнятої черги.
+        # data=return_data_from_new_order()
+        data={"testdata" : "Test-GET-OK"}
+        return data
+
+
 
 if __name__=='__main__':
     app.run(debug=True)
