@@ -1,0 +1,70 @@
+<div class="create-order__page mt20" >
+  <div class="create-order__title">
+    <h3 class="create-order__title--number title-text">Замовлення № <input  type="text"></h3>
+    <h3 class="create-order__title--date title-text">Дата замовлення
+      <ngx-datepicker
+      class="create-order__title--calendar"
+      [options]="options"
+    ></ngx-datepicker>
+    </h3>
+  </div>
+
+  <div class="create-order__form" *ngFor="let i of orders; let index = index">
+    <div class="form__number">
+      <input class="number" type="text" readonly [value]="index + 1" disabled>
+      <button class="next-btn btn-icon" (click)="addOrder()" [disabled]="orders.length - 1 !== index">
+        <img class="next-icon" src="./assets/img/icons/next.svg" />
+      </button>
+    </div>
+
+    <div class="form__fields">
+      <input type="text" class="form__field" placeholder="код">
+      <input type="text" class="form__field" placeholder="колір помпона">
+    </div>
+
+    <div class="form__fields">
+      <div>
+        <input type="text" class="form__field" placeholder="матеріал 1">
+        <input type="text" class="form__field--sm" placeholder="1 - %">
+      </div>
+      <div>
+        <input type="text" class="form__field" placeholder="матеріал 3">
+        <input type="text" class="form__field--sm" placeholder="3 - %">
+      </div>
+    </div>
+
+    <div class="form__fields">
+      <div>
+        <input type="text" class="form__field" placeholder="матеріал 2">
+        <input type="text" class="form__field--sm" placeholder="2 - %">
+      </div>
+      <div>
+        <input type="text" class="form__field" placeholder="матеріал 4">
+        <input type="text" class="form__field--sm" placeholder="4 - %">
+      </div>
+    </div>
+
+    <div class="form__fields">
+      <input class="form__field--md" type="text" placeholder="ціна">
+      <button class="ok-btn btn-icon">
+        <img class="ok-icon" src="./assets/img/icons/ok.svg" />
+      </button>
+    </div>
+
+    <div class="form__fields">
+        <input type="text" class="form__field--ml" placeholder="к-сть пар">
+        <input type="text" class="form__field--ml" placeholder="сума">
+    </div>
+
+    <div class="form__fields">
+      <textarea type="text" class="form__field--textarea" placeholder="примітка"></textarea>
+    </div>
+
+    <div class="form__fields">
+      <button class="btn-icon" (click)="deleteOrder()" [disabled]="orders.length <= 1">
+        <img class="cancel-icon" src="./assets/img/icons/cancel.svg" />
+      </button>
+    </div>
+
+  </div>
+</div>

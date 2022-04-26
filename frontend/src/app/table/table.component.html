@@ -1,0 +1,136 @@
+<div class="base-page-wrapper">
+  <div class="table-responsive container-fluid table">
+    <table class="table table-lg table-bordered mb-0 border-primary">
+      <thead>
+      <tr class="center-data">
+        <th scope="col" sortable="id_order" (sort)="onSort($event)">№</th>
+        <th scope="col" sortable="data_order" (sort)="onSort($event)">Дата замов.</th>
+        <th class="mw130" scope="col" sortable="kolor_model" (sort)="onSort($event)">Кольори </th>
+        <th class="mw130" scope="col" sortable="kod_model" (sort)="onSort($event)">Код</th>
+        <th scope="col" sortable="quantity_pars_model" (sort)="onSort($event)">К-сть</th>
+        <th scope="col" sortable="phase_1_model" (sort)="onSort($event)">Ф.1</th>
+        <th scope="col" sortable="phase_2_model" (sort)="onSort($event)">Ф.2</th>
+        <th scope="col" sortable="phase_3_model" (sort)="onSort($event)">Ф.3</th>
+        <th class="mw130" scope="col" sortable="money">Сума, грн</th>
+        <th class="mw80" scope="col" sortable="sity" (sort)="onSort($event)">Місто</th>
+        <th scope="col" sortable="data_plane_order" (sort)="onSort($event)">Дата прогноз</th>
+        <th scope="col" sortable="fulfilled_order"><img class="h20" src="./assets/img/icons/gotow.png" alt=""></th>
+      </tr>
+      </thead>
+      <tbody>
+        <ng-container  *ngFor="let order of ordersRow">
+          <tr class="table--row">
+            <td ngxTooltip [tooltipContent]="order.comment_order" class="w70">{{ order.id_order }}</td>
+            <td>{{ order.data_order | date: 'yyyy-mm-dd'}}</td>
+            <ng-container *ngIf="checkArray(order.kolor_model); else oneItem">
+             <!-- kolor_model -->
+              <td>
+                <div class="bb_solid" *ngFor="let kolor_model of order.kolor_model">
+                  {{ kolor_model }}
+                </div>
+              </td>
+               <!-- kod_model -->
+              <td>
+                <div class="bb_solid" ngxTooltip [tooltipContent]="order.comment_model[i]"  class="bb_solid" [ngClass]="checkCode(kod_model, order.comment_model[i], i)" *ngFor="let kod_model of order.kod_model; let i = index">
+                 {{kod_model}}
+                </div>
+              </td>
+              <td>
+                <div class="bb_solid" *ngFor="let quantity_pars_model of order.quantity_pars_model">
+                  {{quantity_pars_model}}
+                </div>
+              </td>
+              <td>
+                <div class="bb_solid" *ngFor="let item of order.phase_1_model">
+                  <button class="check-btn">
+                    <img class="check-icon" [src]="order.phase_1_model ? './assets/img/icons/check.svg' : './assets/img/icons/uncheck.svg'" />
+                  </button>
+                </div>
+              </td>
+              <td>
+                <div class="bb_solid" *ngFor="let item of order.phase_2_model">
+                  <button class="check-btn">
+                    <img class="check-icon" [src]="order.phase_2_model ? './assets/img/icons/check.svg' : './assets/img/icons/uncheck.svg'" />
+                  </button>
+                </div>
+              </td>
+              <td>
+                <div class="bb_solid" *ngFor="let item of order.phase_3_model">
+                  <button class="check-btn">
+                    <img class="check-icon" [src]="order.phase_3_model ? './assets/img/icons/check.svg' : './assets/img/icons/uncheck.svg'" />
+                  </button>
+                </div>
+              </td>
+            </ng-container>
+
+            <ng-template #oneItem>
+               <!-- kolor_model -->
+              <td>
+                {{ order.kolor_model }}
+              </td>
+              <!-- kod_model -->
+              <td ngxTooltip [tooltipContent]="order.comment_model" [classList]="checkCode(order.kod_model, order.comment_model)">
+                {{ order.kod_model }}
+              </td>
+              <td>
+                {{ order.quantity_pars_model }}
+              </td>
+              <td>
+                <button class="check-btn">
+                  <img class="check-icon" [src]="order.phase_1_model ? './assets/img/icons/check.svg' : './assets/img/icons/uncheck.svg'" />
+                </button>
+              </td>
+              <td>
+                <button class="check-btn">
+                  <img class="check-icon" [src]="order.phase_2_model ? './assets/img/icons/check.svg' : './assets/img/icons/uncheck.svg'" />
+                </button>
+              </td>
+              <td>
+                <button class="check-btn">
+                  <img class="check-icon" [src]="order.phase_3_model ? './assets/img/icons/check.svg' : './assets/img/icons/uncheck.svg'" />
+                </button>
+              </td>
+            </ng-template>
+
+            <td [classList]="countMoney(order)">{{ order.sum_payment + ' / ' + order.real_money + ' / ' + order.left_money }}</td>
+            <td>{{ order.sity }}</td>
+            <td>{{ order.data_plane_order | date: 'yyyy-mm-dd'}}</td>
+            <td>
+              <button class="check-btn">
+                <img class="check-icon" [src]="order.fulfilled_order ? './assets/img/icons/check.svg' : './assets/img/icons/uncheck.svg'" />
+              </button>
+            </td>
+          </tr>
+    </ng-container>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="filtres" >
+    <ng-toggle
+      [value]="true"
+      [color]="switchConfig.color"
+      [labels]="switchConfig.labels"
+      [switchColor]="switchConfig.switchColor"
+      [width]="switchConfig.width"
+      [height]="switchConfig.height"
+      [(ngModel)]="isShowCalendar"
+      [fontSize]="switchConfig.fontSize"
+    ></ng-toggle>
+    <div [formGroup]="dataDateForm" class="calendar-wrapper" >
+      <ngx-datepicker
+        class="calendar"
+        formControlName="dateStart"
+        [class.disabled]="!isShowCalendar"
+        [options]="optionsDateStart"
+      ></ngx-datepicker>
+      <ngx-datepicker
+        class="calendar"
+        [class.disabled]="!isShowCalendar"
+        formControlName="dateEnd"
+        [options]="optionsDateEnd"
+      ></ngx-datepicker>
+    </div>
+  </div>
+
+</div>
