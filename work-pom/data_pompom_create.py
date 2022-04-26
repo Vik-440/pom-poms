@@ -1,5 +1,5 @@
-from sqlalchemy import Date, Numeric, create_engine, Column, BigInteger, Integer, String
-from sqlalchemy import Float, Boolean
+from sqlalchemy import Date, Numeric, create_engine, Column, BigInteger, Integer, String, \
+                Float, Boolean
 from sqlalchemy.ext.declarative import declarative_base
 import psycopg2
 import os
