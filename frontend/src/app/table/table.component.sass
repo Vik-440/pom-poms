@@ -1,0 +1,97 @@
+.base-page-wrapper
+  display: flex
+  padding-top: 2rem
+
+
+.filtres
+  margin-left: 30px
+  margin-right: 30px
+  display: flex
+  flex-direction: column
+
+
+.table
+  width: auto
+
+  & th
+    border: 1px solid #111 !important
+    border-bottom: 2px solid #111 !important
+    padding: 0px
+    font-size: 16px
+    background: #203B4A
+    color: #fff
+    vertical-align: middle !important
+  &--row
+    td
+      text-align: center
+      vertical-align: inherit
+      padding: 0px
+      border-color: #111
+      font-size: 16px
+
+.check-btn
+  border: none
+  padding: 0px
+  &:active
+    transform: scale(0.8)
+  & .check-icon
+    height: 15px
+
+
+.red
+  background: #ff0000
+
+.yellow
+  background: #ffff00
+
+.green
+  background: #00b61e
+
+.y-cr
+  background: linear-gradient(90deg, rgba(255,255,0,1) 47%, rgba(247,51,149,1) 47%)
+
+.y-cr-lb
+  background: linear-gradient(90deg, yellow 12%, #f73395 63%, rgba(0, 139, 238, 0.9970974962) 74%)
+
+.y-lb
+  background: linear-gradient(90deg, rgba(255,255,0,1) 47%, rgba(0,139,238,1) 47%)
+
+.cr-lb
+  background: linear-gradient(90deg, rgba(247,51,149,1) 47%, rgba(0,139,238,1) 47%)
+
+.y
+  background: #ffff00
+
+.cr
+  background: #f73395
+
+.lb
+  background: #008bee
+
+.calendar-wrapper
+  display: flex
+  flex-direction: column
+
+::ng-deep .base-page-wrapper
+  .calendar-container
+    width: 180px !important
+  ngx-datepicker
+    &.disabled
+      & input
+        pointer-events: none
+      & .datepicker-container.datepicker-default
+        cursor: not-allowed
+    & input
+      background: #C4C4C4 !important
+      border: none
+      padding: 5px
+      width: 18 0px
+      z-index: 100
+      width: 170px
+      border-radius: 25px
+      font-weight: 600
+
+
+.calendar
+  margin-top: 20px
+
