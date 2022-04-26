@@ -86,7 +86,7 @@ def new_order ():
         # data_json = {"id_new_order":data['id_new_order'], "time_last_order":data['time_last_order']}
         # return data_json # returning a JSON response
         return data
-
+"""
 @app.route('/material', methods=['GET', 'POST'])
 def new_order ():
     if request.method == 'POST':
@@ -98,7 +98,7 @@ def new_order ():
         # data=return_data_from_new_order()
         data={"testdata" : "Test-GET-OK"}
         return data
-
+"""
 
 
 if __name__=='__main__':
