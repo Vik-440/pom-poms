@@ -1,28 +1,18 @@
-# from time import time
-from operator import and_, or_
-from unicodedata import numeric
-from sqlalchemy import create_engine,  MetaData, true, text, Integer, String, Table, Column, and_, or_
-from datetime import datetime, timedelta
-from sqlalchemy.orm import sessionmaker, session, mapper, declarative_base#, decl_base, decl_api
-from sqlalchemy.ext.declarative import declarative_base
-from data_pompom_create import directory_of_order, directory_of_client, directory_of_team, directory_of_model
-from data_pompom_create import directory_of_group, directory_of_payment, directory_of_sity, directory_of_color
-from data_pompom_create import directory_of_outlay, directory_of_outlay_class
+from sqlalchemy.orm import sessionmaker
+from data_pompom_create import directory_of_order, directory_of_client
+from data_pompom_create import directory_of_model,  directory_of_sity
+from data_pompom_create import directory_of_group, directory_of_payment
 from data_pompom_create import engine
-#Base = declarative_base()
+
 
 def return_data_from_sql(data_start_order, data_end_order):
-    # time_start=datetime.today().strftime('%Y-%m-%d : %H-%M-%S----%f')
-    # log_pass_sql = 'postgresql+psycopg2://postgres:123123@localhost/postgres'
-    # engine = create_engine(log_pass_sql)
-
     Session = sessionmaker(engine)
     Session.configure(bind=engine)
     session = Session()
-    j_id_order=[]
-    j_data_order=[]
-    j_data_plane_order=[]
-    j_sum_payment=[]
+    j_id_order = []
+    j_data_order = []
+    j_data_plane_order = []
+    j_sum_payment = []
     j_kolor_model = []
     j_kolor_model_1 = []
     j_kod_model = []
