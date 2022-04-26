@@ -1,5 +1,5 @@
-from audioop import add
-from pymysql import NULL
+# from audioop import add
+# from pymysql import NULL
 from sqlalchemy import null
 from _2_new_order_page import return_data_from_order_page, return_data_from_client, return_data_from_kod
 from _2_new_order_page import return_data_from_full_kod, return_data_from_full_person, return_data_from_final_order
