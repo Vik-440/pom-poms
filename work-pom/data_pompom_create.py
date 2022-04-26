@@ -1,5 +1,6 @@
-from sqlalchemy import Date, Numeric, create_engine, Column, BigInteger, Integer, String, \
+from sqlalchemy import Date, ForeignKey, Numeric, create_engine, Column, BigInteger, Integer, String, \
                 Float, Boolean
+from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
 import psycopg2
 import os
@@ -20,6 +21,8 @@ class directory_of_order(Base):
     sum_payment = Column('sum_payment', Numeric(8, 2))
     discont_order = Column('discont_order', String)
     comment_order = Column('comment_order', String)
+    directory_of_group = relationship("directory_of_group")
+    directory_of_payment = relationship("directory_of_payment")
 
 class directory_of_client(Base):
     __tablename__ = 'directory_of_client'
@@ -64,19 +67,21 @@ class directory_of_group(Base):
     __tablename__ = 'directory_of_group'
     id_group_model = Column('id_group_model', Integer, primary_key=True)
     id_model = Column('id_model', Integer)
-    id_order = Column('id_order', Integer)
+    id_order = Column('id_order', Integer, ForeignKey('directory_of_order.id_order'))
     quantity_pars_model = Column('quantity_pars_model', Integer)
     phase_1_model = Column('phase_1_model', Boolean)
     phase_2_model = Column('phase_2_model', Boolean)
     phase_3_model = Column('phase_3_model', Boolean)
+    directory_of_order = relationship("directory_of_order")
 
 class directory_of_payment(Base):
     __tablename__ = 'directory_of_payment'
     id_payment = Column('id_payment', Integer, primary_key=True)
-    id_order = Column('id_order', Integer)
+    id_order = Column('id_order', Integer, ForeignKey('directory_of_order.id_order'))
     payment = Column('payment', Numeric(8, 2))
     metod_payment = Column('metod_payment', String)
     data_payment = Column('data_payment', Date)
+    directory_of_order = relationship("directory_of_order")
 
 class directory_of_sity(Base):
     __tablename__ = 'directory_of_sity'
