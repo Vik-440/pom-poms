@@ -12,6 +12,6 @@ export class MainPage {
 
   getList() {
     console.log(this.apiUrl)
-    return this.http.get(`http://172.17.0.3:5000/mainpage`);
+    return this.http.get(`http://127.0.0.2:5000/mainpage`);
   }
 }
