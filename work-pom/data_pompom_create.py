@@ -24,7 +24,7 @@ class directory_of_order(Base):
     sum_payment = Column('sum_payment', Numeric(8, 2))
     discont_order = Column('discont_order', String)
     comment_order = Column('comment_order', String)
-    directory_of_group = relationship("directory_of_group")
+    # directory_of_group = relationship("directory_of_group")
     directory_of_payment = relationship("directory_of_payment")
 
 class directory_of_client(Base):
@@ -75,7 +75,7 @@ class directory_of_group(Base):
     phase_1_model = Column('phase_1_model', Boolean)
     phase_2_model = Column('phase_2_model', Boolean)
     phase_3_model = Column('phase_3_model', Boolean)
-    directory_of_order = relationship("directory_of_order")
+    # directory_of_order = relationship("directory_of_order")
 
 class directory_of_payment(Base):
     __tablename__ = 'directory_of_payment'
