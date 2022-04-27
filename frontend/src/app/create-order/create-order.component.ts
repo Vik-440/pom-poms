@@ -25,6 +25,7 @@ export class CreateOrderComponent implements OnInit {
 
   orders = [1]
 
+  isRecipient = false;
   ngOnInit(): void {
   }
 

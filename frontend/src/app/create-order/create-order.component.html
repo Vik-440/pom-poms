@@ -98,14 +98,14 @@
         </div>
       <div class="check-person-btn">
         <span class="cutomer-title">отримувач</span>
-        <button class="btn-icon">
-          <img class="cancel-icon" src="./assets/img/icons/cancel.svg" />
+        <button class="btn-icon" (click)="isRecipient = !isRecipient">
+          <img class="cancel-icon" [src]="isRecipient ? './assets/img/icons/cancel.svg' : './assets/img/icons/check.svg'" />
         </button></div>
         <button class="mt10 btn-icon">
           <img class="ok-icon" src="./assets/img/icons/ok.svg" />
         </button>
     </div>
-    <div class="data-customer data-customer-coach">
+    <div class="data-customer data-customer-coach" *ngIf="isRecipient">
       <input class="data-customer--phone" type="text" placeholder="телефон">
       <input class="data-customer--lastname" type="text" placeholder="прізвище">
       <input class="data-customer--firstname" type="text" placeholder="ім'я">
