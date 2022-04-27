@@ -1,8 +1,6 @@
-from sqlalchemy import null
 from _2_new_order_page import return_data_from_order_page, return_data_from_client, return_data_from_kod
 from _2_new_order_page import return_data_from_full_kod, return_data_from_full_person, return_data_from_final_order
 import json
-from sqlalchemy import create_engine,  MetaData, true, text, Integer, String, Table, Column, and_, or_
 from datetime import datetime, timedelta
 from sqlalchemy.orm import sessionmaker, session, mapper, declarative_base#, decl_base, decl_api
 from sqlalchemy.ext.declarative import declarative_base
@@ -11,8 +9,6 @@ from data_pompom_create import directory_of_group, directory_of_payment, directo
 from data_pompom_create import directory_of_outlay, directory_of_outlay_class
 from data_pompom_create import engine
 
-# log_pass_sql = 'postgresql+psycopg2://postgres:123123@localhost/postgres'
-# engine = create_engine(log_pass_sql)
 
 Session = sessionmaker(engine)
 Session.configure(bind=engine)

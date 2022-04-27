@@ -2,6 +2,7 @@ from flask import Flask,jsonify,request
 import json
 from _1_main_json import return_data_from_mainpage
 from _2_new_order_json import return_data_from_new_order, return_data_from_new_order_post
+from _3_material_json import return_data_from_material
 
 
 app =   Flask(__name__)
@@ -86,6 +87,19 @@ def new_order ():
         # data_json = {"id_new_order":data['id_new_order'], "time_last_order":data['time_last_order']}
         # return data_json # returning a JSON response
         return data
+
+@app.route('/material', methods=['GET', 'POST'])
+def material ():
+    if request.method == 'POST':
+        # request.data = request.get_json()
+        # data=return_data_from_new_order_post(request.data)
+        data={"testdata" : "Test-POST-OK"}
+        return data
+    else:                           ######## потрібновіддати: Номер наступного ордеру, дата зайнятої черги.
+        data=return_data_from_material(0)
+        data={"testdata" : "Test-GET-OK"}
+        return data
+
 
 
 if __name__=='__main__':

@@ -3,6 +3,10 @@ from sqlalchemy import Float, Boolean
 from sqlalchemy.ext.declarative import declarative_base
 import psycopg2
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
+url = os.getenv("PSQL_URL")
 
 Base = declarative_base()
 
@@ -114,7 +118,7 @@ class directory_of_outlay_class(Base):
     outlay_class = Column('outlay_class', String)
 
 
-engine = create_engine('postgresql+psycopg2://tcjukcve:vUJC-YJ0isoZ5NvtvvtiBjD75n-vaqfJ@hattie.db.elephantsql.com/tcjukcve')
+engine = create_engine(url)
 
 Base.metadata.create_all(engine)
 
