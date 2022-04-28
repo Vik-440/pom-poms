@@ -24,7 +24,7 @@ def return_data_from_material(search):
         j_bab_quantity_color=[]
         j_weight_color=[]
         j_comment_color=[]
-
+        j_bab_weight_color=[]
         if search ==999 or search==0:
             if search == 999:
                 None
@@ -39,8 +39,9 @@ def return_data_from_material(search):
                 j_bab_quantity_color.append(row.bab_quantity_color)
                 j_weight_color.append(row.weight_color)
                 j_comment_color.append(row.comment_color)
+                j_bab_weight_color.append(row.bab_weight_color)
+                
             a1a=len(j_id_color)
-            print(a1a)
             full_block=[]
             while a1a > 0:
                 a1a-=1
@@ -56,10 +57,43 @@ def return_data_from_material(search):
                 del j_weight_color[0]
                 element_6=j_comment_color[0]
                 del j_comment_color[0]
+                element_7=j_bab_weight_color[0]
+                del j_bab_weight_color[0]
+                element_5=element_5-(element_4 * element_7)
 
-                one_block = {"id_color": element_1, "name_color": element_2, "width_color" : element_3,
+                one_block = {"name_color": element_2, "id_color": element_1, "width_color" : element_3,
                     "bab_quantity_color" : element_4, "weight_color" : element_5, "comment_color" : element_6}
 
                 full_block.append(one_block)
         # data_material={"testdata" : "Test-GET-OK"}
-        return json.dumps(full_block)       #, ensure_ascii=False
+        return json.dumps(full_block)       #, ensure_ascii=False, sort_keys = True
+
+############################################################################################################
+def return_data_from_material_one(search):
+    # with Session(engine) as session:
+        mat=session.query(directory_of_color).filter_by(id_color=search).all()
+        for row in mat:
+            # j_id_color=search
+            j_name_color=row.name_color
+            j_width_color=row.width_color
+            j_bab_quantity_color=row.bab_quantity_color
+            j_weight_color=row.weight_color
+            j_comment_color=row.comment_color
+            j_thickness_color=row.thickness_color
+            j_bab_weight_color=row.bab_weight_color
+            j_manufacturer_color=row.manufacturer_color
+            j_reserve_color=row.reserve_color
+            j_weight_10m_color=row.weight_10m_color
+
+        full_block = {"name_color": j_name_color, "id_color":search, "width_color" :j_width_color,
+                    "bab_quantity_color" :j_bab_quantity_color, "weight_color" :j_weight_color,
+                    "comment_color" : j_comment_color,"thickness_color":j_thickness_color,
+                    "bab_weight_color":j_bab_weight_color, "manufacturer_color":j_manufacturer_color,
+                    "reserve_color":j_reserve_color,"weight_10m_color":j_weight_10m_color}
+
+        return json.dumps(full_block)
+
+############################################################################################################
+def return_data_from_material_change(search):
+
+        return
