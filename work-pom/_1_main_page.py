@@ -13,8 +13,6 @@ from data_pompom_create import engine
 
 def return_data_from_sql(data_start_order, data_end_order):
     # time_start=datetime.today().strftime('%Y-%m-%d : %H-%M-%S----%f')
-    # log_pass_sql = 'postgresql+psycopg2://postgres:123123@localhost/postgres'
-    # engine = create_engine(log_pass_sql)
 
     Session = sessionmaker(engine)
     Session.configure(bind=engine)

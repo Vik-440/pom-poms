@@ -104,7 +104,7 @@ class directory_of_color(Base):
     manufacturer_color = Column('manufacturer_color', String)
     reserve_color = Column('reserve_color', Integer)
     weight_10m_color = Column('weight_10m_color', Float)
-    Comment_color = Column('Comment_color', String)
+    comment_color = Column('comment_color', String)
 
 class directory_of_outlay(Base):
     __tablename__ = 'directory_of_outlay'
@@ -123,7 +123,7 @@ class directory_of_outlay_class(Base):
 
 
 engine = create_engine(url)
-# engine = create_engine('postgresql+psycopg2://tcjukcve:vUJC-YJ0isoZ5NvtvvtiBjD75n-vaqfJ@hattie.db.elephantsql.com/tcjukcve')
+
 
 
 Base.metadata.create_all(engine)
