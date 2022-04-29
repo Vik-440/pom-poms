@@ -1,9 +1,9 @@
 from flask import Flask,jsonify,request
 import json
-
-from psycopg2 import Date
 from _1_main_json import return_data_from_mainpage
 from _2_new_order_json import return_data_from_new_order, return_data_from_new_order_post
+from _3_material_json import return_data_from_material, return_data_from_material_one, \
+    return_data_from_material_change, return_data_from_material_new, return_data_from_material_change_full
 
 
 app =   Flask(__name__)
@@ -20,38 +20,6 @@ def return_data_from_flask ():
 
     return jsonify(info) # returning a JSON response
 
-@app.route('/query-example', methods=['GET', 'POST'])
-def query_example():
-    # if key doesn't exist, returns None
-    language = request.args.get('language')
-    framework = request.args.get('framework')
-
-    return '''<h1>The language value is: {},    
-    The framework is: {}</h1>'''.format(language, framework)
-
-@app.route('/form-example', methods=['GET', 'POST'])
-def form_example():
-    # handle the POST request
-    if request.method == 'POST':
-        language = request.form.get('language')
-        framework = request.form.get('framework')
-        return '''
-                  <h1>The language value is: {}</h1>
-                  <h1>The framework value is: {}</h1>'''.format(language, framework)
-
-    # otherwise handle the GET request
-    return '''
-           <form method="POST">
-               <div><label>Language: <input type="text" name="language"></label></div>
-               <div><label>Framework: <input type="text" name="framework"></label></div>
-               <input type="submit" value="Submit">
-               <input type="submit" value="Submit">
-           </form>'''
-
-@app.route('/json-example', methods=['POST'])
-def json_example():
-    return 'JSON Object Example'
-
 
 
 @app.route('/mainpage', methods=['GET', 'POST'])
@@ -64,30 +32,48 @@ def mainpage ():
             data = return_data_from_mainpage(data_start_order, data_end_order)
         else:
             data = request.data
-
-        # return jsonify(info_1) # returning a JSON response
-        # return request.data
         return data
     else:
         data = return_data_from_mainpage(0,0)
-        # with open('sw_templates.json') as f:
-        #     info = f.read()
-        return data # returning a JSON response
+        return data
 
 @app.route('/new_order', methods=['GET', 'POST'])
 def new_order ():
     if request.method == 'POST':
         request.data = request.get_json()
         data=return_data_from_new_order_post(request.data)
-        # print(request.data)
-        # data={"testdata" : "Test-OK"}
         return data
-    else:                           ######## потрібновіддати: Номер наступного ордеру, дата зайнятої черги.
-        # request.data = request.get_json()
+    else:
         data=return_data_from_new_order()
-        # data_json = {"id_new_order":data['id_new_order'], "time_last_order":data['time_last_order']}
-        # return data_json # returning a JSON response
+
         return data
+
+@app.route('/material', methods=['GET', 'POST'])
+def material ():
+    if request.method == 'POST':
+        request.data = request.get_json()
+        if 'id_color' in request.data:
+            tmp_id_color=request.data['id_color']
+            if tmp_id_color == 999:
+                data=return_data_from_material(999)
+            else:
+                data=return_data_from_material_one(request.data)
+        elif 'color_new' in request.data:
+            data=return_data_from_material_new(request.data)
+        elif 'color_change' in request.data:
+            data=return_data_from_material_change(request.data)
+        elif 'color_change_full' in request.data:
+            data=return_data_from_material_change_full(request.data)
+        else:
+            data={"запит ":"не вірний"}
+
+
+        # data={"testdata" : "Test-POST-OK"}
+        return data
+    else:
+        data=return_data_from_material(0)
+        return data
+
 
 
 if __name__=='__main__':

@@ -3,7 +3,7 @@ import json
 from _1_main_json import return_data_from_mainpage
 from _2_new_order_json import return_data_from_new_order, return_data_from_new_order_post
 from _3_material_json import return_data_from_material, return_data_from_material_one, \
-            return_data_from_material_change
+    return_data_from_material_change, return_data_from_material_new, return_data_from_material_change_full
 
 
 app =   Flask(__name__)
@@ -55,20 +55,23 @@ def material ():
         if 'id_color' in request.data:
             tmp_id_color=request.data['id_color']
             if tmp_id_color == 999:
-                data=return_data_from_material(tmp_id_color)
+                data=return_data_from_material(999)
             else:
-                data=return_data_from_material_one(tmp_id_color)
+                data=return_data_from_material_one(request.data)
+        elif 'color_new' in request.data:
+            data=return_data_from_material_new(request.data)
         elif 'color_change' in request.data:
             data=return_data_from_material_change(request.data)
+        elif 'color_change_full' in request.data:
+            data=return_data_from_material_change_full(request.data)
         else:
-            data={"запит" : "не вірний"}
+            data={"запит ":"не вірний"}
 
 
         # data={"testdata" : "Test-POST-OK"}
         return data
     else:
         data=return_data_from_material(0)
-        # data={"testdata" : "Test-GET-OK"}
         return data
 
 

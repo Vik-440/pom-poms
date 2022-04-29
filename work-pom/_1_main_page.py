@@ -166,7 +166,7 @@ def return_data_from_sql(data_start_order, data_end_order):
             x1x=row3.sum_payment
             x2x=row3.discont_order
             x3x=x1x - x2x
-            j_sum_payment.append(int(x3x))
+            j_sum_payment.append(x3x)
 #####################################################################################################3            
         real_money_1=session.query(directory_of_payment).filter_by(id_order=row.id_order).all()
         q3q=(len(real_money_1))

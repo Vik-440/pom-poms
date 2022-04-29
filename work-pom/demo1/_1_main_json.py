@@ -1,20 +1,26 @@
+from tracemalloc import stop
 from _1_main_page import return_data_from_sql
-import json
+# from app_flask import return_data_from_flask
+# from flask import Flask,jsonify,request
+# app =   Flask(__name__)
+# app.config['JSON_AS_ASCII'] = False
 
+
+import json
 
 def return_data_from_mainpage(data_start_order, data_end_order):
 
     data = return_data_from_sql(data_start_order, data_end_order)
 
-    a1a = len(data["id_order"])
-    full_block = []
-    # # print(a1a)git
+    a1a=len(data["id_order"])
+    full_block=[]
+    # # print(a1a)
     while a1a > 0:
-        a1a -= 1
+        a1a-=1
         # print(a1a)
-        element_1 = data['id_order'][0]
-        element_2 = data["data_order"][0]
-        element_3 = data['kolor_model'][0]
+        element_1=data['id_order'][0]
+        element_2=data["data_order"][0]
+        element_3=data['kolor_model'][0]
         del data['id_order'][0]
         del data["data_order"][0]
         del data['kolor_model'][0]

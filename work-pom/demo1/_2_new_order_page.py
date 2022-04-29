@@ -69,7 +69,7 @@ def return_data_from_client(sl_phone, sl_second_name):
             w11w=[]
             w12w=[]
             for row1 in phone_client_1:
-                if w1w > 0:
+                if w1w > 0:             # it is maybe excessive!
                     w2w.append(row1.phone_client)
                     w3w.append(row1.second_name_client)
                     w4w.append(row1.first_name_client)

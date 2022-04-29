@@ -1,18 +1,26 @@
-from sqlalchemy.orm import sessionmaker
-from data_pompom_create import directory_of_order, directory_of_client
-from data_pompom_create import directory_of_model,  directory_of_sity
-from data_pompom_create import directory_of_group, directory_of_payment
+# from time import time
+from operator import and_, or_
+from unicodedata import numeric
+from sqlalchemy import create_engine,  MetaData, true, text, Integer, String, Table, Column, and_, or_
+from datetime import datetime, timedelta
+from sqlalchemy.orm import sessionmaker, session, mapper, declarative_base#, decl_base, decl_api
+from sqlalchemy.ext.declarative import declarative_base
+from data_pompom_create import directory_of_order, directory_of_client, directory_of_team, directory_of_model, \
+        directory_of_group, directory_of_payment, directory_of_sity, directory_of_color, \
+        directory_of_outlay, directory_of_outlay_class
+#Base = declarative_base()
 from data_pompom_create import engine
 
-
 def return_data_from_sql(data_start_order, data_end_order):
+    # time_start=datetime.today().strftime('%Y-%m-%d : %H-%M-%S----%f')
+
     Session = sessionmaker(engine)
     Session.configure(bind=engine)
     session = Session()
-    j_id_order = []
-    j_data_order = []
-    j_data_plane_order = []
-    j_sum_payment = []
+    j_id_order=[]
+    j_data_order=[]
+    j_data_plane_order=[]
+    j_sum_payment=[]
     j_kolor_model = []
     j_kolor_model_1 = []
     j_kod_model = []
@@ -158,7 +166,7 @@ def return_data_from_sql(data_start_order, data_end_order):
             x1x=row3.sum_payment
             x2x=row3.discont_order
             x3x=x1x - x2x
-            j_sum_payment.append(int(x3x))
+            j_sum_payment.append(x3x)
 #####################################################################################################3            
         real_money_1=session.query(directory_of_payment).filter_by(id_order=row.id_order).all()
         q3q=(len(real_money_1))
