@@ -1,8 +1,4 @@
-# from sqlalchemy import null
-# from _2_new_order_page import return_data_from_order_page, return_data_from_client, return_data_from_kod
-# from _2_new_order_page import return_data_from_full_kod, return_data_from_full_person, return_data_from_final_order
 import json 
-# from json import JSONEncoder
 from sqlalchemy import MetaData, false, func, true, text, Integer, String, Table, Column, insert, create_engine, \
         and_, or_, update
 from datetime import datetime, timedelta
@@ -13,10 +9,6 @@ from data_pompom_create import directory_of_group, directory_of_payment, directo
 from data_pompom_create import directory_of_outlay, directory_of_outlay_class
 from data_pompom_create import engine
 
-
-# Session = sessionmaker(engine)
-# Session.configure(bind=engine)
-# session = Session()
 
 def return_data_from_material(search):
     with Session(engine) as session:
