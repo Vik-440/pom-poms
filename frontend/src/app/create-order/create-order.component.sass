@@ -1,7 +1,9 @@
 .create-order
+  
   &__page
     margin-left: 5rem
-    max-width: 1225px
+    max-width: 1254px
+    position: relative
   &__title
     display: flex
     font-size: 16px
@@ -21,6 +23,7 @@
         font-size: 20px
         line-height: 12px
         text-align: center
+        border-radius: 25px
     &--date
       display: flex
       align-items: center
@@ -32,13 +35,19 @@
           width: 132px
           height: 32px
           background: #FFFFFF
-          border: 0.5px solid #203B4A
+          border: none
           box-sizing: border-box
           font-weight: 600
           font-size: 20px
           line-height: 12px
           color: #727272
           text-align: center
+          &:focus
+            outline: none
+            border: none
+          &:active
+            outline: none
+            border: none
 .create-order
   &__form
     display: flex
@@ -71,12 +80,14 @@
     flex-direction: column
     margin-left: 10px
   &__field
-    width: 178px
+    width: 205px
     height: 26px
     background: #FFFFFF
     border: 0.5px solid #203B4A
     box-sizing: border-box
     padding-left: 6px
+    &-material
+      width: 178px
     &--ml
       width: 128px
       height: 26px
@@ -111,9 +122,9 @@
 .sum-up
   display: flex
   justify-content: flex-end
-  margin-right: 35px
+  margin-right: 38px
   &--sale
-    margin-right: 16px
+    margin-right: 8px
     & input
       width: 128px
       height: 34px
@@ -158,12 +169,27 @@
       grid-area: 4 / 1 / 5 / 16
   &--coach
       grid-area: 4 / 16 / 5 / 44
+  &--save
+    grid-area: 4 / 35 / 5 / 44
+
+.save-btn
+  border: none
+  background: #32FA00
+  border-radius: 25px
+  font-weight: 700
+  font-size: 13px
+  line-height: 12px
+  height: 26px
+  color: #ffffff
+  text-transform: uppercase
+  &.forms
+    margin-top: 6px
 
 .check-person
   display: flex
   flex-direction: column
   align-items: center
-  margin: 0 10px
+  margin: 0 16px
   &-btn
     display: flex
     flex-direction: column
@@ -175,7 +201,15 @@
   margin-top: 24px
   &--comment
     resize: none
-    width: 900px
+    width: 949px
+  &--btns
+    display: grid
+    grid-template-columns: repeat(2, 140px)
+    grid-template-rows: repeat(2, 35px)
+    grid-column-gap: 12px
+    grid-row-gap: 14px
+    align-self: flex-end
+    margin-left: 12px
   &--btn
     width: 141px
     font-weight: 600
@@ -185,6 +219,7 @@
     text-transform: uppercase
     color: #FFFFFF
     border: none
+    border-radius: 18px
     &:active
       transform: translateY(-1px)
       box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2)
@@ -192,6 +227,10 @@
       background: #10bbb1
     &.malachite
       background: #32E322
+    &.edit
+      background: #AAAD17
+    &.done
+      background: #102CBB
 
 
 .cutomer-title
@@ -215,3 +254,32 @@ input
     outline: none
     border: none
     border: 0.5px solid #203B4A
+
+.date-order
+  position: absolute
+  right: 0px
+  margin-top: 18px
+  display: grid
+  grid-template-rows: repeat(2, 1fr)
+  grid-template-columns: 225px 30px
+  & .btn-icon
+    width: 30px
+  &-icons
+    display: flex
+    flex-direction: column
+  &-item
+    display: flex
+    flex-direction: column
+    &:first-child
+      margin-bottom: 7px
+    &--title
+      margin-bottom: 2px !important
+      font-weight: 400
+      font-size: 16px
+      line-height: 12px
+      color: #727272
+
+
+::ng-deep
+  .calendar-container
+    width: 210px !important

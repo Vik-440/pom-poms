@@ -1,6 +1,3 @@
-.navbar
-  background-color: #c8c7c7
-
 .nav-item
   text-align: center
   border: 1px solid black
@@ -11,6 +8,21 @@
     border: none
     text-align: start
     background: none !important
+
+.nav-item
+  width: 170px
+  height: 33px
+  border-radius: 16px
+  font-weight: 600
+  font-size: 14px
+  line-height: 16px
+  text-align: center
+  border: none
+  display: flex
+  align-items: center
+  justify-content: center
+  text-align: center
+  margin-right: 23px
 
 .gradient
   &--base-page
@@ -27,6 +39,7 @@
     background: linear-gradient(180deg, #2C204D 12.5%, rgba(76, 49, 244, 0.44) 100%)
 
 .navbar
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset
   padding: 0px
 
 .nav-link
@@ -43,11 +56,12 @@
 
 .container-fluid
   display: flex
-  flex-direction: column
+  flex-direction: row-reverse
   padding: 0px
-  align-items: flex-end
+  padding-left: 20px
   @media (max-width: 992px)
     flex-direction: row
+     padding-left: 0
 
 .navbar-brand
   color: #fff

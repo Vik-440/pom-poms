@@ -1,20 +1,20 @@
-<div class="base-page-wrapper">
+<div>
   <div class="table-responsive container-fluid table">
     <table class="table table-lg table-bordered mb-0 border-primary">
       <thead>
       <tr class="center-data">
-        <th scope="col" sortable="id_order" class="number-order" (sort)="onSort($event)">№ замл.</th>
-        <th scope="col" sortable="data_order" class="data_order" (sort)="onSort($event)">Дата замовлення</th>
-        <th class="mw130 color" scope="col" sortable="kolor_model" (sort)="onSort($event)">Кольори </th>
-        <th class="mw130 code" scope="col" sortable="kod_model" (sort)="onSort($event)">Код</th>
-        <th class="quantity" scope="col" sortable="quantity_pars_model" (sort)="onSort($event)">К-сть</th>
-        <th scope="col" sortable="phase_1_model" class="phase" (sort)="onSort($event)">1</th>
+        <th scope="col" sortable="id_order" class="number-order">№ замл.</th>
+        <th scope="col" sortable="data_order" class="data_order">Дата замовлення</th>
+        <th class="mw130 color" scope="col" sortable="kolor_model">Кольори </th>
+        <th class="mw130 code" scope="col" sortable="kod_model">Код</th>
+        <th class="quantity" scope="col" sortable="quantity_pars_model">К-сть</th>
+        <th scope="col" sortable="phase_1_model" class="phase">1</th>
         <th scope="col" sortable="phase_2_model" class="phase"(sort)="onSort($event)">2</th>
-        <th scope="col" sortable="phase_3_model" class="phase" (sort)="onSort($event)">3</th>
+        <th scope="col" sortable="phase_3_model" class="phase">3</th>
         <th class="mw130" scope="col" sortable="money">Сума, грн</th>
         <th class="mw130" scope="col" sortable="money">№ телефону</th>
-        <th class="mw80" scope="col" sortable="sity" (sort)="onSort($event)">Місто</th>
-        <th scope="col" sortable="data_plane_order" (sort)="onSort($event)">Дата прогноз</th>
+        <th class="mw80" scope="col" sortable="sity">Місто</th>
+        <th scope="col" sortable="data_plane_order">Дата прогноз</th>
         <th scope="col" sortable="fulfilled_order">OK</th>
       </tr>
       </thead>
@@ -107,32 +107,4 @@
       </tbody>
     </table>
   </div>
-
-  <div class="filtres" >
-    <ng-toggle
-      [value]="true"
-      [color]="switchConfig.color"
-      [labels]="switchConfig.labels"
-      [switchColor]="switchConfig.switchColor"
-      [width]="switchConfig.width"
-      [height]="switchConfig.height"
-      [(ngModel)]="isShowCalendar"
-      [fontSize]="switchConfig.fontSize"
-    ></ng-toggle>
-    <div [formGroup]="dataDateForm" class="calendar-wrapper" >
-      <ngx-datepicker
-        class="calendar"
-        formControlName="dateStart"
-        [class.disabled]="!isShowCalendar"
-        [options]="optionsDateStart"
-      ></ngx-datepicker>
-      <ngx-datepicker
-        class="calendar"
-        [class.disabled]="!isShowCalendar"
-        formControlName="dateEnd"
-        [options]="optionsDateEnd"
-      ></ngx-datepicker>
-    </div>
-  </div>
-
 </div>

@@ -25,6 +25,7 @@ export class CreateOrderComponent implements OnInit {
 
   orders = [1]
 
+  dateToday = new Date();
   isRecipient = false;
   ngOnInit(): void {
   }

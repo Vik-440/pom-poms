@@ -23,6 +23,7 @@ interface OrderInterface {
   sum_payment: number;
   real_money: number;
   left_money: number;
+  telephone: string;
   sity: string[] | string;
   data_plane_order: string;
   fulfilled_order: boolean;
@@ -144,6 +145,7 @@ export class TableComponent implements OnInit, OnDestroy {
           sum_payment: row.sum_payment || '',
           real_money: row.real_money || 0,
           left_money: row.sum_payment - row.real_money,
+          telephone: '',
           sity: row.sity || '',
           data_plane_order: row.data_plane_order || '',
           fulfilled_order: row.fulfilled_order || '',

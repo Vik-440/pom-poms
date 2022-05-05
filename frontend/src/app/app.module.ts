@@ -15,6 +15,7 @@ import { NgToggleModule } from 'ngx-toggle-button';
 import { DatepickerModule } from 'ng2-datepicker';
 import { MyDatePickerModule } from 'mydatepicker';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ReserveComponent } from './reserve/reserve.component';
 
 
 @NgModule({
@@ -23,7 +24,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     SortDirective,
     TableComponent,
     NavbarComponent,
-    CreateOrderComponent
+    CreateOrderComponent,
+    ReserveComponent
   ],
   imports: [
     NgToggleModule,
