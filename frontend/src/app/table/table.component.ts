@@ -232,20 +232,19 @@ validateInput(currentValue: NgbDate | null, input: string): NgbDate | null {
   }
 
   checkCode(kodModel, commentModel, i?) {
-    const classListArray = [];
     if(commentModel) {
-      classListArray.push('y');
+      return 'yellow';
     }
     const letterModel = kodModel.split('');
       if(+letterModel[2] !== 0){
-        classListArray.push('cr')
+        return 'light-pink';
     }
     const splitModelH = kodModel.split('-');
     if(splitModelH[1].split('')[0] === 'B') {
-      classListArray.push('lb');
+      return 'light-blue';
     }
 
-    return classListArray.join('-');
+    return '';
   }
 
   onSort({column, direction}: SortEvent) {
@@ -264,6 +263,11 @@ validateInput(currentValue: NgbDate | null, input: string): NgbDate | null {
         return direction === 'asc' ? res : -res;
       });
     }
+  }
+
+  getFulfilledOrder() {
+    return this.ordersRow.filter(item => !item.fulfilled_order).length
+    
   }
 
 }

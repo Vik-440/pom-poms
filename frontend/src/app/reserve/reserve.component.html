@@ -1,107 +1,27 @@
 <div>
-  <div class="table-responsive container-fluid table">
+  <div class="table-responsive container-fluid table table-reserve">
     <table class="table table-lg table-bordered mb-0 border-primary">
       <thead>
       <tr class="center-data">
-        <th scope="col" sortable="id_order" class="number-order">№ замл.</th>
-        <th scope="col" sortable="data_order" class="data_order">Дата замовлення</th>
-        <th class="mw130 color" scope="col" sortable="kolor_model">Кольори </th>
-        <th class="mw130 code" scope="col" sortable="kod_model">Код</th>
-        <th class="quantity" scope="col" sortable="quantity_pars_model">К-сть</th>
-        <th scope="col" sortable="phase_1_model" class="phase">1</th>
-        <th scope="col" sortable="phase_2_model" class="phase"(sort)="onSort($event)">2</th>
-        <th scope="col" sortable="phase_3_model" class="phase">3</th>
-        <th class="mw130" scope="col" sortable="money">Сума, грн</th>
-        <th class="mw130" scope="col" sortable="money">№ телефону</th>
-        <th class="mw80" scope="col" sortable="sity">Місто</th>
-        <th scope="col" sortable="data_plane_order">Дата прогноз</th>
-        <th scope="col" sortable="fulfilled_order">OK</th>
+        <th scope="col" sortable="id_order" class="id">id</th>
+        <th scope="col" sortable="data_order" class="color">колір</th>
+        <th scope="col" sortable="width" class="width">ширина </th>
+        <th scope="col" sortable="babin" class="babin">бабін</th>
+        <th class="quantity" scope="col" sortable="quantity_pars_model" class="clean-width">чиста вага</th>
+        <th scope="col" sortable="phase_1_model" class="model">модель</th>
+        <th scope="col" sortable="phase_2_model" class="pars">пар</th>
       </tr>
       </thead>
       <tbody>
-        <ng-container  *ngFor="let order of ordersRow">
-          <tr class="table--row">
-            <td ngxTooltip [tooltipContent]="order.comment_order" class="w70">{{ order.id_order }}</td>
-            <td>{{ order.data_order | date: 'yyyy-mm-dd'}}</td>
-            <ng-container *ngIf="checkArray(order.kolor_model); else oneItem">
-             <!-- kolor_model -->
-              <td>
-                <div class="bb_solid" *ngFor="let kolor_model of order.kolor_model">
-                  {{ kolor_model }}
-                </div>
-              </td>
-               <!-- kod_model -->
-              <td>
-                <div class="bb_solid" ngxTooltip [tooltipContent]="order.comment_model[i]"  class="bb_solid" [ngClass]="checkCode(kod_model, order.comment_model[i], i)" *ngFor="let kod_model of order.kod_model; let i = index">
-                 {{kod_model}}
-                </div>
-              </td>
-              <td>
-                <div class="bb_solid" *ngFor="let quantity_pars_model of order.quantity_pars_model">
-                  {{quantity_pars_model}}
-                </div>
-              </td>
-              <td>
-                <div class="bb_solid" *ngFor="let item of order.phase_1_model">
-                  <button class="check-btn">
-                    <img class="check-icon" [src]="order.phase_1_model ? './assets/img/icons/check.svg' : './assets/img/icons/uncheck.svg'" />
-                  </button>
-                </div>
-              </td>
-              <td>
-                <div class="bb_solid" *ngFor="let item of order.phase_2_model">
-                  <button class="check-btn">
-                    <img class="check-icon" [src]="order.phase_2_model ? './assets/img/icons/check.svg' : './assets/img/icons/uncheck.svg'" />
-                  </button>
-                </div>
-              </td>
-              <td>
-                <div class="bb_solid" *ngFor="let item of order.phase_3_model">
-                  <button class="check-btn">
-                    <img class="check-icon" [src]="order.phase_3_model ? './assets/img/icons/check.svg' : './assets/img/icons/uncheck.svg'" />
-                  </button>
-                </div>
-              </td>
-            </ng-container>
-
-            <ng-template #oneItem>
-               <!-- kolor_model -->
-              <td>
-                {{ order.kolor_model }}
-              </td>
-              <!-- kod_model -->
-              <td ngxTooltip [tooltipContent]="order.comment_model" [classList]="checkCode(order.kod_model, order.comment_model)">
-                {{ order.kod_model }}
-              </td>
-              <td>
-                {{ order.quantity_pars_model }}
-              </td>
-              <td>
-                <button class="check-btn">
-                  <img class="check-icon" [src]="order.phase_1_model ? './assets/img/icons/check.svg' : './assets/img/icons/uncheck.svg'" />
-                </button>
-              </td>
-              <td>
-                <button class="check-btn">
-                  <img class="check-icon" [src]="order.phase_2_model ? './assets/img/icons/check.svg' : './assets/img/icons/uncheck.svg'" />
-                </button>
-              </td>
-              <td>
-                <button class="check-btn">
-                  <img class="check-icon" [src]="order.phase_3_model ? './assets/img/icons/check.svg' : './assets/img/icons/uncheck.svg'" />
-                </button>
-              </td>
-            </ng-template>
-
-            <td [classList]="countMoney(order)">{{ order.sum_payment + ' / ' + order.real_money + ' / ' + order.left_money }}</td>
-            <td>{{ order.telephone }}</td>
-            <td>{{ order.sity }}</td>
-            <td>{{ order.data_plane_order | date: 'yyyy-mm-dd'}}</td>
-            <td>
-              <button class="check-btn">
-                <img class="check-icon" [src]="order.fulfilled_order ? './assets/img/icons/check.svg' : './assets/img/icons/uncheck.svg'" />
-              </button>
-            </td>
+        <ng-container  *ngFor="let item of reserveItems">
+          <tr>
+            <td>{{ item.id_color }}</td>
+            <td>{{ item.name_color}}</td>
+            <td>{{ item.width_color}}</td>
+            <td>{{ item.bab_quantity_color }}</td>
+            <td>{{ item.weight_color}}</td>
+            <td>{{ item.model}}</td>
+            <td>{{ item.pars}}</td>
           </tr>
     </ng-container>
       </tbody>

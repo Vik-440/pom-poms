@@ -1,7 +1,63 @@
 .base-page-wrapper
   display: flex
   padding-top: 2rem
+  flex-direction: column
 
+p
+  margin-bottom: 0px !important
+
+.base-page-header
+  display: flex
+  margin-bottom: 21px
+  justify-content: space-between
+  .filters  
+    display: flex
+    gap: 24px
+  .filters-data
+    &--title
+      color: #727272
+      font-weight: 400
+      font-size: 16px
+      line-height: 12px
+    &--datapicker
+    &--phone
+      width: 142px
+      height: 25px
+      background: #FFFFFF
+      border: 0.5px solid #727272
+      border-radius: 25px
+    &--save
+      width: 104px
+      height: 25px
+      background: #32FA00
+      border-radius: 25px
+      border: none
+      align-self: flex-end
+      text-transform: uppercase
+      font-size: 13px
+      font-weight: 700
+      color: #fff
+  .info
+    display: flex
+    align-items: center
+    &--title
+      font-weight: 400
+      font-size: 16px
+      line-height: 12px
+    & .speed
+      width: 82px
+      height: 25px
+      background: #FFFFFF
+      border: 0.5px solid #727272
+      border-radius: 25px
+      margin-left: 24px
+      margin-right: 18px
+    & .downloaded
+      display: flex
+      align-items: center
+      & ::ng-deep
+        input
+          border: none
 .center-data
   height: 44px
   .phase
@@ -14,27 +70,22 @@
     width: 217px
   .code
     width: 157px
+  .money
+    width: 194px
+  .phone
+    width: 133px
   .quantity
     width: 41px
-
-.filtres
-  margin-left: 30px
-  margin-right: 30px
-  display: flex
-  flex-direction: column
+  .sity
+    width: 125px
+  .data_plane
+    width: 98px
+  .downloaded
+    width: 41px
 
 
 .table
   width: auto
-
-  & th
-    border: 0.5px solid #ffffff !important
-    border-bottom: 0.5px solid #111 !important
-    padding: 0px
-    font-size: 16px
-    background: #203B4A
-    color: #fff
-    vertical-align: middle !important
   &--row
     td
       text-align: center
@@ -61,26 +112,11 @@
 .green
   background: #B7F5B2
 
-.y-cr
-  background: linear-gradient(90deg, rgba(255,255,0,1) 47%, rgba(247,51,149,1) 47%)
+.light-pink
+  background: #EDD0EE
 
-.y-cr-lb
-  background: linear-gradient(90deg, yellow 12%, #f73395 63%, rgba(0, 139, 238, 0.9970974962) 74%)
-
-.y-lb
-  background: linear-gradient(90deg, rgba(255,255,0,1) 47%, rgba(0,139,238,1) 47%)
-
-.cr-lb
-  background: linear-gradient(90deg, rgba(247,51,149,1) 47%, rgba(0,139,238,1) 47%)
-
-.y
-  background: #ffff00
-
-.cr
-  background: #f73395
-
-.lb
-  background: #008bee
+.light-blue
+  background: #C9FBEC
 
 .calendar-wrapper
   display: flex
@@ -96,11 +132,11 @@
       & .datepicker-container.datepicker-default
         cursor: not-allowed
     & input
-      background: #C4C4C4 !important
-      border: none
-      padding: 5px
-      width: 18 0px
-      z-index: 100
+      width: 104px !important
+      height: 25px
+      background: #FFFFFF
+      border: 0.5px solid #727272
+      border-radius: 25px
       width: 170px
       border-radius: 25px
       font-weight: 600
