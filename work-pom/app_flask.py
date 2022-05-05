@@ -4,6 +4,7 @@ from _1_main_json import return_data_from_mainpage
 from _2_new_order_json import return_data_from_new_order, return_data_from_new_order_post
 from _3_material_json import return_data_from_material, return_data_from_material_one, \
     return_data_from_material_change, return_data_from_material_new, return_data_from_material_change_full
+from _4_finance_json import return_data_from_finance, return_data_from_payment,return_data_from_outlay
 
 
 app =   Flask(__name__)
@@ -66,15 +67,23 @@ def material ():
             data=return_data_from_material_change_full(request.data)
         else:
             data={"запит ":"не вірний"}
-
-
         # data={"testdata" : "Test-POST-OK"}
         return data
     else:
-        data=return_data_from_material(0)
+        return(return_data_from_material(0))
+
+@app.route('/finance', methods=['GET', 'POST'])
+def finance ():
+    if request.method == 'POST':
+        request.data = request.get_json()
+        if 'payment_group' in request.data[0]:
+            return (return_data_from_payment(request.data))
+        if 'outlay_group' in request.data[0]:
+            return (return_data_from_outlay(request.data))
+        data={"testdata" : "Test-POST-OK-second"}
         return data
-
-
+    else:
+        return(return_data_from_finance(0))
 
 if __name__=='__main__':
     app.run(debug=True)
