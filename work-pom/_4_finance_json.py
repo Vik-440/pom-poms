@@ -1,4 +1,5 @@
-import json 
+import json
+from flask import session 
 from sqlalchemy import MetaData, false, func, true, text, Integer, String, Table, Column, insert, create_engine, \
     and_, or_, update#, desc
 from datetime import datetime, timedelta
@@ -84,6 +85,141 @@ def return_data_from_outlay(sender):
         session.commit()    
     return({"outlay_group":"ok"})
 
+def return_data_from_payment_search(sender):
+    with Session(engine) as session:
+        data_start=sender['data_start']
+        data_end=sender['data_end']
+        iban=sender['iban']
+        cash=sender['cash']
+        if iban and not(cash):
+            payment_search_1=session.query(directory_of_payment).filter(directory_of_payment.data_payment>=data_start,
+                directory_of_payment.data_payment<=data_end).filter_by(metod_payment="iban").all()
+        elif cash and not(iban):
+            payment_search_1=session.query(directory_of_payment).filter(directory_of_payment.data_payment>=data_start,
+                directory_of_payment.data_payment<=data_end).filter_by(metod_payment="cash").all()
+        else:
+            payment_search_1=session.query(directory_of_payment).filter(directory_of_payment.data_payment>=data_start,
+                directory_of_payment.data_payment<=data_end).all()
+
+        full_block, id_payment, id_order,payment,metod_payment,data_payment = [], [], [], [], [], []
+        for row in payment_search_1:
+            id_payment.append(row.id_payment)
+            id_order.append(row.id_order)
+            payment.append(row.payment)
+            metod_payment.append(row.metod_payment)
+            data_payment.append(str(row.data_payment))
+        a1a=len(id_payment)
+        while a1a > 0:
+            a1a-=1
+            q1=block_json(id_payment, id_order, payment, metod_payment, data_payment)
+            one_block={"id_payment":q1[0],"id_order":q1[1],"payment":q1[2],"metod_payment":q1[3],"data_payment":q1[4]}
+            full_block.append(one_block)
+    return json.dumps(full_block)
+
+def return_data_from_outlay_search(sender):
+    with Session(engine) as session:
+        data_start=sender['data_start']
+        data_end=sender['data_end']
+        full_block,id_outlay,data_outlay,id_outlay_class,money_outlay,comment_outlay=[],[],[],[],[],[]
+        outlay_search_1=session.query(directory_of_outlay).filter(directory_of_outlay.data_outlay>=data_start,
+            directory_of_outlay.data_outlay<=data_end).all()
+        for row in outlay_search_1:
+            id_outlay.append(row.id_outlay)
+            data_outlay.append(str(row.data_outlay))
+            id_outlay_class.append(row.id_outlay_class)
+            money_outlay.append(row.money_outlay)
+            comment_outlay.append(row.comment_outlay)
+        a1a=len(id_outlay)
+        while a1a>0:
+            a1a-=1
+            q4=block_json(id_outlay,data_outlay,id_outlay_class,money_outlay,comment_outlay)
+            one_block={"id_outlay":q4[0],"data_outlay":q4[1],"id_outlay_class":q4[2],"money_outlay":q4[3],"comment_outlay":q4[4]}
+            full_block.append(one_block)
+    return json.dumps(full_block)
+
+def return_data_from_payment_change(sender):
+    with Session(engine)as session:
+        id_payment=sender['id_payment']
+        id_order=sender['id_order']
+        payment=sender['payment']
+        metod_payment=sender['metod_payment']
+        data_payment=sender['data_payment']
+        rows=session.query(directory_of_payment).filter_by(id_payment=id_payment).update({'id_order':id_order,
+            'payment':payment, 'metod_payment':metod_payment, 'data_payment':data_payment})
+        session.commit()
+    return({"id_payment":"ok"})
+
+def return_data_from_outlay_change(sender):
+    with Session(engine)as session:
+        id_outlay=sender['id_outlay']
+        data_outlay=sender['data_outlay']
+        id_outlay_class=sender['id_outlay_class']
+        money_outlay=sender['money_outlay']
+        comment_outlay=sender['comment_outlay']
+        rows=session.query(directory_of_outlay).filter_by(id_outlay=id_outlay).update({'data_outlay':data_outlay,
+            'id_outlay_class':id_outlay_class, 'money_outlay':money_outlay, 'comment_outlay':comment_outlay})
+        session.commit()
+    return({"id_outlay":"ok"})
+
+def return_data_from_payment_id_order(sender):
+    with Session(engine)as session:
+        tmp_order=sender['id_order']
+        full_block, id_payment, id_order,payment,metod_payment,data_payment = [], [], [], [], [], []
+        payment_search_1=session.query(directory_of_payment).filter_by(id_order=tmp_order).all()
+        for row in payment_search_1:
+            id_payment.append(row.id_payment)
+            id_order.append(row.id_order)
+            payment.append(row.payment)
+            metod_payment.append(row.metod_payment)
+            data_payment.append(str(row.data_payment))
+        a1a=len(id_payment)
+        while a1a > 0:
+            a1a-=1
+            q1=block_json(id_payment, id_order, payment, metod_payment, data_payment)
+            one_block={"id_payment":q1[0],"id_order":q1[1],"payment":q1[2],"metod_payment":q1[3],"data_payment":q1[4]}
+            full_block.append(one_block)
+    return json.dumps(full_block)
+
+def return_data_from_payment_balans(sender):
+    with Session(engine)as session:
+        data_start=sender['data_start'] # datetime.today().strftime('%Y-%m-%d')        #"2022-05-02"#     
+        data_end=sender['data_end']
+        iban=sender['iban']
+        cash=sender['cash']
+        full_block, id_payment, id_order,payment,metod_payment,data_payment = [], [], [], [], [], []
+
+        days=datetime.today().strftime('%Y-%m-%d') - datetime.datetime(data_start)
+        print(days.days)
+
+
+        payment_1=session.query(func.sum(directory_of_payment.payment).label('my_sum'), func.count(directory_of_payment.payment
+                ).label('my_count')).filter(directory_of_payment.data_payment>=data_start, 
+                directory_of_payment.data_payment<=data_end).first()
+        for row in payment_1:
+            payment_quantity=payment_1.my_count
+            payment=payment_1.my_sum
+            metod_payment='iban'
+            data_payment=data_start
+        one_block={"data_payment":data_payment,"metod_payment":metod_payment,"payment_quantity":payment_quantity,"payment":payment}
+        full_block.append(one_block)
+
+        
+        
+        # full_block={"testdata" : "in progres"}
+    return json.dumps(full_block)
+
+
+
+
+
+
+
+
+def return_data_from_payment_stat(sender):
+    with Session(engine)as session:
+
+        full_block={"testdata" : "in progres"}
+    return json.dumps(full_block)
 
 def block_json(pos1,pos2,pos3,pos4,pos5):
     el1=pos1[0]

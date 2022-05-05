@@ -111,7 +111,7 @@ class directory_of_outlay(Base):
     __tablename__ = 'directory_of_outlay'
     id_outlay = Column('id_outlay', Integer, primary_key=True)
     data_outlay = Column('data_outlay', Date)
-    id_outlay_class = Column('id_outlay_class', Integer)
+    id_outlay_class = Column('id_outlay_class', String)
     money_outlay = Column('money_outlay', Integer)
     quantity_outlay = Column('quantity_outlay', Numeric(8, 2))
     type_pc_outlay= Column('type_pc_outlay', String)
