@@ -17,6 +17,7 @@ import { MyDatePickerModule } from 'mydatepicker';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ReserveComponent } from './reserve/reserve.component';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { FinancesComponent } from './finances/finances.component';
 
 
 @NgModule({
@@ -26,7 +27,8 @@ import { NgSelectModule } from '@ng-select/ng-select';
     TableComponent,
     NavbarComponent,
     CreateOrderComponent,
-    ReserveComponent
+    ReserveComponent,
+    FinancesComponent
   ],
   imports: [
     NgToggleModule,
