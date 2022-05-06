@@ -16,6 +16,7 @@ import { DatepickerModule } from 'ng2-datepicker';
 import { MyDatePickerModule } from 'mydatepicker';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ReserveComponent } from './reserve/reserve.component';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 
 @NgModule({
@@ -36,6 +37,7 @@ import { ReserveComponent } from './reserve/reserve.component';
     CommonModule,
     DatepickerModule,
     FormsModule,
+    NgSelectModule,
     ReactiveFormsModule,
     TooltipModule.forRoot({
         placement: 'top',

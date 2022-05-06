@@ -1,30 +1,114 @@
-<div>
-  <div class="table-responsive container-fluid table table-reserve">
-    <table class="table table-lg table-bordered mb-0 border-primary">
-      <thead>
-      <tr class="center-data">
-        <th scope="col" sortable="id_order" class="id">id</th>
-        <th scope="col" sortable="data_order" class="color">колір</th>
-        <th scope="col" sortable="width" class="width">ширина </th>
-        <th scope="col" sortable="babin" class="babin">бабін</th>
-        <th class="quantity" scope="col" sortable="quantity_pars_model" class="clean-width">чиста вага</th>
-        <th scope="col" sortable="phase_1_model" class="model">модель</th>
-        <th scope="col" sortable="phase_2_model" class="pars">пар</th>
-      </tr>
-      </thead>
-      <tbody>
-        <ng-container  *ngFor="let item of reserveItems">
-          <tr>
-            <td>{{ item.id_color }}</td>
-            <td>{{ item.name_color}}</td>
-            <td>{{ item.width_color}}</td>
-            <td>{{ item.bab_quantity_color }}</td>
-            <td>{{ item.weight_color}}</td>
-            <td>{{ item.model}}</td>
-            <td>{{ item.pars}}</td>
-          </tr>
-    </ng-container>
-      </tbody>
-    </table>
+<div class="page pl63 mt20 pr37">
+  <div class="reserve-tables">
+    <div class="table-responsive table table-reserve">
+      <table class="table table-lg table-bordered mb-0 border-primary">
+        <thead>
+        <tr class="center-data">
+          <th scope="col" sortable="id_order" class="id">id</th>
+          <th scope="col" sortable="data_order" class="color">колір</th>
+          <th scope="col" sortable="width" class="width">ширина </th>
+          <th scope="col" sortable="babin" class="babin">бабін</th>
+          <th class="quantity" scope="col" sortable="quantity_pars_model" class="clean-width">чиста вага</th>
+          <th scope="col" sortable="phase_1_model" class="model">модель</th>
+          <th scope="col" sortable="phase_2_model" class="pars">пар</th>
+        </tr>
+        </thead>
+        <tbody>
+          <ng-container  *ngFor="let item of reserveItems">
+            <tr>
+              <td>{{ item.id_color }}</td>
+              <td>{{ item.name_color}}</td>
+              <td>{{ item.width_color}}</td>
+              <td>{{ item.bab_quantity_color }}</td>
+              <td>{{ item.weight_color}}</td>
+              <td>{{ item.model}}</td>
+              <td>{{ item.pars}}</td>
+            </tr>
+      </ng-container>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="table-responsive table table-reserve table-reserve--materials">
+      <table class="table table-lg table-bordered mb-0 border-primary">
+        <thead>
+        <tr class="center-data-second">
+          <th  colspan="2" scope="col" sortable="id_order" class="mat-val">мат / зміна / втулк</th>
+        </tr>
+        </thead>
+        <tbody>
+          <ng-container  *ngFor="let item of reserveItems">
+            <tr>
+              <td>{{ item.id_color }}</td>
+              <td>{{ item.name_color}}</td>
+            </tr>
+      </ng-container>
+        </tbody>
+      </table>
+    </div>
+
+    <button class="btn-icon">
+      <img class="next-icon icon" src="./assets/img/icons/ok.svg" />
+    </button>
+    <div class="materials">
+      <div class="materials-title title">Матеріали</div>
+      <div class="materials-active">
+        <p class="materials-active--title">наявність</p>
+        <ng-select 
+           bindLabel="name" 
+           bindValue="id" >
+        </ng-select>
+      </div>
+      <button class="materials-apply">
+        Застосувати
+      </button>
+    </div>
+  </div>
+  <div class="block-edit">
+    <p class="title">Редагувати</p>
+    <div class="edit-table">
+      <div class="edit-table--field">
+        <p class="edit-table--field-title">назва матеріалу</p>
+        <input type="text" class="edit-table--field-inp">
+      </div>
+      <div class="edit-table--field">
+        <p class="edit-table--field-title">ширина, мм</p>
+        <input type="text" class="edit-table--field-inp">
+      </div>
+      <div class="edit-table--field">
+        <p class="edit-table--field-title">товщина, мкм</p>
+        <input type="text" class="edit-table--field-inp">
+      </div>
+      <div class="edit-table--field">
+        <p class="edit-table--field-title">виробник</p>
+        <input type="text" class="edit-table--field-inp">
+      </div>
+      <div class="edit-table--field">
+        <p class="edit-table--field-title">вага втулки, гр</p>
+        <input type="text" class="edit-table--field-inp">
+      </div>
+      <div class="edit-table--field">
+        <p class="edit-table--field-title">вага (10м), гр</p>
+        <input type="text" class="edit-table--field-inp">
+      </div>
+      <div class="edit-table--field">
+        <p class="edit-table--field-title">резерв, гр</p>
+        <input type="text" class="edit-table--field-inp">
+      </div>
+      <div class="edit-table--field">
+        <p class="edit-table--field-title">кількість бабін</p>
+        <input type="text" class="edit-table--field-inp">
+      </div>
+      <div class="edit-table--field">
+        <p class="edit-table--field-title">повна вага</p>
+        <input type="text" class="edit-table--field-inp">
+      </div>
+      <div class="edit-table--field-note">
+        <input type="text" class="edit-table--field-note-inp" placeholder="примітка">
+      </div>
+    </div>
+    <button class="save-btn">
+      Зберегти
+    </button>
   </div>
 </div>

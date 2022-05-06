@@ -17,6 +17,8 @@ body
 .pd0
   padding: 0px !important
 
+.pl63
+  padding-left: 63px
   
 .pl61 
   padding-left: 61px
@@ -32,6 +34,8 @@ body
 .mt20
   margin-top: 20px
 
+.pr37
+  padding-right: 37px
 .h20
   height: 20px
 
@@ -57,6 +61,7 @@ body
     vertical-align: middle !important
   & td
     padding: 0px !important
+    text-align: center
   & th
     padding: 0px !important
 
@@ -68,6 +73,21 @@ body
   width: 25px
 button[disabled]
   opacity: .5
+
+.btn-icon
+  width: 25px
+  height: 25px
+  border: none
+  background: transparent
+  padding: 0
+  align-self: center
+  margin-top: 5px
+  &:active
+    transform: scale(0.8)
+
+
+p
+  margin: 0 !important
 /* Importing Bootstrap SCSS file. */
 @import '~bootstrap/scss/bootstrap'
 
