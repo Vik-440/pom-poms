@@ -11,7 +11,7 @@ from _4_finance_json import return_data_from_finance, return_data_from_payment,r
 
 app =   Flask(__name__)
 app.config['JSON_AS_ASCII'] = False
-  
+#########################################################################################  
 @app.route('/')
 def return_data_from_flask ():
 
@@ -24,7 +24,7 @@ def return_data_from_flask ():
     return jsonify(info) # returning a JSON response
 
 
-
+#########################################################################################
 @app.route('/mainpage', methods=['GET', 'POST'])
 def mainpage ():
     if request.method == 'POST':
@@ -39,7 +39,7 @@ def mainpage ():
     else:
         data = return_data_from_mainpage(0,0)
         return data
-
+#########################################################################################
 @app.route('/new_order', methods=['GET', 'POST'])
 def new_order ():
     if request.method == 'POST':
@@ -50,7 +50,7 @@ def new_order ():
         data=return_data_from_new_order()
 
         return data
-
+#########################################################################################
 @app.route('/material', methods=['GET', 'POST'])
 def material ():
     if request.method == 'POST':
@@ -73,7 +73,7 @@ def material ():
         return data
     else:
         return(return_data_from_material(0))
-
+#########################################################################################
 @app.route('/finance', methods=['GET', 'POST'])
 def finance ():
     if request.method == 'POST':
@@ -101,6 +101,6 @@ def finance ():
         return({"testdata" : "Test-POST-NOT-OK"})
     else:
         return(return_data_from_finance(0))
-
+#########################################################################################
 if __name__=='__main__':
     app.run(debug=True)

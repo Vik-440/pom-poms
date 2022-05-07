@@ -1,15 +1,17 @@
+from distutils.command.clean import clean
 import json
 from flask import session 
 from sqlalchemy import MetaData, false, func, true, text, Integer, String, Table, Column, insert, create_engine, \
     and_, or_, update#, desc
 from datetime import datetime, timedelta
+# from dateutil.relativedelta import relativedelta
 from sqlalchemy.orm import sessionmaker, Session, mapper, declarative_base#, decl_base, decl_api#, desc
 from sqlalchemy.ext.declarative import declarative_base
 from data_pompom_create import directory_of_order, directory_of_client, directory_of_team, directory_of_model
 from data_pompom_create import directory_of_group, directory_of_payment, directory_of_sity, directory_of_color
 from data_pompom_create import directory_of_outlay, directory_of_outlay_class
 from data_pompom_create import engine
-
+#########################################################################################
 def return_data_from_finance(asked):
     with Session(engine) as session:
         data_outlay_class=[]
@@ -58,7 +60,7 @@ def return_data_from_finance(asked):
         one_block={"id_outlay":q4[0],"data_outlay":q4[1],"id_outlay_class":q4[2],"money_outlay":q4[3],"comment_outlay":q4[4]}
         full_block.append(one_block)
     return json.dumps(full_block)
-
+#########################################################################################
 def return_data_from_payment(sender):
     with Session(engine) as session:
         w1=sender[0]['payment_group']
@@ -71,7 +73,7 @@ def return_data_from_payment(sender):
             session.add(z1)
         session.commit()    
     return({"payment_group":"ok"})
-
+#########################################################################################
 def return_data_from_outlay(sender):
     with Session(engine) as session:
         w1=sender[0]['outlay_group']
@@ -84,7 +86,7 @@ def return_data_from_outlay(sender):
             session.add(z1)
         session.commit()    
     return({"outlay_group":"ok"})
-
+#########################################################################################
 def return_data_from_payment_search(sender):
     with Session(engine) as session:
         data_start=sender['data_start']
@@ -115,7 +117,7 @@ def return_data_from_payment_search(sender):
             one_block={"id_payment":q1[0],"id_order":q1[1],"payment":q1[2],"metod_payment":q1[3],"data_payment":q1[4]}
             full_block.append(one_block)
     return json.dumps(full_block)
-
+#########################################################################################
 def return_data_from_outlay_search(sender):
     with Session(engine) as session:
         data_start=sender['data_start']
@@ -136,7 +138,7 @@ def return_data_from_outlay_search(sender):
             one_block={"id_outlay":q4[0],"data_outlay":q4[1],"id_outlay_class":q4[2],"money_outlay":q4[3],"comment_outlay":q4[4]}
             full_block.append(one_block)
     return json.dumps(full_block)
-
+#########################################################################################
 def return_data_from_payment_change(sender):
     with Session(engine)as session:
         id_payment=sender['id_payment']
@@ -148,7 +150,7 @@ def return_data_from_payment_change(sender):
             'payment':payment, 'metod_payment':metod_payment, 'data_payment':data_payment})
         session.commit()
     return({"id_payment":"ok"})
-
+#########################################################################################
 def return_data_from_outlay_change(sender):
     with Session(engine)as session:
         id_outlay=sender['id_outlay']
@@ -160,7 +162,7 @@ def return_data_from_outlay_change(sender):
             'id_outlay_class':id_outlay_class, 'money_outlay':money_outlay, 'comment_outlay':comment_outlay})
         session.commit()
     return({"id_outlay":"ok"})
-
+#########################################################################################
 def return_data_from_payment_id_order(sender):
     with Session(engine)as session:
         tmp_order=sender['id_order']
@@ -179,47 +181,148 @@ def return_data_from_payment_id_order(sender):
             one_block={"id_payment":q1[0],"id_order":q1[1],"payment":q1[2],"metod_payment":q1[3],"data_payment":q1[4]}
             full_block.append(one_block)
     return json.dumps(full_block)
-
+#########################################################################################
 def return_data_from_payment_balans(sender):
     with Session(engine)as session:
+        time_period_str=sender['balans']
+        
         data_start=sender['data_start'] # datetime.today().strftime('%Y-%m-%d')        #"2022-05-02"#     
         data_end=sender['data_end']
         iban=sender['iban']
         cash=sender['cash']
         full_block, id_payment, id_order,payment,metod_payment,data_payment = [], [], [], [], [], []
 
-        days=datetime.today().strftime('%Y-%m-%d') - datetime.datetime(data_start)
-        print(days.days)
+        data_start_obj=datetime.strptime(data_start, '%Y-%m-%d')
+        data_end_obj=datetime.strptime(data_end, '%Y-%m-%d')
 
+        days=data_end_obj - data_start_obj
+        day=days.days
 
-        payment_1=session.query(func.sum(directory_of_payment.payment).label('my_sum'), func.count(directory_of_payment.payment
-                ).label('my_count')).filter(directory_of_payment.data_payment>=data_start, 
-                directory_of_payment.data_payment<=data_end).first()
-        for row in payment_1:
-            payment_quantity=payment_1.my_count
-            payment=payment_1.my_sum
-            metod_payment='iban'
-            data_payment=data_start
-        one_block={"data_payment":data_payment,"metod_payment":metod_payment,"payment_quantity":payment_quantity,"payment":payment}
-        full_block.append(one_block)
+        if time_period_str == "day":
+            time_step = timedelta(days=1)
+            step_day=1
+            data_start_sql=data_start_obj
+            data_end_sql=data_start_obj
+        elif time_period_str == "week":
+            time_step = timedelta(days=7)
+            step_day=7
+            data_start_sql=data_start_obj
+            data_end_sql=data_start_sql+timedelta(days=6)
+        elif time_period_str == "month":
+            time_step = timedelta(days=30.5)
+            step_day=30.5                          ########## ?????????????????
+            data_start_sql=data_start_obj
+            data_end_sql=data_start_sql+timedelta(days=29.5)
+        elif time_period_str == "quarter":
+            time_step = timedelta(days=91.5)
+            step_day=91.5                          ########## ?????????????????
+            data_start_sql=data_start_obj
+            data_end_sql=data_start_sql+timedelta(days=90.5)
+        else: # time_period_str == "year":
+            time_step = timedelta(days=365)
+            step_day=365                          ########## ?????????????????
+            data_start_sql=data_start_obj
+            data_end_sql=data_start_sql+timedelta(days=364)
 
-        
-        
+        while day>0:
+
+            if iban and not(cash):
+                metod_payment='iban'
+                payment_1=session.query(func.sum(directory_of_payment.payment).label('my_sum'), func.count(directory_of_payment.payment
+                    ).label('my_count')).filter(directory_of_payment.data_payment>=data_start_sql, 
+                    directory_of_payment.data_payment<=data_end_sql).filter_by(metod_payment="iban").first() 
+            elif cash and not(iban):
+                metod_payment='cash'
+                payment_1=session.query(func.sum(directory_of_payment.payment).label('my_sum'), func.count(directory_of_payment.payment
+                    ).label('my_count')).filter(directory_of_payment.data_payment>=data_start_sql, 
+                    directory_of_payment.data_payment<=data_end_sql).filter_by(metod_payment="cash").first() 
+            else:
+                metod_payment='all'
+                payment_1=session.query(func.sum(directory_of_payment.payment).label('my_sum'), func.count(directory_of_payment.payment
+                    ).label('my_count')).filter(directory_of_payment.data_payment>=data_start_sql, 
+                    directory_of_payment.data_payment<=data_end_sql).first()   
+
+            for row in payment_1:
+                payment_quantity=payment_1.my_count
+                payment=payment_1.my_sum
+            if payment_quantity != 0:
+                one_block={"data_payment":str(data_start_sql.date()),"metod_payment":metod_payment,"payment_quantity":payment_quantity,"payment":payment}
+                full_block.append(one_block)
+
+            data_start_sql=data_start_sql+time_step
+            data_end_sql=data_end_sql+time_step
+            day=day-step_day
         # full_block={"testdata" : "in progres"}
     return json.dumps(full_block)
+#########################################################################################
+def return_data_from_payment_stat(search):
+    with Session(engine) as session:
+        stat, stat_outlay = [], []
+        
+        sql_sum=directory_of_payment.payment
+        sql_data=directory_of_payment.data_payment
+        stat_payment=return_forecast(stat, sql_sum, sql_data)
 
-
-
-
-
-
-
-
-def return_data_from_payment_stat(sender):
-    with Session(engine)as session:
-
-        full_block={"testdata" : "in progres"}
+        sql_sum=directory_of_outlay.money_outlay
+        sql_data=directory_of_outlay.data_outlay
+        stat_outlay=return_forecast(stat_outlay, sql_sum, sql_data)
+              
+        full_block={"stat_payment":stat_payment, "stat_outlay":stat_outlay}
     return json.dumps(full_block)
+#########################################################################################
+def return_forecast(stat, sql_sum, sql_data):
+    ds=datetime.today()
+    ds1=ds.strftime('%Y-%m-%d')
+    data_start_sql=ds1
+    data_end_sql=ds1
+    stat=return_stat (data_start_sql, data_end_sql, stat, sql_sum, sql_data)
+
+    time_step = timedelta(days=1)
+    data_start_sql=(ds-time_step).strftime('%Y-%m-%d')
+    data_end_sql=(ds-time_step).strftime('%Y-%m-%d')
+    stat=return_stat (data_start_sql, data_end_sql, stat, sql_sum, sql_data)
+
+    time_step = timedelta(days=2)
+    data_start_sql=(ds-time_step).strftime('%Y-%m-%d')
+    data_end_sql=(ds-time_step).strftime('%Y-%m-%d')
+    stat=return_stat (data_start_sql, data_end_sql, stat, sql_sum, sql_data)
+
+    data_start_sql=datetime.now().replace(day=1, hour=0, minute=0, second=0)    #, hour=0, minute=0, second=0
+    data_end_sql=datetime.now().replace(day=31, hour=0, minute=0, second=0)
+    stat=return_stat (data_start_sql, data_end_sql, stat, sql_sum, sql_data)
+
+    time_step = timedelta(days=30)
+    dss=ds-time_step
+    data_start_sql=dss.replace(day=1, hour=0, minute=0, second=0)    #, hour=0, minute=0, second=0
+    data_end_sql=data_start_sql+time_step
+    stat=return_stat (data_start_sql, data_end_sql, stat, sql_sum, sql_data)
+    
+    time_step = timedelta(days=365)
+    data_start_sql=ds.replace(month=1, day=1, hour=0, minute=0, second=0)    #, hour=0, minute=0, second=0
+    data_end_sql=data_start_sql+time_step
+    stat=return_stat (data_start_sql, data_end_sql, stat, sql_sum, sql_data)
+    # print(data_start_sql)
+    # print(data_end_sql)
+    days_year=ds -data_start_sql
+    forecast=round((stat[0]/days_year.days)*365, 2)
+    stat.insert(0, forecast)
+
+    return(stat)
+
+#########################################################################################
+def return_stat (data_start_sql, data_end_sql, stat, sql_sum, sql_data):
+    with Session(engine) as session:
+        payment_1=session.query(func.sum(sql_sum).label('my_sum')).filter(
+                sql_data>=data_start_sql, sql_data<=data_end_sql).first()  
+        # payment_1=session.query(func.sum(directory_of_payment.payment).label('my_sum')).filter(
+        #         directory_of_payment.data_payment>=data_start_sql, directory_of_payment.data_payment<=data_end_sql).first() 
+        for row in payment_1:
+            payment=payment_1.my_sum
+        stat.insert(0, payment)
+    return(stat)
+
+#########################################################################################
+
 
 def block_json(pos1,pos2,pos3,pos4,pos5):
     el1=pos1[0]
