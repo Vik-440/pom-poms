@@ -29,6 +29,7 @@ def return_data_from_flask ():
 #########################################################################################
 @app.route('/main_page', methods=['GET', 'POST'])
 def main_page ():
+    response.headers.add("Access-Control-Allow-Origin", "*")
     if request.method == 'POST':
         request.data = request.get_json()
         return(return_data_from_main_page(request.data))

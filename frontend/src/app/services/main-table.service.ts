@@ -5,13 +5,13 @@ import { HttpClient } from '@angular/common/http';
 })
 export class MainPage {
 
-  url = `${this.apiUrl}/mainpage`;
+  url = `${this.apiUrl}/main_page`;
 
   constructor(private http: HttpClient, @Inject('API_URL') private apiUrl: string) {
   }
 
   getList() {
     console.log(this.apiUrl)
-    return this.http.get(`http://127.0.0.2:5000/mainpage`);
+    return this.http.get(`http://127.0.0.2:5000/main_page`);
   }
 }
