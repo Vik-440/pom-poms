@@ -82,7 +82,7 @@ class directory_of_payment(Base):
     __tablename__ = 'directory_of_payment'
     id_payment = Column('id_payment', Integer, primary_key=True)
     id_order = Column('id_order', Integer, ForeignKey('directory_of_order.id_order'))
-    payment = Column('payment', Integer)
+    payment = Column('payment', Integer)        #Integer   Numeric(8, 2)
     metod_payment = Column('metod_payment', String)
     data_payment = Column('data_payment', Date)
     # directory_of_order = relationship("directory_of_order")
@@ -111,8 +111,8 @@ class directory_of_outlay(Base):
     __tablename__ = 'directory_of_outlay'
     id_outlay = Column('id_outlay', Integer, primary_key=True)
     data_outlay = Column('data_outlay', Date)
-    id_outlay_class = Column('id_outlay_class', Integer)
-    money_outlay = Column('money_outlay', Numeric(8, 2))
+    id_outlay_class = Column('id_outlay_class', String)
+    money_outlay = Column('money_outlay', Integer)
     quantity_outlay = Column('quantity_outlay', Numeric(8, 2))
     type_pc_outlay= Column('type_pc_outlay', String)
     comment_outlay = Column('comment_outlay', String)
