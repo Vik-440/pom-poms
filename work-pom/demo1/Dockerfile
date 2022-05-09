@@ -1,9 +1,7 @@
-FROM ubuntu:20.04
-WORKDIR /code
+FROM python:3.8-slim-buster
 ENV FLASK_APP=app_flask.py
 ENV FLASK_RUN_HOST=0.0.0.0
 COPY . .
-RUN apt-get update && apt-get install -y python python3-pip
 RUN pip3 install -r requirements.txt
 EXPOSE 5000
 COPY . .

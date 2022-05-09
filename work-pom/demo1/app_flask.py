@@ -1,5 +1,8 @@
 from flask import Flask,jsonify,request
 import json
+from datetime import datetime, timedelta
+
+from sqlalchemy import false
 from _1_main_json import return_data_from_mainpage
 from _2_new_order_json import return_data_from_new_order, return_data_from_new_order_post
 from _3_material_json import return_data_from_material, return_data_from_material_one, \
@@ -8,6 +11,7 @@ from _4_finance_json import return_data_from_finance, return_data_from_payment,r
     return_data_from_payment_search, return_data_from_outlay_search, return_data_from_payment_change, \
     return_data_from_outlay_change, return_data_from_payment_id_order, return_data_from_payment_stat, \
     return_data_from_payment_balans
+from _1_main_page_json import return_data_from_main_page
 
 app =   Flask(__name__)
 app.config['JSON_AS_ASCII'] = False
@@ -22,8 +26,15 @@ def return_data_from_flask ():
         "kod_model": "190-B05"}
 
     return jsonify(info) # returning a JSON response
-
-
+#########################################################################################
+@app.route('/main_page', methods=['GET', 'POST'])
+def main_page ():
+    if request.method == 'POST':
+        request.data = request.get_json()
+        return(return_data_from_main_page(request.data))
+    # ds=datetime.today().strftime('%Y-%m-%d')
+    data={"data_start": "2016-01-01"}#, "data_end" : ds, "fulfilled_order":false}
+    return(return_data_from_main_page(data))
 #########################################################################################
 @app.route('/mainpage', methods=['GET', 'POST'])
 def mainpage ():
@@ -36,9 +47,7 @@ def mainpage ():
         else:
             data = request.data
         return data
-    else:
-        data = return_data_from_mainpage(0,0)
-        return data
+    else: return (return_data_from_mainpage(0,0))
 #########################################################################################
 @app.route('/new_order', methods=['GET', 'POST'])
 def new_order ():
@@ -46,10 +55,7 @@ def new_order ():
         request.data = request.get_json()
         data=return_data_from_new_order_post(request.data)
         return data
-    else:
-        data=return_data_from_new_order()
-
-        return data
+    else: return (return_data_from_new_order())
 #########################################################################################
 @app.route('/material', methods=['GET', 'POST'])
 def material ():
@@ -103,4 +109,4 @@ def finance ():
         return(return_data_from_finance(0))
 #########################################################################################
 if __name__=='__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0',debug=True)

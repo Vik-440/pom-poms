@@ -47,3 +47,5 @@ Thumbs.db
 .env
 
 /frontend/yarn.lock
+*.env
+venv/
