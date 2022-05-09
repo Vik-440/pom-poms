@@ -1,6 +1,7 @@
 from unicodedata import numeric
 from sqlalchemy import Date, ForeignKey, Numeric, create_engine, Column, BigInteger, Integer, String, \
-                Float, Boolean
+                Float, Boolean, Table, Index, Text, DateTime, \
+                PrimaryKeyConstraint, UniqueConstraint, ForeignKeyConstraint
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
 import psycopg2
@@ -25,7 +26,7 @@ class directory_of_order(Base):
     sum_payment = Column('sum_payment', Integer)            #Integer
     discont_order = Column('discont_order', Integer)        #numeric (8,2)
     comment_order = Column('comment_order', String)
-    # directory_of_group = relationship("directory_of_group")
+    directory_of_group = relationship("directory_of_group")
     # directory_of_payment = relationship("directory_of_payment")
 
 class directory_of_client(Base):
@@ -74,7 +75,7 @@ class directory_of_group(Base):
     id_order = Column('id_order', Integer, ForeignKey('directory_of_order.id_order'))
     quantity_pars_model = Column('quantity_pars_model', Integer)
     phase_1_model = Column('phase_1_model', Boolean)
-    phase_2_model = Column('phase_2_model', Boolean)
+    phase_2_model = Column('phase_2_model', Boolean)    #Integer
     phase_3_model = Column('phase_3_model', Boolean)
     # directory_of_order = relationship("directory_of_order")
 
