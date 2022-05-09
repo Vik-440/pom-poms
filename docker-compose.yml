@@ -1,0 +1,9 @@
+version: "2"
+services:
+  app:
+    build: ./work-pom/demo1
+    ports:
+      - "5000:5000"
+    env_file:
+      - dev.env
+    
