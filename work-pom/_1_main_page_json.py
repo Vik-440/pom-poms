@@ -16,6 +16,26 @@ from data_pompom_create import engine
 
 def return_data_from_main_page(asked):
     with Session(engine) as session:
+        if 'fulfilled_id_order' in asked:
+            id_order=asked['fulfilled_id_order']
+            fulfilled_order=asked['fulfilled_order']
+            rows=session.query(directory_of_order).filter_by(id_order=id_order
+                ).update({'fulfilled_order':fulfilled_order})
+            session.commit()
+            one_block = {"id_order": "ok"}
+            return json.dumps(one_block)
+        # if 'phase_id_order' in asked:
+        #     id_order=asked['phase_id_order']
+        #     phase_1_model=asked['phase_1_model']
+        #     phase_2_model=asked['phase_2_model']
+        #     phase_3_model=asked['phase_3_model']
+        #     rows=session.query(directory_of_group).filter_by(id_order=id_order
+        #         ).update({'phase_1_model':phase_1_model,'phase_2_model':phase_2_model,'phase_3_model':phase_3_model})
+        #     session.commit()
+        #     one_block = {"phase_id_order": "ok"}
+        #     return json.dumps(one_block)
+
+
         id_order,comment_order,data_order,kolor_model,kod_model,comment_model,quantity_pars_model,phase_1_model,\
             phase_2_model,phase_3_model,sum_payment,real_money, phone_client,phone_recipient,\
             sity,data_plane_order,fulfilled_order,np_number,zip_code,street_house_apartment,second_name_client,\

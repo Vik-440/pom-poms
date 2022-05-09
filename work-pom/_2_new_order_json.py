@@ -115,6 +115,15 @@ def return_data_from_new_order_post(data_from_new_page):
     elif 'sl_id_model' in data_from_new_page:
         # search_data=data_from_new_page['sl_kod']
         data_new_page=return_data_from_full_kod(data_from_new_page)
+####    
+    elif 'fulfilled_id_order' in data_from_new_page:
+        id_order=data_from_new_page['fulfilled_id_order']
+        fulfilled_order=data_from_new_page['fulfilled_order']
+        rows=session.query(directory_of_order).filter_by(id_order=id_order
+            ).update({'fulfilled_order':fulfilled_order})
+        session.commit()
+        data_new_page = {"id_order": "ok"}
+
 
 #############################################################################    
     else:
