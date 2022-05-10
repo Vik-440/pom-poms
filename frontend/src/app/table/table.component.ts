@@ -121,15 +121,11 @@ export class TableComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.service.getList().subscribe();
-    this.dataDateForm = this.fb.group({
-      dateStart: null,
-      dateEnd: null
-    });
-
-    console.log(this.ordersRow)
-    this.httpClient.get("assets/tmp.json").subscribe(data =>{
-      Object.values(data).forEach(row => {
+    this.service.getListMain()
+    .subscribe((data: any )=> {
+     console.log(data);
+     
+      data?.map(row => {
         this.ordersRow.push({
           id_order: row.id_order || '',
           data_order: row.data_order || '',
@@ -145,14 +141,20 @@ export class TableComponent implements OnInit, OnDestroy {
           sum_payment: row.sum_payment || '',
           real_money: row.real_money || 0,
           left_money: row.sum_payment - row.real_money,
-          telephone: '',
+          telephone: row.telephone || '',
           sity: row.sity || '',
           data_plane_order: row.data_plane_order || '',
           fulfilled_order: row.fulfilled_order || '',
           comment_order: row.comment_order || '',
         })
       });
-    })
+      console.log(this.ordersRow);
+      
+    });
+    this.dataDateForm = this.fb.group({
+      dateStart: null,
+      dateEnd: null
+    });
 
     this.optionsDateStart = {
       ...this.options
@@ -268,6 +270,10 @@ validateInput(currentValue: NgbDate | null, input: string): NgbDate | null {
   getFulfilledOrder() {
     return this.ordersRow.filter(item => !item.fulfilled_order).length
     
+  }
+
+  sityColor(city) {
+    return city.includes("самовивіз");
   }
 
 }

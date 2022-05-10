@@ -15,6 +15,9 @@ from _1_main_page_json import return_data_from_main_page
 
 app =   Flask(__name__)
 app.config['JSON_AS_ASCII'] = False
+from flask_cors import CORS
+
+CORS(app)
 #########################################################################################  
 @app.route('/')
 def return_data_from_flask ():
@@ -29,7 +32,6 @@ def return_data_from_flask ():
 #########################################################################################
 @app.route('/main_page', methods=['GET', 'POST'])
 def main_page ():
-    response.headers.add("Access-Control-Allow-Origin", "*")
     if request.method == 'POST':
         request.data = request.get_json()
         return(return_data_from_main_page(request.data))

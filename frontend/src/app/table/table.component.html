@@ -68,7 +68,7 @@
       </thead>
       <tbody>
         <ng-container  *ngFor="let order of ordersRow">
-          <tr class="table--row">
+          <tr  class="table--row">
             <td ngxTooltip [tooltipContent]="order.comment_order">{{ order.id_order }}</td>
             <td>{{ order.data_order | date: 'yyyy-mm-dd'}}</td>
             <ng-container *ngIf="checkArray(order.kolor_model); else oneItem">
@@ -143,7 +143,7 @@
 
             <td [classList]="countMoney(order)">{{ order.sum_payment + ' / ' + order.real_money + ' / ' + order.left_money }}</td>
             <td>{{ order.telephone }}</td>
-            <td>{{ order.sity }}</td>
+            <td [class.green]="sityColor(order.sity)" ngxTooltip [tooltipContent]="'Н.П. №' + order.zip_code + ', ' + order.street_house_apartment">{{ order.sity }}</td>
             <td>{{ order.data_plane_order | date: 'yyyy-mm-dd'}}</td>
             <td>
               <button class="check-btn">

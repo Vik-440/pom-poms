@@ -10,8 +10,7 @@ export class MainPage {
   constructor(private http: HttpClient, @Inject('API_URL') private apiUrl: string) {
   }
 
-  getList() {
-    console.log(this.apiUrl)
-    return this.http.get(`http://127.0.0.2:5000/main_page`);
+  getListMain() {
+    return this.http.get(`http://127.0.0.1:5000/main_page`);
   }
 }
