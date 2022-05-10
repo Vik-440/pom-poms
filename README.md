@@ -11,3 +11,5 @@
 - **git pull**        # Отримання файлів з хмари у мій проект
 
 - **git pull origin main**
+
+- **sudo docker-compose -f docker-compose.dev.yml up --build**
