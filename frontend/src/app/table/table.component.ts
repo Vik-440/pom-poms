@@ -7,6 +7,7 @@ import { DatepickerOptions } from 'ng2-datepicker';
 import locale from 'date-fns/locale/en-US';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { tap } from 'rxjs';
+import * as moment from 'moment';
 
 interface OrderInterface {
   id_order: number;
@@ -70,6 +71,7 @@ export class SortDirective {
 })
 export class TableComponent implements OnInit, OnDestroy {
 
+  filtersForm: FormGroup;
   ordersRow = [];
   switchConfig = {
     labels: {
@@ -95,16 +97,14 @@ export class TableComponent implements OnInit, OnDestroy {
   date = new Date();
   options: DatepickerOptions = {
     minDate: new Date(''),
-    format: 'MM/dd/yyyy', // date format to display in input
+    format: 'MM/dd/yyyy',
     formatDays: 'EEEEE',
     firstCalendarDay: 1, // 0 - Sunday, 1 - Monday
     locale: locale,
     position: 'bottom',
     placeholder: 'mm/dd/yyyy',
-    inputClass: '', // custom input CSS class to be applied
-    calendarClass: 'datepicker-default', // custom datepicker calendar CSS class to be applied
-    scrollBarColor: '#dfe3e9', // in case you customize you theme, here you define scroll bar color
-    // keyboardEvents: true // enable keyboard events
+    calendarClass: 'datepicker-default', 
+    scrollBarColor: '#dfe3e9',
   };
 
   isShowCalendar = false;
@@ -112,45 +112,30 @@ export class TableComponent implements OnInit, OnDestroy {
   optionsDateEnd: DatepickerOptions;
 
   dataDateForm: FormGroup;
+  fulfilledOrderItems = [
+    { id: 1, value: true, name: 'виконані' },
+    { id: 2, value: false, name: 'очікують' },
+    { id: 3, value: '', name: 'всі' },
+];
   @ViewChildren(SortDirective) headers: QueryList<SortDirective>;
 
   constructor(
-    private fb: FormBuilder,
-    private resolver: ComponentFactoryResolver, private httpClient: HttpClient, private service: MainPage, private calendar: NgbCalendar, public formatter: NgbDateParserFormatter){
+    private fb: FormBuilder, private service: MainPage, private calendar: NgbCalendar, public formatter: NgbDateParserFormatter){
 
   }
 
   ngOnInit() {
+    this.filtersForm = this.fb.group({
+      dataStart: '',
+      dataEnd: '',
+      fulfilled_order: ''
+    });
+
     this.service.getListMain()
     .subscribe((data: any )=> {
-     console.log(data);
-     
-      data?.map(row => {
-        this.ordersRow.push({
-          id_order: row.id_order || '',
-          data_order: row.data_order || '',
-          kolor_model: row.kolor_model || '',
-          kod_model: row.kod_model || '',
-          comment_model: row.comment_model || '',
-          kolor_cell_model: row.kolor_cell_model || '',
-          quantity_pars_model: row.quantity_pars_model || '',
-          kolor_cell_pars: row.kolor_cell_pars || '',
-          phase_1_model: row.phase_1_model || '',
-          phase_2_model: row.phase_2_model || '',
-          phase_3_model: row.phase_3_model || '',
-          sum_payment: row.sum_payment || '',
-          real_money: row.real_money || 0,
-          left_money: row.sum_payment - row.real_money,
-          telephone: row.telephone || '',
-          sity: row.sity || '',
-          data_plane_order: row.data_plane_order || '',
-          fulfilled_order: row.fulfilled_order || '',
-          comment_order: row.comment_order || '',
-        })
-      });
-      console.log(this.ordersRow);
-      
+      this.ordersRow = data;
     });
+
     this.dataDateForm = this.fb.group({
       dateStart: null,
       dateEnd: null
@@ -183,7 +168,6 @@ export class TableComponent implements OnInit, OnDestroy {
  }
 
  changeDate(value){
-  console.log('value', value);
   this.dataDateForm = this.fb.group({
     dateStart: null,
     dateEnd: null
@@ -256,7 +240,6 @@ validateInput(currentValue: NgbDate | null, input: string): NgbDate | null {
       }
     });
 
-    // sorting countries
     if (direction === '' || column === '') {
       this.ordersRow = orders;
     } else {
@@ -276,4 +259,17 @@ validateInput(currentValue: NgbDate | null, input: string): NgbDate | null {
     return city.includes("самовивіз");
   }
 
+  applyFilters() {
+    const params = {
+      data_start: moment(this.filtersForm.value.dataStart).format('yyyy-MM-DD'),
+      data_end: moment(this.filtersForm.value.dataEnd).format('yyyy-MM-DD'),
+      fulfilled_order: this.filtersForm.value.fulfilled_order
+    }
+    if (this.filtersForm.value.fulfilled_order === '') {
+      delete params.fulfilled_order
+    }
+    this.service.getListWithFilters(params).subscribe((data: any )=> {
+      this.ordersRow = data;
+     });
+  }
 }

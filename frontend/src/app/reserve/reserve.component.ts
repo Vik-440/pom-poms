@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { MaterialPageService } from '../services/materials.service';
 
 @Component({
   selector: 'app-reserve',
@@ -7,18 +8,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ReserveComponent implements OnInit {
 
-  constructor() { }
+  constructor(private servieMaterial: MaterialPageService) { }
 
-  reserveItems = [{
-    id_color: 1,
-    name_color: 'dd',
-    width_color: 12,
-    bab_quantity_color: 6,
-    weight_color: 3045,
-    model: 1,
-    pars: 30
-  }];
+  reserveItems;
   ngOnInit(): void {
+    this.servieMaterial.getListMaterial().subscribe(data => {
+      this.reserveItems = data;
+    });
   }
 
 }

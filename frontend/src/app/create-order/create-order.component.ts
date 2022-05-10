@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DatepickerOptions } from 'ng2-datepicker';
 import locale from 'date-fns/locale/en-US';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-create-order',
@@ -9,8 +10,9 @@ import locale from 'date-fns/locale/en-US';
 })
 export class CreateOrderComponent implements OnInit {
 
-  constructor() { }
+  constructor(private fb: FormBuilder) { }
 
+  orderForm: FormGroup;
   options: DatepickerOptions = {
     minDate: new Date(''),
     format: 'dd.MM.yyyy',
@@ -27,7 +29,17 @@ export class CreateOrderComponent implements OnInit {
 
   dateToday = new Date();
   isRecipient = false;
+
   ngOnInit(): void {
+    this.orderForm = this.fb.group({
+      kod_model: '',
+      kolor_model: '',
+      name_color: '',
+      id_color_part_1: '',
+      id_color_part_2: '',
+      price_model: '',
+      quantity_pars_model: ''
+    })
   }
 
   addOrder() {
