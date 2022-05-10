@@ -1,16 +1,19 @@
 <div class="page base-page-wrapper pl41 pr40">
   <div class="base-page-header">
-  <div class="filters">
+  <div class="filters" [formGroup]="filtersForm">
     <div class="filters-data">
       <p class="filters-data--title"> готовність</p>
-      <ngx-datepicker
-      class="filters-data--datapicker"
-      [options]="options"
-    ></ngx-datepicker>
+      <ng-select 
+        formControlName="fulfilled_order"
+        bindLabel="name"
+        class="done" 
+        bindValue="value" 
+        [items]="fulfilledOrderItems"></ng-select>
     </div>
     <div class="filters-data">
       <p class="filters-data--title">дата від</p>
       <ngx-datepicker
+      formControlName="dataStart"
       class="filters-data--datapicker"
       [options]="options"
     ></ngx-datepicker>
@@ -18,6 +21,7 @@
     <div class="filters-data">
       <p class="filters-data--title">дата до</p>
       <ngx-datepicker
+      formControlName="dataEnd"
       class="filters-data--datapicker"
       [options]="options"
     ></ngx-datepicker>
@@ -26,7 +30,7 @@
       <p class="filters-data--title">№ телефону</p>
       <input class="filters-data--phone" type="text">
     </div>
-    <button class="filters-data--save">
+    <button class="filters-data--save" (click)="applyFilters()">
       Застосувати
     </button>
   </div>
@@ -47,7 +51,7 @@
     </div>
   </div>
 </div>
-  <div class="table-responsive container-fluid table">
+  <div class="table-responsive container-fluid table"  *ngIf="ordersRow.length else noData">
     <table class="table table-lg table-bordered mb-0 border-primary">
       <thead>
       <tr class="center-data">
@@ -68,7 +72,7 @@
       </thead>
       <tbody>
         <ng-container  *ngFor="let order of ordersRow">
-          <tr class="table--row">
+          <tr  class="table--row">
             <td ngxTooltip [tooltipContent]="order.comment_order">{{ order.id_order }}</td>
             <td>{{ order.data_order | date: 'yyyy-mm-dd'}}</td>
             <ng-container *ngIf="checkArray(order.kolor_model); else oneItem">
@@ -142,8 +146,8 @@
             </ng-template>
 
             <td [classList]="countMoney(order)">{{ order.sum_payment + ' / ' + order.real_money + ' / ' + order.left_money }}</td>
-            <td>{{ order.telephone }}</td>
-            <td>{{ order.sity }}</td>
+            <td>{{ order.telephone || '-' }}</td>
+            <td [class.green]="sityColor(order.sity)" ngxTooltip [tooltipContent]="'Н.П. №' + order.np_number + ', ' + order.zip_code + ', ' + order.street_house_apartment">{{ order.sity }}</td>
             <td>{{ order.data_plane_order | date: 'yyyy-mm-dd'}}</td>
             <td>
               <button class="check-btn">
@@ -155,5 +159,10 @@
       </tbody>
     </table>
   </div>
+  <ng-template #noData>
+    <div class="nodata">
+      Немає записів
+    </div>
+  </ng-template>
 
 </div>

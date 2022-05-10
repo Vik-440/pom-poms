@@ -3,6 +3,11 @@
   padding-top: 2rem
   flex-direction: column
 
+::ng-deep 
+  .base-page-wrapper
+    .ng-dropdown-panel.ng-select-bottom
+      background: #b0adad
+      border-radius: 10px
 p
   margin-bottom: 0px !important
 
@@ -10,6 +15,7 @@ p
   display: flex
   margin-bottom: 21px
   justify-content: space-between
+  align-items: flex-end
   .filters  
     display: flex
     gap: 24px
@@ -19,7 +25,6 @@ p
       font-weight: 400
       font-size: 16px
       line-height: 12px
-    &--datapicker
     &--phone
       width: 142px
       height: 25px
@@ -37,6 +42,13 @@ p
       font-size: 13px
       font-weight: 700
       color: #fff
+    & .done
+      width: 104px
+      height: 25px
+      background: #FFFFFF
+      border: 0.5px solid #727272
+      border-radius: 25px
+      padding-left: 5px
   .info
     display: flex
     align-items: center

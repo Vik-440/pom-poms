@@ -17,6 +17,9 @@ from flask_cors import CORS
 app =   Flask(__name__)
 CORS(app)
 app.config['JSON_AS_ASCII'] = False
+from flask_cors import CORS
+
+CORS(app)
 #########################################################################################  
 @app.route('/')
 def return_data_from_flask ():
