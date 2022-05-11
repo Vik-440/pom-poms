@@ -25,7 +25,7 @@ def return_data_from_material(search):
             material_1=session.query(directory_of_color).all()
         elif search == 0:
             # None
-            material_1=session.query(directory_of_color).filter(directory_of_color.weight_color > 0).all()
+            material_1=session.query(directory_of_color).filter(directory_of_color.weight_color > 0).order_by('name_color').all()
         for row in material_1:
             j_id_color.append(row.id_color)
             j_name_color.append(row.name_color)
