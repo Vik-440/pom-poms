@@ -59,15 +59,20 @@ def return_data_from_main_page(asked):
             id_client_1=session.query(directory_of_client).filter_by(phone_client=phone_client_tmp).all()
             for row0 in id_client_1:
                 id_client3=row0.id_client
-            
+##################################################################################################################            
         if 'phone_client' in asked:
-            if fulfilled_order_1:
-                id_order_1=session.query(directory_of_order).filter(directory_of_order.data_order>=data_start,
-                directory_of_order.data_order<=data_end).filter_by(fulfilled_order=fulfilled_order_1,
-                id_client=id_client3).order_by('id_order').all() 
+            if 'fulfilled_order' in asked:
+                if fulfilled_order:
+                    id_order_1=session.query(directory_of_order).filter(directory_of_order.data_order>=data_start,
+                    directory_of_order.data_order<=data_end).filter_by(fulfilled_order=fulfilled_order_1,
+                    id_client=id_client3).order_by('id_order').all()
+                else: 
+                    id_order_1=session.query(directory_of_order).filter(directory_of_order.data_order>=data_start,
+                    directory_of_order.data_order<=data_end).filter_by(id_client=id_client3
+                    ).order_by('id_order').all()
             else:
                 id_order_1=session.query(directory_of_order).filter(directory_of_order.data_order>=data_start,
-                directory_of_order.data_order<=data_end).filter_by(id_client=id_client3
+                directory_of_order.data_order<=data_end).filter_by(fulfilled_order='FALSE',id_client=id_client3
                 ).order_by('id_order').all() 
         elif 'fulfilled_order' in asked:
             if fulfilled_order_1:
