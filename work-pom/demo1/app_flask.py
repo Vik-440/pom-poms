@@ -12,14 +12,9 @@ from _4_finance_json import return_data_from_finance, return_data_from_payment,r
     return_data_from_outlay_change, return_data_from_payment_id_order, return_data_from_payment_stat, \
     return_data_from_payment_balans
 from _1_main_page_json import return_data_from_main_page
-from flask_cors import CORS
 
 app =   Flask(__name__)
-CORS(app)
 app.config['JSON_AS_ASCII'] = False
-from flask_cors import CORS
-
-CORS(app)
 #########################################################################################  
 @app.route('/')
 def return_data_from_flask ():
@@ -114,4 +109,4 @@ def finance ():
         return(return_data_from_finance(0))
 #########################################################################################
 if __name__=='__main__':
-    app.run(host='0.0.0.0',debug=True)
+    app.run(debug=True)
