@@ -1,13 +1,12 @@
 import { Component, Directive, EventEmitter, Input, OnDestroy, OnInit, Output, QueryList, ViewChildren } from '@angular/core';
-import { HttpClient } from "@angular/common/http";
-import { MainPage } from '../services/main-table.service';
-import {NgbDate, NgbCalendar, NgbDateParserFormatter} from '@ng-bootstrap/ng-bootstrap';
-import { ComponentFactoryResolver } from '@angular/core';
-import { DatepickerOptions } from 'ng2-datepicker';
-import locale from 'date-fns/locale/en-US';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { tap } from 'rxjs';
+import { NgbCalendar, NgbDate, NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
+import locale from 'date-fns/locale/en-US';
 import * as moment from 'moment';
+import { DatepickerOptions } from 'ng2-datepicker';
+import { tap } from 'rxjs';
+import { CreateOrderService } from '../services/create-order.service';
+import { MainPage } from '../services/main-table.service';
 
 interface OrderInterface {
   id_order: number;
@@ -110,17 +109,23 @@ export class TableComponent implements OnInit, OnDestroy {
   isShowCalendar = false;
   optionsDateStart: DatepickerOptions;
   optionsDateEnd: DatepickerOptions;
+  optionsDownloaded: DatepickerOptions;
 
   dataDateForm: FormGroup;
+  phoneClients = [];
+  dateDownloaded = '';
+  speed: number;
+  queue: number = 0;
   fulfilledOrderItems = [
     { id: 1, value: true, name: 'виконані' },
-    { id: 2, value: false, name: 'очікують' },
+    { id: 2, value: false, name: 'не виконані' },
     { id: 3, value: '', name: 'всі' },
 ];
   @ViewChildren(SortDirective) headers: QueryList<SortDirective>;
 
   constructor(
-    private fb: FormBuilder, private service: MainPage, private calendar: NgbCalendar, public formatter: NgbDateParserFormatter){
+    private fb: FormBuilder, private service: MainPage, private calendar: NgbCalendar, public formatter: NgbDateParserFormatter,
+    private serviceOrders: CreateOrderService){
 
   }
 
@@ -128,7 +133,8 @@ export class TableComponent implements OnInit, OnDestroy {
     this.filtersForm = this.fb.group({
       dataStart: '',
       dataEnd: '',
-      fulfilled_order: ''
+      fulfilled_order: '',
+      phone_client: ''
     });
 
     this.service.getListMain()
@@ -146,6 +152,10 @@ export class TableComponent implements OnInit, OnDestroy {
     }
 
     this.optionsDateEnd = {
+      ...this.options
+    }
+
+    this.optionsDownloaded = {
       ...this.options
     }
     this.dataDateForm.valueChanges.pipe(
@@ -210,10 +220,8 @@ validateInput(currentValue: NgbDate | null, input: string): NgbDate | null {
     const interest = (100*order.real_money)/order.sum_payment;
     if(interest < 25) {
       return 'red';
-    } else if(interest === 100) {
+    } else if(interest >= 100) {
       return 'green';
-    } else {
-      return 'yellow';
     }
   }
 
@@ -251,8 +259,16 @@ validateInput(currentValue: NgbDate | null, input: string): NgbDate | null {
   }
 
   getFulfilledOrder() {
-    return this.ordersRow.filter(item => !item.fulfilled_order).length
-    
+    let sum: number = 0;
+    this.ordersRow.map(item => {
+      if(!item.fulfilled_order) {
+        sum += Array.isArray(item.quantity_pars_model) 
+          ? item.quantity_pars_model.reduce((partialSum, a) => partialSum + a, 0) 
+          : item.quantity_pars_model;
+      }
+    });
+    this.queue = sum;
+    return sum;
   }
 
   sityColor(city) {
@@ -260,7 +276,7 @@ validateInput(currentValue: NgbDate | null, input: string): NgbDate | null {
   }
 
   applyFilters() {
-    const params = {
+    let params: any = {
       data_start: moment(this.filtersForm.value.dataStart).format('yyyy-MM-DD'),
       data_end: moment(this.filtersForm.value.dataEnd).format('yyyy-MM-DD'),
       fulfilled_order: this.filtersForm.value.fulfilled_order
@@ -268,8 +284,55 @@ validateInput(currentValue: NgbDate | null, input: string): NgbDate | null {
     if (this.filtersForm.value.fulfilled_order === '') {
       delete params.fulfilled_order
     }
+
+    if (this.filtersForm.value.dataStart === '') {
+      delete params.data_start
+    }
+
+    if (this.filtersForm.value.dataEnd === '') {
+      delete params.data_end
+    }
+
+    if (this.filtersForm.value.phone_client) {
+      params = { 
+        ...params,
+        phone_client: this.filtersForm.value.phone_client
+      }
+    }
     this.service.getListWithFilters(params).subscribe((data: any )=> {
       this.ordersRow = data;
      });
+  }
+
+  changeSpeed() {
+    const days = Math.ceil(this.queue/this.speed);
+    this.dateDownloaded = moment().add(days, 'days').format('MM/DD/YYYY');
+    console.log(moment().add(days, 'days').format('MM/DD/YYYY'));
+  }
+
+  makeDone(id, fulfilledOrder, i){
+    this.service.makeDoneOrder({fulfilled_id_order: id, fulfilled_order: fulfilledOrder}).subscribe(() => {
+      this.ordersRow.forEach((order, index) => {
+        if(i === index){
+          order.fulfilled_order = !order.fulfilled_order;
+        }
+      })
+    })
+  }
+
+  tooltipCity(order) {
+    const tooltip = ['Н.П. №' + order.np_number, order.second_name_client, order.phone_recipient, order.zip_code, order.street_house_apartment];
+    return tooltip.filter(n => n).join(', ');
+  }
+
+  changePhone(event) {
+    console.log(event.term.length);
+    
+    if(event.term.length >= 4) {
+      this.serviceOrders.getPhone({ur_phone: event.term})
+      .subscribe((numbers: any) => {
+        this.phoneClients = numbers?.phone_client;
+      })
+    }
   }
 }

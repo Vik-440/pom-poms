@@ -28,7 +28,14 @@
     </div>
     <div class="filters-phone">
       <p class="filters-data--title">№ телефону</p>
-      <input class="filters-data--phone" type="text">
+      <ng-select 
+        [clearOnBackspace]="false" 
+        notFoundText="No phone founded"
+        (search)="changePhone($event)" 
+        class="filters-data--phone" 
+        type="number" 
+        formControlName="phone_client" 
+        [items]="phoneClients" ></ng-select>
     </div>
     <button class="filters-data--save" (click)="applyFilters()">
       Застосувати
@@ -37,17 +44,19 @@
   <div class="info">
     <div class="queue">
       <p class="info--title">Черга: {{ getFulfilledOrder() }}</p>
-
     </div>
     <div>
-      <input type="text" class="speed" placeholder="швидкість">
+      <input type="number" class="speed" placeholder="швидкість" max="10" min="1" [(ngModel)]="speed" (ngModelChange)="changeSpeed()">
     </div>
     <div class="downloaded">  
       <p class="info--title">Завантажені до:</p>
-      <ngx-datepicker
-      class="filters-data--datapicker"
-      [options]="options"
-    ></ngx-datepicker>
+      <input
+      readonly
+      disabled
+      class="filters-data--dateDownloaded"
+      placeholder="mm/dd/yyyy"
+      [(ngModel)]="dateDownloaded"
+    >
     </div>
   </div>
 </div>
@@ -55,35 +64,35 @@
     <table class="table table-lg table-bordered mb-0 border-primary">
       <thead>
       <tr class="center-data">
-        <th scope="col" sortable="id_order" class="number-order" (sort)="onSort($event)">№ замл.</th>
-        <th scope="col" sortable="data_order" class="data-order" (sort)="onSort($event)">Дата замовлення</th>
-        <th class="color" scope="col" sortable="kolor_model" (sort)="onSort($event)">Кольори </th>
-        <th class="code" scope="col" sortable="kod_model" (sort)="onSort($event)">Код</th>
-        <th class="quantity" scope="col" sortable="quantity_pars_model" (sort)="onSort($event)">К-сть</th>
-        <th scope="col" sortable="phase_1_model" class="phase" (sort)="onSort($event)">1</th>
-        <th scope="col" sortable="phase_2_model" class="phase"(sort)="onSort($event)">2</th>
-        <th scope="col" sortable="phase_3_model" class="phase" (sort)="onSort($event)">3</th>
+        <th scope="col" sortable="id_order" class="number-order">№ замл.</th>
+        <th scope="col" sortable="data_order" class="data-order">Дата замовлення</th>
+        <th class="color" scope="col" sortable="kolor_model">Кольори </th>
+        <th class="code" scope="col" sortable="kod_model">Код</th>
+        <th class="quantity" scope="col" sortable="quantity_pars_model">К-сть</th>
+        <th scope="col" sortable="phase_1_model" class="phase">1</th>
+        <th scope="col" sortable="phase_2_model" class="phase">2</th>
+        <th scope="col" sortable="phase_3_model" class="phase">3</th>
         <th scope="col" sortable="money" class="money">Сума, грн</th>
         <th scope="col" sortable="money" class="phone">№ телефону</th>
-        <th class="sity" scope="col" sortable="sity" (sort)="onSort($event)">Місто</th>
-        <th scope="col" sortable="data_plane_order" class="data_plane" (sort)="onSort($event)">Дата прогноз</th>
+        <th class="sity" scope="col" sortable="sity">Місто</th>
+        <th scope="col" sortable="data_plane_order" class="data_plane">Дата прогноз</th>
         <th scope="col" sortable="fulfilled_order" class="done">OK</th>
       </tr>
       </thead>
       <tbody>
-        <ng-container  *ngFor="let order of ordersRow">
+        <ng-container  *ngFor="let order of ordersRow; let i = index">
           <tr  class="table--row">
             <td ngxTooltip [tooltipContent]="order.comment_order">{{ order.id_order }}</td>
-            <td>{{ order.data_order | date: 'yyyy-mm-dd'}}</td>
+            <td>{{ order.data_order | date: 'yyyy-MM-dd'}}</td>
             <ng-container *ngIf="checkArray(order.kolor_model); else oneItem">
              <!-- kolor_model -->
-              <td>
+              <td class="td-left">
                 <div class="bb_solid" *ngFor="let kolor_model of order.kolor_model">
                   {{ kolor_model }}
                 </div>
               </td>
                <!-- kod_model -->
-              <td>
+              <td class="td-left">
                 <div class="bb_solid" ngxTooltip [tooltipContent]="order.comment_model[i]"  class="bb_solid" [ngClass]="checkCode(kod_model, order.comment_model[i], i)" *ngFor="let kod_model of order.kod_model; let i = index">
                  {{kod_model}}
                 </div>
@@ -118,11 +127,11 @@
 
             <ng-template #oneItem>
                <!-- kolor_model -->
-              <td>
+              <td class="td-left">
                 {{ order.kolor_model }}
               </td>
               <!-- kod_model -->
-              <td ngxTooltip [tooltipContent]="order.comment_model" [classList]="checkCode(order.kod_model, order.comment_model)">
+              <td class="td-left" ngxTooltip [tooltipContent]="order.comment_model" [class]="checkCode(order.kod_model, order.comment_model)">
                 {{ order.kod_model }}
               </td>
               <td>
@@ -145,12 +154,12 @@
               </td>
             </ng-template>
 
-            <td [classList]="countMoney(order)">{{ order.sum_payment + ' / ' + order.real_money + ' / ' + order.left_money }}</td>
-            <td>{{ order.telephone || '-' }}</td>
-            <td [class.green]="sityColor(order.sity)" ngxTooltip [tooltipContent]="'Н.П. №' + order.np_number + ', ' + order.zip_code + ', ' + order.street_house_apartment">{{ order.sity }}</td>
-            <td>{{ order.data_plane_order | date: 'yyyy-mm-dd'}}</td>
+            <td class="td-left" [class]="countMoney(order)">{{ order.sum_payment + ' / ' + order.real_money + ' / ' + (order.sum_payment - order.real_money)}}</td>
+            <td class="td-left">{{ order.phone_client | mask: '000-000-00-00 ' || '-' }}</td>
+            <td class="td-left" [class.green]="sityColor(order.sity)" ngxTooltip [tooltipContent]="tooltipCity(order)">{{ order.sity }}</td>
+            <td>{{ order.data_plane_order | date: 'yyyy-MM-dd'}}</td>
             <td>
-              <button class="check-btn">
+              <button class="check-btn" (click)="makeDone(order.id_order, !order.fulfilled_order, i)">
                 <img class="check-icon" [src]="order.fulfilled_order ? './assets/img/icons/check.svg' : './assets/img/icons/uncheck.svg'" />
               </button>
             </td>

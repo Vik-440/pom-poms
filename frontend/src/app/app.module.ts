@@ -1,23 +1,23 @@
+import { CommonModule } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
-
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgSelectModule } from '@ng-select/ng-select';
+import { TooltipModule, TooltipOptions } from '@teamhive/ngx-tooltip';
+import { DatepickerModule } from 'ng2-datepicker';
+import { NgxMaskModule } from 'ngx-mask';
+import { NgToggleModule } from 'ngx-toggle-button';
+import { environment } from 'src/environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { TableComponent, SortDirective } from './table/table.component';
-import { HttpClientModule } from '@angular/common/http';
-import { CommonModule } from '@angular/common';
-import { NavbarComponent } from './navbar/navbar.component';
-import { environment } from 'src/environments/environment';
-import { TooltipModule, TooltipOptions } from '@teamhive/ngx-tooltip';
 import { CreateOrderComponent } from './create-order/create-order.component';
-import { NgToggleModule } from 'ngx-toggle-button';
-import { DatepickerModule } from 'ng2-datepicker';
-import { MyDatePickerModule } from 'mydatepicker';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { ReserveComponent } from './reserve/reserve.component';
-import { NgSelectModule } from '@ng-select/ng-select';
 import { FinancesComponent } from './finances/finances.component';
+import { NavbarComponent } from './navbar/navbar.component';
+import { ReserveComponent } from './reserve/reserve.component';
+import { SortDirective, TableComponent } from './table/table.component';
+
 
 
 @NgModule({
@@ -28,10 +28,11 @@ import { FinancesComponent } from './finances/finances.component';
     NavbarComponent,
     CreateOrderComponent,
     ReserveComponent,
-    FinancesComponent
+    FinancesComponent,
   ],
   imports: [
     NgToggleModule,
+    NgxMaskModule.forRoot(),
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
