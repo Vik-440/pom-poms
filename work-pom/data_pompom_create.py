@@ -26,8 +26,8 @@ class directory_of_order(Base):
     sum_payment = Column('sum_payment', Integer)            #Integer
     discont_order = Column('discont_order', Integer)        #numeric (8,2)
     comment_order = Column('comment_order', String)
-    directory_of_group = relationship("directory_of_group")
-    # directory_of_payment = relationship("directory_of_payment")
+    #directory_of_group = relationship("directory_of_group")
+    #directory_of_payment = relationship("directory_of_payment")
 
 class directory_of_client(Base):
     __tablename__ = 'directory_of_client'

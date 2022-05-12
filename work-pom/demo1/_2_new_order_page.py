@@ -10,40 +10,21 @@ from data_pompom_create import directory_of_outlay, directory_of_outlay_class
 from data_pompom_create import engine
 
 
-# log_pass_sql = 'postgresql+psycopg2://postgres:123123@localhost/postgres'
-# engine = create_engine(log_pass_sql)
-
-# Session = sessionmaker(engine)
-# Session.configure(bind=engine)
-# session = Session()
-
-# j_id_client=[]
-# j_phone_client=[]
 ###################################################################################
 def return_data_from_order_page():
     with Session(engine) as session:
         id_new_order=session.query(func.max(directory_of_order.id_order))
         for row222 in id_new_order:
             j_id_new_order=row222[0]+1
-        time_last_order = '2022-22-22'
+        time_last_order = '2022-12-31'
         # session.close()
         return {'id_new_order':j_id_new_order, 'time_last_order':time_last_order}
 ###################################################################################
 def return_data_from_client(sl_phone, sl_second_name):
     with Session(engine) as session:
         # j_phone_client.clear()
-        j_phone_client=[]
-        j_id_client=[]
-        j_second_name_client=[]
-        j_first_name_client=[]
-        j_surname_client=[]
-        j_sity=[]
-        j_np_number=[]
-        j_name_team=[]
-        j_coach=[]
-        j_zip_code=[]
-        j_street_house_apartment=[]
-        j_comment_client=[]
+        j_phone_client,j_id_client,j_second_name_client,j_first_name_client,j_surname_client,j_sity,j_np_number,\
+            j_name_team,j_coach,j_zip_code,j_street_house_apartment,j_comment_client=[],[],[],[],[],[],[],[],[],[],[],[]
 
         if sl_phone==0:
             id_client_1=session.query(directory_of_client).filter_by(second_name_client=sl_second_name).all()
@@ -57,17 +38,7 @@ def return_data_from_client(sl_phone, sl_second_name):
     
             phone_client_1=session.query(directory_of_client).filter_by(id_client=row.id_client).all()
             w1w=len(phone_client_1)
-            w2w=[]
-            w3w=[]
-            w4w=[]
-            w5w=[]
-            w6w=[]
-            w7w=[]
-            w8w=[]
-            w9w=[]
-            w10w=[]
-            w11w=[]
-            w12w=[]
+            w2w,w3w,w4w,w5w,w6w,w7w,w8w,w9w,w10w,w11w,w12w=[],[],[],[],[],[],[],[],[],[],[]
             for row1 in phone_client_1:
                 if w1w > 0:             # it is maybe excessive!
                     w2w.append(row1.phone_client)
@@ -127,30 +98,18 @@ def return_data_from_client(sl_phone, sl_second_name):
         # # print(a1a)
         while a1a > 0:
             a1a-=1
-            element_1=j_id_client[0]
-            del j_id_client[0]
-            element_2=j_phone_client[0]
-            del j_phone_client[0]
-            element_3=j_second_name_client[0]
-            del j_second_name_client[0]
-            element_4=j_first_name_client[0]
-            del j_first_name_client[0]
-            element_5=j_surname_client[0]
-            del j_surname_client[0]
-            element_6=j_sity[0]
-            del j_sity[0]
-            element_7=j_np_number[0]
-            del j_np_number[0]
-            element_8=j_name_team[0]
-            del j_name_team[0]
-            element_9=j_coach[0]
-            del j_coach[0]
-            element_10=j_zip_code[0]
-            del j_zip_code[0]
-            element_11=j_street_house_apartment[0]
-            del j_street_house_apartment[0]
-            element_12=j_comment_client[0]
-            del j_comment_client[0]
+            element_1=j_id_client.pop(0)
+            element_2=j_phone_client.pop(0)
+            element_3=j_second_name_client.pop(0)
+            element_4=j_first_name_client.pop(0)
+            element_5=j_surname_client.pop(0)
+            element_6=j_sity.pop(0)
+            element_7=j_np_number.pop(0)
+            element_8=j_name_team.pop(0)
+            element_9=j_coach.pop(0)
+            element_10=j_zip_code.pop(0)
+            element_11=j_street_house_apartment.pop(0)
+            element_12=j_comment_client.pop(0)
 
             one_block = {"id_client": element_1, "phone_client": element_2, "second_name_client" : element_3,
             "first_name_client" : element_4, "surname_client" : element_5, "sity" : element_6,
@@ -163,24 +122,8 @@ def return_data_from_client(sl_phone, sl_second_name):
 ###################################################################################
 def return_data_from_kod(sl_kod):
     with Session(engine) as session:
-        j_id_model=[]
-        j_kod_model=[]
-        j_id_color_1=[]
-        j_id_color_part_1=[]
-        j_id_color_2=[]
-        j_id_color_part_2=[]
-        j_id_color_3=[]
-        j_id_color_part_3=[]
-        j_id_color_4=[]
-        j_id_color_part_4=[]
-        j_price_model=[]
-        j_comment_model=[]
-        j_kolor_model=[]
-
         id_model_1=session.query(directory_of_model).filter_by(kod_model=sl_kod).all()
         for row in id_model_1:
-            # a1a=len(row.id_model)
-            # print(a1a)
             j_id_model=row.id_model
             j_kod_model=row.kod_model
             j_id_color_1=row.id_color_1
@@ -194,8 +137,7 @@ def return_data_from_kod(sl_kod):
             j_price_model=row.price_model
             j_comment_model=row.comment_model
             j_kolor_model=row.kolor_model
-        # print(len(str(j_kod_model)))
-        if len(str(j_kod_model))<3:
+        if len(str(id_model_1))<3:
             one_block={}
         else:
             one_block = {"id_model":j_id_model, "kod_model":j_kod_model, "id_color_1":j_id_color_1,
@@ -203,7 +145,6 @@ def return_data_from_kod(sl_kod):
             "id_color_3":j_id_color_3, "id_color_part_3":j_id_color_part_3, "id_color_4":j_id_color_4,
             "id_color_part_4":j_id_color_part_4, "price_model":j_price_model, "comment_model":j_comment_model,
             "kolor_model":j_kolor_model}
-
     return one_block
 ###################################################################################
 def return_data_from_full_kod(data_from_new_page):
@@ -274,22 +215,35 @@ def return_data_from_full_person(data_from_new_page):
 ###################################################################################
 def return_data_from_final_order(data_from_new_page):
     with Session(engine) as session:
-        ins=directory_of_order(
-            data_order=data_from_new_page['data_order'],
-            id_client=data_from_new_page['id_client'],
-            id_recipient=data_from_new_page['id_recipient'],
-            data_plane_order=data_from_new_page['data_plane_order'],
-            data_send_order=data_from_new_page['data_send_order'],
-            discont_order=data_from_new_page['discont_order'],
-            sum_payment=data_from_new_page['sum_payment'],
-            fulfilled_order=data_from_new_page['fulfilled_order'])
+        id_order=data_from_new_page['id_order']
+        if id_order ==0:
+            ins=directory_of_order(
+                data_order=data_from_new_page['data_order'],
+                id_client=data_from_new_page['id_client'],
+                id_recipient=data_from_new_page['id_recipient'],
+                data_plane_order=data_from_new_page['data_plane_order'],
+                data_send_order=data_from_new_page['data_send_order'],
+                discont_order=data_from_new_page['discont_order'],
+                sum_payment=data_from_new_page['sum_payment'],
+                fulfilled_order=data_from_new_page['fulfilled_order'])
+        else:
+            ins=directory_of_order(
+                id_order=id_order,
+                data_order=data_from_new_page['data_order'],
+                id_client=data_from_new_page['id_client'],
+                id_recipient=data_from_new_page['id_recipient'],
+                data_plane_order=data_from_new_page['data_plane_order'],
+                data_send_order=data_from_new_page['data_send_order'],
+                discont_order=data_from_new_page['discont_order'],
+                sum_payment=data_from_new_page['sum_payment'],
+                fulfilled_order=data_from_new_page['fulfilled_order'])
         session.add(ins)
         session.commit()
         session.refresh(ins)
         j_id_order=ins.id_order
 
         w1w=len(data_from_new_page['id_model'])
-        print(w1w)
+        # print(w1w)
         while w1w>0:
             elem1=data_from_new_page['id_model'][0]
             del data_from_new_page['id_model'][0]
@@ -311,16 +265,3 @@ def return_data_from_final_order(data_from_new_page):
         return one_block
 
 
-
-
-
-#    "id_model" : [122, 21, 17, 114, 7],
-#    "quantity_pars_model" : [2, 4, 2, 5, 15],
-
-#return_data_from_final_order
-
-# id_new_order=session.query(func.max(directory_of_order.id_order))
-# for row in id_new_order:
-#     j_id_new_order=row[0]
-# time_last_order = '2022-04-24'
-# print (j_id_new_order)
