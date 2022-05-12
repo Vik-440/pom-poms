@@ -101,7 +101,7 @@ export class TableComponent implements OnInit, OnDestroy {
     firstCalendarDay: 1, // 0 - Sunday, 1 - Monday
     locale: locale,
     position: 'bottom',
-    placeholder: 'mm/dd/yyyy',
+    placeholder: '',
     calendarClass: 'datepicker-default', 
     scrollBarColor: '#dfe3e9',
   };
@@ -118,8 +118,8 @@ export class TableComponent implements OnInit, OnDestroy {
   queue: number = 0;
   fulfilledOrderItems = [
     { id: 1, value: true, name: 'виконані' },
-    { id: 2, value: false, name: 'не виконані' },
-    { id: 3, value: '', name: 'всі' },
+    { id: 2, value: '', name: 'всі' },
+    { id: 3, value: false, name: 'не виконані' },
 ];
   @ViewChildren(SortDirective) headers: QueryList<SortDirective>;
 
@@ -307,7 +307,6 @@ validateInput(currentValue: NgbDate | null, input: string): NgbDate | null {
   changeSpeed() {
     const days = Math.ceil(this.queue/this.speed);
     this.dateDownloaded = moment().add(days, 'days').format('MM/DD/YYYY');
-    console.log(moment().add(days, 'days').format('MM/DD/YYYY'));
   }
 
   makeDone(id, fulfilledOrder, i){
@@ -321,15 +320,14 @@ validateInput(currentValue: NgbDate | null, input: string): NgbDate | null {
   }
 
   tooltipCity(order) {
-    const tooltip = ['Н.П. №' + order.np_number, order.second_name_client, order.phone_recipient, order.zip_code, order.street_house_apartment];
+    const tooltip = ['Н.П. №' + order.np_number, order.first_name_client + ' ' + order.second_name_client, order.phone_recipient, order.zip_code, order.street_house_apartment];
     return tooltip.filter(n => n).join(', ');
   }
 
   changePhone(event) {
-    console.log(event.term.length);
     
     if(event.term.length >= 4) {
-      this.serviceOrders.getPhone({ur_phone: event.term})
+      this.serviceOrders.getInfoForOrder({ur_phone: event.term})
       .subscribe((numbers: any) => {
         this.phoneClients = numbers?.phone_client;
       })

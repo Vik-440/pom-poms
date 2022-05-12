@@ -10,59 +10,76 @@
     </h3>
   </div>
 
-  <div class="create-order__form" *ngFor="let i of orders; let index = index">
+  <div class="create-order__form" *ngFor="let order of orderForm.controls; let index = index" [formGroup]="order">
     <div class="form__number">
       <input class="number" type="text" readonly [value]="index + 1" disabled>
-      <button class="next-btn btn-icon" (click)="addOrder()" [disabled]="orders.length - 1 !== index">
+      <button class="next-btn btn-icon" (click)="addOrder()" [disabled]="orderForm.controls.length - 1 !== index">
         <img class="next-icon icon" src="./assets/img/icons/next.svg" />
       </button>
     </div>
 
     <div class="form__fields">
-      <input type="text" class="form__field" placeholder="код">
-      <input type="text" class="form__field" placeholder="колір помпона">
+      <ng-select 
+        [clearable]="false" 
+        [clearSearchOnAdd]="false" 
+        appearance="outline" 
+        [items]="kodItems" 
+        type="text" 
+        class="form__field" 
+        [addTag]="true"
+        [hideSelected]="true"
+        placeholder="код"
+        addTagText="+ нова модель"
+        formControlName="kod_model" 
+        (search)="changeKodModel($event.term, index)" 
+        (change)="chooseKode($event, index)">
+      </ng-select>
+      <input type="text" class="form__field" placeholder="колір помпона" formControlName="kolor_model">
     </div>
 
     <div class="form__fields">
       <div>
-        <input type="text" class="form__field form__field-material" placeholder="матеріал 1">
-        <input type="text" class="form__field--sm" placeholder="%">
+        <input type="text" class="form__field form__field-material" placeholder="матеріал 1" formControlName="id_color_1">
+        <input type="text" class="form__field--sm" placeholder="%" formControlName="id_color_part_1">
       </div>
       <div>
-        <input type="text" class="form__field form__field-material" placeholder="матеріал 3">
-        <input type="text" class="form__field--sm" placeholder="%">
+        <input type="text" class="form__field form__field-material" placeholder="матеріал 3" formControlName="id_color_3">
+        <input type="text" class="form__field--sm" placeholder="%" formControlName="id_color_part_3">
       </div>
     </div>
 
     <div class="form__fields">
       <div>
-        <input type="text" class="form__field form__field-material" placeholder="матеріал 2">
-        <input type="text" class="form__field--sm" placeholder="%">
+        <input type="text" class="form__field form__field-material" placeholder="матеріал 2" formControlName="id_color_2">
+        <input type="text" class="form__field--sm" placeholder="%" formControlName="id_color_part_2">
       </div>
       <div>
-        <input type="text" class="form__field form__field-material" placeholder="матеріал 4">
-        <input type="text" class="form__field--sm" placeholder="%">
+        <input type="text" class="form__field form__field-material" placeholder="матеріал 4" formControlName="id_color_4">
+        <input type="text" class="form__field--sm" placeholder="%" formControlName="id_color_part_4">
       </div>
     </div>
 
     <div class="form__fields">
-      <input class="form__field--md" type="text" placeholder="ціна">
-      <button class="save-btn forms">
+      <input class="form__field--md" type="text" placeholder="ціна" formControlName="price_model">
+      <button class="save-btn forms" (click)="saveOrder(index, order)" *ngIf="order.value.isNew">
        Зберегти
       </button>
+      <button class="ok-btn forms" (click)="saveOrder(index)" *ngIf="!order.value.isNew">
+        <img class="next-icon icon" src="./assets/img/icons/ok-btn.svg" />
+       </button>
     </div>
 
     <div class="form__fields">
-        <input type="text" class="form__field--ml" placeholder="к-сть пар">
-        <input type="text" class="form__field--ml" placeholder="сума">
+        <input type="text" class="form__field--ml" placeholder="к-сть пар" formControlName="quantity_pars_model">
+        <input type="text" class="form__field--ml" placeholder="сума" formControlName="sum_pars">
     </div>
 
     <div class="form__fields">
-      <textarea type="text" class="form__field--textarea" placeholder="примітка"></textarea>
+      <textarea type="text" class="form__field--textarea" placeholder="примітка" formControlName="comment_model"></textarea>
     </div>
 
     <div class="form__fields">
-      <button class="btn-icon" (click)="deleteOrder()" [disabled]="orders.length <= 1">
+      <button class="btn-icon" (click)="deleteOrder()" [disabled]="orderForm.controls.length <= 1">
         <img class="cancel-icon icon" src="./assets/img/icons/cancel.svg" />
       </button>
     </div>

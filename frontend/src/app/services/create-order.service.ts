@@ -14,7 +14,7 @@ export class CreateOrderService {
     return this.http.get(`http://127.0.0.1:5000/new_order`);
   }
 
-  getPhone(params) {
+  getInfoForOrder(params) {
     return this.http.post(`http://127.0.0.1:5000/new_order`, params);
   }
 }

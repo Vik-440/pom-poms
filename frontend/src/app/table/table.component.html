@@ -82,7 +82,7 @@
       <tbody>
         <ng-container  *ngFor="let order of ordersRow; let i = index">
           <tr  class="table--row">
-            <td ngxTooltip [tooltipContent]="order.comment_order">{{ order.id_order }}</td>
+            <td [class.yellow]="order.comment_order"  ngxTooltip [tooltipContent]="order.comment_order">{{ order.id_order }}</td>
             <td>{{ order.data_order | date: 'yyyy-MM-dd'}}</td>
             <ng-container *ngIf="checkArray(order.kolor_model); else oneItem">
              <!-- kolor_model -->
@@ -154,7 +154,7 @@
               </td>
             </ng-template>
 
-            <td class="td-left" [class]="countMoney(order)">{{ order.sum_payment + ' / ' + order.real_money + ' / ' + (order.sum_payment - order.real_money)}}</td>
+            <td class="td-left" [class]="countMoney(order)">{{ order.sum_payment + ' / ' + order.real_money + ' / ' + (order.sum_payment - order.real_money).toFixed(2)}}</td>
             <td class="td-left">{{ order.phone_client | mask: '000-000-00-00 ' || '-' }}</td>
             <td class="td-left" [class.green]="sityColor(order.sity)" ngxTooltip [tooltipContent]="tooltipCity(order)">{{ order.sity }}</td>
             <td>{{ order.data_plane_order | date: 'yyyy-MM-dd'}}</td>
