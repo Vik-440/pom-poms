@@ -27,7 +27,7 @@ def return_data_from_flask ():
         "kolor_model": "малиновий",
         "kod_model": "190-B05"}
 
-    return jsonify(info) # returning a JSON response
+    return jsonify(info), 200 # returning a JSON response
 #########################################################################################
 @app.route('/main_page', methods=['GET', 'POST'])
 def main_page ():
@@ -53,11 +53,14 @@ def mainpage ():
 #########################################################################################
 @app.route('/new_order', methods=['GET', 'POST'])
 def new_order ():
-    if request.method == 'POST':
-        request.data = request.get_json()
-        data=return_data_from_new_order_post(request.data)
-        return data
-    else: return (return_data_from_new_order())
+    try:
+        if request.method == 'POST':
+            request.data = request.get_json()
+            data=return_data_from_new_order_post(request.data)
+            return data
+        else: return (return_data_from_new_order())
+    except Exception as e:
+        return f'Error in function new_order: {e}', 500
 #########################################################################################
 @app.route('/material', methods=['GET', 'POST'])
 def material ():
