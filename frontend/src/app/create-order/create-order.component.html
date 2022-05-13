@@ -79,7 +79,7 @@
     </div>
 
     <div class="form__fields">
-      <button class="btn-icon" (click)="deleteOrder()" [disabled]="orderForm.controls.length <= 1">
+      <button class="btn-icon" (click)="deleteOrder(index)" [disabled]="orderForm.controls.length <= 1">
         <img class="cancel-icon icon" src="./assets/img/icons/cancel.svg" />
       </button>
     </div>

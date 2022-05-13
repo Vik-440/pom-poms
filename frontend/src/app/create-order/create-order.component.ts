@@ -143,8 +143,8 @@ export class CreateOrderComponent implements OnInit {
     this.viewChanges();
   }
 
-  deleteOrder() {
-    this.orders.pop()
+  deleteOrder(index) {
+    this.orderForm.controls.splice(index, 1);
   }
 
   saveOrder(index, order) {

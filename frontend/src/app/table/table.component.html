@@ -97,26 +97,26 @@
                  {{kod_model}}
                 </div>
               </td>
-              <td>
+              <td class="pl0">
                 <div class="bb_solid" *ngFor="let quantity_pars_model of order.quantity_pars_model">
                   {{quantity_pars_model}}
                 </div>
               </td>
-              <td>
+              <td class="pl0">
                 <div class="bb_solid" *ngFor="let item of order.phase_1_model">
                   <button class="check-btn">
                     <img class="check-icon" [src]="order.phase_1_model ? './assets/img/icons/check.svg' : './assets/img/icons/uncheck.svg'" />
                   </button>
                 </div>
               </td>
-              <td>
+              <td class="pl0">
                 <div class="bb_solid" *ngFor="let item of order.phase_2_model">
                   <button class="check-btn">
                     <img class="check-icon" [src]="order.phase_2_model ? './assets/img/icons/check.svg' : './assets/img/icons/uncheck.svg'" />
                   </button>
                 </div>
               </td>
-              <td>
+              <td class="pl0">
                 <div class="bb_solid" *ngFor="let item of order.phase_3_model">
                   <button class="check-btn">
                     <img class="check-icon" [src]="order.phase_3_model ? './assets/img/icons/check.svg' : './assets/img/icons/uncheck.svg'" />
@@ -127,11 +127,11 @@
 
             <ng-template #oneItem>
                <!-- kolor_model -->
-              <td class="td-left">
+              <td class="td-left pl5">
                 {{ order.kolor_model }}
               </td>
               <!-- kod_model -->
-              <td class="td-left" ngxTooltip [tooltipContent]="order.comment_model" [class]="checkCode(order.kod_model, order.comment_model)">
+              <td class="td-left pl5" ngxTooltip [tooltipContent]="order.comment_model" [class]="checkCode(order.kod_model, order.comment_model)">
                 {{ order.kod_model }}
               </td>
               <td>
@@ -154,9 +154,9 @@
               </td>
             </ng-template>
 
-            <td class="td-left" [class]="countMoney(order)">{{ order.sum_payment + ' / ' + order.real_money + ' / ' + (order.sum_payment - order.real_money).toFixed(2)}}</td>
-            <td class="td-left">{{ order.phone_client | mask: '000-000-00-00 ' || '-' }}</td>
-            <td class="td-left" [class.green]="sityColor(order.sity)" ngxTooltip [tooltipContent]="tooltipCity(order)">{{ order.sity }}</td>
+            <td class="td-left pl5" [class]="countMoney(order)">{{ order.sum_payment + ' / ' + order.real_money + ' / ' + (order.sum_payment - order.real_money).toFixed(2)}}</td>
+            <td class="td-left pl5">{{ order.phone_client | mask: '000-000-00-00 ' || '-' }}</td>
+            <td class="td-left pl5" [class.green]="sityColor(order.sity)" ngxTooltip [tooltipContent]="tooltipCity(order)">{{ order.sity }}</td>
             <td>{{ order.data_plane_order | date: 'yyyy-MM-dd'}}</td>
             <td>
               <button class="check-btn" (click)="makeDone(order.id_order, !order.fulfilled_order, i)">

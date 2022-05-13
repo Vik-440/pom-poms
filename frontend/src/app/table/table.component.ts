@@ -118,8 +118,8 @@ export class TableComponent implements OnInit, OnDestroy {
   queue: number = 0;
   fulfilledOrderItems = [
     { id: 1, value: true, name: 'виконані' },
-    { id: 2, value: '', name: 'всі' },
-    { id: 3, value: false, name: 'не виконані' },
+    { id: 2, value: false, name: 'всі' },
+    { id: 3, value: '', name: 'не виконані' },
 ];
   @ViewChildren(SortDirective) headers: QueryList<SortDirective>;
 
@@ -234,7 +234,7 @@ validateInput(currentValue: NgbDate | null, input: string): NgbDate | null {
         return 'light-pink';
     }
     const splitModelH = kodModel.split('-');
-    if(splitModelH[1].split('')[0] === 'B') {
+    if(splitModelH[1].split('')[0] === 'В' || splitModelH[1].split('')[0] === 'B') {
       return 'light-blue';
     }
 
