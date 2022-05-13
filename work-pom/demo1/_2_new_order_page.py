@@ -1,6 +1,7 @@
 from operator import and_, or_
 from unicodedata import numeric
-from sqlalchemy import create_engine,  MetaData, false, func, true, text, Integer, String, Table, Column, insert
+from pymysql import NULL
+from sqlalchemy import create_engine,  MetaData, false, func, null, true, text, Integer, String, Table, Column, insert
 from datetime import datetime, timedelta
 from sqlalchemy.orm import sessionmaker, Session, mapper, declarative_base#, decl_base, decl_api
 from sqlalchemy.ext.declarative import declarative_base
@@ -137,14 +138,35 @@ def return_data_from_kod(sl_kod):
             j_price_model=row.price_model
             j_comment_model=row.comment_model
             j_kolor_model=row.kolor_model
+        
+        name_color_0=session.query(directory_of_color).filter_by(id_color=j_id_color_1).all()
+        for row in name_color_0:
+            name_color_1=row.name_color
+        if j_id_color_2!=0 and j_id_color_2!=None:
+            name_color_0=session.query(directory_of_color).filter_by(id_color=j_id_color_2).all()
+            for row in name_color_0:
+                name_color_2=row.name_color
+        else: name_color_2=0
+        if j_id_color_3!=0 and j_id_color_3!=None:
+            name_color_0=session.query(directory_of_color).filter_by(id_color=j_id_color_3).all()
+            for row in name_color_0:
+                name_color_3=row.name_color
+        else: name_color_3=0
+        if j_id_color_4!=0 and j_id_color_4!=None :  # 
+            name_color_0=session.query(directory_of_color).filter_by(id_color=j_id_color_4).all()
+            for row in name_color_0:
+                name_color_4=row.name_color
+        else: name_color_4=0
+        
         if len(str(id_model_1))<3:
             one_block={}
         else:
             one_block = {"id_model":j_id_model, "kod_model":j_kod_model, "id_color_1":j_id_color_1,
-            "id_color_part_1":j_id_color_part_1, "id_color_2":j_id_color_2, "id_color_part_2":j_id_color_part_2,
-            "id_color_3":j_id_color_3, "id_color_part_3":j_id_color_part_3, "id_color_4":j_id_color_4,
-            "id_color_part_4":j_id_color_part_4, "price_model":j_price_model, "comment_model":j_comment_model,
-            "kolor_model":j_kolor_model}
+            "name_color_1":name_color_1,"id_color_part_1":j_id_color_part_1, "id_color_2":j_id_color_2,
+            "name_color_2":name_color_2,"id_color_part_2":j_id_color_part_2,"id_color_3":j_id_color_3,
+            "name_color_3":name_color_3,"id_color_part_3":j_id_color_part_3, "id_color_4":j_id_color_4,
+            "name_color_4":name_color_4,"id_color_part_4":j_id_color_part_4, "price_model":j_price_model,
+            "comment_model":j_comment_model,"kolor_model":j_kolor_model}
     return one_block
 ###################################################################################
 def return_data_from_full_kod(data_from_new_page):
