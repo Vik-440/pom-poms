@@ -73,12 +73,15 @@ def return_data_from_new_order_post(data_from_new_page):
 ########
     elif 'ur_kolor' in data_from_new_page:
         search_data=data_from_new_page['ur_kolor']
-        w206w=('%'+ str(search_data) +'%')
+        w206w=("%"+str(search_data)+"%")
+        # print(w206w)
+        # print(f'%{search_data}%')
         ur_kolor_1=session.query(directory_of_color).filter(directory_of_color.name_color.ilike(w206w)).all()
-        data_var=[]
+        data_var,id_var=[],[]                                   #   f'%{search_data}%'
         for row in ur_kolor_1:
             data_var.append(row.name_color)
-        data_new_page = {"name_color" : data_var}
+            id_var.append(row.id_color)
+        data_new_page = {"name_color":data_var,"id_color":id_var}
 ########
     elif 'ur_kod' in data_from_new_page:
         search_data=data_from_new_page['ur_kod']
