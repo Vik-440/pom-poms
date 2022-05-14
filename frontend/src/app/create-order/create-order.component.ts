@@ -15,6 +15,7 @@ export class CreateOrderComponent implements OnInit {
   constructor(private fb: FormBuilder, private service: CreateOrderService) { }
 
   orderForm: FormArray;
+  priceAll: FormGroup;
   options: DatepickerOptions = {
     minDate: new Date(''),
     format: 'dd.MM.yyyy',
@@ -32,26 +33,33 @@ export class CreateOrderComponent implements OnInit {
   dateToday = new Date();
   isRecipient = false;
   kodItems;
+  materialsItems;
 
   ngOnInit(): void {
+    this.priceAll = this.fb.group({
+      sum_payment: 0,
+      real_money: 0,
+      different: 0
+    });
     this.orderForm =  
       this.fb.array([
         this.fb.group({
-          kod_model: '',
-          kolor_model: '',
-          id_color_1: '',
-          id_color_part_1: '',
-          id_color_2: '',
-          id_color_part_2: '',
-          id_color_3: '',
-          id_color_part_3: '',
-          id_color_4: '',
-          id_color_part_4: '',
-          price_model: '',
-          quantity_pars_model: '',
-          sum_pars: '',
-          comment_model: '',
-          isNew: true
+          kod_model: null,
+          kolor_model: null,
+          id_color_1: null,
+          id_color_part_1: null,
+          id_color_2: null,
+          id_color_part_2: null,
+          id_color_3: null,
+          id_color_part_3: null,
+          id_color_4: null,
+          id_color_part_4: null,
+          price_model: null,
+          quantity_pars_model: null,
+          sum_pars: null,
+          comment_model: null,
+          isNew: true,
+          isChange: false
         })
       ]);
 
@@ -59,6 +67,19 @@ export class CreateOrderComponent implements OnInit {
       this.viewChanges();
   }
 
+  sumAll() {
+    const sumAllItems = [];
+    this.priceAll.patchValue({
+      sum_payment: 0
+    })
+    this.orderForm.controls.map(order => {
+      this.priceAll.patchValue({
+        sum_payment: this.priceAll.value.sum_payment + order.value.sum_pars
+      })
+    })
+    sumAllItems.push(this.priceAll.value.sum_payment, this.priceAll.value.real_money, this.priceAll.value.different);
+    return sumAllItems.join(' / ')
+  }
   viewChanges() {
     this.orderForm.controls.map((order, index) => {
       order.get('quantity_pars_model').valueChanges.pipe(
@@ -85,7 +106,13 @@ export class CreateOrderComponent implements OnInit {
       })
     }
   }
-
+  changeMaterial(value, index) {
+    if(value.length >= 3) {
+      this.service.getInfoForOrder({ur_kolor: value}).subscribe((materials: any) => {
+        this.materialsItems = materials?.name_color;
+      })
+    }
+  }
   chooseKode(value, index) { 
     if(!this.kodItems) {
       this.orderForm.controls.map((order, ind) => {
@@ -114,31 +141,37 @@ export class CreateOrderComponent implements OnInit {
             id_color_part_4: data.id_color_part_4,
             price_model: data.price_model,
             comment_model: data.comment_model,
-            isNew: false
+            isNew: false,
+            isChange: false
           })
         }
       })
       this.kodItems = [];
     })
-    
   }
+
+  resetMaterialsItems() {
+    this.materialsItems = [];
+  }
+
   addOrder() {
     this.orderForm.push(this.fb.group({
-      kod_model: '',
-      kolor_model: '',
-      id_color_1: '',
-      id_color_part_1: '',
-      id_color_2: '',
-      id_color_part_2: '',
-      id_color_3: '',
-      id_color_part_3: '',
-      id_color_4: '',
-      id_color_part_4: '',
-      price_model: '',
-      quantity_pars_model: '',
-      sum_pars: '',
-      comment_model: '',
-      isNew: true
+      kod_model: null,
+      kolor_model: null,
+      id_color_1: null,
+      id_color_part_1: null,
+      id_color_2: null,
+      id_color_part_2: null,
+      id_color_3: null,
+      id_color_part_3: null,
+      id_color_4: null,
+      id_color_part_4: null,
+      price_model: null,
+      quantity_pars_model: null,
+      sum_pars: null,
+      comment_model: null,
+      isNew: true,
+      isChange: false
     }));
     this.viewChanges();
   }

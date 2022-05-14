@@ -198,7 +198,7 @@ def return_data_from_full_kod(data_from_new_page):
                 j_id_model=row.id_model
             one_block = {"id_model" : j_id_model}
         else:
-            q1q=('даний код моделі існує під номером : id=' + str(j_id_model))
+            q1q=('real_id=' + str(j_id_model))
             one_block = {"id_model" : q1q}
         return one_block
 ###################################################################################
@@ -247,7 +247,8 @@ def return_data_from_final_order(data_from_new_page):
                 data_send_order=data_from_new_page['data_send_order'],
                 discont_order=data_from_new_page['discont_order'],
                 sum_payment=data_from_new_page['sum_payment'],
-                fulfilled_order=data_from_new_page['fulfilled_order'])
+                fulfilled_order=data_from_new_page['fulfilled_order'],
+                comment_order=data_from_new_page['comment_order'])
         else:
             ins=directory_of_order(
                 id_order=id_order,
@@ -258,7 +259,8 @@ def return_data_from_final_order(data_from_new_page):
                 data_send_order=data_from_new_page['data_send_order'],
                 discont_order=data_from_new_page['discont_order'],
                 sum_payment=data_from_new_page['sum_payment'],
-                fulfilled_order=data_from_new_page['fulfilled_order'])
+                fulfilled_order=data_from_new_page['fulfilled_order'],
+                comment_order=data_from_new_page['comment_order'])
         session.add(ins)
         session.commit()
         session.refresh(ins)

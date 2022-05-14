@@ -20,6 +20,7 @@ p
     display: flex
     gap: 24px
   .filters-data
+    position: relative
     &--dateDownloaded
       background: none
       color: #111
@@ -57,6 +58,12 @@ p
       border: 0.5px solid #727272
       border-radius: 25px
       padding-left: 5px
+    &--datapicker-remove
+        border: none
+        background: none
+        position: absolute
+        right: 0
+        color: #999
   .info
     display: flex
     align-items: center
@@ -165,7 +172,6 @@ p
       border-radius: 25px
       font-weight: 600
 
-
 .calendar
   margin-top: 20px
 
@@ -174,3 +180,16 @@ p
 
 input[type=number]::-webkit-inner-spin-button 
   -webkit-appearance: none
+
+::ng-deep
+  .ng-select.ng-select-single .ng-select-container .ng-value-container .ng-input
+    top: 0
+  .ng-select .ng-select-container .ng-value-container
+    padding-left: 3px
+  .ng-select .ng-select-container
+    min-height: auto !important
+    background: none
+    border: none
+  .ng-select.ng-select-single 
+    .ng-select-container
+      height: auto !important

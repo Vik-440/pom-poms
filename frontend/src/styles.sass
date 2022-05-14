@@ -2,7 +2,23 @@
 
 /* Importing Bootstrap SCSS file. */
 @import '~bootstrap/scss/bootstrap'
+@import "@ng-select/ng-select/themes/default.theme.css"
+/* Importing Bootstrap SCSS file. */
+@import '~bootstrap/scss/bootstrap'
 
+/* Importing Bootstrap SCSS file. */
+@import '~bootstrap/scss/bootstrap'
+
+
+::ng-deep
+  .ng-select .ng-select-container
+    min-height: auto !important
+  .ng-select.ng-select-single 
+    .ng-select-container
+      height: auto !important
+
+.flex
+  display: flex
 body
   height: 100%
   background: #ebe8e8
@@ -107,8 +123,3 @@ button
   justify-content: center
 p
   margin: 0 !important
-/* Importing Bootstrap SCSS file. */
-@import '~bootstrap/scss/bootstrap'
-
-/* Importing Bootstrap SCSS file. */
-@import '~bootstrap/scss/bootstrap'

@@ -1,4 +1,4 @@
-<div class="page pl61 pr50 create-order__page" >
+<div class="page pl61 pr50 mt20 create-order__page" >
   <div class="create-order__title">
     <h3 class="create-order__title--number title-text">Замовлення № <input  type="text"></h3>
     <h3 class="create-order__title--date title-text">Дата замовлення
@@ -10,7 +10,7 @@
     </h3>
   </div>
 
-  <div class="create-order__form" *ngFor="let order of orderForm.controls; let index = index" [formGroup]="order">
+  <div class="create-order__form mt20" *ngFor="let order of orderForm.controls; let index = index" [formGroup]="order">
     <div class="form__number">
       <input class="number" type="text" readonly [value]="index + 1" disabled>
       <button class="next-btn btn-icon" (click)="addOrder()" [disabled]="orderForm.controls.length - 1 !== index">
@@ -18,9 +18,12 @@
       </button>
     </div>
 
+    <!-- 
+    form__field ng-select-taggable ng-select-searchable ng-select ng-select-single ng-valid ng-touched ng-dirty ng-select-opened ng-select-bottom
+    form__field ng-select-taggable ng-select-searchable ng-select ng-select-single ng-untouched ng-pristine ng-valid
+   -->
     <div class="form__fields">
       <ng-select 
-        [clearable]="false" 
         [clearSearchOnAdd]="false" 
         appearance="outline" 
         [items]="kodItems" 
@@ -38,23 +41,76 @@
     </div>
 
     <div class="form__fields">
-      <div>
-        <input type="text" class="form__field form__field-material" placeholder="матеріал 1" formControlName="id_color_1">
+      <div class="flex">
+        <ng-select 
+        [clearSearchOnAdd]="false" 
+        appearance="outline" 
+        [items]="materialsItems" 
+        type="text" 
+        class="form__field form__field-material" 
+        [addTag]="true"
+        [hideSelected]="true"
+        placeholder="матеріал 1"
+        addTagText="+ новий матеріал"
+        formControlName="id_color_1" 
+        (search)="changeMaterial($event.term, index)" 
+        (change)="resetMaterialsItems()">
+      </ng-select>
+        <!-- <input type="text" class="form__field form__field-material" placeholder="матеріал 1" formControlName="id_color_1"> -->
         <input type="text" class="form__field--sm" placeholder="%" formControlName="id_color_part_1">
       </div>
-      <div>
-        <input type="text" class="form__field form__field-material" placeholder="матеріал 3" formControlName="id_color_3">
+      <div class="flex">
+        <ng-select 
+        [clearSearchOnAdd]="false" 
+        appearance="outline" 
+        [items]="materialsItems" 
+        type="text" 
+        class="form__field form__field-material" 
+        [addTag]="true"
+        [hideSelected]="true"
+        placeholder="матеріал 3"
+        addTagText="+ новий матеріал"
+        formControlName="id_color_3" 
+        (search)="changeMaterial($event.term, index)" 
+        (change)="resetMaterialsItems()">
+      </ng-select>
         <input type="text" class="form__field--sm" placeholder="%" formControlName="id_color_part_3">
       </div>
     </div>
 
     <div class="form__fields">
-      <div>
-        <input type="text" class="form__field form__field-material" placeholder="матеріал 2" formControlName="id_color_2">
+      <div class="flex">
+        <ng-select 
+        [clearSearchOnAdd]="false" 
+        appearance="outline" 
+        [items]="materialsItems" 
+        type="text" 
+        class="form__field form__field-material" 
+        [addTag]="true"
+        [hideSelected]="true"
+        placeholder="матеріал 2"
+        addTagText="+ новий матеріал"
+        formControlName="id_color_2" 
+        (search)="changeMaterial($event.term, index)" 
+        (change)="resetMaterialsItems()">
+      </ng-select>
         <input type="text" class="form__field--sm" placeholder="%" formControlName="id_color_part_2">
       </div>
-      <div>
-        <input type="text" class="form__field form__field-material" placeholder="матеріал 4" formControlName="id_color_4">
+      <div class="flex">
+        <ng-select 
+        [clearSearchOnAdd]="false" 
+        appearance="outline" 
+        [items]="materialsItems" 
+        type="text" 
+        class="form__field form__field-material" 
+        [addTag]="true"
+        [hideSelected]="true"
+        placeholder="матеріал 4"
+        addTagText="+ новий матеріал"
+        formControlName="id_color_4" 
+        (search)="changeMaterial($event.term, index)" 
+        (change)="resetMaterialsItems()">
+      </ng-select>
         <input type="text" class="form__field--sm" placeholder="%" formControlName="id_color_part_4">
       </div>
     </div>
@@ -90,7 +146,8 @@
       <span class="title-text">Знижка </span> <input type="text" class="form__field" placeholder="грн">
     </div>
     <div class="sum-up--all">
-      <span class="title-text">Всього </span> <input type="text" class="form__field" placeholder="___ / ___ / ___">
+      <span class="title-text">Всього </span> 
+      <input type="text" [value]="sumAll()" class="form__field" placeholder="___ / ___ / ___">
     </div>
   </div>
   <div class="date-order">

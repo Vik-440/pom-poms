@@ -8,23 +8,28 @@
         bindLabel="name"
         class="done" 
         bindValue="value" 
+        [clearable]="false"
         [items]="fulfilledOrderItems"></ng-select>
     </div>
     <div class="filters-data">
       <p class="filters-data--title">дата від</p>
       <ngx-datepicker
       formControlName="dataStart"
+      #dataStart
       class="filters-data--datapicker"
       [options]="options"
     ></ngx-datepicker>
+    <button class="filters-data--datapicker-remove" (click)="removeData('dataStart')">&#10005;</button>
     </div>
     <div class="filters-data">
       <p class="filters-data--title">дата до</p>
       <ngx-datepicker
       formControlName="dataEnd"
+      #dataEnd
       class="filters-data--datapicker"
       [options]="options"
     ></ngx-datepicker>
+    <button class="filters-data--datapicker-remove" (click)="removeData('dataEnd')">&#10005;</button>
     </div>
     <div class="filters-phone">
       <p class="filters-data--title">№ телефону</p>

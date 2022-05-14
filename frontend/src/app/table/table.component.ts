@@ -1,4 +1,4 @@
-import { Component, Directive, EventEmitter, Input, OnDestroy, OnInit, Output, QueryList, ViewChildren } from '@angular/core';
+import { Component, Directive, EventEmitter, Input, OnDestroy, OnInit, Output, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { NgbCalendar, NgbDate, NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
 import locale from 'date-fns/locale/en-US';
@@ -69,7 +69,8 @@ export class SortDirective {
   styleUrls: ['./table.component.sass']
 })
 export class TableComponent implements OnInit, OnDestroy {
-
+  @ViewChild('dataStart') dataStart;
+  @ViewChild('dataEnd') dataEnd;
   filtersForm: FormGroup;
   ordersRow = [];
   switchConfig = {
@@ -332,5 +333,13 @@ validateInput(currentValue: NgbDate | null, input: string): NgbDate | null {
         this.phoneClients = numbers?.phone_client;
       })
     }
+  }
+
+  removeData(control) {
+    this.options = {
+      ...this.options
+    }
+    this[control].displayValue = '';
+    this.filtersForm.get(control).patchValue('')
   }
 }
