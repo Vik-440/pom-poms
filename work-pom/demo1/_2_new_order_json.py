@@ -1,4 +1,4 @@
-from sqlalchemy import null
+from sqlalchemy import func, null
 from _2_new_order_page import return_data_from_order_page, return_data_from_client, return_data_from_kod
 from _2_new_order_page import return_data_from_full_kod, return_data_from_full_person, return_data_from_final_order
 import json
@@ -76,8 +76,10 @@ def return_data_from_new_order_post(data_from_new_page):
         w206w=("%"+str(search_data)+"%")
         # print(w206w)
         # print(f'%{search_data}%')
-        ur_kolor_1=session.query(directory_of_color).filter(directory_of_color.name_color.ilike(w206w)).all()
-        data_var,id_var=[],[]                                   #   f'%{search_data}%'
+        ur_kolor_1=session.query(directory_of_color).filter(directory_of_color.name_color.ilike(f'%{search_data}%')
+            ).order_by('name_color').all()
+        # ur_kolor_1=session.query(func.lower(directory_of_color.name_color).like(f'%{search_data.lower()}%')).all()
+        data_var,id_var=[],[]                                   #   f'%{search_data}%'      .order_by('name_color')
         for row in ur_kolor_1:
             data_var.append(row.name_color)
             id_var.append(row.id_color)
