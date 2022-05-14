@@ -1,8 +1,9 @@
-from sqlalchemy import func, null
+
 from _2_new_order_page import return_data_from_order_page, return_data_from_client, return_data_from_kod
 from _2_new_order_page import return_data_from_full_kod, return_data_from_full_person, return_data_from_final_order
 import json
-from sqlalchemy import create_engine,  MetaData, true, text, Integer, String, Table, Column, and_, or_
+from sqlalchemy import create_engine,  MetaData, true, text, Integer, String, Table, Column, and_, or_, \
+        func, null
 from datetime import datetime, timedelta
 from sqlalchemy.orm import sessionmaker, session, mapper, declarative_base#, decl_base, decl_api
 from sqlalchemy.ext.declarative import declarative_base
@@ -73,7 +74,7 @@ def return_data_from_new_order_post(data_from_new_page):
 ########
     elif 'ur_kolor' in data_from_new_page:
         search_data=data_from_new_page['ur_kolor']
-        w206w=("%"+str(search_data)+"%")
+        # w206w=("%"+str(lower(search_data))+"%")
         # print(w206w)
         # print(f'%{search_data}%')
         ur_kolor_1=session.query(directory_of_color).filter(directory_of_color.name_color.ilike(f'%{search_data}%')
@@ -132,6 +133,6 @@ def return_data_from_new_order_post(data_from_new_page):
 
 #############################################################################    
     else:
-        data_new_page = {"this POST from WEB-page" : "not correctly"}
+        data_new_page = {"request_POST" : "this POST is not correctly"}
     # return data_new_page
     return json.dumps(data_new_page, ensure_ascii=False)
