@@ -95,7 +95,7 @@ def material ():
         else:
             return(return_data_from_material(0)), 200
     except Exception as e:
-        return f'Error in function new_order: {e}', 500
+        return f'Error in function material: {e}', 500
 #########################################################################################
 @app.route('/finance', methods=['GET', 'POST'])
 def finance ():
@@ -126,7 +126,7 @@ def finance ():
         else:
             return(return_data_from_finance(0)), 200
     except Exception as e:
-        return f'Error in function new_order: {e}', 500
+        return f'Error in function finance: {e}', 500
 #########################################################################################
 if __name__=='__main__':
     app.run(debug=True)
