@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { DatepickerOptions } from 'ng2-datepicker';
-import locale from 'date-fns/locale/en-US';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
-import { tap } from 'rxjs';
+import locale from 'date-fns/locale/en-US';
+import { DatepickerOptions } from 'ng2-datepicker';
+import { filter, tap } from 'rxjs';
 import { CreateOrderService } from '../services/create-order.service';
 
 @Component({
@@ -15,6 +15,7 @@ export class CreateOrderComponent implements OnInit {
   constructor(private fb: FormBuilder, private service: CreateOrderService) { }
 
   orderForm: FormArray;
+  clientForm: FormGroup;
   priceAll: FormGroup;
   options: DatepickerOptions = {
     minDate: new Date(''),
@@ -34,6 +35,7 @@ export class CreateOrderComponent implements OnInit {
   isRecipient = false;
   kodItems;
   materialsItems;
+  clientDataItems;
 
   ngOnInit(): void {
     this.priceAll = this.fb.group({
@@ -63,8 +65,22 @@ export class CreateOrderComponent implements OnInit {
         })
       ]);
 
-      
-      this.viewChanges();
+    this.clientForm = this.fb.group({
+      id_client: null,
+      phone_client: null,
+      second_name_client: null,
+      first_name_client: null,
+      surname_client: null,
+      sity: null,
+      np_number: null,
+      name_team: null,
+      coach: false,
+      zip_code: null,
+      street_house_apartment: null,
+      comment_client: null
+    });
+
+    this.viewChanges();
   }
 
   sumAll() {
@@ -80,6 +96,7 @@ export class CreateOrderComponent implements OnInit {
     sumAllItems.push(this.priceAll.value.sum_payment, this.priceAll.value.real_money, this.priceAll.value.different);
     return sumAllItems.join(' / ')
   }
+
   viewChanges() {
     this.orderForm.controls.map((order, index) => {
       order.get('quantity_pars_model').valueChanges.pipe(
@@ -97,8 +114,39 @@ export class CreateOrderComponent implements OnInit {
           })
         })
       ).subscribe()
-    })
+
+      order.get('kolor_model').valueChanges.subscribe(() => {
+        order.patchValue({
+          isNew: true
+        })
+      })
+
+      order.get('id_color_part_1').valueChanges.subscribe(() => {
+        order.patchValue({
+          isNew: true
+        })
+      })
+
+      order.get('id_color_part_2').valueChanges.subscribe(() => {
+        order.patchValue({
+          isNew: true
+        })
+      })
+
+      order.get('id_color_part_3').valueChanges.subscribe(() => {
+        order.patchValue({
+          isNew: true
+        })
+      })
+
+      order.get('id_color_part_4').valueChanges.subscribe(() => {
+        order.patchValue({
+          isNew: true
+        })
+      })
+    });
   }
+
   changeKodModel(value, index) {
     if(value.length >= 3) {
       this.service.getInfoForOrder({ur_kod: value}).subscribe((kods: any) => {
@@ -106,6 +154,7 @@ export class CreateOrderComponent implements OnInit {
       })
     }
   }
+
   changeMaterial(value, index) {
     if(value.length >= 3) {
       this.service.getInfoForOrder({ur_kolor: value}).subscribe((materials: any) => {
@@ -113,6 +162,7 @@ export class CreateOrderComponent implements OnInit {
       })
     }
   }
+
   chooseKode(value, index) { 
     if(!this.kodItems) {
       this.orderForm.controls.map((order, ind) => {
@@ -181,7 +231,6 @@ export class CreateOrderComponent implements OnInit {
   }
 
   saveOrder(index, order) {
-    
     const params = {
       "sl_id_model": order.value.id_model,
       "kod_model": order.value.kod_model,
@@ -203,5 +252,38 @@ export class CreateOrderComponent implements OnInit {
         isNew: false
       })
     });
+  }
+
+  changeClientInfo(phone, minLength, keySend) {
+    if(phone.length >= minLength) {
+      this.service.getInfoForOrder({ [keySend] : phone}).subscribe((phones: any) => {
+        this.clientDataItems = Object.values(phones)[0];
+      })
+    }
+  }
+
+  selectedItemClient(value, keySend){
+    this.clientDataItems = [];
+
+    this.service.getInfoForOrder({ [keySend]: value })
+    .pipe(filter(() => value))
+    .subscribe((data: any) => {
+      console.log(data);
+      let dataClient = data[0]
+      this.clientForm.patchValue({
+        coach: dataClient.coach,
+        comment_client: dataClient.comment_client,
+        first_name_client: dataClient.first_name_client,
+        id_client: dataClient.id_client,
+        name_team: dataClient.name_team,
+        phone_client: dataClient.phone_client,
+        second_name_client: dataClient.second_name_client,
+        sity: dataClient.sity,
+        street_house_apartment: dataClient.street_house_apartment,
+        surname_client: dataClient.surname_client,
+        zip_code: dataClient.zip_code,
+        np_number: dataClient.np_number
+      })
+    })
   }
 }

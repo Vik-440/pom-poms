@@ -81,19 +81,19 @@
     <div class="form__fields">
       <div class="flex">
         <ng-select 
-        [clearSearchOnAdd]="false" 
-        appearance="outline" 
-        [items]="materialsItems" 
-        type="text" 
-        class="form__field form__field-material" 
-        [addTag]="true"
-        [hideSelected]="true"
-        placeholder="матеріал 2"
-        addTagText="+ новий матеріал"
-        formControlName="id_color_2" 
-        (search)="changeMaterial($event.term, index)" 
-        (change)="resetMaterialsItems()">
-      </ng-select>
+          [clearSearchOnAdd]="false" 
+          appearance="outline" 
+          [items]="materialsItems" 
+          type="text" 
+          class="form__field form__field-material" 
+          [addTag]="true"
+          [hideSelected]="true"
+          placeholder="матеріал 2"
+          addTagText="+ новий матеріал"
+          formControlName="id_color_2" 
+          (search)="changeMaterial($event.term, index)" 
+          (change)="resetMaterialsItems()">
+        </ng-select>
         <input type="text" class="form__field--sm" placeholder="%" formControlName="id_color_part_2">
       </div>
       <div class="flex">
@@ -171,25 +171,64 @@
         <img class="next-icon icon" src="./assets/img/icons/send.svg" />
       </button>
   </div>
-  <div class="customer">
+  <div class="customer" [formGroup]="clientForm">
     <div class="data-customer">
-      <input class="data-customer--phone" type="text" placeholder="телефон">
-      <input class="data-customer--lastname" type="text" placeholder="прізвище">
-      <input class="data-customer--firstname" type="text" placeholder="ім'я">
-      <input class="data-customer--sity" type="text" placeholder="місто">
-      <input class="data-customer--post" type="text" placeholder="№ НП">
-      <input class="data-customer--surname" type="text"  placeholder="по-батькові">
-      <input class="data-customer--index" type="text" placeholder="індекс">
-      <input class="data-customer--address" type="text" placeholder="адреса">
-      <input class="data-customer--team" type="text" placeholder="команда">
-      <input class="data-customer--coach" type="text" placeholder="тренер">
+      <ng-select 
+        [clearSearchOnAdd]="false" 
+        appearance="outline" 
+        [items]="clientDataItems" 
+        type="text" 
+        class="data-customer--phone" 
+        [addTag]="true"
+        [hideSelected]="true"
+        placeholder="телефон"
+        addTagText="+ новий номер телефону"
+        formControlName="phone_client"
+        (search)="changeClientInfo($event.term, 4, 'ur_phone')" 
+        (change)="selectedItemClient($event, 'sl_phone')">
+      </ng-select>
+
+      <ng-select 
+        [clearSearchOnAdd]="false" 
+        appearance="outline" 
+        [items]="clientDataItems" 
+        type="text" 
+        class="data-customer--lastname" 
+        [addTag]="true"
+        [hideSelected]="true"
+        placeholder="прізвище"
+        addTagText="+ прізвище"
+        formControlName="second_name_client"
+        (search)="changeClientInfo($event.term, 3, 'ur_second_name')" 
+        (change)="selectedItemClient($event, 'sl_second_name')">
+      </ng-select>
+      <input class="data-customer--firstname" type="text" placeholder="ім'я" formControlName="first_name_client">
+      <ng-select 
+      [clearSearchOnAdd]="false" 
+      appearance="outline" 
+      [items]="clientDataItems" 
+      type="text" 
+      class="data-customer--sity" 
+      [addTag]="true"
+      [hideSelected]="true"
+      placeholder="місто"
+      addTagText="+ місто"
+      formControlName="sity"
+      (search)="changeClientInfo($event.term, 3, 'ur_sity')">
+    </ng-select>
+      <input class="data-customer--post" type="text" placeholder="№ НП" formControlName="np_number">
+      <input class="data-customer--surname" type="text"  placeholder="по-батькові" formControlName="surname_client">
+      <input class="data-customer--index" type="text" placeholder="індекс" formControlName="zip_code">
+      <input class="data-customer--address" type="text" placeholder="адреса" formControlName="street_house_apartment">
+      <input class="data-customer--team" type="text" placeholder="команда" formControlName="name_team">
+      <input class="data-customer--coach" type="text" placeholder="тренер" [attr.disabled]="!clientForm.get('coach').value">
     </div>
 
     <div class="check-person">
       <div class="check-person-btn">
         <span class="cutomer-title">тренер</span>
         <button class="btn-icon">
-          <img class="cancel-icon icon" src="./assets/img/icons/cancel.svg" />
+          <img class="cancel-icon icon" [src]="clientForm.get('coach').value ? './assets/img/icons/check.svg' : './assets/img/icons/cancel.svg'" />
         </button>
         </div>
       <div class="check-person-btn">
