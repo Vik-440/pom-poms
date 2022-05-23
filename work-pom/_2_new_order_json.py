@@ -133,6 +133,6 @@ def return_data_from_new_order_post(data_from_new_page):
 
 #############################################################################    
     else:
-        data_new_page = {"request_POST" : "this POST is not correctly"}
+        data_new_page = {"this POST is not correctly"} #,500
     # return data_new_page
     return json.dumps(data_new_page, ensure_ascii=False)
