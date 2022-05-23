@@ -11,6 +11,11 @@ export class MainPage {
   }
 
   getListMain() {
+    const params = {status: 'pending'}
+    this.http.post(' https://gorest.co.in/public/v2/todos',  params)
+    .subscribe(data => {
+      console.log(data)
+    })
     return this.http.get(`http://127.0.0.1:5000/main_page`);
   }
 

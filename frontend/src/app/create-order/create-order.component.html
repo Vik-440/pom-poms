@@ -178,7 +178,7 @@
         appearance="outline" 
         [items]="clientDataItems" 
         type="text" 
-        class="data-customer--phone" 
+        class="datacustomer--select data-customer--phone" 
         [addTag]="true"
         [hideSelected]="true"
         placeholder="телефон"
@@ -193,7 +193,7 @@
         appearance="outline" 
         [items]="clientDataItems" 
         type="text" 
-        class="data-customer--lastname" 
+        class="datacustomer--select data-customer--lastname" 
         [addTag]="true"
         [hideSelected]="true"
         placeholder="прізвище"
@@ -208,7 +208,7 @@
       appearance="outline" 
       [items]="clientDataItems" 
       type="text" 
-      class="data-customer--sity" 
+      class="datacustomer--select data-customer--sity" 
       [addTag]="true"
       [hideSelected]="true"
       placeholder="місто"
@@ -236,7 +236,7 @@
         <button class="btn-icon" (click)="isRecipient = !isRecipient">
           <img class="cancel-icon icon" [src]="isRecipient ? './assets/img/icons/cancel.svg' : './assets/img/icons/check.svg'" />
         </button></div>
-        <button class="mt10 save-btn save-btn--w70">
+        <button class="mt10 save-btn save-btn--w70" (click)="saveClient()">
           Зберегти
         </button>
     </div>

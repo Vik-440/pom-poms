@@ -286,4 +286,28 @@ export class CreateOrderComponent implements OnInit {
       })
     })
   }
+
+  saveClient() {
+    console.log(1);
+    
+    const params = {
+      "sl_id_recipient": null,
+      "phone_client": this.clientForm.value.phone_client,
+      "second_name_client": this.clientForm.value.second_name_client,
+      "first_name_client": this.clientForm.value.first_name_client,
+      "surname_client": this.clientForm.value.surname_client,
+      "id_sity": this.clientForm.value.id_sity,
+      "np_number": this.clientForm.value.np_number,
+      "id_team": this.clientForm.value.id_team,
+      "coach": this.clientForm.value.coach,
+      "zip_code": this.clientForm.value.zip_code,
+      "street_house_apartment": this.clientForm.value.street_house_apartment,
+      "comment_client": this.clientForm.value.comment_client
+    }
+
+    this.service.getInfoForOrder(params).subscribe(data => {
+      console.log(data);
+      
+    })
+  }
 }
