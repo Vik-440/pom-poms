@@ -120,7 +120,7 @@
       <button class="save-btn forms" (click)="saveOrder(index, order)" *ngIf="order.value.isNew">
        Зберегти
       </button>
-      <button class="ok-btn forms" (click)="saveOrder(index)" *ngIf="!order.value.isNew">
+      <button class="ok-btn forms"  *ngIf="!order.value.isNew">
         <img class="next-icon icon" src="./assets/img/icons/ok-btn.svg" />
        </button>
     </div>

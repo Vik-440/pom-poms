@@ -166,38 +166,48 @@ export class CreateOrderComponent implements OnInit {
   chooseKode(value, index) { 
     if(!this.kodItems) {
       this.orderForm.controls.map((order, ind) => {
-        if(ind === index) {
+        if(ind === index && value) {
           order.patchValue({
             kod_model: `id__ - ` + value,
+          })
+        } else if(!value){
+          order.patchValue({
+            kod_model: null
           })
         }
         return;
       })
     }
-     
-    this.orderForm.controls.map((order, ind) => {
-      this.service.getInfoForOrder({ sl_kod: value }).subscribe((data: any) => {
-        if(index === ind && Object.keys(data).length){
-          order.patchValue({
-            kod_model: `id${data.id_model} - ` + data.kod_model,
-            kolor_model: data.kolor_model,
-            id_color_1: data.id_color_1,
-            id_color_part_1: data.id_color_part_1,
-            id_color_2: data.id_color_2,
-            id_color_part_2: data.id_color_part_2,
-            id_color_3: data.id_color_3,
-            id_color_part_3: data.id_color_part_3,
-            id_color_4: data.id_color_4,
-            id_color_part_4: data.id_color_part_4,
-            price_model: data.price_model,
-            comment_model: data.comment_model,
-            isNew: false,
-            isChange: false
-          })
-        }
+
+    console.log(value);
+    
+     if(this.kodItems?.includes(value)) {
+       console.log(1);
+       
+      this.orderForm.controls.map((order, ind) => {
+        this.service.getInfoForOrder({ sl_kod: value }).subscribe((data: any) => {
+          if(index === ind && Object.keys(data).length){
+            order.patchValue({
+              kod_model: `id${data.id_model} - ` + data.kod_model,
+              kolor_model: data.kolor_model,
+              id_color_1: data.id_color_1,
+              id_color_part_1: data.id_color_part_1,
+              id_color_2: data.id_color_2,
+              id_color_part_2: data.id_color_part_2,
+              id_color_3: data.id_color_3,
+              id_color_part_3: data.id_color_part_3,
+              id_color_4: data.id_color_4,
+              id_color_part_4: data.id_color_part_4,
+              price_model: data.price_model,
+              comment_model: data.comment_model,
+              isNew: false,
+              isChange: false
+            })
+          }
+        })
       })
-      this.kodItems = [];
-    })
+    }
+    this.kodItems = [];
   }
 
   resetMaterialsItems() {
@@ -231,8 +241,10 @@ export class CreateOrderComponent implements OnInit {
   }
 
   saveOrder(index, order) {
+    console.log(order);
+    
     const params = {
-      "sl_id_model": order.value.id_model,
+      "sl_id_model": order.value.id_model || null,
       "kod_model": order.value.kod_model,
       "id_color_1": order.value.id_color_1,
       "id_color_part_1": order.value.id_color_part_1,
@@ -246,6 +258,7 @@ export class CreateOrderComponent implements OnInit {
       "comment_model":  order.value.comment_model,
       "kolor_model":  order.value.kolor_model
     }
+console.log(params);
 
     this.service.getInfoForOrder(params).subscribe(() => {
       order.patchValue({
