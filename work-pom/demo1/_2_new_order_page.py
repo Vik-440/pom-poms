@@ -1,6 +1,6 @@
 from operator import and_, or_
 from unicodedata import numeric
-from pymysql import NULL
+# from pymysql import NULL
 from sqlalchemy import create_engine,  MetaData, false, func, null, true, text, Integer, String, Table, Column, insert
 from datetime import datetime, timedelta
 from sqlalchemy.orm import sessionmaker, Session, mapper, declarative_base#, decl_base, decl_api

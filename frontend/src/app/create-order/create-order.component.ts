@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import locale from 'date-fns/locale/en-US';
 import { DatepickerOptions } from 'ng2-datepicker';
 import { filter, tap } from 'rxjs';
 import { CreateOrderService } from '../services/create-order.service';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-create-order',
@@ -14,12 +15,15 @@ export class CreateOrderComponent implements OnInit {
 
   constructor(private fb: FormBuilder, private service: CreateOrderService) { }
 
+  @Input() isNew: Boolean = true;
   orderForm: FormArray;
   clientForm: FormGroup;
+  recipientForm: FormGroup;
   priceAll: FormGroup;
+  idOrder: number = null;
   options: DatepickerOptions = {
     minDate: new Date(''),
-    format: 'dd.MM.yyyy',
+    format: 'yyyy-MM-dd',
     formatDays: 'EEEEE',
     firstCalendarDay: 1,
     locale: locale,
@@ -32,12 +36,23 @@ export class CreateOrderComponent implements OnInit {
   orders = [1]
 
   dateToday = new Date();
+  dataPlaneOrder = null;
+  dataSendOrder = null;
+  dateForms: FormGroup;
   isRecipient = false;
   kodItems;
   materialsItems;
   clientDataItems;
+  infoForSave: any;
 
   ngOnInit(): void {
+    this.dateForms = this.fb.group({
+      data_order: moment().format('YYYY-MM-DD'),
+      data_plane_order: null,
+      data_send_order: null
+    })
+    console.log(this.dateForms.value);
+    
     this.priceAll = this.fb.group({
       sum_payment: 0,
       real_money: 0,
@@ -47,14 +62,15 @@ export class CreateOrderComponent implements OnInit {
       this.fb.array([
         this.fb.group({
           kod_model: null,
+          id_model: null,
           kolor_model: null,
-          id_color_1: null,
+          name_color_1: null,
           id_color_part_1: null,
-          id_color_2: null,
+          name_color_2: null,
           id_color_part_2: null,
-          id_color_3: null,
+          name_color_3: null,
           id_color_part_3: null,
-          id_color_4: null,
+          name_color_4: null,
           id_color_part_4: null,
           price_model: null,
           quantity_pars_model: null,
@@ -75,6 +91,20 @@ export class CreateOrderComponent implements OnInit {
       np_number: null,
       name_team: null,
       coach: false,
+      zip_code: null,
+      street_house_apartment: null,
+      comment_client: null
+    });
+
+    this.recipientForm = this.fb.group({
+      id_client: null,
+      phone_client: null,
+      second_name_client: null,
+      first_name_client: null,
+      surname_client: null,
+      sity: null,
+      np_number: null,
+      name_team: null,
       zip_code: null,
       street_house_apartment: null,
       comment_client: null
@@ -168,7 +198,7 @@ export class CreateOrderComponent implements OnInit {
       this.orderForm.controls.map((order, ind) => {
         if(ind === index && value) {
           order.patchValue({
-            kod_model: `id__ - ` + value,
+            kod_model: value,
           })
         } else if(!value){
           order.patchValue({
@@ -188,15 +218,16 @@ export class CreateOrderComponent implements OnInit {
         this.service.getInfoForOrder({ sl_kod: value }).subscribe((data: any) => {
           if(index === ind && Object.keys(data).length){
             order.patchValue({
-              kod_model: `id${data.id_model} - ` + data.kod_model,
+              id_model: data.id_model,
+              kod_model: data.kod_model,
               kolor_model: data.kolor_model,
-              id_color_1: data.id_color_1,
+              name_color_1: data.name_color_1 || null,
               id_color_part_1: data.id_color_part_1,
-              id_color_2: data.id_color_2,
+              name_color_2: data.name_color_2 || null,
               id_color_part_2: data.id_color_part_2,
-              id_color_3: data.id_color_3,
+              name_color_3: data.name_color_3 || null,
               id_color_part_3: data.id_color_part_3,
-              id_color_4: data.id_color_4,
+              name_color_4: data.name_color_4 || null,
               id_color_part_4: data.id_color_part_4,
               price_model: data.price_model,
               comment_model: data.comment_model,
@@ -217,14 +248,15 @@ export class CreateOrderComponent implements OnInit {
   addOrder() {
     this.orderForm.push(this.fb.group({
       kod_model: null,
+      id_model: null,
       kolor_model: null,
-      id_color_1: null,
+      name_color_1: null,
       id_color_part_1: null,
-      id_color_2: null,
+      name_color_2: null,
       id_color_part_2: null,
-      id_color_3: null,
+      name_color_3: null,
       id_color_part_3: null,
-      id_color_4: null,
+      name_color_4: null,
       id_color_part_4: null,
       price_model: null,
       quantity_pars_model: null,
@@ -246,13 +278,13 @@ export class CreateOrderComponent implements OnInit {
     const params = {
       "sl_id_model": order.value.id_model || null,
       "kod_model": order.value.kod_model,
-      "id_color_1": order.value.id_color_1,
+      "name_color_1": order.value.name_color_1,
       "id_color_part_1": order.value.id_color_part_1,
-      "id_color_2" :  order.value.id_color_2,
+      "name_color_2" :  order.value.name_color_2,
       "id_color_part_2" : order.value.id_color_part_2,
-      "id_color_3" :  order.value.id_color_3,
+      "name_color_3" :  order.value.name_color_3,
       "id_color_part_3" : order.value.id_color_part_3,
-      "id_color_4" :  order.value.id_color_4,
+      "name_color_4" :  order.value.name_color_4,
       "id_color_part_4" : order.value.id_color_part_4,
       "price_model":  order.value.price_model,
       "comment_model":  order.value.comment_model,
@@ -275,15 +307,14 @@ console.log(params);
     }
   }
 
-  selectedItemClient(value, keySend){
+  selectedItemClient(value, keySend, form = this.clientForm){
     this.clientDataItems = [];
 
     this.service.getInfoForOrder({ [keySend]: value })
     .pipe(filter(() => value))
     .subscribe((data: any) => {
-      console.log(data);
-      let dataClient = data[0]
-      this.clientForm.patchValue({
+      const dataClient = data[0]
+      form.patchValue({
         coach: dataClient.coach,
         comment_client: dataClient.comment_client,
         first_name_client: dataClient.first_name_client,
@@ -322,5 +353,36 @@ console.log(params);
       console.log(data);
       
     })
+  }
+
+  makeArrayDataOrder(key) {
+    const result = [];
+    console.log(this.orderForm.value)
+    this.orderForm.value.map(order => {
+      result.push(order[key])
+    })
+    return result;
+  }
+  saveAll() {
+    console.log( moment(this.dataPlaneOrder).format('YYYY-MM-DD'), this.sumAll().split('/')[0])
+    console.log(this.makeArrayDataOrder('quantity_pars_model'))
+    const params = {
+      id_order: this.isNew ? 0 : '',
+      data_order: moment(this.dateToday).format('YYYY-MM-DD'),
+      id_client: this.clientForm.value.id_client,
+      id_recipient: !this.isRecipient ? this.clientForm.value.id_client : this.recipientForm.value.id_client, // (2 або ід_клієнт)
+      id_model: this.makeArrayDataOrder('id_model'), // - порядок!
+      quantity_pars_model: this.makeArrayDataOrder('quantity_pars_model'), // - порядок!
+      data_plane_order: this.dataPlaneOrder ? moment(this.dataPlaneOrder).format('YYYY-MM-DD') : null, // - прогнозована
+      data_send_order: this.dataSendOrder ? moment(this.dataSendOrder).format('YYYY-MM-DD') : null, //- бажана
+      discont_order: 0,// - аб 
+      sum_payment: this.sumAll().split('/')[0].trim(),
+      fulfilled_order: false,
+      comment_order: null
+    }
+
+    this.service.saveOrder(params).subscribe((data: any) => {
+      this.idOrder = data.id_order
+    });
   }
 }
