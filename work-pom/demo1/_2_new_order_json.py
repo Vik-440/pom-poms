@@ -1,6 +1,6 @@
 
-from _2_new_order_page import return_data_from_order_page, return_data_from_client, return_data_from_kod
-from _2_new_order_page import return_data_from_full_kod, return_data_from_full_person, return_data_from_final_order
+from _2_new_order_page import return_data_from_order_page, return_data_from_client, return_data_from_kod, \
+    return_data_from_full_kod,return_data_from_full_person,return_data_from_final_order,return_data_from_edit_order
 import json
 from sqlalchemy import create_engine,  MetaData, true, text, Integer, String, Table, Column, and_, or_, \
         func, null
@@ -79,8 +79,7 @@ def return_data_from_new_order_post(data_from_new_page):
         # print(f'%{search_data}%')
         ur_kolor_1=session.query(directory_of_color).filter(directory_of_color.name_color.ilike(f'%{search_data}%')
             ).order_by('name_color').all()
-        # ur_kolor_1=session.query(func.lower(directory_of_color.name_color).like(f'%{search_data.lower()}%')).all()
-        data_var,id_var=[],[]                                   #   f'%{search_data}%'      .order_by('name_color')
+        data_var,id_var=[],[]                                   
         for row in ur_kolor_1:
             data_var.append(row.name_color)
             id_var.append(row.id_color)
@@ -97,15 +96,24 @@ def return_data_from_new_order_post(data_from_new_page):
 #############################################################################    
     elif 'sl_phone' in data_from_new_page:
         search_data=data_from_new_page['sl_phone']
-        data_new_page=return_data_from_client(search_data, 0)
+        data_new_page=return_data_from_client(search_data, 0,0)
 ####
     elif 'sl_second_name' in data_from_new_page:
         search_data=data_from_new_page['sl_second_name']
-        data_new_page=return_data_from_client(0, search_data)
+        data_new_page=return_data_from_client(0, search_data,0)
+####
+    elif 'open_id_client' in data_from_new_page:
+        search_data=data_from_new_page['open_id_client']
+        data_new_page=return_data_from_client(0, 0, search_data)
 ####
     elif 'sl_kod' in data_from_new_page:
         search_data=data_from_new_page['sl_kod']
-        data_new_page=return_data_from_kod(search_data)
+        data_new_page=return_data_from_kod(search_data,0)
+####
+    elif 'open_id_model' in data_from_new_page:
+        search_data=data_from_new_page['open_id_model']
+        data_new_page=return_data_from_kod(0,search_data)
+    
 #############################################################################    
     elif 'sl_id_recipient' in data_from_new_page:
         data_tmp_page=return_data_from_full_person(data_from_new_page)
@@ -129,9 +137,11 @@ def return_data_from_new_order_post(data_from_new_page):
             ).update({'fulfilled_order':fulfilled_order})
         session.commit()
         data_new_page = {"id_order": "ok"}
+############################################################################# 
+    elif 'edit_order' in data_from_new_page:
+        data_new_page=return_data_from_edit_order(data_from_new_page)
 
-
-#############################################################################    
+#############################################################################   
     else:
         data_new_page = {"this POST is not correctly"} #,500
     # return data_new_page

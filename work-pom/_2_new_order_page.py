@@ -20,110 +20,57 @@ def return_data_from_order_page():
         time_last_order = '2022-12-31'
         # session.close()
         return {'id_new_order':j_id_new_order, 'time_last_order':time_last_order}
-###################################################################################
-def return_data_from_client(sl_phone, sl_second_name):
+################################################################################### - тут дописати пошук по ID
+def return_data_from_client(sl_phone, sl_second_name, open_id_client):
     with Session(engine) as session:
-        # j_phone_client.clear()
-        j_phone_client,j_id_client,j_second_name_client,j_first_name_client,j_surname_client,j_sity,j_np_number,\
-            j_name_team,j_coach,j_zip_code,j_street_house_apartment,j_comment_client=[],[],[],[],[],[],[],[],[],[],[],[]
 
-        if sl_phone==0:
-            id_client_1=session.query(directory_of_client).filter_by(second_name_client=sl_second_name).all()
-        else:
+        if sl_phone==0 and open_id_client==0:
+            id_client_3=session.query(directory_of_client).filter_by(second_name_client=sl_second_name).all()
+        elif sl_second_name==0 and open_id_client==0:
             sl_phone=str(sl_phone)
-            # print(sl_phone)
-            id_client_1=session.query(directory_of_client).filter_by(phone_client=str(sl_phone)).all()    
-######## тут        
-        for row in id_client_1:
-            j_id_client.append(row.id_client)
-    
-            phone_client_1=session.query(directory_of_client).filter_by(id_client=row.id_client).all()
-            w1w=len(phone_client_1)
-            w2w,w3w,w4w,w5w,w6w,w7w,w8w,w9w,w10w,w11w,w12w=[],[],[],[],[],[],[],[],[],[],[]
-            for row1 in phone_client_1:
-                if w1w > 0:             # it is maybe excessive!
-                    w2w.append(row1.phone_client)
-                    w3w.append(row1.second_name_client)
-                    w4w.append(row1.first_name_client)
-                    w5w.append(row1.surname_client)
-                    w6w.append(row1.np_number)
-                    w7w.append(row1.coach)
-                    w8w.append(row1.zip_code)
-                    w9w.append(row1.street_house_apartment)
-                    w10w.append(row1.comment_client)
-                    # w12w.append(row1.id_team)
-                    sity_1=session.query(directory_of_sity).filter_by(id_sity=row.id_sity).all()
-                    for row2 in sity_1:
-                        w11w.append(row2.sity)
-                    name_team_1=session.query(directory_of_team).filter_by(id_team=row.id_team).all()
-                    for row2 in name_team_1:
-                        w12w.append(row2.name_team)
+            id_client_3=session.query(directory_of_client).filter_by(phone_client=str(sl_phone)).all() 
+        else:
+            id_client_3=session.query(directory_of_client).filter_by(id_client=open_id_client).all()
+########
+        for row in id_client_3:
+            j_id_client=row.id_client
+            id_sity=row.id_sity
+            id_team=row.id_team
+        phone_client_1=session.query(directory_of_client).filter_by(id_client=j_id_client).all()
 
-                    w1w=w1w-1
-            if len(w2w)== 1:
-                w2w=int(w2w[0])
-            j_phone_client.append(w2w)
-            if len(w3w)== 1:
-                w3w=w3w[0]
-            j_second_name_client.append(w3w)
-            if len(w4w)== 1:
-                w4w=w4w[0]
-            j_first_name_client.append(w4w)
-            if len(w5w)== 1:
-                w5w=w5w[0]
-            j_surname_client.append(w5w)
-            if len(w6w)== 1:
-                w6w=int(w6w[0])
-            j_np_number.append(w6w)
-            if len(w7w)== 1:
-                w7w=w7w[0]
-            j_coach.append(w7w)
-            if len(w8w)== 1:
-                w8w=w8w[0]
-            j_zip_code.append(w8w)
-            if len(w9w)== 1:
-                w9w=w9w[0]
-            j_street_house_apartment.append(w9w)
-            if len(w10w)== 1:
-                w10w=w10w[0]
-            j_comment_client.append(w10w)
-            if len(w11w)== 1:
-                w11w=w11w[0]
-            j_sity.append(w11w)
-            if len(w12w)== 1:
-                w12w=w12w[0]
-            j_name_team.append(w12w)
+        for row1 in phone_client_1:
+            j_phone_client=(row1.phone_client)
+            j_second_name_client=(row1.second_name_client)
+            j_first_name_client=(row1.first_name_client)
+            j_surname_client=(row1.surname_client)
+            j_np_number=(row1.np_number)
+            j_coach=(row1.coach)
+            j_zip_code=(row1.zip_code)
+            j_street_house_apartment=(row1.street_house_apartment)
+            j_comment_client=(row1.comment_client)
 
-        a1a=len(j_id_client)
-        full_block=[]
-        # # print(a1a)
-        while a1a > 0:
-            a1a-=1
-            element_1=j_id_client.pop(0)
-            element_2=j_phone_client.pop(0)
-            element_3=j_second_name_client.pop(0)
-            element_4=j_first_name_client.pop(0)
-            element_5=j_surname_client.pop(0)
-            element_6=j_sity.pop(0)
-            element_7=j_np_number.pop(0)
-            element_8=j_name_team.pop(0)
-            element_9=j_coach.pop(0)
-            element_10=j_zip_code.pop(0)
-            element_11=j_street_house_apartment.pop(0)
-            element_12=j_comment_client.pop(0)
+            sity_1=session.query(directory_of_sity).filter_by(id_sity=id_sity).all()
+            for row2 in sity_1:
+                j_sity=(row2.sity)
+            name_team_1=session.query(directory_of_team).filter_by(id_team=id_team).all()
+            for row2 in name_team_1:
+                j_name_team=(row2.name_team)
 
-            one_block = {"id_client": element_1, "phone_client": element_2, "second_name_client" : element_3,
-            "first_name_client" : element_4, "surname_client" : element_5, "sity" : element_6,
-            "np_number" : element_7, "name_team" : element_8, "coach":element_9, "zip_code": element_10,
-            "street_house_apartment": element_11, "comment_client": element_12}
 
-            full_block.append(one_block)
-    return full_block
+        one_block = {"id_client": j_id_client, "phone_client": j_phone_client, "second_name_client" : j_second_name_client,
+        "first_name_client" : j_first_name_client, "surname_client" : j_surname_client, "sity" : j_sity,
+        "np_number" : j_np_number, "name_team" : j_name_team, "coach":j_coach, "zip_code": j_zip_code,
+        "street_house_apartment": j_street_house_apartment, "comment_client": j_comment_client}
+
+    return one_block
 
 ###################################################################################
-def return_data_from_kod(sl_kod):
+def return_data_from_kod(sl_kod,open_id_model):
     with Session(engine) as session:
-        id_model_1=session.query(directory_of_model).filter_by(kod_model=sl_kod).all()
+        if open_id_model==0:
+            id_model_1=session.query(directory_of_model).filter_by(kod_model=sl_kod).all()
+        else:
+            id_model_1=session.query(directory_of_model).filter_by(id_model=open_id_model).all()
         for row in id_model_1:
             j_id_model=row.id_model
             j_kod_model=row.kod_model
@@ -287,5 +234,35 @@ def return_data_from_final_order(data_from_new_page):
         
         one_block = {"id_order" : j_id_order}
         return one_block
+###################################################################################
+def return_data_from_edit_order(data_from_new_page):
+    with Session(engine) as session:
+        edit_order=data_from_new_page['edit_order']
+        id_order_1=session.query(directory_of_order).filter_by(id_order=edit_order).all()
+        for row in id_order_1:
+            id_order=row.id_order
+            data_order=str(row.data_order)
+            id_client=row.id_client
+            id_recipient=row.id_recipient
+            data_plane_order=str(row.data_plane_order)
+            data_send_order=str(row.data_send_order)
+            discont_order=row.discont_order
+            sum_payment=row.sum_payment
+            fulfilled_order=row.fulfilled_order
+            comment_order=row.comment_order
+            
+            id_model,quantity_pars_model=[],[]
+            id_model_1=session.query(directory_of_group).filter_by(id_order=id_order)
+            for row1 in id_model_1:
+                id_model.append(row1.id_model)
+                quantity_pars_model.append(row1.quantity_pars_model)
 
+        if len(str(id_order_1))<3:
+            one_block={}
+        else:
+            one_block = {"id_order":id_order,"data_order":data_order,"id_client":id_client,"id_recipient":id_recipient,
+            "data_plane_order":data_plane_order,"data_send_order":data_send_order,"discont_order":discont_order,
+            "sum_payment":sum_payment,"fulfilled_order":fulfilled_order,"comment_order":comment_order,
+            "id_model":id_model,"quantity_pars_model":quantity_pars_model}
 
+    return one_block
