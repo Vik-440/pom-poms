@@ -50,7 +50,7 @@ def return_data_from_main_page(asked):
         if 'data_end' in asked: data_end=asked['data_end']
         else: data_end=ds
         
-        id_client3=[]
+        id_client3=[]                               ######## здається зайве!
         if 'fulfilled_order' in asked:
             fulfilled_order_1=asked['fulfilled_order']
         # else: fulfilled_order_1='FALSE'#false
@@ -86,7 +86,8 @@ def return_data_from_main_page(asked):
             id_order_1=session.query(directory_of_order).filter(directory_of_order.data_order>=data_start,
             directory_of_order.data_order<=data_end).filter_by(fulfilled_order='FALSE'
             ).order_by('id_order').all()
-
+########
+        # print("test-OK-1")
         for row in id_order_1:
             id_order.append(row.id_order)
             comment_order.append(row.comment_order)
@@ -94,9 +95,13 @@ def return_data_from_main_page(asked):
             data_plane_order.append(str(row.data_plane_order))
             fulfilled_order.append(row.fulfilled_order)
             sum_payment.append(row.sum_payment - row.discont_order)
-            
+########            
+            # print("test-OK-2")
             id_group_1=session.query(directory_of_group).filter_by(id_order=row.id_order).all()
-            # w1w=len(id_group_1)
+            if (len(str(id_group_1))) <3:
+                return json.dumps({"Помилка в записі клієнта (не має моделей у Group) - id:":row.id_order}),500
+########
+
             tmp_kolor_model,tmp_kod_model,tmp_comment_model,tmp_quantity_pars_model,tmp_phase_1_model, \
                     tmp_phase_2_model,tmp_phase_3_model=[],[],[],[],[],[],[]
             for row1 in id_group_1:
@@ -104,6 +109,13 @@ def return_data_from_main_page(asked):
                 tmp_phase_1_model.append(row1.phase_1_model)
                 tmp_phase_2_model.append(row1.phase_2_model)
                 tmp_phase_3_model.append(row1.phase_3_model)
+
+                if row1.id_model==None:
+                    return json.dumps({"Відсутній запис моделі у Group - id:":row.id_order}),500
+                if row1.quantity_pars_model==None:
+                    return json.dumps({"Відсутня кількість пар у Group - id:":row.id_order}),500
+
+
                 id_model_1=id_group_1=session.query(directory_of_model).filter_by(id_model=row1.id_model).all()
                 for row2 in id_model_1:
                     tmp_kolor_model.append(row2.kolor_model)
@@ -126,11 +138,15 @@ def return_data_from_main_page(asked):
             kolor_model.append(tmp_kolor_model)
             kod_model.append(tmp_kod_model)
             comment_model.append(tmp_comment_model)
-            
+#### тут виловлювати помилку, якщо поля не існує. #########################################################            
             id_client_2=session.query(directory_of_client).filter_by(id_client=row.id_client).all()
+            if (len(str(id_client_2))) <3:
+                return json.dumps({"Помилка в записі клієнта - id:":row.id_order}),500
             for row1 in id_client_2:
                 phone_client.append(row1.phone_client)
             id_recipient_1=session.query(directory_of_client).filter_by(id_client=row.id_recipient).all()
+            if (len(str(id_recipient_1))) <3:
+                return json.dumps({"Помилка в записі отримувача - id:":row.id_order}),500
             for row1 in id_recipient_1:
                 second_name_client.append(row1.second_name_client)
                 first_name_client.append(row1.first_name_client)
@@ -146,7 +162,7 @@ def return_data_from_main_page(asked):
                 ).filter_by(id_order=row.id_order).first()
             real_money.append(real_money_1.my_sum)
 
-        None
+        # print("test-OK-3")
         a1a=len(id_order)
         # a1a=1
         while a1a>0:
@@ -180,6 +196,7 @@ def return_data_from_main_page(asked):
             "sity":el15,"data_plane_order":el16,"fulfilled_order":el17,"np_number":el18,"zip_code":el19,
             "street_house_apartment":el20,"second_name_client":el21,"first_name_client":el22}
             # print(one_block)
+            # print("test-OK-4")
             full_block.append(one_block)
 
         # full_block={"testdata" : "in progres", "data_end": data_end, "id_order":id_order}
