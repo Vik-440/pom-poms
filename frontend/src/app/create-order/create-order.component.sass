@@ -154,8 +154,11 @@
   width: 430px
   column-gap: 9px
   row-gap: 5px 
-  grid-template-rows: repeat(4, 1fr)
+  grid-template-rows: repeat(5, 1fr)
   grid-template-columns: repeat(43, 1fr)
+  ::ng-deep
+    .ng-select .ng-arrow-wrapper
+      display: none
   &--phone
     grid-area: 1 / 1 / 2 / 16
   &--lastname
@@ -176,6 +179,8 @@
       grid-area: 4 / 1 / 5 / 16
   &--coach
       grid-area: 4 / 16 / 5 / 44
+  &--comment-client
+    grid-area: 5 / 1 / 6 / 44
   &--save
     grid-area: 4 / 35 / 5 / 44
 
@@ -222,6 +227,8 @@
   &--comment
     resize: none
     width: 949px
+    height: 30px
+    resize: none
   &--btns
     display: grid
     grid-template-columns: repeat(2, 140px)

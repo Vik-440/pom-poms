@@ -6,7 +6,7 @@ import { ReserveComponent } from './reserve/reserve.component';
 import { TableComponent } from './table/table.component';
 
 const routes: Routes = [
-  { path: 'base-page', component: TableComponent },
+  { path: '', component: TableComponent },
   { path: 'create-order', component: CreateOrderComponent },
   { path: 'reserve-page', component: ReserveComponent },
   { path: 'finances-page', component: FinancesComponent }

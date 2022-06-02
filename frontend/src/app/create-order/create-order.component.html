@@ -1,6 +1,6 @@
 <div class="page pl61 pr50 mt20 create-order__page" >
   <div class="create-order__title">
-    <h3 class="create-order__title--number title-text">Замовлення № <input  type="text"></h3>
+    <h3 class="create-order__title--number title-text">Замовлення № <input  type="text" [value]="idOrder"></h3>
     <h3 class="create-order__title--date title-text">Дата замовлення
       <ngx-datepicker
       [(ngModel)]="dateToday"
@@ -52,11 +52,11 @@
         [hideSelected]="true"
         placeholder="матеріал 1"
         addTagText="+ новий матеріал"
-        formControlName="id_color_1" 
+        formControlName="name_color_1" 
         (search)="changeMaterial($event.term, index)" 
         (change)="resetMaterialsItems()">
       </ng-select>
-        <!-- <input type="text" class="form__field form__field-material" placeholder="матеріал 1" formControlName="id_color_1"> -->
+        <!-- <input type="text" class="form__field form__field-material" placeholder="матеріал 1" formControlName="name_color_1"> -->
         <input type="text" class="form__field--sm" placeholder="%" formControlName="id_color_part_1">
       </div>
       <div class="flex">
@@ -70,7 +70,7 @@
         [hideSelected]="true"
         placeholder="матеріал 3"
         addTagText="+ новий матеріал"
-        formControlName="id_color_3" 
+        formControlName="name_color_3" 
         (search)="changeMaterial($event.term, index)" 
         (change)="resetMaterialsItems()">
       </ng-select>
@@ -90,7 +90,7 @@
           [hideSelected]="true"
           placeholder="матеріал 2"
           addTagText="+ новий матеріал"
-          formControlName="id_color_2" 
+          formControlName="name_color_2" 
           (search)="changeMaterial($event.term, index)" 
           (change)="resetMaterialsItems()">
         </ng-select>
@@ -107,7 +107,7 @@
         [hideSelected]="true"
         placeholder="матеріал 4"
         addTagText="+ новий матеріал"
-        formControlName="id_color_4" 
+        formControlName="name_color_4" 
         (search)="changeMaterial($event.term, index)" 
         (change)="resetMaterialsItems()">
       </ng-select>
@@ -150,10 +150,11 @@
       <input type="text" [value]="sumAll()" class="form__field" placeholder="___ / ___ / ___">
     </div>
   </div>
-  <div class="date-order">
+  <div class="date-order" >
       <div class="date-order-item">
         <p class="date-order-item--title">Прогнозована дата відправки:</p>
         <ngx-datepicker
+        [(ngModel)]="dataPlaneOrder"
         [options]="options"
       ></ngx-datepicker>
       </div>
@@ -163,6 +164,7 @@
       <div>
         <p class="date-order-item--title">Бажана дата відправки:</p>
         <ngx-datepicker
+        [(ngModel)]="dataSendOrder"
         [options]="options"
       ></ngx-datepicker>
       </div>
@@ -171,8 +173,8 @@
         <img class="next-icon icon" src="./assets/img/icons/send.svg" />
       </button>
   </div>
-  <div class="customer" [formGroup]="clientForm">
-    <div class="data-customer">
+  <div class="customer" >
+    <div class="data-customer" [formGroup]="clientForm" >
       <ng-select 
         [clearSearchOnAdd]="false" 
         appearance="outline" 
@@ -214,14 +216,28 @@
       placeholder="місто"
       addTagText="+ місто"
       formControlName="sity"
-      (search)="changeClientInfo($event.term, 3, 'ur_sity')">
+      (search)="changeClientInfo($event.term, 3, 'ur_sity')" >
     </ng-select>
       <input class="data-customer--post" type="text" placeholder="№ НП" formControlName="np_number">
       <input class="data-customer--surname" type="text"  placeholder="по-батькові" formControlName="surname_client">
       <input class="data-customer--index" type="text" placeholder="індекс" formControlName="zip_code">
       <input class="data-customer--address" type="text" placeholder="адреса" formControlName="street_house_apartment">
-      <input class="data-customer--team" type="text" placeholder="команда" formControlName="name_team">
-      <input class="data-customer--coach" type="text" placeholder="тренер" [attr.disabled]="!clientForm.get('coach').value">
+      <ng-select 
+        [clearSearchOnAdd]="false" 
+        appearance="outline" 
+        [items]="clientDataItems" 
+        type="text" 
+        class="datacustomer--select data-customer--team" 
+        [addTag]="true"
+        [hideSelected]="true"
+        placeholder="команда"
+        addTagText="+ команда"
+        formControlName="name_team"
+        (search)="changeClientInfo($event.term, 3, 'ur_team')" >
+      </ng-select>
+      <input class="data-customer--coach" type="text" placeholder="тренер" [disabled]="clientForm.get('coach').value">
+      <input class="data-customer--comment-client" type="text" placeholder="коментар до клієнта">
+      
     </div>
 
     <div class="check-person">
@@ -240,26 +256,79 @@
           Зберегти
         </button>
     </div>
-    <div class="data-customer data-customer-coach" *ngIf="isRecipient">
-      <input class="data-customer--phone" type="text" placeholder="телефон">
-      <input class="data-customer--lastname" type="text" placeholder="прізвище">
-      <input class="data-customer--firstname" type="text" placeholder="ім'я">
-      <input class="data-customer--sity" type="text" placeholder="місто">
-      <input class="data-customer--post" type="text" placeholder="№ НП">
-      <input class="data-customer--surname" type="text"  placeholder="по-батькові">
-      <input class="data-customer--index" type="text" placeholder="індекс">
-      <input class="data-customer--address" type="text" placeholder="адреса">
-      <input class="data-customer--team" type="text" placeholder="команда">
-      <button class="data-customer--save save-btn">Зберегти</button>
+    <div class="data-customer" [formGroup]="recipientForm" *ngIf="isRecipient">
+      <ng-select 
+        [clearSearchOnAdd]="false" 
+        appearance="outline" 
+        [items]="clientDataItems" 
+        type="text" 
+        class="datacustomer--select data-customer--phone" 
+        [addTag]="true"
+        [hideSelected]="true"
+        placeholder="телефон"
+        addTagText="+ новий номер телефону"
+        formControlName="phone_client"
+        (search)="changeClientInfo($event.term, 4, 'ur_phone')" 
+        (change)="selectedItemClient($event, 'sl_phone', recipientForm)">
+      </ng-select>
+
+      <ng-select 
+        [clearSearchOnAdd]="false" 
+        appearance="outline" 
+        [items]="clientDataItems" 
+        type="text" 
+        class="datacustomer--select data-customer--lastname" 
+        [addTag]="true"
+        [hideSelected]="true"
+        placeholder="прізвище"
+        addTagText="+ прізвище"
+        formControlName="second_name_client"
+        (search)="changeClientInfo($event.term, 3, 'ur_second_name')" 
+        (change)="selectedItemClient($event, 'sl_second_name', recipientForm)">
+      </ng-select>
+      <input class="data-customer--firstname" type="text" placeholder="ім'я" formControlName="first_name_client">
+      <ng-select 
+      [clearSearchOnAdd]="false" 
+      appearance="outline" 
+      [items]="clientDataItems" 
+      type="text" 
+      class="datacustomer--select data-customer--sity" 
+      [addTag]="true"
+      [hideSelected]="true"
+      placeholder="місто"
+      addTagText="+ місто"
+      formControlName="sity"
+      (search)="changeClientInfo($event.term, 3, 'ur_sity')" >
+    </ng-select>
+      <input class="data-customer--post" type="text" placeholder="№ НП" formControlName="np_number">
+      <input class="data-customer--surname" type="text"  placeholder="по-батькові" formControlName="surname_client">
+      <input class="data-customer--index" type="text" placeholder="індекс" formControlName="zip_code">
+      <input class="data-customer--address" type="text" placeholder="адреса" formControlName="street_house_apartment">
+      <ng-select 
+        [clearSearchOnAdd]="false" 
+        appearance="outline" 
+        [items]="clientDataItems" 
+        type="text" 
+        class="datacustomer--select data-customer--team" 
+        [addTag]="true"
+        [hideSelected]="true"
+        placeholder="команда"
+        addTagText="+ команда"
+        formControlName="name_team"
+        (search)="changeClientInfo($event.term, 3, 'ur_team')" >
+      </ng-select>
+      <button class="data-customer--save save-btn">Зберегти</button>  
+      <input class="data-customer--comment-client" type="text" placeholder="коментар до клієнта">
+      
     </div>
   </div>
   <div class="finished-order">
     <textarea name="" class="finished-order--comment" placeholder="коментар"></textarea>
     <div class="finished-order--btns">
-      <button class="finished-order--btn edit">Редагувати</button>
-    <button class="finished-order--btn done">Виконано</button>
-    <button class="finished-order--btn malachite">Оформити замовлення</button>
-    <button class="finished-order--btn teal-blue">Виставити рахунок</button>
+      <button class="finished-order--btn edit" [disabled]="isNew">Редагувати</button>
+      <button class="finished-order--btn done">Виконано</button>
+      <button class="finished-order--btn malachite" (click)="saveAll()">Оформити замовлення</button>
+      <button class="finished-order--btn teal-blue">Виставити рахунок</button>
     </div>
   </div>
 </div>
