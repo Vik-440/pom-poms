@@ -21,6 +21,8 @@ export class CreateOrderComponent implements OnInit {
   recipientForm: FormGroup;
   priceAll: FormGroup;
   idOrder: number = null;
+  isSaveClient: Boolean = false;
+  isSaveRecipient: Boolean;
   options: DatepickerOptions = {
     minDate: new Date(''),
     format: 'yyyy-MM-dd',
@@ -44,7 +46,8 @@ export class CreateOrderComponent implements OnInit {
   materialsItems;
   clientDataItems;
   infoForSave: any;
-
+  commentOrder: string;
+  discount: number;
   ngOnInit(): void {
     this.dateForms = this.fb.group({
       data_order: moment().format('YYYY-MM-DD'),
@@ -217,12 +220,17 @@ export class CreateOrderComponent implements OnInit {
       this.orderForm.controls.map((order, ind) => {
         this.service.getInfoForOrder({ sl_kod: value }).subscribe((data: any) => {
           if(index === ind && Object.keys(data).length){
+            console.log(data, 'data')
             order.patchValue({
               id_model: data.id_model,
               kod_model: data.kod_model,
               kolor_model: data.kolor_model,
               name_color_1: data.name_color_1 || null,
-              id_color_part_1: data.id_color_part_1,
+              id_color_part_1: +data.id_color_part_1,
+              id_color_1: data.id_color_1,
+              id_color_2: data.id_color_2,
+              id_color_3: data.id_color_3,
+              id_color_4: data.id_color_4,
               name_color_2: data.name_color_2 || null,
               id_color_part_2: data.id_color_part_2,
               name_color_3: data.name_color_3 || null,
@@ -245,6 +253,11 @@ export class CreateOrderComponent implements OnInit {
     this.materialsItems = [];
   }
 
+  changeCoach(form, field) {
+    form.patchValue({
+      [field]: !form.value[field]
+    })
+  }
   addOrder() {
     this.orderForm.push(this.fb.group({
       kod_model: null,
@@ -276,19 +289,19 @@ export class CreateOrderComponent implements OnInit {
     console.log(order);
     
     const params = {
-      "sl_id_model": order.value.id_model || null,
-      "kod_model": order.value.kod_model,
-      "name_color_1": order.value.name_color_1,
-      "id_color_part_1": order.value.id_color_part_1,
-      "name_color_2" :  order.value.name_color_2,
-      "id_color_part_2" : order.value.id_color_part_2,
-      "name_color_3" :  order.value.name_color_3,
-      "id_color_part_3" : order.value.id_color_part_3,
-      "name_color_4" :  order.value.name_color_4,
-      "id_color_part_4" : order.value.id_color_part_4,
-      "price_model":  order.value.price_model,
-      "comment_model":  order.value.comment_model,
-      "kolor_model":  order.value.kolor_model
+      "id_model": order.value.id_model || 0,
+      "kod_model": order.value.kod_model || 0,
+      "id_color_1": order.value.id_color_1 || 0,
+      "id_color_part_1": +order.value.id_color_part_1 || 0,
+      "id_color_2" :  order.value.id_color_2 || 0,
+      "id_color_part_2" : order.value.id_color_part_2 || 0,
+      "id_color_3" :  order.value.id_color_3 || 0,
+      "id_color_part_3" : order.value.id_color_part_3 || 0,
+      "id_color_4" :  order.value.id_color_4  || 0,
+      "id_color_part_4" : order.value.id_color_part_4  || 0,
+      "price_model":  order.value.price_model  || 0,
+      "comment_model":  order.value.comment_model  || 0,
+      "kolor_model":  order.value.kolor_model || 0
     }
 console.log(params);
 
@@ -340,7 +353,7 @@ console.log(params);
       "second_name_client": this.clientForm.value.second_name_client,
       "first_name_client": this.clientForm.value.first_name_client,
       "surname_client": this.clientForm.value.surname_client,
-      "id_sity": this.clientForm.value.id_sity,
+      // "id_sity": this.clientForm.value.id_sity,
       "np_number": this.clientForm.value.np_number,
       "id_team": this.clientForm.value.id_team,
       "coach": this.clientForm.value.coach,
@@ -351,8 +364,29 @@ console.log(params);
 
     this.service.getInfoForOrder(params).subscribe(data => {
       console.log(data);
-      
+      this.isSaveClient = true;
     })
+  }
+
+  saveRecipient() {
+    const params = {
+      "sl_id_recipient": null,
+      "phone_client": this.recipientForm.value.phone_client,
+      "second_name_client": this.recipientForm.value.second_name_client,
+      "first_name_client": this.recipientForm.value.first_name_client,
+      "surname_client": this.recipientForm.value.surname_client,
+      // "id_sity": this.recipientForm.value.id_sity,
+      "np_number": this.recipientForm.value.np_number,
+      "id_team": this.recipientForm.value.id_team,
+      "coach": this.clientForm.value.coach,
+      "zip_code": this.recipientForm.value.zip_code,
+      "street_house_apartment": this.recipientForm.value.street_house_apartment,
+      "comment_client": this.recipientForm.value.comment_client,
+    }
+
+    this.service.getInfoForOrder(params).subscribe(data => {
+      this.isSaveRecipient = true;
+    });
   }
 
   makeArrayDataOrder(key) {
@@ -375,10 +409,10 @@ console.log(params);
       quantity_pars_model: this.makeArrayDataOrder('quantity_pars_model'), // - порядок!
       data_plane_order: this.dataPlaneOrder ? moment(this.dataPlaneOrder).format('YYYY-MM-DD') : null, // - прогнозована
       data_send_order: this.dataSendOrder ? moment(this.dataSendOrder).format('YYYY-MM-DD') : null, //- бажана
-      discont_order: 0,// - аб 
+      discont_order: this.discount,// - аб 
       sum_payment: this.sumAll().split('/')[0].trim(),
       fulfilled_order: false,
-      comment_order: null
+      comment_order: this.commentOrder
     }
 
     this.service.saveOrder(params).subscribe((data: any) => {
