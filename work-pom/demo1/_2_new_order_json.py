@@ -40,37 +40,41 @@ def return_data_from_new_order_post(data_from_new_page):
         search_data=data_from_new_page['ur_phone']
         w206w=('%'+ str(search_data) +'%')
         ur_phone_1=session.query(directory_of_client).filter(directory_of_client.phone_client.ilike(w206w)).all()
-        data_var=[]
+        data_var,id_var=[],[]
         for row in ur_phone_1:
             data_var.append(int(row.phone_client))
-        data_new_page = {"phone_client" : data_var}
+            id_var.append(row.id_client)
+        data_new_page = {"phone_client":data_var,"id_client":id_var}
 ########
     elif 'ur_second_name' in data_from_new_page:
         search_data=data_from_new_page['ur_second_name']
         w206w=('%'+ str(search_data) +'%')
         ur_second_name_1=session.query(directory_of_client).filter(directory_of_client.second_name_client.ilike(w206w)).all()
-        data_var=[]
+        data_var,id_var=[],[]
         for row in ur_second_name_1:
             data_var.append(row.second_name_client)
-        data_new_page = {"second_name_client" : data_var}
+            id_var.append(row.id_client)
+        data_new_page = {"second_name_client":data_var,"id_client":id_var}
 ########
     elif 'ur_team' in data_from_new_page:
         search_data=data_from_new_page['ur_team']
         w206w=('%'+ str(search_data) +'%')
         ur_team_1=session.query(directory_of_team).filter(directory_of_team.name_team.ilike(w206w)).all()
-        data_var=[]
+        data_var,id_var=[],[]
         for row in ur_team_1:
             data_var.append(row.name_team)
-        data_new_page = {"name_team" : data_var}
+            id_var.append(row.id_team)
+        data_new_page = {"name_team" : data_var,"id_team":id_var}
 ########
     elif 'ur_sity' in data_from_new_page:
         search_data=data_from_new_page['ur_sity']
         w206w=('%'+ str(search_data) +'%')
         ur_sity_1=session.query(directory_of_sity).filter(directory_of_sity.sity.ilike(w206w)).all()
-        data_var=[]
+        data_var,id_var=[],[]
         for row in ur_sity_1:
             data_var.append(row.sity)
-        data_new_page = {"sity" : data_var}
+            id_var.append(row.id_sity)
+        data_new_page = {"sity" : data_var,"id_sity":id_var}
 ########
     elif 'ur_kolor' in data_from_new_page:
         search_data=data_from_new_page['ur_kolor']

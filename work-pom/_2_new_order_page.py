@@ -60,7 +60,8 @@ def return_data_from_client(sl_phone, sl_second_name, open_id_client):
         one_block = {"id_client": j_id_client, "phone_client": j_phone_client, "second_name_client" : j_second_name_client,
         "first_name_client" : j_first_name_client, "surname_client" : j_surname_client, "sity" : j_sity,
         "np_number" : j_np_number, "name_team" : j_name_team, "coach":j_coach, "zip_code": j_zip_code,
-        "street_house_apartment": j_street_house_apartment, "comment_client": j_comment_client}
+        "street_house_apartment": j_street_house_apartment, "comment_client": j_comment_client,
+        "id_sity":id_sity,"id_team":id_team}
 
     return one_block
 
