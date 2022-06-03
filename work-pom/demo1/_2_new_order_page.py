@@ -156,7 +156,7 @@ def return_data_from_full_person(data_from_new_page):
                     surname_client=data_from_new_page['surname_client'],
                     sity=data_from_new_page['sity'],
                     np_number=data_from_new_page['np_number'],
-                    team=data_from_new_page['team'],
+                    team=data_from_new_page['name_team'],
                     coach=data_from_new_page['coach'],
                     zip_code=data_from_new_page['zip_code'],
                     street_house_apartment=data_from_new_page['street_house_apartment'],
