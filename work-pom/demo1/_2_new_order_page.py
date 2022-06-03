@@ -56,7 +56,6 @@ def return_data_from_client(sl_phone, sl_second_name, open_id_client):
             for row2 in name_team_1:
                 j_name_team=(row2.name_team)
 
-
         one_block = {"id_client": j_id_client, "phone_client": j_phone_client, "second_name_client" : j_second_name_client,
         "first_name_client" : j_first_name_client, "surname_client" : j_surname_client, "sity" : j_sity,
         "np_number" : j_np_number, "name_team" : j_name_team, "coach":j_coach, "zip_code": j_zip_code,

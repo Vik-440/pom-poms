@@ -117,7 +117,6 @@ def return_data_from_new_order_post(data_from_new_page):
     elif 'open_id_model' in data_from_new_page:
         search_data=data_from_new_page['open_id_model']
         data_new_page=return_data_from_kod(0,search_data)
-    
 #############################################################################    
     elif 'sl_id_recipient' in data_from_new_page:
         data_tmp_page=return_data_from_full_person(data_from_new_page)
