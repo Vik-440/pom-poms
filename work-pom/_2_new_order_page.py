@@ -5,8 +5,8 @@ from sqlalchemy import create_engine,  MetaData, false, func, null, true, text, 
 from datetime import datetime, timedelta
 from sqlalchemy.orm import sessionmaker, Session, mapper, declarative_base#, decl_base, decl_api
 from sqlalchemy.ext.declarative import declarative_base
-from data_pompom_create import directory_of_order, directory_of_client, directory_of_team, directory_of_model
-from data_pompom_create import directory_of_group, directory_of_payment, directory_of_sity, directory_of_color
+from data_pompom_create import directory_of_order, directory_of_client, directory_of_model
+from data_pompom_create import directory_of_group, directory_of_payment, directory_of_color
 from data_pompom_create import directory_of_outlay, directory_of_outlay_class
 from data_pompom_create import engine
 
@@ -34,8 +34,8 @@ def return_data_from_client(sl_phone, sl_second_name, open_id_client):
 ########
         for row in id_client_3:
             j_id_client=row.id_client
-            id_sity=row.id_sity
-            id_team=row.id_team
+            j_sity=row.sity
+            j_name_team=row.team
         phone_client_1=session.query(directory_of_client).filter_by(id_client=j_id_client).all()
 
         for row1 in phone_client_1:
@@ -49,18 +49,10 @@ def return_data_from_client(sl_phone, sl_second_name, open_id_client):
             j_street_house_apartment=(row1.street_house_apartment)
             j_comment_client=(row1.comment_client)
 
-            sity_1=session.query(directory_of_sity).filter_by(id_sity=id_sity).all()
-            for row2 in sity_1:
-                j_sity=(row2.sity)
-            name_team_1=session.query(directory_of_team).filter_by(id_team=id_team).all()
-            for row2 in name_team_1:
-                j_name_team=(row2.name_team)
-
         one_block = {"id_client": j_id_client, "phone_client": j_phone_client, "second_name_client" : j_second_name_client,
         "first_name_client" : j_first_name_client, "surname_client" : j_surname_client, "sity" : j_sity,
         "np_number" : j_np_number, "name_team" : j_name_team, "coach":j_coach, "zip_code": j_zip_code,
-        "street_house_apartment": j_street_house_apartment, "comment_client": j_comment_client,
-        "id_sity":id_sity,"id_team":id_team}
+        "street_house_apartment": j_street_house_apartment, "comment_client": j_comment_client}
 
     return one_block
 
@@ -162,9 +154,9 @@ def return_data_from_full_person(data_from_new_page):
                     second_name_client=data_from_new_page['second_name_client'],
                     first_name_client=data_from_new_page['first_name_client'],
                     surname_client=data_from_new_page['surname_client'],
-                    id_sity=data_from_new_page['id_sity'],
+                    sity=data_from_new_page['sity'],
                     np_number=data_from_new_page['np_number'],
-                    id_team=data_from_new_page['id_team'],
+                    team=data_from_new_page['team'],
                     coach=data_from_new_page['coach'],
                     zip_code=data_from_new_page['zip_code'],
                     street_house_apartment=data_from_new_page['street_house_apartment'],

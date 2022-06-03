@@ -20,7 +20,7 @@ class directory_of_order(Base):
     data_plane_order = Column('data_plane_order', Date)
     id_client = Column('id_client', Integer)
     id_recipient = Column('id_recipient', Integer)
-    doc_add_order = Column('doc_add_order', Boolean)
+    # doc_add_order = Column('doc_add_order', Boolean)
     data_send_order = Column('data_send_order', Date)
     fulfilled_order = Column('fulfilled_order', Boolean)
     sum_payment = Column('sum_payment', Integer)            #Integer
@@ -36,21 +36,21 @@ class directory_of_client(Base):
     second_name_client = Column('second_name_client', String)
     first_name_client = Column('first_name_client', String)
     surname_client = Column('surname_client', String)
-    id_sity = Column('id_sity', Integer)
+    sity = Column('sity', String)
     np_number = Column('np_number', Integer)
-    id_team = Column('id_team', Integer)
-    coach = Column('coach', Boolean)
+    team = Column('team', String)
+    coach = Column('coach', String)
     zip_code = Column('zip_code', Integer)
     street_house_apartment = Column('street_house_apartment', String)
     comment_client = Column('comment_client', String)
 
-class directory_of_team(Base):
-    __tablename__ = 'directory_of_team'
-    id_team = Column('id_team', Integer, primary_key=True)
-    name_team = Column('name_team', String)
-    id_sity = Column('id_sity', Integer)
-    id_coach = Column('id_client', Integer)
-    comment_team = Column('comment_team', String)
+# class directory_of_team(Base):
+#     __tablename__ = 'directory_of_team'
+#     id_team = Column('id_team', Integer, primary_key=True)
+#     name_team = Column('name_team', String)
+#     id_sity = Column('id_sity', Integer)
+#     id_coach = Column('id_client', Integer)
+#     comment_team = Column('comment_team', String)
 
 class directory_of_model(Base):
     __tablename__ = 'directory_of_model'
@@ -88,10 +88,10 @@ class directory_of_payment(Base):
     data_payment = Column('data_payment', Date)
     # directory_of_order = relationship("directory_of_order")
 
-class directory_of_sity(Base):
-    __tablename__ = 'directory_of_sity'
-    id_sity = Column('id_sity', Integer, primary_key=True)
-    sity = Column('sity', String)
+# class directory_of_sity(Base):
+#     __tablename__ = 'directory_of_sity'
+#     id_sity = Column('id_sity', Integer, primary_key=True)
+#     sity = Column('sity', String)
 
 class directory_of_color(Base):
     __tablename__ = 'directory_of_color'

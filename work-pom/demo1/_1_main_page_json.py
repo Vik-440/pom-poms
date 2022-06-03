@@ -6,8 +6,8 @@ from sqlalchemy import MetaData, false, func, true, text, Integer, String, Table
 from datetime import datetime, timedelta
 from sqlalchemy.orm import sessionmaker, Session, mapper, declarative_base#, decl_base, decl_api#, desc
 from sqlalchemy.ext.declarative import declarative_base
-from data_pompom_create import directory_of_order, directory_of_client, directory_of_team, directory_of_model
-from data_pompom_create import directory_of_group, directory_of_payment, directory_of_sity, directory_of_color
+from data_pompom_create import directory_of_order, directory_of_client, directory_of_model
+from data_pompom_create import directory_of_group, directory_of_payment, directory_of_color
 from data_pompom_create import directory_of_outlay, directory_of_outlay_class
 from data_pompom_create import engine
 
@@ -154,9 +154,8 @@ def return_data_from_main_page(asked):
                 np_number.append(row1.np_number)
                 zip_code.append(row1.zip_code)
                 street_house_apartment.append(row1.street_house_apartment)
-                id_sity_1=session.query(directory_of_sity).filter_by(id_sity=row1.id_sity).all()
-                for row2 in id_sity_1:
-                    sity.append(row2.sity)
+                sity.append(row1.sity)
+                    
 
             real_money_1=session.query(func.sum(directory_of_payment.payment).label('my_sum')
                 ).filter_by(id_order=row.id_order).first()

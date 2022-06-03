@@ -7,8 +7,8 @@ from sqlalchemy import create_engine,  MetaData, true, text, Integer, String, Ta
 from datetime import datetime, timedelta
 from sqlalchemy.orm import sessionmaker, session, mapper, declarative_base#, decl_base, decl_api
 from sqlalchemy.ext.declarative import declarative_base
-from data_pompom_create import directory_of_order, directory_of_client, directory_of_team, directory_of_model
-from data_pompom_create import directory_of_group, directory_of_payment, directory_of_sity, directory_of_color
+from data_pompom_create import directory_of_order, directory_of_client, directory_of_model
+from data_pompom_create import directory_of_group, directory_of_payment, directory_of_color
 from data_pompom_create import directory_of_outlay, directory_of_outlay_class
 from data_pompom_create import engine
 
@@ -59,22 +59,20 @@ def return_data_from_new_order_post(data_from_new_page):
     elif 'ur_team' in data_from_new_page:
         search_data=data_from_new_page['ur_team']
         w206w=('%'+ str(search_data) +'%')
-        ur_team_1=session.query(directory_of_team).filter(directory_of_team.name_team.ilike(w206w)).all()
-        data_var,id_var=[],[]
+        ur_team_1=session.query(directory_of_client).filter(directory_of_client.team.ilike(w206w)).all()
+        data_var=[]
         for row in ur_team_1:
-            data_var.append(row.name_team)
-            id_var.append(row.id_team)
-        data_new_page = {"name_team" : data_var,"id_team":id_var}
+            data_var.append(row.team)
+        data_new_page = {"name_team" : data_var}
 ########
     elif 'ur_sity' in data_from_new_page:
         search_data=data_from_new_page['ur_sity']
         w206w=('%'+ str(search_data) +'%')
-        ur_sity_1=session.query(directory_of_sity).filter(directory_of_sity.sity.ilike(w206w)).all()
-        data_var,id_var=[],[]
+        ur_sity_1=session.query(directory_of_client).filter(directory_of_client.sity.ilike(w206w)).all()
+        data_var=[]
         for row in ur_sity_1:
             data_var.append(row.sity)
-            id_var.append(row.id_sity)
-        data_new_page = {"sity" : data_var,"id_sity":id_var}
+        data_new_page = {"sity" : data_var}
 ########
     elif 'ur_kolor' in data_from_new_page:
         search_data=data_from_new_page['ur_kolor']

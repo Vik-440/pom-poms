@@ -3,7 +3,7 @@ import json
 from datetime import datetime, timedelta
 
 from sqlalchemy import false
-from _1_main_json import return_data_from_mainpage
+# from _1_main_json import return_data_from_mainpage
 from _2_new_order_json import return_data_from_new_order, return_data_from_new_order_post
 from _3_material_json import return_data_from_material, return_data_from_material_one, \
     return_data_from_material_change, return_data_from_material_new, return_data_from_material_change_full
