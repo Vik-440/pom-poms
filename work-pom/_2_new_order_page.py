@@ -112,15 +112,15 @@ def return_data_from_full_kod(data_from_new_page):
             j_id_model=row.id_model
         if j_id_model ==0:
             ins = directory_of_model(
-                    kod_model=data_from_new_page['kod_model'],
-                    id_color_1=data_from_new_page['id_color_1'],
-                    id_color_part_1=data_from_new_page['id_color_part_1'],
-                    id_color_2=data_from_new_page['id_color_2'],
-                    id_color_part_2=data_from_new_page['id_color_part_2'],
-                    id_color_3=data_from_new_page['id_color_3'],
-                    id_color_part_3=data_from_new_page['id_color_part_3'],
-                    id_color_4=data_from_new_page['id_color_4'],
-                    id_color_part_4=data_from_new_page['id_color_part_4'],
+                    kod_model=data_from_new_page['kod_model'],      # int for all
+                    id_color_1=int(data_from_new_page['id_color_1']),
+                    id_color_part_1=int(data_from_new_page['id_color_part_1']),
+                    id_color_2=int(data_from_new_page['id_color_2']),
+                    id_color_part_2=int(data_from_new_page['id_color_part_2']),
+                    id_color_3=int(data_from_new_page['id_color_3']),
+                    id_color_part_3=int(data_from_new_page['id_color_part_3']),
+                    id_color_4=int(data_from_new_page['id_color_4']),
+                    id_color_part_4=int(data_from_new_page['id_color_part_4']),
                     price_model=data_from_new_page['price_model'],
                     comment_model=data_from_new_page['comment_model'],
                     kolor_model=data_from_new_page['kolor_model'])
