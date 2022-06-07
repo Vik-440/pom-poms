@@ -78,11 +78,14 @@ def return_data_from_new_order_post(data_from_new_page):
         # print(f'%{search_data}%')
         ur_kolor_1=session.query(directory_of_color).filter(directory_of_color.name_color.ilike(f'%{search_data}%')
             ).order_by('name_color').all()
-        data_var,id_var=[],[]                                   
+        # data_var,id_var,full_block=[],[],[]
+        full_block=[]
         for row in ur_kolor_1:
-            data_var.append(row.name_color)
-            id_var.append(row.id_color)
-        data_new_page = {"name_color":data_var,"id_color":id_var}
+            data_var=row.name_color
+            id_var=row.id_color
+            one_block={"name_color":data_var,"id_color":id_var}
+            full_block.append(one_block)
+        data_new_page = full_block
 ########
     elif 'ur_kod' in data_from_new_page:
         search_data=data_from_new_page['ur_kod']
