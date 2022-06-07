@@ -1,13 +1,8 @@
-from operator import and_, or_
-from unicodedata import numeric
-# from pymysql import NULL
-from sqlalchemy import create_engine,  MetaData, false, func, null, true, text, Integer, String, Table, Column, insert
-from datetime import datetime, timedelta
-from sqlalchemy.orm import sessionmaker, Session, mapper, declarative_base#, decl_base, decl_api
-from sqlalchemy.ext.declarative import declarative_base
-from data_pompom_create import directory_of_order, directory_of_client, directory_of_model
-from data_pompom_create import directory_of_group, directory_of_payment, directory_of_color
-from data_pompom_create import directory_of_outlay, directory_of_outlay_class
+from sqlalchemy import func
+from sqlalchemy.orm import Session
+from data_pompom_create import directory_of_order, directory_of_client
+from data_pompom_create import directory_of_group, directory_of_color
+from data_pompom_create import directory_of_model
 from data_pompom_create import engine
 
 
