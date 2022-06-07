@@ -272,7 +272,7 @@
         addTagText="+ новий номер телефону"
         formControlName="phone_client"
         (search)="changeClientInfo($event.term, 4, 'ur_phone')" 
-        (change)="selectedItemClient($event, 'sl_phone', recipientForm)">
+        (change)="selectedItemClient($event, 'sl_phone', recipientForm, 'isSaveRecipient')">
       </ng-select>
 
       <ng-select 
@@ -287,7 +287,7 @@
         addTagText="+ прізвище"
         formControlName="second_name_client"
         (search)="changeClientInfo($event.term, 3, 'ur_second_name')" 
-        (change)="selectedItemClient($event, 'sl_second_name', recipientForm)">
+        (change)="selectedItemClient($event, 'sl_second_name', recipientForm, 'isSaveRecipient')">
       </ng-select>
       <input class="data-customer--firstname" type="text" placeholder="ім'я" formControlName="first_name_client">
       <ng-select 
@@ -321,7 +321,7 @@
         (search)="changeClientInfo($event.term, 3, 'ur_team')" >
       </ng-select>
       <button  *ngIf="!isSaveRecipient" class="data-customer--save save-btn" (click)="saveRecipient()">Зберегти</button>  
-      <button class="ok-btn forms"  *ngIf="isSaveRecipient">
+      <button class="data-customer--save save-btn ok-btn forms"  *ngIf="isSaveRecipient">
         <img class="next-icon icon" src="./assets/img/icons/ok-btn.svg" />
        </button>
       <input class="data-customer--comment-client" type="text" formControlName="comment_client" placeholder="коментар до клієнта">
@@ -333,7 +333,8 @@
     <div class="finished-order--btns">
       <button class="finished-order--btn edit" [disabled]="isNew">Редагувати</button>
       <button class="finished-order--btn done">Виконано</button>
-      <button class="finished-order--btn malachite" (click)="saveAll()">Оформити замовлення</button>
+      <button class="finished-order--btn malachite" *ngIf="!doneOrder" (click)="saveAll()" [disabled]="!((isSaveClient && isSaveRecipient || !isRecipient) && dataPlaneOrder && dataSendOrder)">Оформити замовлення</button>
+      <button  class="finished-order--btn wave" *ngIf="doneOrder">Оформлено</button>
       <button class="finished-order--btn teal-blue">Виставити рахунок</button>
     </div>
   </div>

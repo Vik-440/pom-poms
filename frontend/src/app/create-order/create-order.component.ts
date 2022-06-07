@@ -1,10 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import locale from 'date-fns/locale/en-US';
+import * as moment from 'moment';
 import { DatepickerOptions } from 'ng2-datepicker';
 import { filter, tap } from 'rxjs';
 import { CreateOrderService } from '../services/create-order.service';
-import * as moment from 'moment';
 
 @Component({
   selector: 'app-create-order',
@@ -18,6 +18,7 @@ export class CreateOrderComponent implements OnInit {
   @Input() isNew: Boolean = true;
   orderForm: FormArray;
   clientForm: FormGroup;
+  isGetPostR: Boolean = false;
   recipientForm: FormGroup;
   priceAll: FormGroup;
   idOrder: number = null;
@@ -46,21 +47,23 @@ export class CreateOrderComponent implements OnInit {
   materialsItems;
   clientDataItems;
   infoForSave: any;
-  commentOrder: string;
-  discount: number;
+  commentOrder: string = '';
+  discount: number = 0;
+  doneOrder: Boolean = false;
+
   ngOnInit(): void {
     this.dateForms = this.fb.group({
       data_order: moment().format('YYYY-MM-DD'),
       data_plane_order: null,
       data_send_order: null
     })
-    console.log(this.dateForms.value);
     
     this.priceAll = this.fb.group({
       sum_payment: 0,
       real_money: 0,
       different: 0
     });
+
     this.orderForm =  
       this.fb.array([
         this.fb.group({
@@ -101,6 +104,7 @@ export class CreateOrderComponent implements OnInit {
 
     this.recipientForm = this.fb.group({
       id_client: null,
+      coach: null,
       phone_client: null,
       second_name_client: null,
       first_name_client: null,
@@ -110,7 +114,7 @@ export class CreateOrderComponent implements OnInit {
       name_team: null,
       zip_code: null,
       street_house_apartment: null,
-      comment_client: null
+      comment_client: null,
     });
 
     this.viewChanges();
@@ -178,6 +182,18 @@ export class CreateOrderComponent implements OnInit {
         })
       })
     });
+
+    this.recipientForm.valueChanges.subscribe(() => {
+      if(this.isSaveRecipient) {
+        this.isSaveRecipient = false;
+      }
+    });
+
+    this.clientForm.valueChanges.subscribe(() => {
+      if(this.isSaveClient) {
+        this.isSaveClient = false;
+      }
+    })
   }
 
   changeKodModel(value, index) {
@@ -211,16 +227,10 @@ export class CreateOrderComponent implements OnInit {
         return;
       })
     }
-
-    console.log(value);
-    
      if(this.kodItems?.includes(value)) {
-       console.log(1);
-       
       this.orderForm.controls.map((order, ind) => {
         this.service.getInfoForOrder({ sl_kod: value }).subscribe((data: any) => {
           if(index === ind && Object.keys(data).length){
-            console.log(data, 'data')
             order.patchValue({
               id_model: data.id_model,
               kod_model: data.kod_model,
@@ -286,8 +296,6 @@ export class CreateOrderComponent implements OnInit {
   }
 
   saveOrder(index, order) {
-    console.log(order);
-    
     const params = {
       "id_model": order.value.id_model || 0,
       "kod_model": order.value.kod_model || 0,
@@ -303,7 +311,6 @@ export class CreateOrderComponent implements OnInit {
       "comment_model":  order.value.comment_model  || 0,
       "kolor_model":  order.value.kolor_model || 0
     }
-console.log(params);
 
     this.service.getInfoForOrder(params).subscribe(() => {
       order.patchValue({
@@ -320,50 +327,48 @@ console.log(params);
     }
   }
 
-  selectedItemClient(value, keySend, form = this.clientForm){
-    this.clientDataItems = [];
-
-    this.service.getInfoForOrder({ [keySend]: value })
-    .pipe(filter(() => value))
-    .subscribe((data: any) => {
-      const dataClient = data[0]
-      form.patchValue({
-        coach: dataClient.coach,
-        comment_client: dataClient.comment_client,
-        first_name_client: dataClient.first_name_client,
-        id_client: dataClient.id_client,
-        name_team: dataClient.name_team,
-        phone_client: dataClient.phone_client,
-        second_name_client: dataClient.second_name_client,
-        sity: dataClient.sity,
-        street_house_apartment: dataClient.street_house_apartment,
-        surname_client: dataClient.surname_client,
-        zip_code: dataClient.zip_code,
-        np_number: dataClient.np_number
+  selectedItemClient(value, keySend, form = this.clientForm, saveBtn = 'isSaveClient'){
+    if(value && this.clientDataItems.includes(value)) {
+      this.service.getInfoForOrder({ [keySend]: value })
+      .pipe(filter(() => value))
+      .subscribe((dataClient: any) => {
+        form.setValue({
+          coach: dataClient?.coach,
+          comment_client: dataClient.comment_client,
+          first_name_client: dataClient.first_name_client,
+          id_client: dataClient.id_client,
+          name_team: dataClient.name_team,
+          phone_client: dataClient.phone_client,
+          second_name_client: dataClient.second_name_client,
+          sity: dataClient.sity,
+          street_house_apartment: dataClient.street_house_apartment,
+          surname_client: dataClient.surname_client,
+          zip_code: dataClient.zip_code,
+          np_number: dataClient.np_number
+        }, {emitEvent: false});
+        this[saveBtn] = true;
       })
-    })
+    }
+    this.clientDataItems = [];
   }
 
   saveClient() {
-    console.log(1);
-    
     const params = {
       "sl_id_recipient": null,
       "phone_client": this.clientForm.value.phone_client,
       "second_name_client": this.clientForm.value.second_name_client,
       "first_name_client": this.clientForm.value.first_name_client,
       "surname_client": this.clientForm.value.surname_client,
-      // "id_sity": this.clientForm.value.id_sity,
       "np_number": this.clientForm.value.np_number,
-      "id_team": this.clientForm.value.id_team,
+      "name_team": this.clientForm.value.name_team,
       "coach": this.clientForm.value.coach,
       "zip_code": this.clientForm.value.zip_code,
       "street_house_apartment": this.clientForm.value.street_house_apartment,
-      "comment_client": this.clientForm.value.comment_client
+      "comment_client": this.clientForm.value.comment_client,
+      "sity": this.clientForm.value.sity
     }
 
     this.service.getInfoForOrder(params).subscribe(data => {
-      console.log(data);
       this.isSaveClient = true;
     })
   }
@@ -375,48 +380,47 @@ console.log(params);
       "second_name_client": this.recipientForm.value.second_name_client,
       "first_name_client": this.recipientForm.value.first_name_client,
       "surname_client": this.recipientForm.value.surname_client,
-      // "id_sity": this.recipientForm.value.id_sity,
       "np_number": this.recipientForm.value.np_number,
       "id_team": this.recipientForm.value.id_team,
       "coach": this.clientForm.value.coach,
       "zip_code": this.recipientForm.value.zip_code,
       "street_house_apartment": this.recipientForm.value.street_house_apartment,
       "comment_client": this.recipientForm.value.comment_client,
+      "sity": this.recipientForm.value.sity
     }
 
-    this.service.getInfoForOrder(params).subscribe(data => {
+    this.service.getInfoForOrder(params).subscribe(() => {
       this.isSaveRecipient = true;
     });
   }
 
   makeArrayDataOrder(key) {
     const result = [];
-    console.log(this.orderForm.value)
     this.orderForm.value.map(order => {
       result.push(order[key])
     })
     return result;
   }
+
   saveAll() {
-    console.log( moment(this.dataPlaneOrder).format('YYYY-MM-DD'), this.sumAll().split('/')[0])
-    console.log(this.makeArrayDataOrder('quantity_pars_model'))
     const params = {
       id_order: this.isNew ? 0 : '',
       data_order: moment(this.dateToday).format('YYYY-MM-DD'),
       id_client: this.clientForm.value.id_client,
       id_recipient: !this.isRecipient ? this.clientForm.value.id_client : this.recipientForm.value.id_client, // (2 або ід_клієнт)
-      id_model: this.makeArrayDataOrder('id_model'), // - порядок!
-      quantity_pars_model: this.makeArrayDataOrder('quantity_pars_model'), // - порядок!
+      id_model: this.makeArrayDataOrder('id_model'),
+      quantity_pars_model: this.makeArrayDataOrder('quantity_pars_model'),
       data_plane_order: this.dataPlaneOrder ? moment(this.dataPlaneOrder).format('YYYY-MM-DD') : null, // - прогнозована
       data_send_order: this.dataSendOrder ? moment(this.dataSendOrder).format('YYYY-MM-DD') : null, //- бажана
-      discont_order: this.discount,// - аб 
+      discont_order: this.discount,
       sum_payment: this.sumAll().split('/')[0].trim(),
       fulfilled_order: false,
       comment_order: this.commentOrder
     }
 
     this.service.saveOrder(params).subscribe((data: any) => {
-      this.idOrder = data.id_order
+      this.idOrder = data.id_order;
+      this.doneOrder = true;
     });
   }
 }
