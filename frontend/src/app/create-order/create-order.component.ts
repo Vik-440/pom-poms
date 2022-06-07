@@ -100,7 +100,7 @@ export class CreateOrderComponent implements OnInit {
       sity: null,
       np_number: null,
       name_team: null,
-      coach: false,
+      coach: null,
       zip_code: null,
       street_house_apartment: null,
       comment_client: null
@@ -269,8 +269,8 @@ export class CreateOrderComponent implements OnInit {
 
   changeCoach(form, field) {
     form.patchValue({
-      [field]: !form.value[field]
-    })
+      [field]: form.value[field] === form.value.surname_client ? form.value.surname_client : null
+    });
   }
   addOrder() {
     this.orderForm.push(this.fb.group({
@@ -305,7 +305,7 @@ export class CreateOrderComponent implements OnInit {
 
   saveOrder(index, order) {
     const params = {
-      "id_model": order.value.id_model || 0,
+      "sl_id_model": order.value.id_model || 0,
       "kod_model": order.value.kod_model || 0,
       "id_color_1": order.value.id_color_1 || 0,
       "id_color_part_1": +order.value.id_color_part_1 || 0,
