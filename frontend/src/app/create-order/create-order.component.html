@@ -46,13 +46,15 @@
         [clearSearchOnAdd]="false" 
         appearance="outline" 
         [items]="materialsItems" 
+        bindLabel="name_color"
+        bindValue="id_color"
         type="text" 
         class="form__field form__field-material" 
         [addTag]="true"
         [hideSelected]="true"
         placeholder="матеріал 1"
         addTagText="+ новий матеріал"
-        formControlName="name_color_1" 
+        formControlName="id_color_1" 
         (search)="changeMaterial($event.term, index)" 
         (change)="resetMaterialsItems()">
       </ng-select>
@@ -67,10 +69,12 @@
         type="text" 
         class="form__field form__field-material" 
         [addTag]="true"
+        bindLabel="name_color"
+        bindValue="id_color"
         [hideSelected]="true"
         placeholder="матеріал 3"
         addTagText="+ новий матеріал"
-        formControlName="name_color_3" 
+        formControlName="id_color_3" 
         (search)="changeMaterial($event.term, index)" 
         (change)="resetMaterialsItems()">
       </ng-select>
@@ -84,13 +88,15 @@
           [clearSearchOnAdd]="false" 
           appearance="outline" 
           [items]="materialsItems" 
+          bindLabel="name_color"
+          bindValue="id_color"
           type="text" 
           class="form__field form__field-material" 
           [addTag]="true"
           [hideSelected]="true"
           placeholder="матеріал 2"
           addTagText="+ новий матеріал"
-          formControlName="name_color_2" 
+          formControlName="id_color_2" 
           (search)="changeMaterial($event.term, index)" 
           (change)="resetMaterialsItems()">
         </ng-select>
@@ -100,14 +106,16 @@
         <ng-select 
         [clearSearchOnAdd]="false" 
         appearance="outline" 
-        [items]="materialsItems" 
+        [items]="materialsItems"
+        bindLabel="name_color"
+        bindValue="id_color"
         type="text" 
         class="form__field form__field-material" 
         [addTag]="true"
         [hideSelected]="true"
         placeholder="матеріал 4"
         addTagText="+ новий матеріал"
-        formControlName="name_color_4" 
+        formControlName="id_color_4" 
         (search)="changeMaterial($event.term, index)" 
         (change)="resetMaterialsItems()">
       </ng-select>

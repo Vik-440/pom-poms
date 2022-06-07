@@ -70,12 +70,16 @@ export class CreateOrderComponent implements OnInit {
           kod_model: null,
           id_model: null,
           kolor_model: null,
+          id_color_1: null,
           name_color_1: null,
           id_color_part_1: null,
+          id_color_2: null,
           name_color_2: null,
           id_color_part_2: null,
+          id_color_3: null,
           name_color_3: null,
           id_color_part_3: null,
+          id_color_4: null,
           name_color_4: null,
           id_color_part_4: null,
           price_model: null,
@@ -207,7 +211,7 @@ export class CreateOrderComponent implements OnInit {
   changeMaterial(value, index) {
     if(value.length >= 3) {
       this.service.getInfoForOrder({ur_kolor: value}).subscribe((materials: any) => {
-        this.materialsItems = materials?.name_color;
+        this.materialsItems = materials;
       })
     }
   }
@@ -273,13 +277,17 @@ export class CreateOrderComponent implements OnInit {
       kod_model: null,
       id_model: null,
       kolor_model: null,
+      id_color_1: null,
       name_color_1: null,
-      id_color_part_1: null,
       name_color_2: null,
-      id_color_part_2: null,
       name_color_3: null,
-      id_color_part_3: null,
       name_color_4: null,
+      id_color_part_1: null,
+      id_color_2: null,
+      id_color_part_2: null,
+      id_color_3: null,
+      id_color_part_3: null,
+      id_color_4: null,
       id_color_part_4: null,
       price_model: null,
       quantity_pars_model: null,
