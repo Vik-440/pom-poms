@@ -1,19 +1,16 @@
-
-from _2_new_order_page import return_data_from_order_page, return_data_from_client, return_data_from_kod, \
-    return_data_from_full_kod,return_data_from_full_person,return_data_from_final_order,return_data_from_edit_order
+from _2_new_order_page import return_data_from_order_page
+from _2_new_order_page import return_data_from_client
+from _2_new_order_page import return_data_from_kod
+from _2_new_order_page import return_data_from_full_kod
+from _2_new_order_page import return_data_from_full_person
+from _2_new_order_page import return_data_from_final_order
+from _2_new_order_page import return_data_from_edit_order
 import json
-from sqlalchemy import create_engine,  MetaData, true, text, Integer, String, Table, Column, and_, or_, \
-        func, null
-from datetime import datetime, timedelta
-from sqlalchemy.orm import sessionmaker, session, mapper, declarative_base#, decl_base, decl_api
-from sqlalchemy.ext.declarative import declarative_base
-from data_pompom_create import directory_of_order, directory_of_client, directory_of_model
-from data_pompom_create import directory_of_group, directory_of_payment, directory_of_color
-from data_pompom_create import directory_of_outlay, directory_of_outlay_class
+from sqlalchemy.orm import sessionmaker, session
+from data_pompom_create import directory_of_order, directory_of_client
+from data_pompom_create import directory_of_color, directory_of_model
 from data_pompom_create import engine
 
-# log_pass_sql = 'postgresql+psycopg2://postgres:123123@localhost/postgres'
-# engine = create_engine(log_pass_sql)
 
 Session = sessionmaker(engine)
 Session.configure(bind=engine)

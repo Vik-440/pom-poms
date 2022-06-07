@@ -1,8 +1,5 @@
-from unicodedata import numeric
-from sqlalchemy import Date, ForeignKey, Numeric, create_engine, Column, BigInteger, Integer, String, \
-                Float, Boolean, Table, Index, Text, DateTime, \
-                PrimaryKeyConstraint, UniqueConstraint, ForeignKeyConstraint
-from sqlalchemy.orm import relationship
+from sqlalchemy import Date, ForeignKey, Numeric, create_engine, Column
+from sqlalchemy import Integer, String, Boolean
 from sqlalchemy.ext.declarative import declarative_base
 import psycopg2
 from dotenv import load_dotenv
@@ -29,6 +26,7 @@ class directory_of_order(Base):
     #directory_of_group = relationship("directory_of_group")
     #directory_of_payment = relationship("directory_of_payment")
 
+
 class directory_of_client(Base):
     __tablename__ = 'directory_of_client'
     id_client = Column('id_client', Integer, primary_key=True)
@@ -52,6 +50,7 @@ class directory_of_client(Base):
 #     id_coach = Column('id_client', Integer)
 #     comment_team = Column('comment_team', String)
 
+
 class directory_of_model(Base):
     __tablename__ = 'directory_of_model'
     id_model = Column('id_model', Integer, primary_key=True)
@@ -68,6 +67,7 @@ class directory_of_model(Base):
     id_color_part_4 = Column('id_color_part_4', Integer)
     comment_model = Column('comment_model', String)
 
+
 class directory_of_group(Base):
     __tablename__ = 'directory_of_group'
     id_group_model = Column('id_group_model', Integer, primary_key=True)
@@ -78,6 +78,7 @@ class directory_of_group(Base):
     phase_2_model = Column('phase_2_model', Boolean)    #Integer
     phase_3_model = Column('phase_3_model', Boolean)
     # directory_of_order = relationship("directory_of_order")
+
 
 class directory_of_payment(Base):
     __tablename__ = 'directory_of_payment'
@@ -92,6 +93,7 @@ class directory_of_payment(Base):
 #     __tablename__ = 'directory_of_sity'
 #     id_sity = Column('id_sity', Integer, primary_key=True)
 #     sity = Column('sity', String)
+
 
 class directory_of_color(Base):
     __tablename__ = 'directory_of_color'
@@ -108,6 +110,7 @@ class directory_of_color(Base):
     weight_10m_color = Column('weight_10m_color', Integer)
     comment_color = Column('comment_color', String)
 
+
 class directory_of_outlay(Base):
     __tablename__ = 'directory_of_outlay'
     id_outlay = Column('id_outlay', Integer, primary_key=True)
@@ -115,8 +118,9 @@ class directory_of_outlay(Base):
     id_outlay_class = Column('id_outlay_class', String)
     money_outlay = Column('money_outlay', Integer)
     quantity_outlay = Column('quantity_outlay', Numeric(8, 2))
-    type_pc_outlay= Column('type_pc_outlay', String)
+    type_pc_outlay = Column('type_pc_outlay', String)
     comment_outlay = Column('comment_outlay', String)
+
 
 class directory_of_outlay_class(Base):
     __tablename__ = 'directory_of_outlay_class'
@@ -125,8 +129,6 @@ class directory_of_outlay_class(Base):
 
 
 engine = create_engine(url)
-
-
 
 Base.metadata.create_all(engine)
 
