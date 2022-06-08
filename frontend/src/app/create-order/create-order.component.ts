@@ -3,6 +3,7 @@ import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import locale from 'date-fns/locale/en-US';
 import * as moment from 'moment';
 import { DatepickerOptions } from 'ng2-datepicker';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { filter, tap } from 'rxjs';
 import { CreateOrderService } from '../services/create-order.service';
 
@@ -13,7 +14,7 @@ import { CreateOrderService } from '../services/create-order.service';
 })
 export class CreateOrderComponent implements OnInit {
 
-  constructor(private fb: FormBuilder, private service: CreateOrderService) { }
+  constructor(private fb: FormBuilder, private service: CreateOrderService, private spinner: NgxSpinnerService) { }
 
   @Input() isNew: Boolean = true;
   orderForm: FormArray;
@@ -21,7 +22,7 @@ export class CreateOrderComponent implements OnInit {
   isGetPostR: Boolean = false;
   recipientForm: FormGroup;
   priceAll: FormGroup;
-  idOrder: number = null;
+  idOrder: number = 0;
   isSaveClient: Boolean = false;
   isSaveRecipient: Boolean;
   options: DatepickerOptions = {
@@ -240,7 +241,7 @@ export class CreateOrderComponent implements OnInit {
               kod_model: data.kod_model,
               kolor_model: data.kolor_model,
               name_color_1: data.name_color_1 || null,
-              id_color_part_1: +data.id_color_part_1,
+              id_color_part_1: data.id_color_part_1,
               id_color_1: data.id_color_1,
               id_color_2: data.id_color_2,
               id_color_3: data.id_color_3,
@@ -255,7 +256,10 @@ export class CreateOrderComponent implements OnInit {
               comment_model: data.comment_model,
               isNew: false,
               isChange: false
-            })
+            }, {emitEvent: false})
+
+           console.log(order);
+            
           }
         })
       })
@@ -268,9 +272,15 @@ export class CreateOrderComponent implements OnInit {
   }
 
   changeCoach(form, field) {
-    form.patchValue({
-      [field]: form.value[field] === form.value.surname_client ? form.value.surname_client : null
-    });
+    if(form.value[field] === form.value.second_name_client) {
+      form.patchValue({
+        [field]: null
+      });
+    } else {
+      form.patchValue({
+        [field]: form.value.second_name_client
+      });
+    }
   }
   addOrder() {
     this.orderForm.push(this.fb.group({
@@ -412,7 +422,7 @@ export class CreateOrderComponent implements OnInit {
 
   saveAll() {
     const params = {
-      id_order: this.isNew ? 0 : '',
+      id_order: this.idOrder,
       data_order: moment(this.dateToday).format('YYYY-MM-DD'),
       id_client: this.clientForm.value.id_client,
       id_recipient: !this.isRecipient ? this.clientForm.value.id_client : this.recipientForm.value.id_client, // (2 або ід_клієнт)
@@ -429,6 +439,21 @@ export class CreateOrderComponent implements OnInit {
     this.service.saveOrder(params).subscribe((data: any) => {
       this.idOrder = data.id_order;
       this.doneOrder = true;
+    });
+  }
+
+  getOrder(event) {
+    this.spinner.show();
+
+    
+    const params = {
+      edit_order: this.idOrder
+    };
+    this.service.getInfoForOrder(params).subscribe(data => {
+      console.log(data);
+
+      this.spinner.hide();
+      
     });
   }
 }

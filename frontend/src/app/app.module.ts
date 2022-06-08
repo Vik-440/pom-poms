@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
-import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -17,9 +17,8 @@ import { FinancesComponent } from './finances/finances.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { ReserveComponent } from './reserve/reserve.component';
 import { SortDirective, TableComponent } from './table/table.component';
-
-
-
+import { NgxSpinnerModule } from "ngx-spinner";
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 @NgModule({
   declarations: [
     AppComponent,
@@ -32,6 +31,7 @@ import { SortDirective, TableComponent } from './table/table.component';
   ],
   imports: [
     NgToggleModule,
+    BrowserAnimationsModule,
     NgxMaskModule.forRoot(),
     BrowserModule,
     AppRoutingModule,
@@ -41,6 +41,7 @@ import { SortDirective, TableComponent } from './table/table.component';
     DatepickerModule,
     FormsModule,
     NgSelectModule,
+    NgxSpinnerModule,
     ReactiveFormsModule,
     TooltipModule.forRoot({
         placement: 'top',
@@ -53,6 +54,7 @@ import { SortDirective, TableComponent } from './table/table.component';
   providers: [
     { provide: 'API_URL', useValue: environment.apiUrl }
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class AppModule { }

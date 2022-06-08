@@ -1,6 +1,6 @@
 <div class="page pl61 pr50 mt20 create-order__page" >
   <div class="create-order__title">
-    <h3 class="create-order__title--number title-text">Замовлення № <input  type="text" [value]="idOrder"></h3>
+    <h3 class="create-order__title--number title-text">Замовлення № <input  type="text" [value]="idOrder" (keyup.enter)="getOrder($event)"></h3>
     <h3 class="create-order__title--date title-text">Дата замовлення
       <ngx-datepicker
       [(ngModel)]="dateToday"
@@ -47,14 +47,13 @@
         appearance="outline" 
         [items]="materialsItems" 
         bindLabel="name_color"
-        bindValue="id_color"
         type="text" 
         class="form__field form__field-material" 
         [addTag]="true"
         [hideSelected]="true"
         placeholder="матеріал 1"
         addTagText="+ новий матеріал"
-        formControlName="id_color_1" 
+        formControlName="name_color_1" 
         (search)="changeMaterial($event.term, index)" 
         (change)="resetMaterialsItems()">
       </ng-select>
@@ -70,11 +69,10 @@
         class="form__field form__field-material" 
         [addTag]="true"
         bindLabel="name_color"
-        bindValue="id_color"
         [hideSelected]="true"
         placeholder="матеріал 3"
         addTagText="+ новий матеріал"
-        formControlName="id_color_3" 
+        formControlName="name_color_3" 
         (search)="changeMaterial($event.term, index)" 
         (change)="resetMaterialsItems()">
       </ng-select>
@@ -89,14 +87,13 @@
           appearance="outline" 
           [items]="materialsItems" 
           bindLabel="name_color"
-          bindValue="id_color"
           type="text" 
           class="form__field form__field-material" 
           [addTag]="true"
           [hideSelected]="true"
           placeholder="матеріал 2"
           addTagText="+ новий матеріал"
-          formControlName="id_color_2" 
+          formControlName="name_color_2" 
           (search)="changeMaterial($event.term, index)" 
           (change)="resetMaterialsItems()">
         </ng-select>
@@ -108,14 +105,13 @@
         appearance="outline" 
         [items]="materialsItems"
         bindLabel="name_color"
-        bindValue="id_color"
         type="text" 
         class="form__field form__field-material" 
         [addTag]="true"
         [hideSelected]="true"
         placeholder="матеріал 4"
         addTagText="+ новий матеріал"
-        formControlName="id_color_4" 
+        formControlName="name_color_4" 
         (search)="changeMaterial($event.term, index)" 
         (change)="resetMaterialsItems()">
       </ng-select>
@@ -243,7 +239,7 @@
         formControlName="name_team"
         (search)="changeClientInfo($event.term, 3, 'ur_team')" >
       </ng-select>
-      <input class="data-customer--coach" type="text" formControlName="coach" placeholder="тренер" [disabled]="clientForm.get('coach').value === clientForm.get('surname_client').value">
+      <input class="data-customer--coach" type="text" formControlName="coach" placeholder="тренер">
       <input class="data-customer--comment-client" formControlName="comment_client" type="text" placeholder="коментар до клієнта">
       
     </div>
@@ -252,7 +248,7 @@
       <div class="check-person-btn">
         <span class="cutomer-title">тренер</span>
         <button class="btn-icon" (click)="changeCoach(clientForm, 'coach')">
-          <img class="cancel-icon icon" [src]="clientForm.get('coach').value === clientForm.get('surname_client').value ? './assets/img/icons/check.svg' : './assets/img/icons/cancel.svg'" />
+          <img class="cancel-icon icon" [src]="clientForm.get('coach').value === clientForm.get('second_name_client').value ? './assets/img/icons/check.svg' : './assets/img/icons/cancel.svg'" />
         </button>
         </div>
       <div class="check-person-btn">
@@ -347,3 +343,5 @@
     </div>
   </div>
 </div>
+
+<ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" size = "medium" color = "#fff" type = "pacman" [fullScreen] = "true"><p style="color: white" > Loading... </p></ngx-spinner>
