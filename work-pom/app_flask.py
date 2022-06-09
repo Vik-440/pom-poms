@@ -45,29 +45,12 @@ def main_page():
             return(return_data_from_main_page(request.data))
         # ds=datetime.today().strftime('%Y-%m-%d')
         elif request.method == 'GET':
-            data = {"data_start": "2016-01-01"}  #, "data_end" : ds, "fulfilled_order":false}
+            data = {"data_start": "2016-01-01"}
             return(return_data_from_main_page(data))
         else:
             return f'Error in request.method: {e}', 500
     except Exception as e:
         return f'Error in function mainpage: {e}', 500
-#########################################################################################
-# @app.route('/mainpage', methods=['GET', 'POST'])
-# def mainpage ():
-#     try:
-#         if request.method == 'POST':
-#             request.data = request.get_json()
-#             if 'data_start' in request.data and 'data_end' in request.data:
-#                 data_start_order = request.data['data_start']
-#                 data_end_order = request.data['data_end']
-#                 data = return_data_from_mainpage(data_start_order, data_end_order)
-#             else:
-#                 data = request.data
-#             return data
-#         else: return (return_data_from_mainpage(0,0))
-#     except Exception as e:
-#         return f'Error in function mainpage: {e}', 500
-###############################################################################
 
 
 @app.route('/new_order', methods=['GET', 'POST'])
@@ -132,7 +115,7 @@ def finance():
                 if 'id_outlay' in request.data:
                     return (return_data_from_outlay_change(request.data)), 200
                 if 'id_order' in request.data:
-                    return (return_data_from_payment_id_order(request.data)), 200
+                    return (return_data_from_payment_id_order(request.data))
                 if 'stat' in request.data:
                     return (return_data_from_payment_stat(request.data)), 200
                 if 'balans' in request.data:
