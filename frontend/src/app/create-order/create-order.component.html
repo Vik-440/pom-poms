@@ -1,6 +1,6 @@
 <div class="page pl61 pr50 mt20 create-order__page" >
   <div class="create-order__title">
-    <h3 class="create-order__title--number title-text">Замовлення № <input  type="text" [value]="idOrder" (keyup.enter)="getOrder($event)"></h3>
+    <h3 class="create-order__title--number title-text">Замовлення № <input  type="text" [(ngModel)]="idOrder" (keyup.enter)="getOrder($event)"></h3>
     <h3 class="create-order__title--date title-text">Дата замовлення
       <ngx-datepicker
       [(ngModel)]="dateToday"
@@ -336,7 +336,7 @@
     <textarea name="" class="finished-order--comment" [(ngModel)]="commentOrder" placeholder="коментар до замовлення"></textarea>
     <div class="finished-order--btns">
       <button class="finished-order--btn edit" [disabled]="isNew">Редагувати</button>
-      <button class="finished-order--btn done">Виконано</button>
+      <button class="finished-order--btn" [ngClass]="{'done': !fulfilledOrder, 'wave': fulfilledOrder}">Виконано</button>
       <button class="finished-order--btn malachite" *ngIf="!doneOrder" (click)="saveAll()" [disabled]="!((isSaveClient && isSaveRecipient || !isRecipient) && dataPlaneOrder && dataSendOrder)">Оформити замовлення</button>
       <button  class="finished-order--btn wave" *ngIf="doneOrder">Оформлено</button>
       <button class="finished-order--btn teal-blue">Виставити рахунок</button>
