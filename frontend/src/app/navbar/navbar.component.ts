@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-navbar',
@@ -6,12 +7,16 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./navbar.component.sass']
 })
 export class NavbarComponent implements OnInit {
+  [x: string]: any;
 
-  constructor() { }
+  constructor(private router: Router) { }
 
   navbarCollapsed = true;
   ngOnInit(): void {
 
   }
 
+  reloadCurrentRoute() {
+    window.location.reload();
+  }
 }

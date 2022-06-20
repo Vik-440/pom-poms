@@ -220,7 +220,8 @@
       placeholder="місто"
       addTagText="+ місто"
       formControlName="sity"
-      (search)="changeClientInfo($event.term, 3, 'ur_sity')" >
+      (search)="changeClientInfo($event.term, 3, 'ur_sity')"
+      (change)="clearDataClient()" >
     </ng-select>
       <input class="data-customer--post" type="text" placeholder="№ НП" formControlName="np_number">
       <input class="data-customer--surname" type="text"  placeholder="по-батькові" formControlName="surname_client">
@@ -305,7 +306,8 @@
       placeholder="місто"
       addTagText="+ місто"
       formControlName="sity"
-      (search)="changeClientInfo($event.term, 3, 'ur_sity')" >
+      (search)="changeClientInfo($event.term, 3, 'ur_sity')" 
+      (change)="clearDataClient()">
     </ng-select>
       <input class="data-customer--post" type="text" placeholder="№ НП" formControlName="np_number">
       <input class="data-customer--surname" type="text"  placeholder="по-батькові" formControlName="surname_client">

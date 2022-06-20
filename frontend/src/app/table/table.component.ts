@@ -2,6 +2,7 @@ import { Component, Directive, EventEmitter, Input, OnDestroy, OnInit, Output, Q
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { NgbCalendar, NgbDate, NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
 import locale from 'date-fns/locale/en-US';
+// import * as moment from 'moment';
 import * as moment from 'moment';
 import { DatepickerOptions } from 'ng2-datepicker';
 import { tap } from 'rxjs';
@@ -259,6 +260,9 @@ validateInput(currentValue: NgbDate | null, input: string): NgbDate | null {
     }
   }
 
+  getMoney(sum) {
+    return Number(sum).toFixed(sum.toString().endsWith('.00') ? null : 2)
+  }
   getFulfilledOrder() {
     let sum: number = 0;
     this.ordersRow.map(item => {
@@ -307,7 +311,8 @@ validateInput(currentValue: NgbDate | null, input: string): NgbDate | null {
 
   changeSpeed() {
     const days = Math.ceil(this.queue/this.speed);
-    this.dateDownloaded = moment().add(days, 'days').format('MM/DD/YYYY');
+    // this.dateDownloaded = moment().add(days, 'days').format('MM/DD/YYYY') ;
+    this.dateDownloaded = moment().weekday(0).add(days, 'days').format('MM/DD/YYYY') ;
   }
 
   makeDone(id, fulfilledOrder, i){

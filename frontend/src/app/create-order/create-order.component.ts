@@ -331,17 +331,18 @@ export class CreateOrderComponent implements OnInit {
       "kolor_model":  order.value.kolor_model || 0
     }
 
-    this.service.getInfoForOrder(params).subscribe(() => {
+    this.service.getInfoForOrder(params).subscribe((data: any) => {
       order.patchValue({
-        isNew: false
+        isNew: false,
+        id_model: data.id_model
       })
     });
   }
 
   changeClientInfo(phone, minLength, keySend) {
     if(phone.length >= minLength) {
-      this.service.getInfoForOrder({ [keySend] : phone}).subscribe((phones: any) => {
-        this.clientDataItems = Object.values(phones)[0];
+      this.service.getInfoForOrder({ [keySend] : phone}).subscribe((data: any) => {
+        this.clientDataItems = [...new Set([...Object.values(data)].flat())];
       })
     }
   }
@@ -368,6 +369,10 @@ export class CreateOrderComponent implements OnInit {
         this[saveBtn] = true;
       })
     }
+    this.clientDataItems = [];
+  }
+
+  clearDataClient() {
     this.clientDataItems = [];
   }
 
@@ -416,7 +421,7 @@ export class CreateOrderComponent implements OnInit {
   makeArrayDataOrder(key) {
     const result = [];
     this.orderForm.value.map(order => {
-      result.push(order[key])
+      result.push(order[key] || 0)
     })
     return result;
   }
@@ -495,7 +500,7 @@ export class CreateOrderComponent implements OnInit {
 
         if(data.id_client !== data.id_recipient) {
           this.isRecipient = true;
-          this.service.getInfoForOrder({id_recipient: data.id_recipient})
+          this.service.getInfoForOrder({open_id_client: data.id_recipient})
             .subscribe((dataRecipient: any) => {
               this.recipientForm.setValue({
                 coach: dataRecipient?.coach,
