@@ -14,4 +14,15 @@ export class MaterialPageService {
     return this.http.get(`http://127.0.0.1:5000/material`);
   }
 
+  getFullInfoMaterial(id) {
+    const params = {
+      id_color: id
+    };
+    return this.http.post(`http://127.0.0.1:5000/material`, params);
+  }
+
+  saveMaterial(data) {
+    return this.http.post(`http://127.0.0.1:5000/material`, data);
+  }
+
 }

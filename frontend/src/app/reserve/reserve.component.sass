@@ -1,3 +1,9 @@
+.page
+  position: relative
+  
+.grey 
+  background: #E5E9F2
+
 .table-reserve
   tr
     height: 26px !important
@@ -18,10 +24,22 @@
   .mat-val
     width: 171px
     text-align: center
+    &--intp
+      width: 85px
+      height: 26px
+      border: none
+      padding: 0 !important
+      margin: 0
+      background: transparent
+      &:active 
+        display: block
   &--materials
     margin: 0px 17px 0px 22px
     margin-left: 22px !important
 
+.name-color
+  text-align: left
+  padding-left: 5px
 .reserve-tables
   display: flex
 
@@ -71,6 +89,28 @@
   display: flex
   flex-direction: column
   align-items: flex-end
+  position: absolute
+  right: 35px
+  top: 150px
+  & .edit-header
+    display: flex
+    justify-content: space-between
+    width: 100%
+    align-content: center
+    align-items: center
+    margin-bottom: 5px
+    & .create-btn
+      border: none
+      background: #7dcb69
+      border-radius: 25px
+      font-weight: 700
+      font-size: 13px
+      line-height: 12px
+      height: 26px
+      width: 80px
+      color: #ffffff
+      text-transform: uppercase
+      margin-top: 7px
 .edit-table
     width: 256px
     border: 3px solid #203B4A
@@ -85,6 +125,18 @@
         border-bottom: 0.5px solid #203B4A
         border-right: 0.5px solid #203B4A
         padding-left: 16px
+        &.name-color
+          border: none
+          width: 180px
+          background: #E5E9F2
+          margin: 0
+          padding: 0
+          padding-left: 16px
+          border-bottom: 0.5px solid #203B4A
+          border-right: 0.5px solid #203B4A
+          &:focus
+            outline: none
+            border-bottom: 0.5px solid #203B4A
       &-inp
         width: 70px
         border: none
@@ -123,3 +175,19 @@
   color: #ffffff
   text-transform: uppercase
   margin-top: 7px
+
+.display-none
+  display: none
+
+::ng-deep .reserve-page
+  .ng-select.ng-select-single .ng-select-container .ng-value-container .ng-input
+    top: 0
+  .ng-select .ng-select-container .ng-value-container
+    padding-left: 3px
+  .ng-select .ng-select-container
+    min-height: auto !important
+    background: none
+    border: none
+  .ng-select.ng-select-single 
+    .ng-select-container
+      height: auto !important

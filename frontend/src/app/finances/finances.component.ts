@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FinancesPageService } from '../services/finances.service';
 
 @Component({
   selector: 'app-finances',
@@ -7,11 +8,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class FinancesComponent implements OnInit {
 
-  constructor() { }
+  constructor(private service: FinancesPageService) { }
 
   items = [];
   
   ngOnInit(): void {
+    this.service.getFinances().subscribe()
   }
 
 }

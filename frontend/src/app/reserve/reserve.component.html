@@ -1,4 +1,4 @@
-<div class="page pl63 mt20 pr37">
+<div class="page pl63 mt20 pr37 reserve-page">
   <div class="reserve-tables">
     <div class="table-responsive table table-reserve">
       <table class="table table-lg table-bordered mb-0 border-primary">
@@ -14,10 +14,10 @@
         </tr>
         </thead>
         <tbody>
-          <ng-container  *ngFor="let item of reserveItems">
-            <tr>
+          <ng-container  *ngFor="let item of reserveItems; let index = index">
+            <tr (click)="editItem(item.id_color)" [class.grey]="idEdit === item.id_color">
               <td>{{ item.id_color }}</td>
-              <td>{{ item.name_color}}</td>
+              <td class="name-color">{{ item.name_color}}</td>
               <td>{{ item.width_color}}</td>
               <td>{{ item.bab_quantity_color }}</td>
               <td>{{ item.weight_color}}</td>
@@ -37,19 +37,22 @@
         </tr>
         </thead>
         <tbody>
-          <ng-container>
+          <ng-container *ngFor="let item of reserveItems; let index = index">
             <tr>
-              <td></td>
-              <td></td>
+              <td><input class="mat-val--intp" type="text"></td>
+              <td><input type="text" class="mat-val--intp"></td>
+              <td>
+                <button class="btn-icon display-none">
+                  <img class="next-icon icon" src="./assets/img/icons/ok.svg" />
+                </button>
+              </td>
             </tr>
       </ng-container>
         </tbody>
       </table>
     </div>
 
-    <button class="btn-icon">
-      <img class="next-icon icon" src="./assets/img/icons/ok.svg" />
-    </button>
+   
     <div class="materials">
       <div class="materials-title title">Матеріали</div>
       <div class="materials-active">
@@ -64,50 +67,53 @@
       </button>
     </div>
   </div>
-  <div class="block-edit">
-    <p class="title">Редагувати</p>
+  <div class="block-edit" [formGroup]="reverseItemData">
+    <div class="edit-header">
+      <p class="title"> {{ isNewMaterial ? 'Створити' : 'Редагувати'}}</p>
+      <button (click)="createMaterial()" class="create-btn">Створити</button>
+    </div>
     <div class="edit-table">
       <div class="edit-table--field">
-        <p class="edit-table--field-title">назва матеріалу</p>
-        <input type="text" class="edit-table--field-inp">
+        <input class="edit-table--field-title name-color" placeholder="назва матеріалу" formControlName="name_color">
+        <input type="text" class="edit-table--field-inp" formControlName="id_color">
       </div>
       <div class="edit-table--field">
         <p class="edit-table--field-title">ширина, мм</p>
-        <input type="text" class="edit-table--field-inp">
+        <input type="text" class="edit-table--field-inp" formControlName="width_color">
       </div>
       <div class="edit-table--field">
         <p class="edit-table--field-title">товщина, мкм</p>
-        <input type="text" class="edit-table--field-inp">
+        <input type="text" class="edit-table--field-inp" formControlName="thickness_color">
       </div>
       <div class="edit-table--field">
         <p class="edit-table--field-title">виробник</p>
-        <input type="text" class="edit-table--field-inp">
+        <input type="text" class="edit-table--field-inp" formControlName="manufacturer_color">
       </div>
       <div class="edit-table--field">
         <p class="edit-table--field-title">вага втулки, гр</p>
-        <input type="text" class="edit-table--field-inp">
+        <input type="text" class="edit-table--field-inp" formControlName="bab_weight_color">
       </div>
       <div class="edit-table--field">
         <p class="edit-table--field-title">вага (10м), гр</p>
-        <input type="text" class="edit-table--field-inp">
+        <input type="text" class="edit-table--field-inp" formControlName="weight_10m_color">
       </div>
       <div class="edit-table--field">
         <p class="edit-table--field-title">резерв, гр</p>
-        <input type="text" class="edit-table--field-inp">
+        <input type="text" class="edit-table--field-inp" formControlName="reserve_color">
       </div>
       <div class="edit-table--field">
         <p class="edit-table--field-title">кількість бабін</p>
-        <input type="text" class="edit-table--field-inp">
+        <input type="text" class="edit-table--field-inp" formControlName="bab_quantity_color">
       </div>
       <div class="edit-table--field">
         <p class="edit-table--field-title">повна вага</p>
-        <input type="text" class="edit-table--field-inp">
+        <input type="text" class="edit-table--field-inp" formControlName="weight_color">
       </div>
       <div class="edit-table--field-note">
-        <input type="text" class="edit-table--field-note-inp" placeholder="примітка">
+        <input type="text" class="edit-table--field-note-inp" placeholder="примітка" formControlName="comment_color">
       </div>
     </div>
-    <button class="save-btn">
+    <button class="save-btn" (click)="saveMaterial()" [disabled]="reverseItemData.invalid">
       Зберегти
     </button>
   </div>
