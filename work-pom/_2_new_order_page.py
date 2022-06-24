@@ -213,6 +213,25 @@ def return_data_from_full_person(data_from_new_page):
 
 def return_data_from_final_order(data_from_new_page):
     with Session(engine) as session:
+        e = "Error in real recipient number"
+        id_client = data_from_new_page['id_client']
+        if id_client is None:
+            return f'Error in client number: {e}', 500
+        check_client = session.query(directory_of_client).filter_by(
+            id_client=id_client).scalar()
+        if check_client is None:
+            raise Exception("Error in real client number ")
+            # return f'Error in real client number {e}', 500
+
+        id_recipient = data_from_new_page['id_recipient']
+        if id_recipient is None:
+            return f'Error in recipient number: {e}', 500
+        check_client = session.query(directory_of_client).filter_by(
+            id_client=id_recipient).scalar()
+        if check_client is None:
+            raise Exception("Error in real recipient number ")
+            # return f'Error in real recipient number {e}', 500
+
         id_order = data_from_new_page['id_order']
         if id_order == 0:
             ins = directory_of_order(
