@@ -273,6 +273,7 @@ export class CreateOrderComponent implements OnInit {
     order.patchValue({
       [field]: value.id_color
     });
+    console.log(order)
     this.resetMaterialsItems();
   }
 
