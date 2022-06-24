@@ -93,6 +93,8 @@ export class CreateOrderComponent implements OnInit {
         })
       ]);
 
+      console.log(this.orderForm);
+      
     this.clientForm = this.fb.group({
       id_client: null,
       phone_client: null,

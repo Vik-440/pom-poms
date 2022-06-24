@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MaterialPageService } from '../services/materials.service';
 
 @Component({
@@ -13,12 +13,26 @@ export class ReserveComponent implements OnInit {
   materialFilter = [];
   reverseItemData: FormGroup;
   reserveItems;
+  reverseItemsCorrect = this.fb.array([]);
   idEdit = null;
   isNewMaterial = false;
+  idChange = [];
+  isHideOk = true;
   ngOnInit(): void {
-    this.servieMaterial.getListMaterial().subscribe(data => {
+    this.servieMaterial.getListMaterial().subscribe((data: any) => {
       this.reserveItems = data;
+      
+      this.reserveItems.map(item => {
+
+        this.reverseItemsCorrect.push(this.fb.group({
+          bab_quantity_color: null,
+          weight_color: null
+        }))
+        
+      })
     });
+    console.log(this.reverseItemsCorrect, this.reverseItemsCorrect.controls);
+    
 
     this.materialFilter = [
       { id: 999, value: true, name: 'всі матеріали' },
@@ -36,8 +50,7 @@ export class ReserveComponent implements OnInit {
       reserve_color: ['', Validators.required],
       bab_quantity_color: ['', Validators.required],
       weight_color: ['', Validators.required],
-      comment_color: '',
-
+      comment_color: ''
     })
   }
 
@@ -93,6 +106,7 @@ export class ReserveComponent implements OnInit {
       });
     });
   }
+
   filterMaterials(event) {
     if(event) {
       if(event.id) {
@@ -106,5 +120,24 @@ export class ReserveComponent implements OnInit {
       }
     }
     
+  }
+
+  changeMaterial(item, value, field, id) {
+    this.idChange.push(id);
+    this.isHideOk = false;
+    item.patchValue({
+      [field]: value
+    });
+  }
+
+  saveChangesMat(id, item) {    
+    const params = {
+      color_change: id,
+      bab_quantity_color: +item.value.bab_quantity_color,
+      weight_color: +item.value.weight_color
+    };
+    this.servieMaterial.saveMaterial(params).subscribe(() => {
+      this.idChange = this.idChange.filter(i => i !== id);
+    });
   }
 }

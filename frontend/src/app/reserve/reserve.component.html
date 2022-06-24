@@ -11,38 +11,51 @@
           <th class="quantity" scope="col" sortable="quantity_pars_model" class="clean-width">чиста вага</th>
           <th scope="col" sortable="phase_1_model" class="model">модель</th>
           <th scope="col" sortable="phase_2_model" class="pars">пар</th>
+          <th class="epmty"></th>
+          <th colspan="2" scope="col" sortable="id_order" class="mat-val ml22">мат / зміна / втулк</th>
         </tr>
         </thead>
         <tbody>
           <ng-container  *ngFor="let item of reserveItems; let index = index">
-            <tr (click)="editItem(item.id_color)" [class.grey]="idEdit === item.id_color">
-              <td>{{ item.id_color }}</td>
-              <td class="name-color">{{ item.name_color}}</td>
-              <td>{{ item.width_color}}</td>
-              <td>{{ item.bab_quantity_color }}</td>
-              <td>{{ item.weight_color}}</td>
-              <td>{{ item.model}}</td>
-              <td>{{ item.pars}}</td>
+            <tr (click)="editItem(item.id_color)">
+              <td [class.grey]="idEdit === item.id_color">{{ item.id_color }}</td>
+              <td [class.grey]="idEdit === item.id_color" class="name-color">{{ item.name_color}}</td>
+              <td [class.grey]="idEdit === item.id_color">{{ item.width_color}}</td>
+              <td [class.grey]="idEdit === item.id_color"> {{ item.bab_quantity_color }}</td>
+              <td [class.grey]="idEdit === item.id_color">{{ item.weight_color}}</td>
+              <td [class.grey]="idEdit === item.id_color">{{ item.model}}</td>
+              <td [class.grey]="idEdit === item.id_color">{{ item.pars}}</td>
+              <td class="epmty"></td>
+              <td class="white"><input type="text" class="mat-val--intp" 
+                [value]="reverseItemsCorrect.controls[index].value.bab_quantity_color" 
+                (change)="changeMaterial(reverseItemsCorrect.controls[index], $event.target.value, 'bab_quantity_color', item.id_color)"></td>
+              <td class="white"><input type="text" class="mat-val--intp"
+                [value]="reverseItemsCorrect.controls[index].value.weight_color" 
+                (change)="changeMaterial(reverseItemsCorrect.controls[index], $event.target.value, 'weight_color', item.id_color)"></td>
+              <button (click)="saveChangesMat(item.id_color, reverseItemsCorrect.controls[index])" class="btn-icon display-none" [class.display-show]="!isHideOk && idChange.includes(item.id_color)">
+                <img class="next-icon icon" src="./assets/img/icons/ok.svg" />
+              </button>
             </tr>
-      </ng-container>
+          </ng-container>
         </tbody>
       </table>
     </div>
 
-    <div class="table-responsive table table-reserve table-reserve--materials">
+    <!-- <div class="table-responsive table table-reserve table-reserve--materials">
       <table class="table table-lg table-bordered mb-0 border-primary">
         <thead>
         <tr class="center-data-second">
-          <th  colspan="2" scope="col" sortable="id_order" class="mat-val">мат / зміна / втулк</th>
+          <th colspan="2" scope="col" sortable="id_order" class="mat-val">мат / зміна / втулк</th>
         </tr>
         </thead>
         <tbody>
-          <ng-container *ngFor="let item of reserveItems; let index = index">
+          <ng-container *ngFor="let item of reverseItemsCorrect.controls; let index = index" >
             <tr>
-              <td><input class="mat-val--intp" type="text"></td>
-              <td><input type="text" class="mat-val--intp"></td>
+              <td><input type="text" class="mat-val--intp" [value]="item.value.babChange" (change)="changeMaterial(item, $event.target.value, 'babChange')"></td>
+              <td><input type="text" class="mat-val--intp" [value]="item.value.weightChange" (change)="changeMaterial(item, $event.target.value, 'weightChange')"></td>
               <td>
-                <button class="btn-icon display-none">
+                
+                <button class="btn-icon display-none" [class.display-none]="isHideOk && !(item.value.babChange || item.value.weightChange)">
                   <img class="next-icon icon" src="./assets/img/icons/ok.svg" />
                 </button>
               </td>
@@ -50,7 +63,7 @@
       </ng-container>
         </tbody>
       </table>
-    </div>
+    </div> -->
 
    
     <div class="materials">
