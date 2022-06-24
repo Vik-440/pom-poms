@@ -69,20 +69,24 @@ class Centaur(Animal, Person):
         Person.__init__(self, status, money)
 
     def print_parameters(self):
-        print(self.name + " has size " + self.size + " in stutus " +
-              self.status + " and has " + self.money + " money")
+        return(self.name + " has size " + self.size + " in stutus " +
+               self.status + " and has " + self.money + " money")
 
 
-peter = Centaur(
-    name="Peter", size="400 kg", status="fabulous animal", money="$ 3'000")
-# peter=Centaur("Peter", "400 kg", "fabulous animal", "$ 3'000")
-# peter1=Person("fabulous animal","$ 3'000")
-# peter=Centaur("Peter", "400 kg")
-# peter=Animal("Peter", "400 kg")
-peter.print_parameters()
+def set_data(a, b, c, d):
+    peter = Centaur(name=a, size=b, status=c, money=d)
+    return(peter.print_parameters())
 
 
-dachshund = Dog("Mika", "30 cm")
-dachshund.move()
-dachshund.eat()
-dachshund.sleep()
+# a = set_data()
+# print(a + str(1))
+
+# peter = Centaur(
+#     name="Peter", size="400", status="fabulous animal", money="$ 3'000")
+# peter.print_parameters()
+
+
+# dachshund = Dog("Mika", "30 cm")
+# dachshund.move()
+# dachshund.eat()
+# dachshund.sleep()

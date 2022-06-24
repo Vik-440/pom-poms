@@ -20,11 +20,11 @@ class directory_of_order(Base):
     # doc_add_order = Column('doc_add_order', Boolean)
     data_send_order = Column('data_send_order', Date)
     fulfilled_order = Column('fulfilled_order', Boolean)
-    sum_payment = Column('sum_payment', Integer)            #Integer
-    discont_order = Column('discont_order', Integer)        #numeric (8,2)
+    sum_payment = Column('sum_payment', Integer)            # Integer
+    discont_order = Column('discont_order', Integer)        # numeric (8,2)
     comment_order = Column('comment_order', String)
-    #directory_of_group = relationship("directory_of_group")
-    #directory_of_payment = relationship("directory_of_payment")
+    # directory_of_group = relationship("directory_of_group")
+    # directory_of_payment = relationship("directory_of_payment")
 
 
 class directory_of_client(Base):
@@ -72,10 +72,11 @@ class directory_of_group(Base):
     __tablename__ = 'directory_of_group'
     id_group_model = Column('id_group_model', Integer, primary_key=True)
     id_model = Column('id_model', Integer)
-    id_order = Column('id_order', Integer, ForeignKey('directory_of_order.id_order'))
+    id_order = Column('id_order', Integer, ForeignKey(
+        'directory_of_order.id_order'))
     quantity_pars_model = Column('quantity_pars_model', Integer)
     phase_1_model = Column('phase_1_model', Boolean)
-    phase_2_model = Column('phase_2_model', Boolean)    #Integer
+    phase_2_model = Column('phase_2_model', Boolean)    # Integer
     phase_3_model = Column('phase_3_model', Boolean)
     # directory_of_order = relationship("directory_of_order")
 
@@ -83,8 +84,9 @@ class directory_of_group(Base):
 class directory_of_payment(Base):
     __tablename__ = 'directory_of_payment'
     id_payment = Column('id_payment', Integer, primary_key=True)
-    id_order = Column('id_order', Integer, ForeignKey('directory_of_order.id_order'))
-    payment = Column('payment', Integer)        #Integer   Numeric(8, 2)
+    id_order = Column('id_order', Integer, ForeignKey(
+        'directory_of_order.id_order'))
+    payment = Column('payment', Integer)        # Integer   Numeric(8, 2)
     metod_payment = Column('metod_payment', String)
     data_payment = Column('data_payment', Date)
     # directory_of_order = relationship("directory_of_order")
@@ -131,13 +133,3 @@ class directory_of_outlay_class(Base):
 engine = create_engine(url)
 
 Base.metadata.create_all(engine)
-
-
-
-#class directory_of_(Base):
-#    __tablename__ = 'directory_of_'
-#     = Column('', Integer, primary_key=True)
-#     = Column('', String)
-#     = Column('', Integer)
-#     = Column('', Integer)
-#     = Column('', String)

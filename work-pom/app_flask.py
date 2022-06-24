@@ -1,4 +1,5 @@
 from flask import Flask, jsonify, request
+from _1_main_page_json import return_data_from_main_page
 from _2_new_order_json import return_data_from_new_order
 from _2_new_order_json import return_data_from_new_order_post
 from _3_material_json import return_data_from_material
@@ -16,7 +17,6 @@ from _4_finance_json import return_data_from_outlay_change
 from _4_finance_json import return_data_from_payment_id_order
 from _4_finance_json import return_data_from_payment_stat
 from _4_finance_json import return_data_from_payment_balans
-from _1_main_page_json import return_data_from_main_page
 from flask_cors import CORS
 
 app = Flask(__name__)
