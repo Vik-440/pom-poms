@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import locale from 'date-fns/locale/en-US';
 import * as moment from 'moment';
 import { DatepickerOptions } from 'ng2-datepicker';
@@ -93,16 +93,15 @@ export class CreateOrderComponent implements OnInit {
         })
       ]);
 
-      console.log(this.orderForm);
       
     this.clientForm = this.fb.group({
       id_client: null,
-      phone_client: null,
-      second_name_client: null,
-      first_name_client: null,
+      phone_client: [null, Validators.required],
+      second_name_client: [null, Validators.required],
+      first_name_client: [null, Validators.required],
       surname_client: null,
-      sity: null,
-      np_number: null,
+      sity: [null, Validators.required],
+      np_number: [null, Validators.required],
       name_team: null,
       coach: null,
       zip_code: null,
@@ -113,12 +112,12 @@ export class CreateOrderComponent implements OnInit {
     this.recipientForm = this.fb.group({
       id_client: null,
       coach: null,
-      phone_client: null,
-      second_name_client: null,
-      first_name_client: null,
+      phone_client: [null, Validators.required],
+      second_name_client: [null, Validators.required],
+      first_name_client: [null, Validators.required],
       surname_client: null,
-      sity: null,
-      np_number: null,
+      sity: [null, Validators.required],
+      np_number: [null, Validators.required],
       name_team: null,
       zip_code: null,
       street_house_apartment: null,
@@ -268,6 +267,13 @@ export class CreateOrderComponent implements OnInit {
       })
     }
     this.kodItems = [];
+  }
+
+  changeIdColor(order, field, value) {
+    order.patchValue({
+      [field]: value.id_color
+    });
+    this.resetMaterialsItems();
   }
 
   resetMaterialsItems() {

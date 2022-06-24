@@ -55,7 +55,7 @@
         addTagText="+ новий матеріал"
         formControlName="name_color_1" 
         (search)="changeMaterial($event.term, index)" 
-        (change)="resetMaterialsItems()">
+        (change)="changeIdColor(order, 'id_color_1', $event)">
       </ng-select>
         <!-- <input type="text" class="form__field form__field-material" placeholder="матеріал 1" formControlName="name_color_1"> -->
         <input type="text" class="form__field--sm" placeholder="%" formControlName="id_color_part_1">
@@ -74,7 +74,7 @@
         addTagText="+ новий матеріал"
         formControlName="name_color_3" 
         (search)="changeMaterial($event.term, index)" 
-        (change)="resetMaterialsItems()">
+        (change)="changeIdColor(order, 'id_color_3', $event)">
       </ng-select>
         <input type="text" class="form__field--sm" placeholder="%" formControlName="id_color_part_3">
       </div>
@@ -95,7 +95,7 @@
           addTagText="+ новий матеріал"
           formControlName="name_color_2" 
           (search)="changeMaterial($event.term, index)" 
-          (change)="resetMaterialsItems()">
+          (change)="changeIdColor(order, 'id_color_2', $event)">
         </ng-select>
         <input type="text" class="form__field--sm" placeholder="%" formControlName="id_color_part_2">
       </div>
@@ -113,7 +113,7 @@
         addTagText="+ новий матеріал"
         formControlName="name_color_4" 
         (search)="changeMaterial($event.term, index)" 
-        (change)="resetMaterialsItems()">
+        (change)="changeIdColor(order, 'id_color_4', $event)">
       </ng-select>
         <input type="text" class="form__field--sm" placeholder="%" formControlName="id_color_part_4">
       </div>
@@ -339,7 +339,7 @@
     <div class="finished-order--btns">
       <button class="finished-order--btn edit" [disabled]="isNew">Редагувати</button>
       <button class="finished-order--btn" [ngClass]="{'done': !fulfilledOrder, 'wave': fulfilledOrder}">Виконано</button>
-      <button class="finished-order--btn malachite" *ngIf="!doneOrder" (click)="saveAll()" [disabled]="!((isSaveClient && isSaveRecipient || !isRecipient) && dataPlaneOrder && dataSendOrder)">Оформити замовлення</button>
+      <button class="finished-order--btn malachite" *ngIf="!doneOrder" (click)="saveAll()" [disabled]="!((isSaveClient && isSaveRecipient || !isRecipient) && dataPlaneOrder && dataSendOrder && clientForm.valid)">Оформити замовлення</button>
       <button  class="finished-order--btn wave" *ngIf="doneOrder">Оформлено</button>
       <button class="finished-order--btn teal-blue">Виставити рахунок</button>
     </div>

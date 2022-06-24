@@ -63,7 +63,8 @@ def return_data_from_new_order_post(data_from_new_page):
             directory_of_client.team.ilike(w206w)).all()
         data_var = []
         for row in ur_team_1:
-            data_var.append(row.team)
+            if row.team not in data_var:
+                data_var.append(row.team)
         data_new_page = {"name_team": data_var}
 ########
     elif 'ur_sity' in data_from_new_page:
@@ -73,7 +74,8 @@ def return_data_from_new_order_post(data_from_new_page):
             directory_of_client.sity.ilike(w206w)).all()
         data_var = []
         for row in ur_sity_1:
-            data_var.append(row.sity)
+            if row.sity not in data_var:
+                data_var.append(row.sity)
         data_new_page = {"sity": data_var}
 ########
     elif 'ur_kolor' in data_from_new_page:
