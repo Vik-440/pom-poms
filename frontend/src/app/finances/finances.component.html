@@ -10,10 +10,12 @@
         </tr>
         </thead>
         <tbody>
-          <ng-container *ngFor="let item of items">
+          <ng-container *ngFor="let item of mainItems">
             <tr>
-              <td>{{ item.id_color }}</td>
-              <td>{{ item.name_color}}</td>
+              <td>{{ item.data_payment }}</td>
+              <td>{{ item.metod_payment	}}</td>
+              <td>{{ item.id_order	}}</td>
+              <td>{{ item.payment	}}</td>
             </tr>
       </ng-container>
         </tbody>

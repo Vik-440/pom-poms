@@ -122,7 +122,7 @@ export class TableComponent implements OnInit, OnDestroy {
     { id: 1, value: true, name: 'виконані' },
     { id: 2, value: false, name: 'всі' },
     { id: 3, value: '', name: 'не виконані' },
-];
+  ];
   @ViewChildren(SortDirective) headers: QueryList<SortDirective>;
 
   constructor(

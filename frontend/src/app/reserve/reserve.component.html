@@ -59,6 +59,8 @@
         <p class="materials-active--title">наявність</p>
         <ng-select 
            bindLabel="name" 
+           [items]="materialFilter"
+           (change)="filterMaterials($event)"
            bindValue="id" >
         </ng-select>
       </div>

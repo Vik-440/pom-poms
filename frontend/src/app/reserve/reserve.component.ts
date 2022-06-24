@@ -10,7 +10,7 @@ import { MaterialPageService } from '../services/materials.service';
 export class ReserveComponent implements OnInit {
 
   constructor(private servieMaterial: MaterialPageService, private fb: FormBuilder) { }
-
+  materialFilter = [];
   reverseItemData: FormGroup;
   reserveItems;
   idEdit = null;
@@ -20,13 +20,18 @@ export class ReserveComponent implements OnInit {
       this.reserveItems = data;
     });
 
+    this.materialFilter = [
+      { id: 999, value: true, name: 'всі матеріали' },
+      { id: null, value: false, name: 'матеріали в наявності' },
+    ];
+
     this.reverseItemData = this.fb.group({
       id_color: '',
       name_color: ['', Validators.required],
       width_color: ['', Validators.required],
       thickness_color: ['', Validators.required],
       manufacturer_color: ['', Validators.required],
-      bab_weight_color: ['', Validators.required],
+      bab_weight_color: '',
       weight_10m_color: ['', Validators.required],
       reserve_color: ['', Validators.required],
       bab_quantity_color: ['', Validators.required],
@@ -87,5 +92,19 @@ export class ReserveComponent implements OnInit {
         this.reverseItemData.reset();
       });
     });
+  }
+  filterMaterials(event) {
+    if(event) {
+      if(event.id) {
+        this.servieMaterial.getFullAllMaterial({ id_color: 999}).subscribe(data => {
+          this.reserveItems = data;
+        })
+      } else {
+        this.servieMaterial.getListMaterial().subscribe(data => {
+          this.reserveItems = data;
+        });
+      }
+    }
+    
   }
 }

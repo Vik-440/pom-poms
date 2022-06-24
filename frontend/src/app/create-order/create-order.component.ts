@@ -392,7 +392,12 @@ export class CreateOrderComponent implements OnInit {
       "sity": this.clientForm.value.sity
     }
 
-    this.service.getInfoForOrder(params).subscribe(data => {
+    this.service.getInfoForOrder(params).subscribe((data: any) => {
+      console.log(data);
+      
+      this.clientForm.patchValue({
+        id_client: data.id_recipient
+      })
       this.isSaveClient = true;
     })
   }
@@ -407,13 +412,17 @@ export class CreateOrderComponent implements OnInit {
       "np_number": this.recipientForm.value.np_number,
       "id_team": this.recipientForm.value.id_team,
       "coach": this.clientForm.value.coach,
+      "name_team": this.clientForm.value.name_team,
       "zip_code": this.recipientForm.value.zip_code,
       "street_house_apartment": this.recipientForm.value.street_house_apartment,
       "comment_client": this.recipientForm.value.comment_client,
       "sity": this.recipientForm.value.sity
     }
 
-    this.service.getInfoForOrder(params).subscribe(() => {
+    this.service.getInfoForOrder(params).subscribe((data: any) => {
+      this.recipientForm.patchValue({
+        id_client: data.id_recipient
+      })
       this.isSaveRecipient = true;
     });
   }
