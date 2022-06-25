@@ -54,6 +54,11 @@ export class CreateOrderComponent implements OnInit {
   doneOrder: Boolean = false;
 
   ngOnInit(): void {
+    this.init();
+    this.viewChanges();
+  }
+
+  init() {
     this.dateForms = this.fb.group({
       data_order: moment().format('YYYY-MM-DD'),
       data_plane_order: null,
@@ -123,8 +128,6 @@ export class CreateOrderComponent implements OnInit {
       street_house_apartment: null,
       comment_client: null,
     });
-
-    this.viewChanges();
   }
 
   sumAll() {
@@ -149,7 +152,11 @@ export class CreateOrderComponent implements OnInit {
             sum_pars: data * order.value.price_model
           })
         })
-      ).subscribe()
+      ).subscribe(() => {
+        order.patchValue({
+          isNew: true
+        })
+      })
 
       order.get('price_model').valueChanges.pipe(
         tap(data => {
@@ -157,8 +164,42 @@ export class CreateOrderComponent implements OnInit {
             sum_pars: data * order.value.quantity_pars_model
           })
         })
-      ).subscribe()
+      ).subscribe(() => {
+        order.patchValue({
+          isNew: true
+        })
+      })
 
+      order.get('id_color_1').valueChanges.subscribe(() => {
+        order.patchValue({
+          isNew: true
+        })
+      })
+
+      order.get('id_color_2').valueChanges.subscribe(() => {
+        order.patchValue({
+          isNew: true
+        })
+      })
+
+      order.get('id_color_3').valueChanges.subscribe(() => {
+        order.patchValue({
+          isNew: true
+        })
+      })
+
+      order.get('id_color_4').valueChanges.subscribe(() => {
+        order.patchValue({
+          isNew: true
+        })
+      })
+
+      order.get('kod_model').valueChanges.subscribe(() => {
+        order.patchValue({
+          isNew: true
+        })
+      })
+      
       order.get('kolor_model').valueChanges.subscribe(() => {
         order.patchValue({
           isNew: true
@@ -259,9 +300,6 @@ export class CreateOrderComponent implements OnInit {
               isNew: false,
               isChange: false
             }, {emitEvent: false})
-
-           console.log(order);
-            
           }
         })
       })
@@ -273,7 +311,6 @@ export class CreateOrderComponent implements OnInit {
     order.patchValue({
       [field]: value.id_color
     });
-    console.log(order)
     this.resetMaterialsItems();
   }
 
@@ -336,8 +373,12 @@ export class CreateOrderComponent implements OnInit {
       "id_color_4" :  +order.value.id_color_4  || 0,
       "id_color_part_4" : +order.value.id_color_part_4  || 0,
       "price_model":  order.value.price_model  || 0,
-      "comment_model":  order.value.comment_model  || 0,
+      "comment_model":  order.value.comment_model,
       "kolor_model":  order.value.kolor_model || 0
+    }
+
+    if(!params.comment_model){
+      delete params['comment_model'];
     }
 
     this.service.getInfoForOrder(params).subscribe((data: any) => {
@@ -402,8 +443,6 @@ export class CreateOrderComponent implements OnInit {
     }
 
     this.service.getInfoForOrder(params).subscribe((data: any) => {
-      console.log(data);
-      
       this.clientForm.patchValue({
         id_client: data.id_recipient
       })
@@ -471,105 +510,99 @@ export class CreateOrderComponent implements OnInit {
       edit_order: this.idOrder
     };
     this.service.getInfoForOrder(params).pipe(
-      filter((data: any) => {
-        if(!!!Object.keys(data).length) {
-          this.commentOrder = '';
-          this.dateToday = new Date();
-          this.dataPlaneOrder = null;
-          this.dataSendOrder = null;
-          this.discount = null;
-          this.fulfilledOrder = false;
-          this.clientForm.reset();
-          this.recipientForm.reset();
-          this.orderForm.reset();
-        }
-        console.log(this.dataPlaneOrder);
-        
-        return !!Object.keys(data).length;
-      }),
       tap(() => {
         this.spinner.show();
       })
     ).subscribe((data: any) => {
-      console.log(data);
-      this.commentOrder = data.comment_order;
-      this.dateToday = new Date(data.data_order);
-      this.dataPlaneOrder = new Date(data.data_plane_order);
-      this.dataSendOrder = new Date(data.data_send_order);
-      this.discount = data.discont_order;
-      this.fulfilledOrder = data.fulfilled_order;
-      this.service.getInfoForOrder({open_id_client: data.id_client})
-        .subscribe((dataClient: any) => {
-          this.clientForm.setValue({
-            coach: dataClient?.coach,
-            comment_client: dataClient.comment_client,
-            first_name_client: dataClient.first_name_client,
-            id_client: dataClient.id_client,
-            name_team: dataClient.name_team,
-            phone_client: dataClient.phone_client,
-            second_name_client: dataClient.second_name_client,
-            sity: dataClient.sity,
-            street_house_apartment: dataClient.street_house_apartment,
-            surname_client: dataClient.surname_client,
-            zip_code: dataClient.zip_code,
-            np_number: dataClient.np_number
-          }, {emitEvent: false});
-        });
-
-        if(data.id_client !== data.id_recipient) {
-          this.isRecipient = true;
-          this.service.getInfoForOrder({open_id_client: data.id_recipient})
-            .subscribe((dataRecipient: any) => {
-              this.recipientForm.setValue({
-                coach: dataRecipient?.coach,
-                comment_client: dataRecipient.comment_client,
-                first_name_client: dataRecipient.first_name_client,
-                id_client: dataRecipient.id_client,
-                name_team: dataRecipient.name_team,
-                phone_client: dataRecipient.phone_client,
-                second_name_client: dataRecipient.second_name_client,
-                sity: dataRecipient.sity,
-                street_house_apartment: dataRecipient.street_house_apartment,
-                surname_client: dataRecipient.surname_client,
-                zip_code: dataRecipient.zip_code,
-                np_number: dataRecipient.np_number
-              }, {emitEvent: false});
+      if(Object.keys(data).length) {
+        this.commentOrder = data.comment_order;
+        this.dateToday = new Date(data.data_order);
+        this.dataPlaneOrder = new Date(data.data_plane_order);
+        this.dataSendOrder = new Date(data.data_send_order);
+        this.discount = data.discont_order;
+        this.fulfilledOrder = data.fulfilled_order;
+        this.service.getInfoForOrder({open_id_client: data.id_client})
+          .subscribe((dataClient: any) => {
+            this.clientForm.setValue({
+              coach: dataClient?.coach,
+              comment_client: dataClient.comment_client,
+              first_name_client: dataClient.first_name_client,
+              id_client: dataClient.id_client,
+              name_team: dataClient.name_team,
+              phone_client: dataClient.phone_client,
+              second_name_client: dataClient.second_name_client,
+              sity: dataClient.sity,
+              street_house_apartment: dataClient.street_house_apartment,
+              surname_client: dataClient.surname_client,
+              zip_code: dataClient.zip_code,
+              np_number: dataClient.np_number
+            }, {emitEvent: false});
+          });
+  
+          if(data.id_client !== data.id_recipient) {
+            this.isRecipient = true;
+            this.service.getInfoForOrder({open_id_client: data.id_recipient})
+              .subscribe((dataRecipient: any) => {
+                this.recipientForm.setValue({
+                  coach: dataRecipient?.coach,
+                  comment_client: dataRecipient.comment_client,
+                  first_name_client: dataRecipient.first_name_client,
+                  id_client: dataRecipient.id_client,
+                  name_team: dataRecipient.name_team,
+                  phone_client: dataRecipient.phone_client,
+                  second_name_client: dataRecipient.second_name_client,
+                  sity: dataRecipient.sity,
+                  street_house_apartment: dataRecipient.street_house_apartment,
+                  surname_client: dataRecipient.surname_client,
+                  zip_code: dataRecipient.zip_code,
+                  np_number: dataRecipient.np_number
+                }, {emitEvent: false});
+              })
+          }
+  
+          data.id_model.forEach((model, index) => {
+            if(index === 0) {
+              this.orderForm.clear();
+            }
+            this.service.getInfoForOrder({open_id_model: model}).subscribe((dataModel: any) => {
+              this.orderForm.push(this.fb.group({
+                id_model: dataModel.id_model,
+                kod_model: dataModel.kod_model,
+                kolor_model: dataModel.kolor_model,
+                name_color_1: dataModel.name_color_1 || null,
+                id_color_part_1: dataModel.id_color_part_1,
+                id_color_1: dataModel.id_color_1,
+                id_color_2: dataModel.id_color_2,
+                id_color_3: dataModel.id_color_3,
+                id_color_4: dataModel.id_color_4,
+                name_color_2: dataModel.name_color_2 || null,
+                id_color_part_2: dataModel.id_color_part_2,
+                name_color_3: dataModel.name_color_3 || null,
+                id_color_part_3: dataModel.id_color_part_3,
+                name_color_4: dataModel.name_color_4 || null,
+                id_color_part_4: dataModel.id_color_part_4,
+                price_model: dataModel.price_model,
+                comment_model: dataModel.comment_model,
+                quantity_pars_model: data.quantity_pars_model[index],
+                sum_pars: data.quantity_pars_model[index] *  dataModel.price_model,
+                isNew: false,
+                isChange: false
+              }));
             })
-        }
-
-        data.id_model.forEach((model, index) => {
-          this.service.getInfoForOrder({open_id_model: model}).subscribe((dataModel: any) => {
-            this.orderForm.clear();
-            this.orderForm.push(this.fb.group({
-              id_model: dataModel.id_model,
-              kod_model: dataModel.kod_model,
-              kolor_model: dataModel.kolor_model,
-              name_color_1: dataModel.name_color_1 || null,
-              id_color_part_1: dataModel.id_color_part_1,
-              id_color_1: dataModel.id_color_1,
-              id_color_2: dataModel.id_color_2,
-              id_color_3: dataModel.id_color_3,
-              id_color_4: dataModel.id_color_4,
-              name_color_2: dataModel.name_color_2 || null,
-              id_color_part_2: dataModel.id_color_part_2,
-              name_color_3: dataModel.name_color_3 || null,
-              id_color_part_3: dataModel.id_color_part_3,
-              name_color_4: dataModel.name_color_4 || null,
-              id_color_part_4: dataModel.id_color_part_4,
-              price_model: dataModel.price_model,
-              comment_model: dataModel.comment_model,
-              quantity_pars_model: data.quantity_pars_model[index],
-              sum_pars: data.quantity_pars_model[index] *  dataModel.price_model,
-              isNew: false,
-              isChange: false
-            }));
           })
+        this.priceAll.patchValue({
+          sum_payment: data.sum_payment
         })
-      this.priceAll.patchValue({
-        sum_payment: data.sum_payment
-      })
-      this.spinner.hide();
-      
+        this.spinner.hide();
+        this.viewChanges();
+        this.isNew = false;
+      } else {
+        this.init();
+        this.isNew = true;
+        this.dataPlaneOrder = null;
+        this.dataSendOrder = null;
+        this.spinner.hide();
+      }
     });
   }
 }
