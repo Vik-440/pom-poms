@@ -185,8 +185,8 @@ def return_data_from_full_kod(data_from_new_page):
                         'kolor_model': data_from_new_page['kolor_model']})
             session.commit()
 
-            q1q = ('id_model=' + str(j_id_model) + ' is updated')
-            one_block = {"id_model": q1q}
+            # q1q = ('id_model=' + str(j_id_model) + ' is updated')
+            one_block = {"id_model": j_id_model}
         return one_block
 # barrier #####################################################################
 
@@ -269,7 +269,12 @@ def return_data_from_final_order(data_from_new_page):
             raise Exception("Error in real recipient number ")
             # return f'Error in real recipient number {e}', 500
 # here work now
-        id_order = data_from_new_page['id_order']
+        id_order = int(data_from_new_page['id_order'])
+        check_order = session.query(directory_of_order).filter_by(
+            id_order=id_order).scalar()
+        if check_order is not None and id_order != 0:
+            raise Exception("This order number is real")
+
         if id_order == 0:
             ins = directory_of_order(
                 data_order=data_from_new_page['data_order'],

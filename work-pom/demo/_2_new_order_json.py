@@ -98,7 +98,8 @@ def return_data_from_new_order_post(data_from_new_page):
         search_data = data_from_new_page['ur_kod']
         w206w = ('%' + str(search_data) + '%')
         ur_kod_1 = session.query(directory_of_model).filter(
-            directory_of_model.kod_model.ilike(w206w)).all()
+            directory_of_model.kod_model.ilike(w206w)).order_by(
+                'kod_model').all()
         data_var = []
         for row in ur_kod_1:
             data_var.append(row.kod_model)

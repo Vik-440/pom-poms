@@ -72,8 +72,7 @@ class directory_of_group(Base):
     __tablename__ = 'directory_of_group'
     id_group_model = Column('id_group_model', Integer, primary_key=True)
     id_model = Column('id_model', Integer)
-    id_order = Column('id_order', Integer, ForeignKey(
-        'directory_of_order.id_order'))
+    id_order = Column('id_order', Integer)
     quantity_pars_model = Column('quantity_pars_model', Integer)
     phase_1_model = Column('phase_1_model', Boolean)
     phase_2_model = Column('phase_2_model', Boolean)    # Integer
