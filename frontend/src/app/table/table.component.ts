@@ -236,7 +236,7 @@ validateInput(currentValue: NgbDate | null, input: string): NgbDate | null {
         return 'light-pink';
     }
     const splitModelH = kodModel.split('-');
-    if(splitModelH[1].split('')[0] === 'В' || splitModelH[1].split('')[0] === 'B') {
+    if(splitModelH[1]?.split('')[0] === 'В' || splitModelH[1]?.split('')[0] === 'B') {
       return 'light-blue';
     }
 

@@ -6,7 +6,6 @@ import { DatepickerOptions } from 'ng2-datepicker';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { filter, tap } from 'rxjs';
 import { CreateOrderService } from '../services/create-order.service';
-
 @Component({
   selector: 'app-create-order',
   templateUrl: './create-order.component.html',
@@ -152,11 +151,7 @@ export class CreateOrderComponent implements OnInit {
             sum_pars: data * order.value.price_model
           })
         })
-      ).subscribe(() => {
-        order.patchValue({
-          isNew: true
-        })
-      })
+      ).subscribe()
 
       order.get('price_model').valueChanges.pipe(
         tap(data => {
@@ -164,11 +159,7 @@ export class CreateOrderComponent implements OnInit {
             sum_pars: data * order.value.quantity_pars_model
           })
         })
-      ).subscribe(() => {
-        order.patchValue({
-          isNew: true
-        })
-      })
+      ).subscribe()
 
       order.get('id_color_1').valueChanges.subscribe(() => {
         order.patchValue({
@@ -329,6 +320,7 @@ export class CreateOrderComponent implements OnInit {
       });
     }
   }
+
   addOrder() {
     this.orderForm.push(this.fb.group({
       kod_model: null,
@@ -377,9 +369,6 @@ export class CreateOrderComponent implements OnInit {
       "kolor_model":  order.value.kolor_model || 0
     }
 
-    if(!params.comment_model){
-      delete params['comment_model'];
-    }
 
     this.service.getInfoForOrder(params).subscribe((data: any) => {
       order.patchValue({
@@ -444,7 +433,7 @@ export class CreateOrderComponent implements OnInit {
 
     this.service.getInfoForOrder(params).subscribe((data: any) => {
       this.clientForm.patchValue({
-        id_client: data.id_recipient
+        id_client: data.id_recipient || this.clientForm.value.id_client
       })
       this.isSaveClient = true;
     })
@@ -475,6 +464,11 @@ export class CreateOrderComponent implements OnInit {
     });
   }
 
+  changeDataPlaneOrder() {
+    console.log(this.dataPlaneOrder);
+    this.dataSendOrder = new Date(this.dataPlaneOrder);
+    
+  }
   makeArrayDataOrder(key) {
     const result = [];
     this.orderForm.value.map(order => {
@@ -484,12 +478,15 @@ export class CreateOrderComponent implements OnInit {
   }
 
   saveAll() {
+    console.log(this.clientForm.value);
+    
     const params = {
       id_order: this.idOrder,
       data_order: moment(this.dateToday).format('YYYY-MM-DD'),
       id_client: this.clientForm.value.id_client,
       id_recipient: !this.isRecipient ? this.clientForm.value.id_client : this.recipientForm.value.id_client, // (2 або ід_клієнт)
       id_model: this.makeArrayDataOrder('id_model'),
+      price_model_order: this.makeArrayDataOrder('price_model'),
       quantity_pars_model: this.makeArrayDataOrder('quantity_pars_model'),
       data_plane_order: this.dataPlaneOrder ? moment(this.dataPlaneOrder).format('YYYY-MM-DD') : null, // - прогнозована
       data_send_order: this.dataSendOrder ? moment(this.dataSendOrder).format('YYYY-MM-DD') : null, //- бажана
@@ -537,6 +534,8 @@ export class CreateOrderComponent implements OnInit {
               zip_code: dataClient.zip_code,
               np_number: dataClient.np_number
             }, {emitEvent: false});
+            this.isSaveClient = true;
+            this.viewChanges();
           });
   
           if(data.id_client !== data.id_recipient) {
@@ -557,6 +556,9 @@ export class CreateOrderComponent implements OnInit {
                   zip_code: dataRecipient.zip_code,
                   np_number: dataRecipient.np_number
                 }, {emitEvent: false});
+
+                this.isSaveRecipient = true;
+                this.viewChanges();
               })
           }
   
@@ -581,23 +583,27 @@ export class CreateOrderComponent implements OnInit {
                 id_color_part_3: dataModel.id_color_part_3,
                 name_color_4: dataModel.name_color_4 || null,
                 id_color_part_4: dataModel.id_color_part_4,
-                price_model: dataModel.price_model,
+                price_model: data.price_model_order[index],
                 comment_model: dataModel.comment_model,
                 quantity_pars_model: data.quantity_pars_model[index],
-                sum_pars: data.quantity_pars_model[index] *  dataModel.price_model,
+                sum_pars: data.quantity_pars_model[index] *  data.price_model_order[index],
                 isNew: false,
                 isChange: false
               }));
+              this.viewChanges();
             })
           })
         this.priceAll.patchValue({
           sum_payment: data.sum_payment
         })
         this.spinner.hide();
-        this.viewChanges();
         this.isNew = false;
+        console.log(1);
+        
+        
       } else {
         this.init();
+        this.viewChanges();
         this.isNew = true;
         this.dataPlaneOrder = null;
         this.dataSendOrder = null;

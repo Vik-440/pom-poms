@@ -159,7 +159,7 @@
               </td>
             </ng-template>
 
-            <td class="td-left pl5" [class]="countMoney(order)">{{ order.sum_payment + ' / ' + order.real_money + ' / ' + getMoney((order.sum_payment - order.real_money).toFixed(2))}}</td>
+            <td class="td-left pl5" [class]="countMoney(order)">{{ order.sum_payment + ' / ' +( order.real_money || 0) + ' / ' + getMoney((order.sum_payment - order.real_money).toFixed(2))}}</td>
             <td class="td-left pl5">{{ order.phone_client | mask: '000-000-00-00 ' || '-' }}</td>
             <td class="td-left pl5" [class.green]="sityColor(order.sity)" ngxTooltip [tooltipContent]="tooltipCity(order)">{{ order.sity }}</td>
             <td>{{ order.data_plane_order | date: 'yyyy-MM-dd'}}</td>

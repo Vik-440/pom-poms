@@ -159,6 +159,7 @@
         <p class="date-order-item--title">Прогнозована дата відправки:</p>
         <ngx-datepicker
         [(ngModel)]="dataPlaneOrder"
+        (ngModelChange)="changeDataPlaneOrder()"
         [options]="options"
       ></ngx-datepicker>
       </div>
