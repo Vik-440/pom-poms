@@ -199,6 +199,7 @@ def return_data_from_full_person(data_from_new_page):
             phone_client=search_data).all()
         for row in second_name_client_1:
             j_second_name_client = row.second_name_client
+            tmp_id_client = row.id_client
         if j_second_name_client == 0:
             ins = directory_of_client(
                     phone_client=data_from_new_page['phone_client'],
@@ -223,9 +224,25 @@ def return_data_from_full_person(data_from_new_page):
                 j_id_client = row.id_client
             one_block = {"id_client": j_id_client}
         else:
-            q1q = (
-                'даний номер телефону уже існує в базі з \
-                    прізвищем - ' + str(j_second_name_client))
+            ins = session.query(directory_of_client).filter(
+                directory_of_client.id_client == tmp_id_client).update(
+                    {'phone_client': data_from_new_page['phone_client'],
+                        'second_name_client': data_from_new_page[
+                            'second_name_client'],
+                        'first_name_client': data_from_new_page[
+                            'first_name_client'],
+                        'surname_client': data_from_new_page['surname_client'],
+                        'sity': data_from_new_page['sity'],
+                        'np_number': data_from_new_page['np_number'],
+                        'team': data_from_new_page['name_team'],
+                        'coach': data_from_new_page['coach'],
+                        'zip_code': data_from_new_page['zip_code'],
+                        'street_house_apartment': data_from_new_page[
+                            'street_house_apartment'],
+                        'comment_client': data_from_new_page['comment_client']}
+                        )
+            session.commit()
+            q1q = ('is updated - ' + str(j_second_name_client))
             one_block = {"phone_client": q1q}
         return one_block
 # barrier #####################################################################
