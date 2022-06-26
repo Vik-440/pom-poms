@@ -78,6 +78,7 @@ class directory_of_group(Base):
     phase_1_model = Column('phase_1_model', Boolean)
     phase_2_model = Column('phase_2_model', Boolean)    # Integer
     phase_3_model = Column('phase_3_model', Boolean)
+    price_model_order = Column('price_model_order', Integer)
     # directory_of_order = relationship("directory_of_order")
 
 
