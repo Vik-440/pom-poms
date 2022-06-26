@@ -12,5 +12,8 @@
 
 - **git pull origin main**
 
-- **sudo docker-compose -f docker-compose.prod.yml up --build**
-- docker-compose -f docker-compose.prod.yml up --build
+- **commit**
+
+- sudo docker-compose -f docker-compose.prod.yml up --build
+
+- sudo docker-compose -f docker-compose.prod.yml up --build

@@ -1,6 +1,8 @@
 from collections import namedtuple
 from mock import patch
 import itertools
+
+import pytest
 from _Test_1._test_1 import set_data
 from _Test_1.step_two import monthly_schedule
 
@@ -44,21 +46,13 @@ def test_defaults_ex():
     assert t1 == t2
 
 
-# from correct.package import __BASE_URL
-# from requests import HTTPError
-
-# def get_employee(id):
-#     resp = requests.get(f'{__BASE_URL}/employee/{id}')
-#     if resp.status_code == 404:
-#         return None
-#     return resp.json()
-
-
 def test_get_employee(requests_mock):
     test_id = 'random-id'
-    requests_mock.get(f'{__BASE_URL}/employee/{test_id}', json= {'name': 'awesome-mock'})
+    requests_mock.get(f'{__BASE_URL}/employee/{test_id}', json={
+        'name': 'awesome-mock'})
     resp = get_employee('random-id')
     assert resp == {'name': 'awesome-mock'}
+
 
 # def test_absent_employee(requests_mock):
 #     test_id = 'does_not_exist'
@@ -68,6 +62,9 @@ def test_get_employee(requests_mock):
 
 
 def test_m_s(requests_mock):
+    smg = 'GoodJob'
+    requests_mock.get(f'http://company.com/{self.last}/{month}')
+    assert 
 
 # def monthly_schedule(self, month):
 #     response = requests.get("http://company.com/{self.last}/{month}")
@@ -76,4 +73,6 @@ def test_m_s(requests_mock):
 #     else:
 #         return 'Bad Response!'
 
-
+# >>> def test_simple(requests_mock):
+# ...    requests_mock.get('http://test.com', text='data')
+# ...    assert 'data' == requests.get('http://test.com').text

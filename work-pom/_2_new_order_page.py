@@ -165,7 +165,27 @@ def return_data_from_full_kod(data_from_new_page):
                 j_id_model = row.id_model
             one_block = {"id_model": j_id_model}
         else:
-            q1q = ('real_id=' + str(j_id_model))
+            ins = session.query(directory_of_model).filter(
+                directory_of_model.id_model == j_id_model).update(
+                    {'kod_model': data_from_new_page['kod_model'],
+                        'id_color_1': int(data_from_new_page['id_color_1']),
+                        'id_color_part_1': int(
+                        data_from_new_page['id_color_part_1']),
+                        'id_color_2': int(data_from_new_page['id_color_2']),
+                        'id_color_part_2': int(
+                            data_from_new_page['id_color_part_2']),
+                        'id_color_3': int(data_from_new_page['id_color_3']),
+                        'id_color_part_3': int(
+                            data_from_new_page['id_color_part_3']),
+                        'id_color_4': int(data_from_new_page['id_color_4']),
+                        'id_color_part_4': int(
+                            data_from_new_page['id_color_part_4']),
+                        'price_model': data_from_new_page['price_model'],
+                        'comment_model': data_from_new_page['comment_model'],
+                        'kolor_model': data_from_new_page['kolor_model']})
+            session.commit()
+
+            q1q = ('id_model=' + str(j_id_model) + ' is updated')
             one_block = {"id_model": q1q}
         return one_block
 # barrier #####################################################################
