@@ -8,7 +8,7 @@ import { TableComponent } from './table/table.component';
 const routes: Routes = [
   { path: '', component: TableComponent },
   { path: 'create-order', component: CreateOrderComponent },
-  { path: 'reserve-page', component: ReserveComponent },
+  { path: 'materials', component: ReserveComponent },
   { path: 'finances-page', component: FinancesComponent }
 ];
 

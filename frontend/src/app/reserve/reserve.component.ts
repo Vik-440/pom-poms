@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { switchMap } from 'rxjs';
 import { MaterialPageService } from '../services/materials.service';
 
 @Component({
@@ -20,7 +21,7 @@ export class ReserveComponent implements OnInit {
   isHideOk = true;
   ngOnInit(): void {
     this.servieMaterial.getListMaterial().subscribe((data: any) => {
-      this.reserveItems = data;
+      this.reserveItems = data.sort((a,b) => a.name_color - b.name_color);
       
       this.reserveItems.map(item => {
 
@@ -110,12 +111,12 @@ export class ReserveComponent implements OnInit {
   filterMaterials(event) {
     if(event) {
       if(event.id) {
-        this.servieMaterial.getFullAllMaterial({ id_color: 999}).subscribe(data => {
-          this.reserveItems = data;
+        this.servieMaterial.getFullAllMaterial({ id_color: 999}).subscribe((data: any) => {
+          this.reserveItems =  data.sort((a,b) => a.name_color - b.name_color);;
         })
       } else {
-        this.servieMaterial.getListMaterial().subscribe(data => {
-          this.reserveItems = data;
+        this.servieMaterial.getListMaterial().subscribe((data: any) => {
+          this.reserveItems =  data.sort((a,b) => a.name_color - b.name_color);;
         });
       }
     }
@@ -136,8 +137,12 @@ export class ReserveComponent implements OnInit {
       bab_quantity_color: +item.value.bab_quantity_color,
       weight_color: +item.value.weight_color
     };
-    this.servieMaterial.saveMaterial(params).subscribe(() => {
+    this.servieMaterial.saveMaterial(params).pipe(
+      switchMap(() => this.servieMaterial.getListMaterial())
+    ).subscribe((data: any) => {
       this.idChange = this.idChange.filter(i => i !== id);
+      this.reserveItems =  data.sort((a,b) => a.name_color - b.name_color);;
+      item.reset();
     });
   }
 }

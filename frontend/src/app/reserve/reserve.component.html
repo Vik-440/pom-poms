@@ -17,21 +17,21 @@
         </thead>
         <tbody>
           <ng-container  *ngFor="let item of reserveItems; let index = index">
-            <tr (click)="editItem(item.id_color)">
-              <td [class.grey]="idEdit === item.id_color">{{ item.id_color }}</td>
-              <td [class.grey]="idEdit === item.id_color" class="name-color">{{ item.name_color}}</td>
-              <td [class.grey]="idEdit === item.id_color">{{ item.width_color}}</td>
-              <td [class.grey]="idEdit === item.id_color"> {{ item.bab_quantity_color }}</td>
-              <td [class.grey]="idEdit === item.id_color">{{ item.weight_color}}</td>
-              <td [class.grey]="idEdit === item.id_color">{{ item.model}}</td>
-              <td [class.grey]="idEdit === item.id_color">{{ item.pars}}</td>
+            <tr>
+              <td [class.grey]="idEdit === item.id_color" (click)="editItem(item.id_color)">{{ item.id_color }}</td>
+              <td [class.grey]="idEdit === item.id_color" (click)="editItem(item.id_color)" class="name-color">{{ item.name_color}}</td>
+              <td [class.grey]="idEdit === item.id_color" (click)="editItem(item.id_color)">{{ item.width_color}}</td>
+              <td [class.grey]="idEdit === item.id_color" (click)="editItem(item.id_color)"> {{ item.bab_quantity_color }}</td>
+              <td [class.grey]="idEdit === item.id_color" (click)="editItem(item.id_color)">{{ item.weight_color}}</td>
+              <td [class.grey]="idEdit === item.id_color" (click)="editItem(item.id_color)">{{ item.model}}</td>
+              <td [class.grey]="idEdit === item.id_color" (click)="editItem(item.id_color)">{{ item.pars}}</td>
               <td class="epmty"></td>
-              <td class="white"><input type="text" class="mat-val--intp" 
-                [value]="reverseItemsCorrect.controls[index].value.bab_quantity_color" 
-                (change)="changeMaterial(reverseItemsCorrect.controls[index], $event.target.value, 'bab_quantity_color', item.id_color)"></td>
               <td class="white"><input type="text" class="mat-val--intp"
                 [value]="reverseItemsCorrect.controls[index].value.weight_color" 
                 (change)="changeMaterial(reverseItemsCorrect.controls[index], $event.target.value, 'weight_color', item.id_color)"></td>
+              <td class="white"><input type="text" class="mat-val--intp" 
+                [value]="reverseItemsCorrect.controls[index].value.bab_quantity_color" 
+                (change)="changeMaterial(reverseItemsCorrect.controls[index], $event.target.value, 'bab_quantity_color', item.id_color)"></td>
               <button (click)="saveChangesMat(item.id_color, reverseItemsCorrect.controls[index])" class="btn-icon display-none" [class.display-show]="!isHideOk && idChange.includes(item.id_color)">
                 <img class="next-icon icon" src="./assets/img/icons/ok.svg" />
               </button>
@@ -40,31 +40,6 @@
         </tbody>
       </table>
     </div>
-
-    <!-- <div class="table-responsive table table-reserve table-reserve--materials">
-      <table class="table table-lg table-bordered mb-0 border-primary">
-        <thead>
-        <tr class="center-data-second">
-          <th colspan="2" scope="col" sortable="id_order" class="mat-val">мат / зміна / втулк</th>
-        </tr>
-        </thead>
-        <tbody>
-          <ng-container *ngFor="let item of reverseItemsCorrect.controls; let index = index" >
-            <tr>
-              <td><input type="text" class="mat-val--intp" [value]="item.value.babChange" (change)="changeMaterial(item, $event.target.value, 'babChange')"></td>
-              <td><input type="text" class="mat-val--intp" [value]="item.value.weightChange" (change)="changeMaterial(item, $event.target.value, 'weightChange')"></td>
-              <td>
-                
-                <button class="btn-icon display-none" [class.display-none]="isHideOk && !(item.value.babChange || item.value.weightChange)">
-                  <img class="next-icon icon" src="./assets/img/icons/ok.svg" />
-                </button>
-              </td>
-            </tr>
-      </ng-container>
-        </tbody>
-      </table>
-    </div> -->
-
    
     <div class="materials">
       <div class="materials-title title">Матеріали</div>
