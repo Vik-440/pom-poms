@@ -283,7 +283,7 @@ def return_data_from_payment_balans(sender):
                 payment_1 = session.query(
                     func.sum(directory_of_payment.payment).label('my_sum'),
                     func.count(
-                        directory_of_payment.paymentі).label(
+                        directory_of_payment.payment).label(
                         'my_count')).filter(
                     directory_of_payment.data_payment >= data_start_sql,
                     directory_of_payment.data_payment <= data_end_sql

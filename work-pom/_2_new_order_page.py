@@ -2,7 +2,7 @@ from sqlalchemy import func
 from sqlalchemy.orm import Session
 from data_pompom_create import directory_of_order, directory_of_client
 from data_pompom_create import directory_of_group, directory_of_color
-from data_pompom_create import directory_of_model
+from data_pompom_create import directory_of_model, directory_of_payment
 from data_pompom_create import engine
 
 # barrier #####################################################################
@@ -354,6 +354,12 @@ def return_data_from_edit_order(data_from_new_page):
                 id_model.append(row1.id_model)
                 quantity_pars_model.append(row1.quantity_pars_model)
                 price_model_order.append(row1.price_model_order)
+            real_money_order_1 = session.query(
+                func.sum(directory_of_payment.payment).label(
+                    'sum_order')).filter_by(
+                    id_order=id_order).first()
+            for row in real_money_order_1:
+                real_money_order = real_money_order_1.sum_order
 
         if len(str(id_order_1)) < 3:
             one_block = {}
@@ -367,5 +373,6 @@ def return_data_from_edit_order(data_from_new_page):
                          "fulfilled_order": fulfilled_order,
                          "comment_order": comment_order, "id_model": id_model,
                          "quantity_pars_model": quantity_pars_model,
-                         "price_model_order": price_model_order}
+                         "price_model_order": price_model_order,
+                         "real_money_order": real_money_order}
     return one_block

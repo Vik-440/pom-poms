@@ -14,7 +14,8 @@ def return_data_from_material(search):
         j_comment_color = []
         j_bab_weight_color = []
         if search == 999:
-            material_1 = session.query(directory_of_color).all()
+            material_1 = session.query(directory_of_color).order_by(
+                'name_color').all()
         elif search == 0:
             # None
             material_1 = session.query(directory_of_color).filter(
