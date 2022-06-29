@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import locale from 'date-fns/locale/en-US';
 import * as moment from 'moment';
 import { DatepickerOptions } from 'ng2-datepicker';
@@ -13,9 +14,16 @@ import { CreateOrderService } from '../services/create-order.service';
 })
 export class CreateOrderComponent implements OnInit {
 
+  
   constructor(private fb: FormBuilder, private service: CreateOrderService, private spinner: NgxSpinnerService) { }
 
   @Input() isNew: Boolean = true;
+  displayMonths = 2;
+  model: NgbDateStruct;
+  navigation = 'select';
+  showWeekNumbers = false;
+  outsideDays = 'visible';
+
   orderForm: FormArray;
   clientForm: FormGroup;
   isGetPostR: Boolean = false;
@@ -39,7 +47,8 @@ export class CreateOrderComponent implements OnInit {
 
   orders = [1]
 
-  dateToday = new Date();
+  todayYear = new Date().getFullYear();
+  dateToday = null;
   dataPlaneOrder = null;
   dataSendOrder = null;
   dateForms: FormGroup;
@@ -55,6 +64,9 @@ export class CreateOrderComponent implements OnInit {
   ngOnInit(): void {
     this.init();
     this.viewChanges();
+    this.dataPlaneOrder = JSON.parse(localStorage.getItem('data_plane_order')) || null;
+    this.dataSendOrder = JSON.parse(localStorage.getItem('data_send_order')) || null;
+    this.dateToday = JSON.parse(localStorage.getItem('dateToday')) || null;
   }
 
   init() {
@@ -464,10 +476,18 @@ export class CreateOrderComponent implements OnInit {
     });
   }
 
-  changeDataPlaneOrder() {
-    console.log(this.dataPlaneOrder);
-    this.dataSendOrder = new Date(this.dataPlaneOrder);
-    
+  changeDataPlaneOrder(d) {
+    const date = d._inputValue.split('-')
+    this.dataSendOrder = {
+      year: +date[0],
+      month: +date[1],
+      day: +date[2]
+    };
+  }
+
+  lick() {
+    localStorage.setItem('data_plane_order', JSON.stringify(this.dataPlaneOrder));
+      localStorage.setItem('data_send_order', JSON.stringify(this.dataSendOrder));
   }
   makeArrayDataOrder(key) {
     const result = [];
@@ -482,14 +502,14 @@ export class CreateOrderComponent implements OnInit {
     
     const params = {
       id_order: this.idOrder,
-      data_order: moment(this.dateToday).format('YYYY-MM-DD'),
+      data_order: [this.dateToday.year, this.dateToday.month, this.dateToday.day].join('-'),
       id_client: this.clientForm.value.id_client,
       id_recipient: !this.isRecipient ? this.clientForm.value.id_client : this.recipientForm.value.id_client, // (2 або ід_клієнт)
       id_model: this.makeArrayDataOrder('id_model'),
       price_model_order: this.makeArrayDataOrder('price_model'),
       quantity_pars_model: this.makeArrayDataOrder('quantity_pars_model'),
-      data_plane_order: this.dataPlaneOrder ? moment(this.dataPlaneOrder).format('YYYY-MM-DD') : null, // - прогнозована
-      data_send_order: this.dataSendOrder ? moment(this.dataSendOrder).format('YYYY-MM-DD') : null, //- бажана
+      data_plane_order: this.dataPlaneOrder ? [this.dataPlaneOrder.year, this.dataPlaneOrder.month, this.dataPlaneOrder.day].join('-') : null, // - прогнозована
+      data_send_order: this.dataSendOrder ? [this.dataSendOrder.year, this.dataSendOrder.month, this.dataSendOrder.day].join('-') : null, //- бажана
       discont_order: this.discount,
       sum_payment: this.sumAll().split('/')[0].trim(),
       fulfilled_order: false,
@@ -499,6 +519,9 @@ export class CreateOrderComponent implements OnInit {
     this.service.saveOrder(params).subscribe((data: any) => {
       this.idOrder = data.id_order;
       this.doneOrder = true;
+      localStorage.setItem('data_plane_order', JSON.stringify(this.dataPlaneOrder));
+      localStorage.setItem('data_send_order', JSON.stringify(this.dataSendOrder));
+      localStorage.setItem('dateToday', JSON.stringify(this.dateToday))
     });
   }
 
@@ -512,10 +535,13 @@ export class CreateOrderComponent implements OnInit {
       })
     ).subscribe((data: any) => {
       if(Object.keys(data).length) {
+        const arrDataOrder = data.data_order.split('-')
+        const arrDataPlane = data.data_plane_order.split('-')
+        const arrDateSend = data.data_send_order.split('-')
         this.commentOrder = data.comment_order;
-        this.dateToday = new Date(data.data_order);
-        this.dataPlaneOrder = new Date(data.data_plane_order);
-        this.dataSendOrder = new Date(data.data_send_order);
+        this.dateToday = { year: +arrDataOrder[0], month: +arrDataOrder[1], day: +arrDataOrder[2] };
+        this.dataPlaneOrder = { year: +arrDataPlane[0], month: +arrDataPlane[1], day: +arrDataPlane[2] };
+        this.dataSendOrder = { year: +arrDateSend[0], month: +arrDateSend[1], day: +arrDateSend[2] };
         this.discount = data.discont_order;
         this.fulfilledOrder = data.fulfilled_order;
         this.service.getInfoForOrder({open_id_client: data.id_client})
@@ -598,9 +624,6 @@ export class CreateOrderComponent implements OnInit {
         })
         this.spinner.hide();
         this.isNew = false;
-        console.log(1);
-        
-        
       } else {
         this.init();
         this.viewChanges();

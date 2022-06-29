@@ -45,8 +45,17 @@
       margin-left: 20px
     &--calendar
       margin-left: 5px
-      & ::ng-deep
-        input
+      width: 132px
+      height: 32px
+      background: none
+      border: none
+      box-sizing: border-box
+      font-weight: 600
+      font-size: 20px
+      line-height: 12px
+      color: #727272
+      text-align: center
+      &input
           width: 132px
           height: 32px
           background: none
@@ -308,7 +317,11 @@ input
       line-height: 12px
       color: #727272
 
+.calendar-block
+  display: flex
 
+button.calendar 
+  border: none
 ::ng-deep
   .calendar-container
     width: 210px !important
