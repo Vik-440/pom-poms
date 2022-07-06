@@ -14,4 +14,5 @@ In this project, I'm responsible for backend part
 |             | PostgreSQL |
 
 To run this project locally you should use this command:
+ 
  ``sudo docker-compose -f docker-compose.prod.yml up --build``
