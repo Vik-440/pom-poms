@@ -1,4 +1,11 @@
 .table-first
+  display: flex
+  flex-direction: column
+  width: 457px !important
+  &--save
+    width: 89px
+    align-self: flex-end
+    margin-top: 10px
   tr
     height: 26px !important
     text-align: center
@@ -10,3 +17,85 @@
     width: 113px
   .sum
     width: 123px
+
+.money
+  margin-left: 54px
+  width: 104px
+  &-header
+    width: 104px
+    height: 18px
+    font-family: 'Futura New'
+    font-style: normal
+    font-weight: 700
+    font-size: 18px
+    line-height: 12px
+    color: #727272
+    text-align: center
+    width: 100%
+    text-transform: uppercase
+    margin-bottom: 6px
+  &-selects
+  &-select
+    margin-bottom: 5px
+    &--header
+      height: 12px
+      font-family: 'Futura New'
+      font-style: normal
+      font-weight: 400
+      font-size: 16px
+      line-height: 12px
+      color: #727272
+    &--input
+      width: 110px
+      height: 25px
+      background: #FFFFFF
+      border: 0.5px solid #727272
+      border-radius: 25px
+
+
+.apply
+  width: 104px
+  height: 25px
+  background: #32FA00
+  border-radius: 25px
+  font-size: 13px
+  border: none
+  color: #fff
+  text-align: center
+  text-transform: uppercase
+  margin-top: 26px
+  &.payments-apply
+  &.spending-apply
+
+.spending
+  margin-top: 43px
+
+.calendar 
+  width: 110px
+  height: 25px
+  background: #FFFFFF
+  border: 0.5px solid #727272
+  border-radius: 25px
+  &:active
+    border: 0.5px solid #727272
+  &:focus
+    border: 0.5px solid #727272
+
+.calendar-block
+  display: flex
+  width: 100%
+.finance-page
+  display: flex
+
+::ng-deep
+  .ng-select.ng-select-single .ng-select-container .ng-value-container .ng-input
+    top: 0
+  .ng-select .ng-select-container .ng-value-container
+    padding-left: 3px
+  .ng-select .ng-select-container
+    min-height: auto !important
+    background: none
+    border: none
+  .ng-select.ng-select-single 
+    .ng-select-container
+      height: auto !important

@@ -498,8 +498,6 @@ export class CreateOrderComponent implements OnInit {
   }
 
   saveAll() {
-    console.log(this.clientForm.value);
-    
     const params = {
       id_order: this.idOrder,
       data_order: [this.dateToday.year, this.dateToday.month, this.dateToday.day].join('-'),
