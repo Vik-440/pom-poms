@@ -1,7 +1,7 @@
 import json
 from sqlalchemy.orm import Session
-from data_pompom_create import directory_of_color
-from data_pompom_create import engine
+from db.models import directory_of_color
+from db.models import engine
 
 
 def return_data_from_material(search):
@@ -58,7 +58,6 @@ def return_data_from_material(search):
             full_block.append(one_block)
     # data_material={"testdata" : "Test-GET-OK"}
     return json.dumps(full_block)     # , ensure_ascii=False, sort_keys = True
-# barrier #####################################################################
 
 
 def return_data_from_material_one(search):
@@ -91,7 +90,6 @@ def return_data_from_material_one(search):
                       "reserve_color": j_reserve_color,
                       "weight_10m_color": j_weight_10m_color}
     return json.dumps(full_block)
-# barrier #####################################################################
 
 
 def return_data_from_material_new(search):
@@ -116,7 +114,6 @@ def return_data_from_material_new(search):
             j_id_color = ins.id_color
             one_block = {"id_color": j_id_color}
             return one_block
-# barrier #####################################################################
 
 
 def return_data_from_material_change(search):
@@ -134,7 +131,6 @@ def return_data_from_material_change(search):
 
         one_block = {"color_change": "ok"}
     return one_block
-# barrier #####################################################################
 
 
 def return_data_from_material_change_full(search):

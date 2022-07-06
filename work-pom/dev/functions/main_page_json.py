@@ -2,10 +2,10 @@ import json
 from sqlalchemy import func
 from datetime import datetime
 from sqlalchemy.orm import Session
-from data_pompom_create import directory_of_order, directory_of_client
-from data_pompom_create import directory_of_group, directory_of_payment
-from data_pompom_create import directory_of_model
-from data_pompom_create import engine
+from db.models import directory_of_order, directory_of_client
+from db.models import directory_of_group, directory_of_payment
+from db.models import directory_of_model
+from db.models import engine
 
 
 def return_data_from_main_page(asked):
@@ -62,7 +62,6 @@ def return_data_from_main_page(asked):
                 phone_client=phone_client_tmp).all()
             for row0 in id_client_1:
                 id_client3 = row0.id_client
-# barrier #####################################################################
         if 'phone_client' in asked:
             if 'fulfilled_order' in asked:
                 if fulfilled_order:
@@ -99,7 +98,6 @@ def return_data_from_main_page(asked):
                 directory_of_order.data_order >= data_start,
                 directory_of_order.data_order <= data_end).filter_by(
                 fulfilled_order='FALSE').order_by('id_order').all()
-########
         for row in id_order_1:
             id_order.append(row.id_order)
             comment_order.append(row.comment_order)
@@ -107,14 +105,12 @@ def return_data_from_main_page(asked):
             data_plane_order.append(str(row.data_plane_order))
             fulfilled_order.append(row.fulfilled_order)
             sum_payment.append(row.sum_payment - row.discont_order)
-########
             id_group_1 = session.query(directory_of_group).filter_by(
                 id_order=row.id_order).all()
             if (len(str(id_group_1))) < 3:
                 return json.dumps({
                     "Помилка в записі клієнта (не має моделей у Group)-id:":
                     row.id_order}), 500
-########
             tmp_kolor_model, tmp_kod_model, tmp_comment_model,\
                 tmp_quantity_pars_model, tmp_phase_1_model, \
                 tmp_phase_2_model, tmp_phase_3_model = [], [], [], [], [], [],\
@@ -157,7 +153,6 @@ def return_data_from_main_page(asked):
             kolor_model.append(tmp_kolor_model)
             kod_model.append(tmp_kod_model)
             comment_model.append(tmp_comment_model)
-# тут виловлювати помилку, якщо поля не існує. ################################
             id_client_2 = session.query(directory_of_client).filter_by(
                 id_client=row.id_client).all()
             if (len(str(id_client_2))) < 3:
@@ -221,7 +216,5 @@ def return_data_from_main_page(asked):
                          "fulfilled_order": el17, "np_number": el18,
                          "zip_code": el19, "street_house_apartment": el20,
                          "second_name_client": el21, "first_name_client": el22}
-            # print(one_block)
-            # print("test-OK-4")
             full_block.append(one_block)
     return json.dumps(full_block)
