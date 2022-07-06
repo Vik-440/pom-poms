@@ -1,9 +1,9 @@
-### Pom-poms
+## Pom-poms
 
 This is a project for my own use, for my own business. 
 In this project, I'm responsible for backend part
 
-## Technical stack
+### Technical stack
 
 | Frontend    | Backend    |
 | ------------| ---------- |
