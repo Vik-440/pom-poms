@@ -1,7 +1,6 @@
 from sqlalchemy import Date, ForeignKey, Numeric, create_engine, Column
 from sqlalchemy import Integer, String, Boolean
 from sqlalchemy.ext.declarative import declarative_base
-import psycopg2
 from dotenv import load_dotenv
 import os
 
@@ -17,14 +16,11 @@ class directory_of_order(Base):
     data_plane_order = Column('data_plane_order', Date)
     id_client = Column('id_client', Integer)
     id_recipient = Column('id_recipient', Integer)
-    # doc_add_order = Column('doc_add_order', Boolean)
     data_send_order = Column('data_send_order', Date)
     fulfilled_order = Column('fulfilled_order', Boolean)
-    sum_payment = Column('sum_payment', Integer)            # Integer
-    discont_order = Column('discont_order', Integer)        # numeric (8,2)
+    sum_payment = Column('sum_payment', Integer)           
+    discont_order = Column('discont_order', Integer)       
     comment_order = Column('comment_order', String)
-    # directory_of_group = relationship("directory_of_group")
-    # directory_of_payment = relationship("directory_of_payment")
 
 
 class directory_of_client(Base):
@@ -41,14 +37,6 @@ class directory_of_client(Base):
     zip_code = Column('zip_code', Integer)
     street_house_apartment = Column('street_house_apartment', String)
     comment_client = Column('comment_client', String)
-
-# class directory_of_team(Base):
-#     __tablename__ = 'directory_of_team'
-#     id_team = Column('id_team', Integer, primary_key=True)
-#     name_team = Column('name_team', String)
-#     id_sity = Column('id_sity', Integer)
-#     id_coach = Column('id_client', Integer)
-#     comment_team = Column('comment_team', String)
 
 
 class directory_of_model(Base):
@@ -75,10 +63,9 @@ class directory_of_group(Base):
     id_order = Column('id_order', Integer)
     quantity_pars_model = Column('quantity_pars_model', Integer)
     phase_1_model = Column('phase_1_model', Boolean)
-    phase_2_model = Column('phase_2_model', Boolean)    # Integer
+    phase_2_model = Column('phase_2_model', Boolean)
     phase_3_model = Column('phase_3_model', Boolean)
     price_model_order = Column('price_model_order', Integer)
-    # directory_of_order = relationship("directory_of_order")
 
 
 class directory_of_payment(Base):
@@ -86,15 +73,9 @@ class directory_of_payment(Base):
     id_payment = Column('id_payment', Integer, primary_key=True)
     id_order = Column('id_order', Integer, ForeignKey(
         'directory_of_order.id_order'))
-    payment = Column('payment', Integer)        # Integer   Numeric(8, 2)
+    payment = Column('payment', Integer)        
     metod_payment = Column('metod_payment', String)
     data_payment = Column('data_payment', Date)
-    # directory_of_order = relationship("directory_of_order")
-
-# class directory_of_sity(Base):
-#     __tablename__ = 'directory_of_sity'
-#     id_sity = Column('id_sity', Integer, primary_key=True)
-#     sity = Column('sity', String)
 
 
 class directory_of_color(Base):

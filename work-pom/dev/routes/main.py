@@ -1,27 +1,23 @@
-from flask import Flask, jsonify, request
-from main_page_json import return_data_from_main_page
-from new_order_json import return_data_from_new_order
-from new_order_json import return_data_from_new_order_post
-from material_json import return_data_from_material
-from material_json import return_data_from_material_one
-from material_json import return_data_from_material_change
-from material_json import return_data_from_material_new
-from material_json import return_data_from_material_change_full
-from finance_json import return_data_from_finance
-from finance_json import return_data_from_payment
-from finance_json import return_data_from_outlay
-from finance_json import return_data_from_payment_search
-from finance_json import return_data_from_outlay_search
-from finance_json import return_data_from_payment_change
-from finance_json import return_data_from_outlay_change
-from finance_json import return_data_from_payment_id_order
-from finance_json import return_data_from_payment_stat
-from finance_json import return_data_from_payment_balans
-from flask_cors import CORS
-
-app = Flask(__name__)
-CORS(app)
-app.config['JSON_AS_ASCII'] = False
+from flask import jsonify, request
+from app import app
+from functions.main_page_json import return_data_from_main_page
+from functions.new_order_json import return_data_from_new_order
+from functions.new_order_json import return_data_from_new_order_post
+from functions.material_json import return_data_from_material
+from functions.material_json import return_data_from_material_one
+from functions.material_json import return_data_from_material_change
+from functions.material_json import return_data_from_material_new
+from functions.material_json import return_data_from_material_change_full
+from functions.finance_json import return_data_from_finance
+from functions.finance_json import return_data_from_payment
+from functions.finance_json import return_data_from_outlay
+from functions.finance_json import return_data_from_payment_search
+from functions.finance_json import return_data_from_outlay_search
+from functions.finance_json import return_data_from_payment_change
+from functions.finance_json import return_data_from_outlay_change
+from functions.finance_json import return_data_from_payment_id_order
+from functions.finance_json import return_data_from_payment_stat
+from functions.finance_json import return_data_from_payment_balans
 
 
 @app.route('/')
@@ -122,6 +118,3 @@ def finance():
     except Exception as e:
         return f'Error in function finance: {e}', 500
 
-
-if __name__ == '__main__':
-    app.run(debug=True)

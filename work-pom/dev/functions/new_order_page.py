@@ -1,11 +1,9 @@
 from sqlalchemy import func
 from sqlalchemy.orm import Session
-from data_pompom_create import directory_of_order, directory_of_client
-from data_pompom_create import directory_of_group, directory_of_color
-from data_pompom_create import directory_of_model, directory_of_payment
-from data_pompom_create import engine
-
-# barrier #####################################################################
+from db.models import directory_of_order, directory_of_client
+from db.models import directory_of_group, directory_of_color
+from db.models import directory_of_model, directory_of_payment
+from db.models import engine
 
 
 def return_data_from_order_page():
@@ -14,10 +12,9 @@ def return_data_from_order_page():
         for row222 in id_new_order:
             j_id_new_order = row222[0]+1
         time_last_order = '2022-12-31'
-        # session.close()
         return {
             'id_new_order': j_id_new_order, 'time_last_order': time_last_order}
-# barrier #####################################################################
+
 
 
 def return_data_from_client(sl_phone, sl_second_name, open_id_client):
@@ -32,7 +29,6 @@ def return_data_from_client(sl_phone, sl_second_name, open_id_client):
         else:
             id_client_3 = session.query(directory_of_client).filter_by(
                 id_client=open_id_client).all()
-########
         for row in id_client_3:
             j_id_client = row.id_client
             j_sity = row.sity
@@ -60,7 +56,6 @@ def return_data_from_client(sl_phone, sl_second_name, open_id_client):
                      "street_house_apartment": j_street_house_apartment,
                      "comment_client": j_comment_client}
     return one_block
-# barrier #####################################################################
 
 
 def return_data_from_kod(sl_kod, open_id_model):
@@ -131,7 +126,6 @@ def return_data_from_kod(sl_kod, open_id_model):
                          "comment_model": j_comment_model,
                          "kolor_model": j_kolor_model}
     return one_block
-# barrier #####################################################################
 
 
 def return_data_from_full_kod(data_from_new_page):
@@ -188,7 +182,6 @@ def return_data_from_full_kod(data_from_new_page):
             # q1q = ('id_model=' + str(j_id_model) + ' is updated')
             one_block = {"id_model": j_id_model}
         return one_block
-# barrier #####################################################################
 
 
 def return_data_from_full_person(data_from_new_page):
@@ -245,7 +238,6 @@ def return_data_from_full_person(data_from_new_page):
             q1q = ('updated id_client - ' + str(tmp_id_client))
             one_block = {"phone_client": q1q}
         return one_block
-# barrier #####################################################################
 
 
 def return_data_from_final_order(data_from_new_page):
@@ -268,7 +260,6 @@ def return_data_from_final_order(data_from_new_page):
         if check_client is None:
             raise Exception("Error in real recipient number ")
             # return f'Error in real recipient number {e}', 500
-# here work now
         id_order = int(data_from_new_page['id_order'])
         check_order = session.query(directory_of_order).filter_by(
             id_order=id_order).scalar()
@@ -327,7 +318,6 @@ def return_data_from_final_order(data_from_new_page):
             w1w = w1w-1
         one_block = {"id_order": j_id_order}
         return one_block
-# barrier #####################################################################
 
 
 def return_data_from_edit_order(data_from_new_page):
