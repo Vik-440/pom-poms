@@ -32,8 +32,6 @@ export class ReserveComponent implements OnInit {
         
       })
     });
-    console.log(this.reverseItemsCorrect, this.reverseItemsCorrect.controls);
-    
 
     this.materialFilter = [
       { id: 999, value: true, name: 'всі матеріали' },

@@ -2,9 +2,9 @@ import json
 from sqlalchemy import func
 from datetime import datetime, timedelta
 from sqlalchemy.orm import Session, mapper
-from data_pompom_create import directory_of_payment
-from data_pompom_create import directory_of_outlay, directory_of_outlay_class
-from data_pompom_create import engine
+from db.models import directory_of_payment
+from db.models import directory_of_outlay, directory_of_outlay_class
+from db.models import engine
 
 
 def return_data_from_finance(asked):
@@ -68,7 +68,6 @@ def return_data_from_finance(asked):
                      "comment_outlay": q4[4]}
         full_block.append(one_block)
     return json.dumps(full_block)
-# barrier #####################################################################
 
 
 def return_data_from_payment(sender):
@@ -85,7 +84,6 @@ def return_data_from_payment(sender):
             session.add(z1)
         session.commit()
     return({"payment_group": "ok"})
-###############################################################################
 
 
 def return_data_from_outlay(sender):
@@ -102,7 +100,6 @@ def return_data_from_outlay(sender):
             session.add(z1)
         session.commit()
     return({"outlay_group": "ok"})
-###############################################################################
 
 
 def return_data_from_payment_search(sender):
@@ -144,7 +141,6 @@ def return_data_from_payment_search(sender):
                          "data_payment": q1[4]}
             full_block.append(one_block)
     return json.dumps(full_block)
-# barrier #####################################################################
 
 
 def return_data_from_outlay_search(sender):
@@ -172,7 +168,6 @@ def return_data_from_outlay_search(sender):
                          "comment_outlay": q4[4]}
             full_block.append(one_block)
     return json.dumps(full_block)
-# barrier #####################################################################
 
 
 def return_data_from_payment_change(sender):
@@ -188,7 +183,6 @@ def return_data_from_payment_change(sender):
                  'metod_payment': metod_payment, 'data_payment': data_payment})
         session.commit()
     return({"id_payment": "ok"})
-# barrier #####################################################################
 
 
 def return_data_from_outlay_change(sender):
@@ -206,7 +200,6 @@ def return_data_from_outlay_change(sender):
                  'comment_outlay': comment_outlay})
         session.commit()
     return({"id_outlay": "ok"})
-# barrier #####################################################################
 
 
 def return_data_from_payment_id_order(sender):
@@ -232,7 +225,6 @@ def return_data_from_payment_id_order(sender):
                          "data_payment": q1[4]}
             full_block.append(one_block)
     return json.dumps(full_block)
-# barrier #####################################################################
 
 
 def return_data_from_payment_balans(sender):
@@ -320,7 +312,6 @@ def return_data_from_payment_balans(sender):
             day = day-step_day
         # full_block={"testdata" : "in progres"}
     return json.dumps(full_block)
-# barrier #####################################################################
 
 
 def return_data_from_payment_stat(search):
@@ -337,7 +328,6 @@ def return_data_from_payment_stat(search):
 
         full_block = {"stat_payment": stat_payment, "stat_outlay": stat_outlay}
     return json.dumps(full_block)
-# barrier #####################################################################
 
 
 def return_forecast(stat, sql_sum, sql_data):
@@ -371,15 +361,11 @@ def return_forecast(stat, sql_sum, sql_data):
     data_start_sql = ds.replace(month=1, day=1, hour=0, minute=0, second=0)
     data_end_sql = data_start_sql+time_step
     stat = return_stat(data_start_sql, data_end_sql, stat, sql_sum, sql_data)
-    # print(data_start_sql)
-    # print(data_end_sql)
     days_year = ds - data_start_sql
     forecast = round((stat[0]/days_year.days)*365, 2)
     stat.insert(0, forecast)
 
     return(stat)
-
-# barrier #####################################################################
 
 
 def return_stat(data_start_sql, data_end_sql, stat, sql_sum, sql_data):
@@ -390,7 +376,6 @@ def return_stat(data_start_sql, data_end_sql, stat, sql_sum, sql_data):
             payment = payment_1.my_sum
         stat.insert(0, payment)
     return(stat)
-# barrier #####################################################################
 
 
 def block_json(pos1, pos2, pos3, pos4, pos5):

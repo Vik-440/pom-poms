@@ -1,4 +1,4 @@
-<div class="page pl63 mt27">
+<div class="page pl63 mt27 finance-page">
   <div class="table-responsive table table-first">
       <table class="table table-lg table-bordered mb-0 border-primary">
         <thead>
@@ -16,11 +16,72 @@
               <td>{{ item.metod_payment	}}</td>
               <td>{{ item.id_order	}}</td>
               <td>{{ item.payment	}}</td>
+              <td>
+                <button class="btn-icon display-none">
+                  <img class="next-icon icon" src="./assets/img/icons/ok.svg" />
+                </button>
+              </td>
             </tr>
       </ng-container>
         </tbody>
       </table>
+      <button class="save-btn left table-first--save">Зберегти</button>
   </div>
-  <div class="money"></div>
+  <div class="money">
+    <div class="payments" [formGroup]="paymentFrom">
+      <div class="money-header">Оплати</div>
+      <div class="money-selects">
+        <div class="money-select">
+          <p class="money-select--header">метод оплати</p>
+          <ng-select
+            class="money-select--input"
+            formControlName="metod"
+             [items]="metodPayment" >
+          </ng-select>
+        </div>
+  
+        <div class="money-select">
+          <p class="money-select--header">дата від</p>
+          <input type="date" class="calendar"  formControlName="dateFrom">
+        </div>
+  
+        <div class="money-select">
+          <p class="money-select--header">дата до</p>
+          <input type="date" class="calendar" formControlName="dateTo">
+        </div>
+  
+        <div class="money-select">
+          <p class="money-select--header">період</p>
+          <ng-select 
+            class="money-select--input"
+            [items]="periods" >
+          </ng-select>
+        </div>
+  
+        <div class="money-select">
+          <p class="money-select--header">№ замовлення</p>
+          <input type="text" class="money-select--input">
+        </div>
+      </div>
+
+      <button class="payments-apply apply" (click)="click()">Застосувати</button>
+    </div>
+
+    <div class="spending" [formGroup]="spendingForm">
+      <div class="money-header">Витрати</div>
+      <div class="money-selects">
+  
+        <div class="money-select">
+          <p class="money-select--header">дата від</p>
+          <input type="date" class="calendar" formControlName="dateFrom">
+        </div>
+  
+        <div class="money-select">
+          <p class="money-select--header">дата до</p>
+          <input type="date" class="calendar" formControlName="dateTo">
+        </div>
+      </div>
+      <button class="spending-apply apply">Застосувати</button>
+  </div>
   <div class="table-second"></div>
 </div>

@@ -1,19 +1,18 @@
 ## Pom-poms
 
-- **git status**      #Перевірка мого репозитоію і його статусу
+This is a project for my own use, for my own business. 
+In this project, I'm responsible for backend part
 
-- **git add .**       # Додавання файлів в Р
+### Technical stack
 
-- **git commit -m"jflkdjflajdsl"** #Коментар до файлів перед відправкою
+| Frontend    | Backend    |
+| ------------| ---------- |
+| Angular     | Flask      |
+| TypeScript  | Python     |
+| SASS        | SQLAlchemy |
+| HTML        | Docker     |
+|             | PostgreSQL |
 
-- **git push**        # безпосередня відправка файлів
-
-- **git pull**        # Отримання файлів з хмари у мій проект
-
-- **git pull origin main**
-
-- **commit**
-
-- sudo docker-compose -f docker-compose.prod.yml up --build
-
-- sudo docker-compose -f docker-compose.prod.yml up --build
+To run this project locally you should use this command:
+ 
+ ``sudo docker-compose -f docker-compose.prod.yml up --build``
