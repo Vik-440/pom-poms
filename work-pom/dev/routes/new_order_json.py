@@ -7,9 +7,9 @@ from _2_new_order_page import return_data_from_final_order
 from _2_new_order_page import return_data_from_edit_order
 import json
 from sqlalchemy.orm import sessionmaker, session
-from data_pompom_create import directory_of_order, directory_of_client
-from data_pompom_create import directory_of_color, directory_of_model
-from data_pompom_create import engine
+from db.models import directory_of_order, directory_of_client
+from db.models import directory_of_color, directory_of_model
+from db.models import engine
 
 Session = sessionmaker(engine)
 Session.configure(bind=engine)
