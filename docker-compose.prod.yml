@@ -1,7 +1,7 @@
 version: "2"
 services:
   flask:
-    build: /work-pom/demo
+    build: ./work-pom/demo
     ports:
       - "5000:5000"
     env_file:
