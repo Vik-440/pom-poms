@@ -4,19 +4,19 @@ from requests import session
 from sqlalchemy import func
 from datetime import datetime
 from sqlalchemy.orm import Session
-from db.models import directory_of_order, directory_of_client
-from db.models import directory_of_group, directory_of_payment
-from db.models import directory_of_model
-from db.models import engine
+from models import directory_of_order, directory_of_client
+from models import directory_of_group, directory_of_payment
+from models import directory_of_model
+from models import engine
 import datetime
 import psycopg2
 
 with Session(engine) as session:
-    a1a = 58
+    a1a = 0
     my_list, tmp1, tmp2, tmp3, tmp4 = [], [], [], [], []
     while a1a < 71:
         my_list.append(a1a)
-        a1a += 3
+        a1a += 1
     my_list_2 = my_list[:]
 #
     q1 = (datetime.datetime.now())
@@ -44,11 +44,13 @@ with Session(engine) as session:
     while k < q:
         print(tmp4[k], " - ", tmp3[k])
         k += 1
-    print(q2-q1)
     print("---------------------------------")
-    print(q3-q2)
     q = len(tmp1)
     k = 0
     while k < q:
         print(tmp2[k], " - ", tmp1[k])
         k += 1
+    print("---------------------------------")
+    print(q2-q1)
+    print(q3-q2)
+    # print(q2-q1-q3+q2)

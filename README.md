@@ -16,3 +16,5 @@ In this project, I'm responsible for backend part
 To run this project locally you should use this command:
  
  ``sudo docker-compose -f docker-compose.prod.yml up --build``
+ cd Projects/pom-poms/work-pom/dev
+

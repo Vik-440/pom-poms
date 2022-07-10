@@ -2,10 +2,10 @@ import json
 from sqlalchemy import func
 from datetime import datetime
 from sqlalchemy.orm import Session
-from db.models import directory_of_order, directory_of_client
-from db.models import directory_of_group, directory_of_payment
-from db.models import directory_of_model
-from db.models import engine
+from models import directory_of_order, directory_of_client
+from models import directory_of_group, directory_of_payment
+from models import directory_of_model
+from models import engine
 
 
 def return_data_from_main_page(asked):
