@@ -2,9 +2,9 @@ import json
 from sqlalchemy import func
 from datetime import datetime, timedelta
 from sqlalchemy.orm import Session, mapper
-from models import directory_of_payment
-from models import directory_of_outlay, directory_of_outlay_class
-from models import engine
+from db.models import directory_of_payment
+from db.models import directory_of_outlay, directory_of_outlay_class
+from db.models import engine
 
 
 def return_data_from_finance(asked):

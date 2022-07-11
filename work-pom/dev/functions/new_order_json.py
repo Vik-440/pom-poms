@@ -1,15 +1,15 @@
-from new_order_page import return_data_from_order_page
-from new_order_page import return_data_from_client
-from new_order_page import return_data_from_kod
-from new_order_page import return_data_from_full_kod
-from new_order_page import return_data_from_full_person
-from new_order_page import return_data_from_final_order
-from new_order_page import return_data_from_edit_order
+from functions.new_order_page import return_data_from_order_page
+from functions.new_order_page import return_data_from_client
+from functions.new_order_page import return_data_from_kod
+from functions.new_order_page import return_data_from_full_kod
+from functions.new_order_page import return_data_from_full_person
+from functions.new_order_page import return_data_from_final_order
+from functions.new_order_page import return_data_from_edit_order
 import json
 from sqlalchemy.orm import sessionmaker, session
-from models import directory_of_order, directory_of_client
-from models import directory_of_color, directory_of_model
-from models import engine
+from db.models import directory_of_order, directory_of_client
+from db.models import directory_of_color, directory_of_model
+from db.models import engine
 
 Session = sessionmaker(engine)
 Session.configure(bind=engine)

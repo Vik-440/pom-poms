@@ -1,7 +1,7 @@
 import json
 from sqlalchemy.orm import Session
-from models import directory_of_color
-from models import engine
+from db.models import directory_of_color
+from db.models import engine
 
 
 def return_data_from_material(search):

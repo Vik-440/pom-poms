@@ -18,8 +18,8 @@ class directory_of_order(Base):
     id_recipient = Column('id_recipient', Integer)
     data_send_order = Column('data_send_order', Date)
     fulfilled_order = Column('fulfilled_order', Boolean)
-    sum_payment = Column('sum_payment', Integer)
-    discont_order = Column('discont_order', Integer)
+    sum_payment = Column('sum_payment', Integer)           
+    discont_order = Column('discont_order', Integer)       
     comment_order = Column('comment_order', String)
 
 
@@ -73,7 +73,7 @@ class directory_of_payment(Base):
     id_payment = Column('id_payment', Integer, primary_key=True)
     id_order = Column('id_order', Integer, ForeignKey(
         'directory_of_order.id_order'))
-    payment = Column('payment', Integer)
+    payment = Column('payment', Integer)        
     metod_payment = Column('metod_payment', String)
     data_payment = Column('data_payment', Date)
 

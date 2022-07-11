@@ -1,9 +1,9 @@
 from sqlalchemy import func
 from sqlalchemy.orm import Session
-from models import directory_of_order, directory_of_client
-from models import directory_of_group, directory_of_color
-from models import directory_of_model, directory_of_payment
-from models import engine
+from db.models import directory_of_order, directory_of_client
+from db.models import directory_of_group, directory_of_color
+from db.models import directory_of_model, directory_of_payment
+from db.models import engine
 
 
 def return_data_from_order_page():
@@ -14,6 +14,7 @@ def return_data_from_order_page():
         time_last_order = '2022-12-31'
         return {
             'id_new_order': j_id_new_order, 'time_last_order': time_last_order}
+
 
 
 def return_data_from_client(sl_phone, sl_second_name, open_id_client):
