@@ -16,7 +16,7 @@
         </tr>
         </thead>
         <tbody>
-          <ng-container  *ngFor="let item of reserveItems; let index = index">
+           <ng-container  *ngFor="let item of reserveItems; let index = index">
             <tr>
               <td [class.grey]="idEdit === item.id_color" (click)="editItem(item.id_color)">{{ item.id_color }}</td>
               <td [class.grey]="idEdit === item.id_color" (click)="editItem(item.id_color)" class="name-color">{{ item.name_color}}</td>
