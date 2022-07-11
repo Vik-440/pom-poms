@@ -1,31 +1,3 @@
-<<<<<<< HEAD:work-pom/demo/app_flask.py
-from flask import Flask, jsonify, request
-from _1_main_page_json import return_data_from_main_page
-# from _1_main_page_new import return_data_from_main_page
-from _2_new_order_json import return_data_from_new_order
-from _2_new_order_json import return_data_from_new_order_post
-from _3_material_json import return_data_from_material
-from _3_material_json import return_data_from_material_one
-from _3_material_json import return_data_from_material_change
-from _3_material_json import return_data_from_material_new
-from _3_material_json import return_data_from_material_change_full
-from _4_finance_json import return_data_from_finance
-from _4_finance_json import return_data_from_payment
-from _4_finance_json import return_data_from_outlay
-from _4_finance_json import return_data_from_payment_search
-from _4_finance_json import return_data_from_outlay_search
-from _4_finance_json import return_data_from_payment_change
-from _4_finance_json import return_data_from_outlay_change
-from _4_finance_json import return_data_from_payment_id_order
-from _4_finance_json import return_data_from_payment_stat
-from _4_finance_json import return_data_from_payment_balans
-from flask_cors import CORS
-
-app = Flask(__name__)
-CORS(app)
-app.config['JSON_AS_ASCII'] = False
-###############################################################################
-=======
 from flask import jsonify, request
 from app import app
 from functions.main_page_json import return_data_from_main_page
@@ -46,7 +18,6 @@ from functions.finance_json import return_data_from_outlay_change
 from functions.finance_json import return_data_from_payment_id_order
 from functions.finance_json import return_data_from_payment_stat
 from functions.finance_json import return_data_from_payment_balans
->>>>>>> b5a6a070b1fdbdb0a7815945e5d270ce24f282be:work-pom/demo/routes/main.py
 
 
 @app.route('/')
