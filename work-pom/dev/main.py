@@ -1,6 +1,7 @@
 from flask import jsonify, request
 from app import app
-from main_page_json import return_data_from_main_page
+# from main_page_json import return_data_from_main_page
+from main_page_new import return_data_from_main_page
 from new_order_json import return_data_from_new_order
 from new_order_json import return_data_from_new_order_post
 from material_json import return_data_from_material

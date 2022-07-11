@@ -1,11 +1,14 @@
 import json
+from sqlalchemy import select
 from sqlalchemy import func
 from datetime import datetime
 from sqlalchemy.orm import Session
-from db.models import directory_of_order, directory_of_client
-from db.models import directory_of_group, directory_of_payment
-from db.models import directory_of_model
-from db.models import engine
+from models import directory_of_order, directory_of_client
+from models import directory_of_group, directory_of_payment
+from models import directory_of_model
+from models import engine
+# from requests import session
+# import datetime
 
 
 def return_data_from_main_page(asked):
@@ -19,16 +22,6 @@ def return_data_from_main_page(asked):
             session.commit()
             one_block = {"id_order": "ok"}
             return json.dumps(one_block)
-        # if 'phase_id_order' in asked:
-        #     id_order=asked['phase_id_order']
-        #     phase_1_model=asked['phase_1_model']
-        #     phase_2_model=asked['phase_2_model']
-        #     phase_3_model=asked['phase_3_model']
-        #     rows=session.query(directory_of_group).filter_by(id_order=id_order
-        #         ).update({'phase_1_model':phase_1_model,'phase_2_model':phase_2_model,'phase_3_model':phase_3_model})
-        #     session.commit()
-        #     one_block = {"phase_id_order": "ok"}
-        #     return json.dumps(one_block)
 
         id_order, comment_order, data_order, kolor_model, kod_model, \
             comment_model, quantity_pars_model, phase_1_model, phase_2_model, \
@@ -56,7 +49,7 @@ def return_data_from_main_page(asked):
         id_client3 = []
         if 'fulfilled_order' in asked:
             fulfilled_order_1 = asked['fulfilled_order']
-        # else: fulfilled_order_1='FALSE'#false
+
         if 'phone_client' in asked:
             phone_client_tmp = str(asked['phone_client'])
             id_client_1 = session.query(directory_of_client).filter_by(
@@ -111,81 +104,53 @@ def return_data_from_main_page(asked):
             id_client.append(row.id_client)
             id_recipient.append(row.id_recipient)
 # рудемент ?
-        print(id_client)
-        print(id_recipient)
-        id_group_1 = session.query(directory_of_group).filter(
-            directory_of_group.id_order.in_(id_order)).order_by(
-                'id_order').all()
-        # if (len(str(id_group_1))) < 3:
-        #     return json.dumps({
-        #         "Помилка в записі клієнта (не має моделей у Group)-id:":
-        #         row.id_order}), 500
-########
-        tmp_kolor_model, tmp_kod_model, tmp_comment_model,\
-            tmp_quantity_pars_model, tmp_phase_1_model, \
-            tmp_phase_2_model, tmp_phase_3_model = [], [], [], [], [], [], []
+        # print(id_client)
+        # print(id_recipient)
         id_model = []
+        for row in id_order:
+            id_group_1 = select(
+                directory_of_group.quantity_pars_model,
+                directory_of_group.phase_1_model,
+                directory_of_group.phase_2_model,
+                directory_of_group.phase_3_model,
+                directory_of_group.id_model).where(
+                directory_of_group.id_order == row).order_by(
+                    'id_group_model')
+            id_group_111 = session.execute(id_group_1)
 # відсутність груп прибрав тут #
-        for row1 in id_group_1:
-            quantity_pars_model.append(row1.quantity_pars_model)
-            phase_1_model.append(row1.phase_1_model)
-            phase_2_model.append(row1.phase_2_model)
-            phase_3_model.append(row1.phase_3_model)
-            id_model.append(row1.id_model)
+            for row1 in id_group_111:
+                quantity_pars_model.append(row1.quantity_pars_model)
+                phase_1_model.append(row1.phase_1_model)
+                phase_2_model.append(row1.phase_2_model)
+                phase_3_model.append(row1.phase_3_model)
+                id_model.append(row1.id_model)
 
-            # if row1.id_model is None:
-            #     return json.dumps({
-            #         "Відсутній запис моделі у Group - id:": row.id_order}
-            #         ), 500
-            # if row1.quantity_pars_model is None:
-            #     return json.dumps({
-            #         "Відсутня кількість пар у Group - id:": row.id_order}
-            #         ), 500
-        print(id_model)
-        id_model_1 = session.query(directory_of_model).filter(
-                    directory_of_model.id_model.in_(id_model)).all()
+        for row in id_model:
+            id_model_1 = session.query(directory_of_model).filter_by(
+                        id_model=row).all()
 # відсутність груп прибрав тут #
-        for row2 in id_model_1:
-            kolor_model.append(row2.kolor_model)
-            kod_model.append(row2.kod_model)
-            comment_model.append(row2.comment_model)
-        # if len(tmp_quantity_pars_model) == 1:
-        #     tmp_quantity_pars_model = tmp_quantity_pars_model[0]
-        #     tmp_phase_1_model = tmp_phase_1_model[0]
-        #     tmp_phase_2_model = tmp_phase_2_model[0]
-        #     tmp_phase_3_model = tmp_phase_3_model[0]
-        #     tmp_kolor_model = tmp_kolor_model[0]
-        #     tmp_kod_model = tmp_kod_model[0]
-        #     tmp_comment_model = tmp_comment_model[0]
+            for row2 in id_model_1:
+                kolor_model.append(row2.kolor_model)
+                kod_model.append(row2.kod_model)
+                comment_model.append(row2.comment_model)
 
-        # quantity_pars_model.append(tmp_quantity_pars_model)
-        # phase_1_model.append(tmp_phase_1_model)
-        # phase_2_model.append(tmp_phase_2_model)
-        # phase_3_model.append(tmp_phase_3_model)
-        # kolor_model.append(tmp_kolor_model)
-        # kod_model.append(tmp_kod_model)
-        # comment_model.append(tmp_comment_model)
+        for row11 in id_client:
+            id_client_2 = session.query(directory_of_client).filter_by(
+                id_client=row11).all()
+            for row1 in id_client_2:
+                phone_client.append(row1.phone_client)
 
-        id_client_2 = session.query(directory_of_client).filter(
-            directory_of_client.id_client.in_(id_client)).all()
-        # if (len(str(id_client_2))) < 3:
-        #     return json.dumps({
-        #         "Помилка в записі - id_client:": row.id_order}), 500
-        for row1 in id_client_2:
-            phone_client.append(row1.phone_client)
-        id_recipient_1 = session.query(directory_of_client).filter(
-            directory_of_client.id_client.in_(id_recipient)).all()
-        # if (len(str(id_recipient_1))) < 3:
-        #     return json.dumps({
-        #         "Помилка в записі - id_recipient:": row.id_order}), 500
-        for row1 in id_recipient_1:
-            second_name_client.append(row1.second_name_client)
-            first_name_client.append(row1.first_name_client)
-            phone_recipient.append(row1.phone_client)
-            np_number.append(row1.np_number)
-            zip_code.append(row1.zip_code)
-            street_house_apartment.append(row1.street_house_apartment)
-            sity.append(row1.sity)
+        for row11 in id_recipient:
+            id_recipient_1 = session.query(directory_of_client).filter_by(
+                id_client=row11).all()
+            for row1 in id_recipient_1:
+                second_name_client.append(row1.second_name_client)
+                first_name_client.append(row1.first_name_client)
+                phone_recipient.append(row1.phone_client)
+                np_number.append(row1.np_number)
+                zip_code.append(row1.zip_code)
+                street_house_apartment.append(row1.street_house_apartment)
+                sity.append(row1.sity)
 
         tmp_order = id_order[:]
         a2a = len(id_order)
@@ -199,7 +164,7 @@ def return_data_from_main_page(asked):
 
         a1a = len(id_order)
         while a1a > 0:
-            # print("OK -", a1a)
+
             if a1a == 1:
                 print(id_order, comment_order, data_order, kolor_model,
                       kod_model, comment_model, quantity_pars_model,
