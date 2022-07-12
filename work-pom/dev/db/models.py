@@ -64,13 +64,16 @@ class directory_of_model(Base):
 class directory_of_group(Base):
     __tablename__ = 'directory_of_group'
     id_group_model = Column('id_group_model', Integer, primary_key=True)
-    id_model = Column('id_model', Integer)
+    id_model = Column('id_model', Integer, ForeignKey(
+        'directory_of_model.id_model'))
     id_order = Column('id_order', Integer)
     quantity_pars_model = Column('quantity_pars_model', Integer)
     phase_1_model = Column('phase_1_model', Boolean)
     phase_2_model = Column('phase_2_model', Boolean)
     phase_3_model = Column('phase_3_model', Boolean)
     price_model_order = Column('price_model_order', Integer)
+
+    model = relationship("directory_of_model", foreign_keys=[id_model])
 
 
 class directory_of_payment(Base):

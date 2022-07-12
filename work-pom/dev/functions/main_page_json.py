@@ -131,6 +131,10 @@ def return_data_from_main_page(asked):
                 tmp_phase_2_model.append(row1.phase_2_model)
                 tmp_phase_3_model.append(row1.phase_3_model)
 
+                tmp_kolor_model.append(row1.model.kolor_model)
+                tmp_kod_model.append(row1.model.kod_model)
+                tmp_comment_model.append(row1.model.comment_model)
+
                 if row1.id_model is None:
                     return json.dumps({
                         "Відсутній запис моделі у Group - id:": row.id_order}
@@ -139,13 +143,14 @@ def return_data_from_main_page(asked):
                     return json.dumps({
                         "Відсутня кількість пар у Group - id:": row.id_order}
                         ), 500
-
-                id_model_1 = session.query(directory_of_model).filter_by(
-                    id_model=row1.id_model).all()
-                for row2 in id_model_1:
-                    tmp_kolor_model.append(row2.kolor_model)
-                    tmp_kod_model.append(row2.kod_model)
-                    tmp_comment_model.append(row2.comment_model)
+# here relationship test
+                # id_model_1 = session.query(directory_of_model).filter_by(
+                #     id_model=row1.id_model).all()
+                # for row2 in id_model_1:
+                #     tmp_kolor_model.append(row2.kolor_model)
+                #     tmp_kod_model.append(row2.kod_model)
+                #     tmp_comment_model.append(row2.comment_model)
+# here relationship test
 
             if len(tmp_quantity_pars_model) == 1:
                 tmp_quantity_pars_model = tmp_quantity_pars_model[0]
