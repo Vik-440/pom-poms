@@ -152,14 +152,14 @@ def return_data_from_main_page(asked):
                 #     tmp_comment_model.append(row2.comment_model)
 # here relationship test
 
-            if len(tmp_quantity_pars_model) == 1:
-                tmp_quantity_pars_model = tmp_quantity_pars_model[0]
-                tmp_phase_1_model = tmp_phase_1_model[0]
-                tmp_phase_2_model = tmp_phase_2_model[0]
-                tmp_phase_3_model = tmp_phase_3_model[0]
-                tmp_kolor_model = tmp_kolor_model[0]
-                tmp_kod_model = tmp_kod_model[0]
-                tmp_comment_model = tmp_comment_model[0]
+            # if len(tmp_quantity_pars_model) == 1:
+            #     tmp_quantity_pars_model = tmp_quantity_pars_model[0]
+            #     tmp_phase_1_model = tmp_phase_1_model[0]
+            #     tmp_phase_2_model = tmp_phase_2_model[0]
+            #     tmp_phase_3_model = tmp_phase_3_model[0]
+            #     tmp_kolor_model = tmp_kolor_model[0]
+            #     tmp_kod_model = tmp_kod_model[0]
+            #     tmp_comment_model = tmp_comment_model[0]
 
             quantity_pars_model.append(tmp_quantity_pars_model)
             phase_1_model.append(tmp_phase_1_model)
