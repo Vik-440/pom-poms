@@ -70,4 +70,4 @@ with Session(engine) as session:
     print(q2-q1)
     print(q3-q2)
     print(q4-q3)
-    # print(q2-q1-q3+q2)
+    # print(q2-q1-q3+q2)#
