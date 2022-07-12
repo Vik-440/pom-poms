@@ -105,6 +105,16 @@ def return_data_from_main_page(asked):
             data_plane_order.append(str(row.data_plane_order))
             fulfilled_order.append(row.fulfilled_order)
             sum_payment.append(row.sum_payment - row.discont_order)
+# here relationship test
+            phone_client.append(row.client.phone_client)
+            second_name_client.append(row.client.second_name_client)
+            first_name_client.append(row.client.first_name_client)
+            phone_recipient.append(row.client.phone_client)
+            np_number.append(row.client.np_number)
+            zip_code.append(row.client.zip_code)
+            street_house_apartment.append(row.client.street_house_apartment)
+            sity.append(row.client.sity)
+# here relationship test
             id_group_1 = session.query(directory_of_group).filter_by(
                 id_order=row.id_order).all()
             if (len(str(id_group_1))) < 3:
@@ -153,26 +163,29 @@ def return_data_from_main_page(asked):
             kolor_model.append(tmp_kolor_model)
             kod_model.append(tmp_kod_model)
             comment_model.append(tmp_comment_model)
-            id_client_2 = session.query(directory_of_client).filter_by(
-                id_client=row.id_client).all()
-            if (len(str(id_client_2))) < 3:
-                return json.dumps({
-                    "Помилка в записі клієнта - id:": row.id_order}), 500
-            for row1 in id_client_2:
-                phone_client.append(row1.phone_client)
-            id_recipient_1 = session.query(directory_of_client).filter_by(
-                id_client=row.id_recipient).all()
-            if (len(str(id_recipient_1))) < 3:
-                return json.dumps({
-                    "Помилка в записі отримувача - id:": row.id_order}), 500
-            for row1 in id_recipient_1:
-                second_name_client.append(row1.second_name_client)
-                first_name_client.append(row1.first_name_client)
-                phone_recipient.append(row1.phone_client)
-                np_number.append(row1.np_number)
-                zip_code.append(row1.zip_code)
-                street_house_apartment.append(row1.street_house_apartment)
-                sity.append(row1.sity)
+# here relationship test
+            # id_client_2 = session.query(directory_of_client).filter_by(
+            #     id_client=row.id_client).all()
+            # if (len(str(id_client_2))) < 3:
+            #     return json.dumps({
+            #         "Помилка в записі клієнта - id:": row.id_order}), 500
+            # for row1 in id_client_2:
+            #     phone_client.append(row1.phone_client)
+# here relationship test
+            # id_recipient_1 = session.query(directory_of_client).filter_by(
+            #     id_client=row.id_recipient).all()
+            # if (len(str(id_recipient_1))) < 3:
+            #     return json.dumps({
+            #         "Помилка в записі отримувача - id:": row.id_order}), 500
+            # for row1 in id_recipient_1:
+            #     second_name_client.append(row1.second_name_client)
+            #     first_name_client.append(row1.first_name_client)
+            #     phone_recipient.append(row1.phone_client)
+            #     np_number.append(row1.np_number)
+            #     zip_code.append(row1.zip_code)
+            #     street_house_apartment.append(row1.street_house_apartment)
+            #     sity.append(row1.sity)
+# here relationship test
 
             real_money_1 = session.query(func.sum(
                 directory_of_payment.payment).label('my_sum')).filter_by(

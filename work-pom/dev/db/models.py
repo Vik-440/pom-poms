@@ -1,6 +1,7 @@
 from sqlalchemy import Date, ForeignKey, Numeric, create_engine, Column
 from sqlalchemy import Integer, String, Boolean
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import relationship
 from dotenv import load_dotenv
 import os
 
@@ -14,13 +15,17 @@ class directory_of_order(Base):
     id_order = Column('id_order', Integer, primary_key=True)
     data_order = Column('data_order', Date)
     data_plane_order = Column('data_plane_order', Date)
-    id_client = Column('id_client', Integer)
-    id_recipient = Column('id_recipient', Integer)
+    id_client = Column('id_client', Integer, ForeignKey(
+        'directory_of_client.id_client'))
+    id_recipient = Column('id_recipient', Integer, ForeignKey(
+        'directory_of_client.id_client'))
     data_send_order = Column('data_send_order', Date)
     fulfilled_order = Column('fulfilled_order', Boolean)
-    sum_payment = Column('sum_payment', Integer)           
-    discont_order = Column('discont_order', Integer)       
+    sum_payment = Column('sum_payment', Integer)
+    discont_order = Column('discont_order', Integer)
     comment_order = Column('comment_order', String)
+
+    client = relationship("directory_of_client", foreign_keys=[id_client])
 
 
 class directory_of_client(Base):
@@ -73,7 +78,7 @@ class directory_of_payment(Base):
     id_payment = Column('id_payment', Integer, primary_key=True)
     id_order = Column('id_order', Integer, ForeignKey(
         'directory_of_order.id_order'))
-    payment = Column('payment', Integer)        
+    payment = Column('payment', Integer)
     metod_payment = Column('metod_payment', String)
     data_payment = Column('data_payment', Date)
 
