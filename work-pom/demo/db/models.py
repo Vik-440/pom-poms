@@ -26,6 +26,7 @@ class directory_of_order(Base):
     comment_order = Column('comment_order', String)
 
     client = relationship("directory_of_client", foreign_keys=[id_client])
+    recipient = relationship("directory_of_client", foreign_keys=[id_client])
 
 
 class directory_of_client(Base):
