@@ -105,7 +105,7 @@ def return_data_from_main_page(asked):
             data_plane_order.append(str(row.data_plane_order))
             fulfilled_order.append(row.fulfilled_order)
             sum_payment.append(row.sum_payment - row.discont_order)
-# here relationship test
+# here relationship test1
             # phone_client.append(row.client.phone_client)
             # second_name_client.append(row.recipient.second_name_client)
             # first_name_client.append(row.recipient.first_name_client)
