@@ -42,29 +42,30 @@
   
         <div class="money-select">
           <p class="money-select--header">дата від</p>
-          <input type="date" class="calendar"  formControlName="dateFrom">
+          <input type="date" class="calendar"  formControlName="data_start">
         </div>
   
         <div class="money-select">
           <p class="money-select--header">дата до</p>
-          <input type="date" class="calendar" formControlName="dateTo">
+          <input type="date" class="calendar" formControlName="data_end">
         </div>
   
         <div class="money-select">
           <p class="money-select--header">період</p>
           <ng-select 
             class="money-select--input"
+            formControlName="period"
             [items]="periods" >
           </ng-select>
         </div>
   
         <div class="money-select">
           <p class="money-select--header">№ замовлення</p>
-          <input type="text" class="money-select--input">
+          <input type="number" class="money-select--input" formControlName="id_order">
         </div>
       </div>
 
-      <button class="payments-apply apply" (click)="click()">Застосувати</button>
+      <button class="payments-apply apply" (click)="sendFiltersPayments()">Застосувати</button>
     </div>
 
     <div class="spending" [formGroup]="spendingForm">
@@ -73,12 +74,12 @@
   
         <div class="money-select">
           <p class="money-select--header">дата від</p>
-          <input type="date" class="calendar" formControlName="dateFrom">
+          <input type="date" class="calendar" formControlName="data_start">
         </div>
   
         <div class="money-select">
           <p class="money-select--header">дата до</p>
-          <input type="date" class="calendar" formControlName="dateTo">
+          <input type="date" class="calendar" formControlName="data_end">
         </div>
       </div>
       <button class="spending-apply apply">Застосувати</button>

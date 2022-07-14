@@ -151,7 +151,7 @@ export class CreateOrderComponent implements OnInit {
         sum_payment: this.priceAll.value.sum_payment + order.value.sum_pars
       })
     });   
-    sumAllItems.push(this.priceAll.value.sum_payment, this.priceAll.value.real_money, this.priceAll.value.different);
+    sumAllItems.push(this.priceAll.value.sum_payment - this.discount, this.priceAll.value.real_money, this.priceAll.value.different);
     return sumAllItems.join(' / ')
   }
 

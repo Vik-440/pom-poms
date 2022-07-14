@@ -14,5 +14,9 @@ export class FinancesPageService {
     return this.http.get(`http://127.0.0.1:5000/finance`);
   }
 
+  getFilters(params) {
+    return this.http.post(`http://127.0.0.1:5000/finance`, params);
+  }
+
 
 }
