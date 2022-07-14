@@ -49,5 +49,6 @@ Thumbs.db
 /frontend/yarn.lock
 *.env
 venv/
+env/
 __pycache__/
 .vscode/
