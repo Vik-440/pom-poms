@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { FinancesPageService } from '../services/finances.service';
 
 @Component({
@@ -21,16 +21,17 @@ export class FinancesComponent implements OnInit {
   todayYear = new Date().getFullYear();
   ngOnInit(): void {
     this.paymentFrom = this.fb.group({
-      metod: null,
-      data_start: '',
-      data_end: '',
-      period: null,
+      metod: [null, Validators.required],
+      data_start: [null, Validators.required],
+      data_end: [null, Validators.required],
+      period: [null, Validators.required],
       id_order: null
     });
     this.spendingForm = this.fb.group({
-      data_start: '',
-      data_end: ''
+      data_start: [null, Validators.required],
+      data_end: [null, Validators.required]
     })
+
     this.service.getFinances().subscribe((data: any) => {
       const copyData = data.slice(0);
       this.metodPayment = data[0].metod_payment;
@@ -74,7 +75,16 @@ export class FinancesComponent implements OnInit {
     this.service.getFilters(params).subscribe((data: any) => {
       this.mainItems = data;
     })
-    
+  }
+
+  sendSpendingFilters() {
+    const params = {
+      ...this.spendingForm.value,
+      outlay_search: 0
+    }
+    this.service.getFilters(params).subscribe((data: any) => {
+      // this.mainItems = data;
+    })
   }
 
 }
