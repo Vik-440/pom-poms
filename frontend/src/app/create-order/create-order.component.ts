@@ -141,7 +141,7 @@ export class CreateOrderComponent implements OnInit {
     });
   }
 
-  sumAll() {
+  sumAll(isCountDiscount = true) {
     const sumAllItems = [];
     this.priceAll.patchValue({
       sum_payment: 0
@@ -151,7 +151,11 @@ export class CreateOrderComponent implements OnInit {
         sum_payment: this.priceAll.value.sum_payment + order.value.sum_pars
       })
     });   
-    sumAllItems.push(this.priceAll.value.sum_payment - this.discount, this.priceAll.value.real_money, this.priceAll.value.different);
+    if(isCountDiscount) {
+      sumAllItems.push(this.priceAll.value.sum_payment - this.discount, this.priceAll.value.real_money, this.priceAll.value.different);
+    } else {
+      sumAllItems.push(this.priceAll.value.sum_payment, this.priceAll.value.real_money, this.priceAll.value.different);
+    }
     return sumAllItems.join(' / ')
   }
 
@@ -509,7 +513,7 @@ export class CreateOrderComponent implements OnInit {
       data_plane_order: this.dataPlaneOrder ? [this.dataPlaneOrder.year, this.dataPlaneOrder.month, this.dataPlaneOrder.day].join('-') : null, // - прогнозована
       data_send_order: this.dataSendOrder ? [this.dataSendOrder.year, this.dataSendOrder.month, this.dataSendOrder.day].join('-') : null, //- бажана
       discont_order: this.discount,
-      sum_payment: this.sumAll().split('/')[0].trim(),
+      sum_payment: this.sumAll(false).split('/')[0].trim(),
       fulfilled_order: false,
       comment_order: this.commentOrder
     }
