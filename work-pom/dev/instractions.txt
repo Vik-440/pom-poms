@@ -24,3 +24,7 @@ pip freeze
 - sudo docker-compose -f docker-compose.prod.yml up --build
 
 - sudo docker-compose -f docker-compose.prod.yml up --build
+
+- python -m venv venv - створити venv
+
+- .\venv\Scripts\activate.bat - активувати venv
