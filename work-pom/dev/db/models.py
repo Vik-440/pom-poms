@@ -15,18 +15,16 @@ class directory_of_order(Base):
     id_order = Column('id_order', Integer, primary_key=True)
     data_order = Column('data_order', Date)
     data_plane_order = Column('data_plane_order', Date)
-    id_client = Column('id_client', Integer, ForeignKey(
-        'directory_of_client.id_client'))
-    id_recipient = Column('id_recipient', Integer, ForeignKey(
-        'directory_of_client.id_client'))
+    id_client = Column('id_client', Integer)
+    id_recipient = Column('id_recipient', Integer)
     data_send_order = Column('data_send_order', Date)
     fulfilled_order = Column('fulfilled_order', Boolean)
     sum_payment = Column('sum_payment', Integer)
     discont_order = Column('discont_order', Integer)
     comment_order = Column('comment_order', String)
 
-    client = relationship("directory_of_client", foreign_keys=[id_client])
-    recipient = relationship("directory_of_client", foreign_keys=[id_client])
+    # client = relationship("directory_of_client", foreign_keys=[id_client])
+    # recipient = relationship("directory_of_client", foreign_keys=[id_client])
 
 
 class directory_of_client(Base):
