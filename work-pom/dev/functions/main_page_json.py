@@ -105,16 +105,7 @@ def return_data_from_main_page(asked):
             data_plane_order.append(str(row.data_plane_order))
             fulfilled_order.append(row.fulfilled_order)
             sum_payment.append(row.sum_payment - row.discont_order)
-# here relationship test1
-            # phone_client.append(row.client.phone_client)
-            # second_name_client.append(row.recipient.second_name_client)
-            # first_name_client.append(row.recipient.first_name_client)
-            # phone_recipient.append(row.recipient.phone_client)
-            # np_number.append(row.recipient.np_number)
-            # zip_code.append(row.recipient.zip_code)
-            # street_house_apartment.append(row.recipient.street_house_apartment)
-            # sity.append(row.recipient.sity)
-# here relationship test
+
             id_group_1 = session.query(directory_of_group).filter_by(
                 id_order=row.id_order).all()
             if (len(str(id_group_1))) < 3:
@@ -143,23 +134,6 @@ def return_data_from_main_page(asked):
                     return json.dumps({
                         "Відсутня кількість пар у Group - id:": row.id_order}
                         ), 500
-# here relationship test
-                # id_model_1 = session.query(directory_of_model).filter_by(
-                #     id_model=row1.id_model).all()
-                # for row2 in id_model_1:
-                #     tmp_kolor_model.append(row2.kolor_model)
-                #     tmp_kod_model.append(row2.kod_model)
-                #     tmp_comment_model.append(row2.comment_model)
-# here relationship test
-
-            # if len(tmp_quantity_pars_model) == 1:
-            #     tmp_quantity_pars_model = tmp_quantity_pars_model[0]
-            #     tmp_phase_1_model = tmp_phase_1_model[0]
-            #     tmp_phase_2_model = tmp_phase_2_model[0]
-            #     tmp_phase_3_model = tmp_phase_3_model[0]
-            #     tmp_kolor_model = tmp_kolor_model[0]
-            #     tmp_kod_model = tmp_kod_model[0]
-            #     tmp_comment_model = tmp_comment_model[0]
 
             quantity_pars_model.append(tmp_quantity_pars_model)
             phase_1_model.append(tmp_phase_1_model)
@@ -235,4 +209,5 @@ def return_data_from_main_page(asked):
                          "zip_code": el19, "street_house_apartment": el20,
                          "second_name_client": el21, "first_name_client": el22}
             full_block.append(one_block)
+
     return json.dumps(full_block)
