@@ -42,13 +42,16 @@
   
         <div class="money-select">
           <p class="money-select--header">дата від</p>
-          <input type="date" class="calendar"  formControlName="data_start">
+          <input class="calendar" placeholder="yyyy-mm-dd" (click)="calendarPaymentStart.toggle()" [minDate]="{year: 2016, month: 1, day: 1}"
+          [maxDate]="{year: +todayYear, month: 12, day: 31}" formControlName="data_start" ngbDatepicker #calendarPaymentStart="ngbDatepicker">
         </div>
   
         <div class="money-select">
           <p class="money-select--header">дата до</p>
-          <input type="date" class="calendar" formControlName="data_end">
+          <input class="calendar" placeholder="yyyy-mm-dd" (click)="calendarPaymentEnd.toggle()" [minDate]="{year: 2016, month: 1, day: 1}"
+          [maxDate]="{year: +todayYear, month: 12, day: 31}" formControlName="data_end" ngbDatepicker #calendarPaymentEnd="ngbDatepicker">
         </div>
+
   
         <div class="money-select">
           <p class="money-select--header">період</p>
@@ -78,12 +81,14 @@
   
         <div class="money-select">
           <p class="money-select--header">дата від</p>
-          <input type="date" class="calendar" formControlName="data_start">
+          <input class="calendar" placeholder="yyyy-mm-dd" (click)="calendarSpendFrom.toggle()" [minDate]="{year: 2016, month: 1, day: 1}"
+          [maxDate]="{year: +todayYear, month: 12, day: 31}" formControlName="data_start" ngbDatepicker #calendarSpendFrom="ngbDatepicker">
         </div>
   
         <div class="money-select">
           <p class="money-select--header">дата до</p>
-          <input type="date" class="calendar" formControlName="data_end">
+          <input class="calendar" placeholder="yyyy-mm-dd" (click)="calendarSpendEnd.toggle()" [minDate]="{year: 2016, month: 1, day: 1}"
+          [maxDate]="{year: +todayYear, month: 12, day: 31}" formControlName="data_end" ngbDatepicker #calendarSpendEnd="ngbDatepicker">
         </div>
       </div>
       <button class="spending-apply apply" 

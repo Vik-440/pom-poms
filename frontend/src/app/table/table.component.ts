@@ -96,9 +96,10 @@ export class TableComponent implements OnInit, OnDestroy {
   fromDate: NgbDate | null;
   toDate: NgbDate | null;
   date = new Date();
+  todayYear = new Date().getFullYear();
   options: DatepickerOptions = {
     minDate: new Date(''),
-    format: 'MM/dd/yyyy',
+    format: 'yyyy-MM-dd',
     formatDays: 'EEEEE',
     firstCalendarDay: 1, // 0 - Sunday, 1 - Monday
     locale: locale,
@@ -280,10 +281,21 @@ validateInput(currentValue: NgbDate | null, input: string): NgbDate | null {
     return city.includes("самовивіз");
   }
 
+  editData(data) {
+    return data.map((item) => {
+      if(item <= 9) {
+        return '0' + item
+      }
+      return item
+    }).join('-')
+  }
+
   applyFilters() {
+    console.log(this.filtersForm);
+    
     let params: any = {
-      data_start: moment(this.filtersForm.value.dataStart).format('yyyy-MM-DD'),
-      data_end: moment(this.filtersForm.value.dataEnd).format('yyyy-MM-DD'),
+      data_start: this.editData(Object.values(this.filtersForm.value.dataStart)),
+      data_end: this.editData(Object.values(this.filtersForm.value.dataEnd)),
       fulfilled_order: this.filtersForm.value.fulfilled_order
     }
     if (this.filtersForm.value.fulfilled_order === '') {
@@ -312,7 +324,7 @@ validateInput(currentValue: NgbDate | null, input: string): NgbDate | null {
   changeSpeed() {
     const days = Math.ceil(this.queue/this.speed);
     // this.dateDownloaded = moment().add(days, 'days').format('MM/DD/YYYY') ;
-    this.dateDownloaded = moment().weekday(0).add(days, 'days').format('MM/DD/YYYY') ;
+    this.dateDownloaded = moment().weekday(0).add(days, 'days').format('YYYY-MM-DD') ;
   }
 
   makeDone(id, fulfilledOrder, i){
@@ -344,7 +356,7 @@ validateInput(currentValue: NgbDate | null, input: string): NgbDate | null {
     this.options = {
       ...this.options
     }
-    this[control].displayValue = '';
+    // this[control].displayValue = '';
     this.filtersForm.get(control).patchValue('')
   }
 }

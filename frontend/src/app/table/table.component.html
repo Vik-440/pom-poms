@@ -13,22 +13,28 @@
     </div>
     <div class="filters-data">
       <p class="filters-data--title">дата від</p>
-      <ngx-datepicker
+      <!-- <ngx-datepicker
       formControlName="dataStart"
       #dataStart
       class="filters-data--datapicker"
       [options]="options"
-    ></ngx-datepicker>
+    ></ngx-datepicker> -->
+    <input class="filters-data--datapicker" placeholder="yyyy-mm-dd" (click)="calendarDataStart.toggle()" [minDate]="{year: 2016, month: 1, day: 1}"
+    [maxDate]="{year: +todayYear, month: 12, day: 31}" formControlName="dataStart" ngbDatepicker #calendarDataStart="ngbDatepicker">
     <button class="filters-data--datapicker-remove" (click)="removeData('dataStart')">&#10005;</button>
     </div>
     <div class="filters-data">
       <p class="filters-data--title">дата до</p>
-      <ngx-datepicker
+      <!-- <ngx-datepicker
       formControlName="dataEnd"
       #dataEnd
       class="filters-data--datapicker"
       [options]="options"
-    ></ngx-datepicker>
+    ></ngx-datepicker> -->
+
+    <input class="filters-data--datapicker" placeholder="yyyy-mm-dd" (click)="calendarDataEnd.toggle()" [minDate]="{year: 2016, month: 1, day: 1}"
+    [maxDate]="{year: +todayYear, month: 12, day: 31}" formControlName="dataEnd" ngbDatepicker #calendarDataEnd="ngbDatepicker">
+
     <button class="filters-data--datapicker-remove" (click)="removeData('dataEnd')">&#10005;</button>
     </div>
     <div class="filters-phone">
@@ -59,7 +65,7 @@
       readonly
       disabled
       class="filters-data--dateDownloaded"
-      placeholder="mm/dd/yyyy"
+      placeholder="yyyy-mm-dd"
       [(ngModel)]="dateDownloaded"
     >
     </div>

@@ -58,8 +58,11 @@ export class FinancesComponent implements OnInit {
 
 
   sendFiltersPayments() {
+
     let params = {
       ...this.paymentFrom.value,
+      data_start: this.editData(Object.values(this.paymentFrom.value.data_start)),
+      data_end: this.editData(Object.values(this.paymentFrom.value.data_end)),
       payment_search: 0,
       iban: this.paymentFrom.value.metod === 'iban',
       cash: this.paymentFrom.value.metod === 'cash'
@@ -71,15 +74,23 @@ export class FinancesComponent implements OnInit {
       }
     }
     delete params['metod'];
-    console.log(this.removeEmptyValues(params));
     this.service.getFilters(params).subscribe((data: any) => {
       this.mainItems = data;
     })
   }
 
+  editData(data) {
+    return data.map((item) => {
+      if(item <= 9) {
+        return '0' + item
+      }
+      return item
+    }).join('-')
+  }
   sendSpendingFilters() {
     const params = {
-      ...this.spendingForm.value,
+      data_start: this.editData(Object.values(this.spendingForm.value.data_start)),
+      data_end: this.editData(Object.values(this.spendingForm.value.data_end)),
       outlay_search: 0
     }
     this.service.getFilters(params).subscribe((data: any) => {
