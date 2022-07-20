@@ -27,7 +27,7 @@
               <td [class.grey]="idEdit === item.id_color" (click)="editItem(item.id_color)">{{ item.pars}}</td>
               <td class="epmty"></td>
               <td class="white"><input type="text" class="mat-val--intp"
-                [value]="reverseItemsCorrect.controls[index].value.weight_color" 
+                [value]="reverseItemsCorrect.controls[index].value?.weight_color" 
                 (change)="changeMaterial(reverseItemsCorrect.controls[index], $event.target.value, 'weight_color', item.id_color)"></td>
               <td class="white"><input type="text" class="mat-val--intp" 
                 [value]="reverseItemsCorrect.controls[index].value.bab_quantity_color" 
@@ -47,12 +47,12 @@
         <p class="materials-active--title">наявність</p>
         <ng-select 
            bindLabel="name" 
+           [(ngModel)]="filterMaterial"
            [items]="materialFilter"
-           (change)="filterMaterials($event)"
            bindValue="id" >
         </ng-select>
       </div>
-      <button class="materials-apply">
+      <button class="materials-apply" (click)="getMaterialByFilter()">
         Застосувати
       </button>
     </div>

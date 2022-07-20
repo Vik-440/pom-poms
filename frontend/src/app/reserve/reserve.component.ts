@@ -19,6 +19,7 @@ export class ReserveComponent implements OnInit {
   isNewMaterial = false;
   idChange = [];
   isHideOk = true;
+  filterMaterial = null;
   ngOnInit(): void {
     this.servieMaterial.getListMaterial().subscribe((data: any) => {
       this.reserveItems = data.sort((a,b) => a.name_color - b.name_color);
@@ -29,7 +30,6 @@ export class ReserveComponent implements OnInit {
           bab_quantity_color: null,
           weight_color: null
         }))
-        
       })
     });
 
@@ -106,19 +106,29 @@ export class ReserveComponent implements OnInit {
     });
   }
 
-  filterMaterials(event) {
-    if(event) {
-      if(event.id) {
-        this.servieMaterial.getFullAllMaterial({ id_color: 999}).subscribe((data: any) => {
-          this.reserveItems =  data.sort((a,b) => a.name_color - b.name_color);;
+  getMaterialByFilter() {
+      if(this.filterMaterial) {
+        this.servieMaterial.getFullAllMaterial({ id_color: this.filterMaterial}).subscribe((data: any) => {
+          this.reserveItems =  data.sort((a,b) => a.name_color - b.name_color);
+          this.reserveItems.map(item => {
+            this.reverseItemsCorrect.push(this.fb.group({
+              bab_quantity_color: null,
+              weight_color: null
+            }))
+          })
+          
         })
       } else {
         this.servieMaterial.getListMaterial().subscribe((data: any) => {
-          this.reserveItems =  data.sort((a,b) => a.name_color - b.name_color);;
+          this.reserveItems =  data.sort((a,b) => a.name_color - b.name_color);
+          this.reserveItems.map(item => {
+            this.reverseItemsCorrect.push(this.fb.group({
+              bab_quantity_color: null,
+              weight_color: null
+            }))    
+          })
         });
       }
-    }
-    
   }
 
   changeMaterial(item, value, field, id) {
