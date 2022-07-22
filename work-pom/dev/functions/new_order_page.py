@@ -16,7 +16,6 @@ def return_data_from_order_page():
             'id_new_order': j_id_new_order, 'time_last_order': time_last_order}
 
 
-
 def return_data_from_client(sl_phone, sl_second_name, open_id_client):
     with Session(engine) as session:
         if sl_phone == 0 and open_id_client == 0:
@@ -307,9 +306,9 @@ def return_data_from_final_order(data_from_new_page):
 
             ins1 = directory_of_group(
                 id_order=j_id_order,
-                phase_1_model=False,
-                phase_2_model=False,
-                phase_3_model=False,
+                phase_1_model=True,
+                phase_2_model=True,
+                phase_3_model=True,
                 id_model=elem1,
                 quantity_pars_model=elem2,
                 price_model_order=elem3)

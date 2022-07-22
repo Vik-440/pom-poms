@@ -306,9 +306,9 @@ def return_data_from_final_order(data_from_new_page):
 
             ins1 = directory_of_group(
                 id_order=j_id_order,
-                phase_1_model=False,
-                phase_2_model=False,
-                phase_3_model=False,
+                phase_1_model=True,
+                phase_2_model=True,
+                phase_3_model=True,
                 id_model=elem1,
                 quantity_pars_model=elem2,
                 price_model_order=elem3)
