@@ -501,9 +501,9 @@ export class CreateOrderComponent implements OnInit {
     return result;
   }
 
-  saveAll() {
+  saveAll(mode = 'create') {
     const params = {
-      id_order: this.idOrder,
+      [mode === 'create' ? 'id_order' : 'edit_order']: this.idOrder,
       data_order: [this.dateToday.year, this.dateToday.month, this.dateToday.day].join('-'),
       id_client: this.clientForm.value.id_client,
       id_recipient: !this.isRecipient ? this.clientForm.value.id_client : this.recipientForm.value.id_client, // (2 або ід_клієнт)
