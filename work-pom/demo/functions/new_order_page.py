@@ -249,8 +249,6 @@ def return_data_from_final_order(data_from_new_page):
             id_client=id_client).scalar()
         if check_client is None:
             raise Exception("Error in real client number ")
-            # return f'Error in real client number {e}', 500
-
         id_recipient = data_from_new_page['id_recipient']
         if id_recipient is None:
             return f'Error in recipient number: {e}', 500
@@ -258,31 +256,20 @@ def return_data_from_final_order(data_from_new_page):
             id_client=id_recipient).scalar()
         if check_client is None:
             raise Exception("Error in real recipient number ")
-            # return f'Error in real recipient number {e}', 500
         if data_from_new_page['quantity_pars_model'] is None:
             raise Exception("Error: quantity_pars is empty")
         id_order = int(data_from_new_page['id_order'])
         check_order = session.query(directory_of_order).filter_by(
             id_order=id_order).scalar()
         if check_order is not None and id_order != 0:
-            raise Exception("This order number is real")
+            if data_from_new_page['edit_real_order'] != id_order:
+                raise Exception("This order number is real")
 
         if id_order == 0:
             id_order_max = session.query(func.max(
                 directory_of_order.id_order)).first()
             id_order = int(id_order_max[0]) + 1
-            # ins = directory_of_order(
-            #     id_order=result,
-            #     data_order=data_from_new_page['data_order'],
-            #     id_client=data_from_new_page['id_client'],
-            #     id_recipient=data_from_new_page['id_recipient'],
-            #     data_plane_order=data_from_new_page['data_plane_order'],
-            #     data_send_order=data_from_new_page['data_send_order'],
-            #     discont_order=data_from_new_page['discont_order'],
-            #     sum_payment=data_from_new_page['sum_payment'],
-            #     fulfilled_order=data_from_new_page['fulfilled_order'],
-            #     comment_order=data_from_new_page['comment_order'])
-        # else:
+
         ins = directory_of_order(
             id_order=id_order,
             data_order=data_from_new_page['data_order'],
