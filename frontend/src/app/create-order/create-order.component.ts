@@ -502,8 +502,8 @@ export class CreateOrderComponent implements OnInit {
   }
 
   saveAll(mode = 'create') {
-    const params = {
-      [mode === 'create' ? 'id_order' : 'edit_order']: this.idOrder,
+    let params = {
+      id_order: this.idOrder,
       data_order: [this.dateToday.year, this.dateToday.month, this.dateToday.day].join('-'),
       id_client: this.clientForm.value.id_client,
       id_recipient: !this.isRecipient ? this.clientForm.value.id_client : this.recipientForm.value.id_client, // (2 або ід_клієнт)
@@ -515,9 +515,13 @@ export class CreateOrderComponent implements OnInit {
       discont_order: this.discount,
       sum_payment: this.sumAll(false).split('/')[0].trim(),
       fulfilled_order: false,
-      comment_order: this.commentOrder
-    }edit_order
+      comment_order: this.commentOrder,
+      edit_real_order: this.idOrder,
+    }
 
+    if(mode === 'create') {
+      delete params.edit_real_order
+    }
     this.service.saveOrder(params).subscribe((data: any) => {
       this.idOrder = data.id_order;
       this.doneOrder = true;
