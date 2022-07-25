@@ -259,6 +259,8 @@ def return_data_from_final_order(data_from_new_page):
         if check_client is None:
             raise Exception("Error in real recipient number ")
             # return f'Error in real recipient number {e}', 500
+        if data_from_new_page['quantity_pars_model'] is None:
+            raise Exception("Error: quantity_pars is empty")
         id_order = int(data_from_new_page['id_order'])
         check_order = session.query(directory_of_order).filter_by(
             id_order=id_order).scalar()
@@ -266,28 +268,32 @@ def return_data_from_final_order(data_from_new_page):
             raise Exception("This order number is real")
 
         if id_order == 0:
-            ins = directory_of_order(
-                data_order=data_from_new_page['data_order'],
-                id_client=data_from_new_page['id_client'],
-                id_recipient=data_from_new_page['id_recipient'],
-                data_plane_order=data_from_new_page['data_plane_order'],
-                data_send_order=data_from_new_page['data_send_order'],
-                discont_order=data_from_new_page['discont_order'],
-                sum_payment=data_from_new_page['sum_payment'],
-                fulfilled_order=data_from_new_page['fulfilled_order'],
-                comment_order=data_from_new_page['comment_order'])
-        else:
-            ins = directory_of_order(
-                id_order=id_order,
-                data_order=data_from_new_page['data_order'],
-                id_client=data_from_new_page['id_client'],
-                id_recipient=data_from_new_page['id_recipient'],
-                data_plane_order=data_from_new_page['data_plane_order'],
-                data_send_order=data_from_new_page['data_send_order'],
-                discont_order=data_from_new_page['discont_order'],
-                sum_payment=data_from_new_page['sum_payment'],
-                fulfilled_order=data_from_new_page['fulfilled_order'],
-                comment_order=data_from_new_page['comment_order'])
+            id_order_max = session.query(func.max(
+                directory_of_order.id_order)).first()
+            id_order = int(id_order_max[0]) + 1
+            # ins = directory_of_order(
+            #     id_order=result,
+            #     data_order=data_from_new_page['data_order'],
+            #     id_client=data_from_new_page['id_client'],
+            #     id_recipient=data_from_new_page['id_recipient'],
+            #     data_plane_order=data_from_new_page['data_plane_order'],
+            #     data_send_order=data_from_new_page['data_send_order'],
+            #     discont_order=data_from_new_page['discont_order'],
+            #     sum_payment=data_from_new_page['sum_payment'],
+            #     fulfilled_order=data_from_new_page['fulfilled_order'],
+            #     comment_order=data_from_new_page['comment_order'])
+        # else:
+        ins = directory_of_order(
+            id_order=id_order,
+            data_order=data_from_new_page['data_order'],
+            id_client=data_from_new_page['id_client'],
+            id_recipient=data_from_new_page['id_recipient'],
+            data_plane_order=data_from_new_page['data_plane_order'],
+            data_send_order=data_from_new_page['data_send_order'],
+            discont_order=data_from_new_page['discont_order'],
+            sum_payment=data_from_new_page['sum_payment'],
+            fulfilled_order=data_from_new_page['fulfilled_order'],
+            comment_order=data_from_new_page['comment_order'])
         session.add(ins)
         session.commit()
         session.refresh(ins)
@@ -299,12 +305,13 @@ def return_data_from_final_order(data_from_new_page):
             del data_from_new_page['id_model'][0]
             elem2 = data_from_new_page['quantity_pars_model'][0]
             del data_from_new_page['quantity_pars_model'][0]
-            # elem3 = data_from_new_page['price_model_order']
-            # del data_from_new_page['price_model_order'][0]
-
             elem3 = data_from_new_page['price_model_order'].pop(0)
+            id_group_max = session.query(func.max(
+                directory_of_group.id_group_model)).first()
+            id_group = int(id_group_max[0]) + 1
 
             ins1 = directory_of_group(
+                id_group_model=id_group,
                 id_order=j_id_order,
                 phase_1_model=True,
                 phase_2_model=True,
