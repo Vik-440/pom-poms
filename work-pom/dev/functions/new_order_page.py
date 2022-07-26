@@ -275,7 +275,13 @@ def return_data_from_final_order(data_from_new_page):
                 discont_order=data_from_new_page['discont_order'],
                 sum_payment=data_from_new_page['sum_payment'],
                 fulfilled_order=data_from_new_page['fulfilled_order'],
-                comment_order=data_from_new_page['comment_order'])
+                comment_order=data_from_new_page['comment_order'],
+                phase_1_model=[True, True],
+                phase_2_model=[True, True],
+                phase_3_model=[True, True],
+                id_model=data_from_new_page['id_model'],
+                quantity_pars_model=data_from_new_page['quantity_pars_model'],
+                price_model_order=data_from_new_page['price_model_order'])
         else:
             ins = directory_of_order(
                 id_order=id_order,
@@ -287,7 +293,13 @@ def return_data_from_final_order(data_from_new_page):
                 discont_order=data_from_new_page['discont_order'],
                 sum_payment=data_from_new_page['sum_payment'],
                 fulfilled_order=data_from_new_page['fulfilled_order'],
-                comment_order=data_from_new_page['comment_order'])
+                comment_order=data_from_new_page['comment_order'],
+                phase_1_model=[True, True],
+                phase_2_model=[True, True],
+                phase_3_model=[True, True],
+                id_model=data_from_new_page['id_model'],
+                quantity_pars_model=data_from_new_page['quantity_pars_model'],
+                price_model_order=data_from_new_page['price_model_order'])
         session.add(ins)
         session.commit()
         session.refresh(ins)
@@ -299,9 +311,6 @@ def return_data_from_final_order(data_from_new_page):
             del data_from_new_page['id_model'][0]
             elem2 = data_from_new_page['quantity_pars_model'][0]
             del data_from_new_page['quantity_pars_model'][0]
-            # elem3 = data_from_new_page['price_model_order']
-            # del data_from_new_page['price_model_order'][0]
-
             elem3 = data_from_new_page['price_model_order'].pop(0)
 
             ins1 = directory_of_group(

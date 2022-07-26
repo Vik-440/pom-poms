@@ -1,10 +1,12 @@
 import json
+from select import select
+from pymysql import NULL
 from sqlalchemy import func
 from datetime import datetime
 from sqlalchemy.orm import Session
 from db.models import directory_of_order, directory_of_client
 from db.models import directory_of_group, directory_of_payment
-# from db.models import directory_of_model
+from db.models import directory_of_model
 from db.models import engine
 
 
@@ -100,52 +102,33 @@ def return_data_from_main_page(asked):
             m_data_plane_order = (str(row.data_plane_order))
             m_fulfilled_order = (row.fulfilled_order)
             m_sum_payment = (row.sum_payment - row.discont_order)
+            m_quantity_pars_model = (row.quantity_pars_model)
+            m_phase_1_model = row.phase_1_model
+            m_phase_2_model = row.phase_2_model
+            m_phase_3_model = row.phase_3_model
+            m_id_model = row.id_model
 
-            id_group_1 = session.query(directory_of_group).filter_by(
-                id_order=row.id_order).all()
-            if (len(str(id_group_1))) < 3:
-                return json.dumps({
-                    "Помилка в записі клієнта (не має моделей у Group)-id:":
-                    row.id_order}), 500
-            tmp_kolor_model, tmp_kod_model, tmp_comment_model,\
-                tmp_quantity_pars_model, tmp_phase_1_model, \
-                tmp_phase_2_model, tmp_phase_3_model = [], [], [], [], [], [],\
-                []
-            for row1 in id_group_1:
-                tmp_quantity_pars_model.append(row1.quantity_pars_model)
-                tmp_phase_1_model.append(row1.phase_1_model)
-                tmp_phase_2_model.append(row1.phase_2_model)
-                tmp_phase_3_model.append(row1.phase_3_model)
+            tmp11 = len(m_id_model)
+            m_kolor_model, m_kod_model, m_comment_model, = [], [], []
+            while tmp11 > 0:
+                tmp11 -= 1
+                id_model = m_id_model.pop(0)
+                gr_model = session.query(directory_of_model).filter_by(
+                id_model = id_model).all()
+                for row5 in gr_model:
+                    m_kolor_model.append(row5.kolor_model)
+                    m_kod_model.append(row5.kod_model)
+                    m_comment_model.append(row5.comment_model)
 
-                tmp_kolor_model.append(row1.model.kolor_model)
-                tmp_kod_model.append(row1.model.kod_model)
-                tmp_comment_model.append(row1.model.comment_model)
-
-                if row1.id_model is None:
-                    return json.dumps({
-                        "Відсутній запис моделі у Group - id:": row.id_order}
-                        ), 500
-                if row1.quantity_pars_model is None:
-                    return json.dumps({
-                        "Відсутня кількість пар у Group - id:": row.id_order}
-                        ), 500
-            if 1 == len(tmp_quantity_pars_model):
-                tmp_quantity_pars_model = tmp_quantity_pars_model[0]
-                tmp_phase_1_model = tmp_phase_1_model[0]
-                tmp_phase_2_model = tmp_phase_2_model[0]
-                tmp_phase_3_model = tmp_phase_3_model[0]
-                tmp_kolor_model = tmp_kolor_model[0]
-                tmp_kod_model = tmp_kod_model[0]
-                tmp_comment_model = tmp_comment_model[0]
-
-            m_quantity_pars_model = (tmp_quantity_pars_model)
-            m_phase_1_model = (tmp_phase_1_model)
-            m_phase_2_model = (tmp_phase_2_model)
-            m_phase_3_model = (tmp_phase_3_model)
-            m_kolor_model = (tmp_kolor_model)
-            m_kod_model = (tmp_kod_model)
-            m_comment_model = (tmp_comment_model)
-# here relationship test
+            if len(list(m_quantity_pars_model)) == 1:
+                m_quantity_pars_model = m_quantity_pars_model[0]
+                m_phase_1_model = m_phase_1_model[0]
+                m_phase_2_model = m_phase_2_model[0]
+                m_phase_3_model = m_phase_3_model[0]
+                m_kolor_model = m_kolor_model[0]
+                m_kod_model = m_kod_model[0]
+                m_comment_model = m_comment_model[0]
+#     
             id_client_2 = session.query(directory_of_client).filter_by(
                 id_client=row.id_client).all()
             if (len(str(id_client_2))) < 3:
@@ -153,7 +136,7 @@ def return_data_from_main_page(asked):
                     "Помилка в записі клієнта - id:": row.id_order}), 500
             for row1 in id_client_2:
                 m_phone_client = (row1.phone_client)
-# here relationship test
+#
             id_recipient_1 = session.query(directory_of_client).filter_by(
                 id_client=row.id_recipient).all()
             if (len(str(id_recipient_1))) < 3:
@@ -167,8 +150,7 @@ def return_data_from_main_page(asked):
                 m_zip_code = (row1.zip_code)
                 m_street_house_apartment = (row1.street_house_apartment)
                 m_sity = (row1.sity)
-# here relationship test
-
+#
             real_money_1 = session.query(func.sum(
                 directory_of_payment.payment).label('my_sum')).filter_by(
                 id_order=row.id_order).first()
@@ -197,47 +179,5 @@ def return_data_from_main_page(asked):
                          "second_name_client": m_second_name_client,
                          "first_name_client": m_first_name_client}
             full_block.append(one_block)
-            # q1 = datetime.now()
-            # print(q1-q0)
-
-        # a1a = len(id_order)
-        # while a1a > 0:
-        #     a1a -= 1
-        #     el1 = id_order.pop(0)
-        #     el2 = comment_order.pop(0)
-        #     el3 = data_order.pop(0)
-        #     el4 = kolor_model.pop(0)
-        #     el5 = kod_model.pop(0)
-        #     el6 = comment_model.pop(0)
-        #     el7 = quantity_pars_model.pop(0)
-        #     el8 = phase_1_model.pop(0)
-        #     el9 = phase_2_model.pop(0)
-        #     el10 = phase_3_model.pop(0)
-        #     el11 = sum_payment.pop(0)
-        #     el12 = real_money.pop(0)
-        #     el13 = phone_client.pop(0)
-        #     el14 = phone_recipient.pop(0)
-        #     el15 = sity.pop(0)
-        #     el16 = data_plane_order.pop(0)
-        #     el17 = fulfilled_order.pop(0)
-        #     el18 = np_number.pop(0)
-        #     el19 = zip_code.pop(0)
-        #     el20 = street_house_apartment.pop(0)
-        #     el21 = second_name_client.pop(0)
-        #     el22 = first_name_client.pop(0)
-
-        #     one_block = {"id_order": el1, "comment_order": el2,
-        #                  "data_order": el3, "kolor_model": el4,
-        #                  "kod_model": el5, "comment_model": el6,
-        #                  "quantity_pars_model": el7, "phase_1_model": el8,
-        #                  "phase_2_model": el9, "phase_3_model": el10,
-        #                  "sum_payment": el11, "real_money": el12,
-        #                  "phone_client": el13, "phone_recipient": el14,
-        #                  "sity": el15, "data_plane_order": el16,
-        #                  "fulfilled_order": el17, "np_number": el18,
-        #                  "zip_code": el19, "street_house_apartment": el20,
-        #                  "second_name_client": el21,
-        #                  "first_name_client": el22}
-        #     full_block.append(one_block)
 
     return json.dumps(full_block)
