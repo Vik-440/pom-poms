@@ -261,56 +261,105 @@ def return_data_from_final_order(data_from_new_page):
         id_order = int(data_from_new_page['id_order'])
         check_order = session.query(directory_of_order).filter_by(
             id_order=id_order).scalar()
+        # x1x = int(data_from_new_page['edit_real_order'])
+        # print(x1x, id_order)     #
         if check_order is not None and id_order != 0:
-            if data_from_new_page['edit_real_order'] != id_order:
-                raise Exception("This order number is real")
+            # if x1x != id_order:
+            #     print("problems")
+            raise Exception("This order number is real")
 
         if id_order == 0:
             id_order_max = session.query(func.max(
                 directory_of_order.id_order)).first()
             id_order = int(id_order_max[0]) + 1
 
-        ins = directory_of_order(
-            id_order=id_order,
-            data_order=data_from_new_page['data_order'],
-            id_client=data_from_new_page['id_client'],
-            id_recipient=data_from_new_page['id_recipient'],
-            data_plane_order=data_from_new_page['data_plane_order'],
-            data_send_order=data_from_new_page['data_send_order'],
-            discont_order=data_from_new_page['discont_order'],
-            sum_payment=data_from_new_page['sum_payment'],
-            fulfilled_order=data_from_new_page['fulfilled_order'],
-            comment_order=data_from_new_page['comment_order'])
-        session.add(ins)
+        # if (data_from_new_page['edit_real_order']) is None:
+        if 1 == 1:
+            ins = directory_of_order(
+                id_order=id_order,
+                data_order=data_from_new_page['data_order'],
+                id_client=data_from_new_page['id_client'],
+                id_recipient=data_from_new_page['id_recipient'],
+                data_plane_order=data_from_new_page['data_plane_order'],
+                data_send_order=data_from_new_page['data_send_order'],
+                discont_order=data_from_new_page['discont_order'],
+                sum_payment=data_from_new_page['sum_payment'],
+                fulfilled_order=data_from_new_page['fulfilled_order'],
+                comment_order=data_from_new_page['comment_order'])
+            session.add(ins)
+            session.commit()
+            session.refresh(ins)
+            j_id_order = ins.id_order
+
+            w1w = len(data_from_new_page['id_model'])
+            while w1w > 0:
+                elem1 = data_from_new_page['id_model'][0]
+                del data_from_new_page['id_model'][0]
+                elem2 = data_from_new_page['quantity_pars_model'][0]
+                del data_from_new_page['quantity_pars_model'][0]
+                elem3 = data_from_new_page['price_model_order'].pop(0)
+                id_group_max = session.query(func.max(
+                    directory_of_group.id_group_model)).first()
+                id_group = int(id_group_max[0]) + 1
+
+                ins1 = directory_of_group(
+                    id_group_model=id_group,
+                    id_order=j_id_order,
+                    phase_1_model=True,
+                    phase_2_model=True,
+                    phase_3_model=True,
+                    id_model=elem1,
+                    quantity_pars_model=elem2,
+                    price_model_order=elem3)
+                session.add(ins1)
+                session.commit()
+                w1w = w1w-1
+            one_block = {"id_order": j_id_order}
+            return one_block
+
+        else:
+            ins = session.query(directory_of_order).filter(
+                directory_of_order.id_order == id_order).update(
+                {'data_order': data_from_new_page['data_order'],
+                    'id_client': data_from_new_page['id_client'],
+                    'id_recipient': data_from_new_page['id_recipient'],
+                    'data_plane_order': data_from_new_page['data_plane_order'],
+                    'data_send_order': data_from_new_page['data_send_order'],
+                    'discont_order': data_from_new_page['discont_order'],
+                    'sum_payment': data_from_new_page['sum_payment'],
+                    'fulfilled_order': data_from_new_page['fulfilled_order'],
+                    'comment_order': data_from_new_page['comment_order']})
         session.commit()
         session.refresh(ins)
         j_id_order = ins.id_order
 
+        q_order_g = session.query(func.count(
+            directory_of_group.id_order).label('my_count')).filter_by(
+                id_order=j_id_order).first()
+        count_order = int(q_order_g.my_count)
         w1w = len(data_from_new_page['id_model'])
-        while w1w > 0:
-            elem1 = data_from_new_page['id_model'][0]
-            del data_from_new_page['id_model'][0]
-            elem2 = data_from_new_page['quantity_pars_model'][0]
-            del data_from_new_page['quantity_pars_model'][0]
-            elem3 = data_from_new_page['price_model_order'].pop(0)
-            id_group_max = session.query(func.max(
-                directory_of_group.id_group_model)).first()
-            id_group = int(id_group_max[0]) + 1
+        if w1w == count_order:
+            while w1w > 0:
+                elem1 = data_from_new_page['id_model'].pop(0)
+                elem2 = data_from_new_page['quantity_pars_model'].pop(0)
+                elem3 = data_from_new_page['price_model_order'].pop(0)
+                # insg = session.query(directory_of_group).filter(
+                #     directory_of_group.id_group_model
 
-            ins1 = directory_of_group(
-                id_group_model=id_group,
-                id_order=j_id_order,
-                phase_1_model=True,
-                phase_2_model=True,
-                phase_3_model=True,
-                id_model=elem1,
-                quantity_pars_model=elem2,
-                price_model_order=elem3)
-            session.add(ins1)
-            session.commit()
-            w1w = w1w-1
-        one_block = {"id_order": j_id_order}
-        return one_block
+                ins1 = directory_of_group(
+                    id_group_model=id_group,
+                    id_order=j_id_order,
+                    phase_1_model=True,
+                    phase_2_model=True,
+                    phase_3_model=True,
+                    id_model=elem1,
+                    quantity_pars_model=elem2,
+                    price_model_order=elem3)
+                session.add(ins1)
+                session.commit()
+                w1w = w1w-1
+            one_block = {"id_order_chenged": j_id_order}
+            return one_block
 
 
 def return_data_from_edit_order(data_from_new_page):
