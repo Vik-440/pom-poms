@@ -337,6 +337,7 @@ def return_data_from_final_order(data_from_new_page):
                 id_order=j_id_order).first()
         count_order = int(q_order_g.my_count)
         w1w = len(data_from_new_page['id_model'])
+
         if w1w == count_order:
             while w1w > 0:
                 elem1 = data_from_new_page['id_model'].pop(0)
