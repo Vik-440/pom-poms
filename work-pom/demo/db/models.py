@@ -1,9 +1,11 @@
-from sqlalchemy import Date, ForeignKey, Numeric, create_engine, Column
-from sqlalchemy import Integer, String, Boolean
+# from array import ArrayType, array
+from sqlalchemy import ARRAY, Date, ForeignKey, Numeric, create_engine, Column
+from sqlalchemy import Integer, String, Boolean, ARRAY
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 from dotenv import load_dotenv
 import os
+from sqlalchemy.dialects import postgresql
 
 load_dotenv()
 url = os.getenv("PSQL_URL")
@@ -15,18 +17,24 @@ class directory_of_order(Base):
     id_order = Column('id_order', Integer, primary_key=True)
     data_order = Column('data_order', Date)
     data_plane_order = Column('data_plane_order', Date)
-    id_client = Column('id_client', Integer, ForeignKey(
-        'directory_of_client.id_client'))
-    id_recipient = Column('id_recipient', Integer, ForeignKey(
-        'directory_of_client.id_client'))
+    id_client = Column('id_client', Integer)
+    id_recipient = Column('id_recipient', Integer)
     data_send_order = Column('data_send_order', Date)
     fulfilled_order = Column('fulfilled_order', Boolean)
     sum_payment = Column('sum_payment', Integer)
     discont_order = Column('discont_order', Integer)
     comment_order = Column('comment_order', String)
 
-    client = relationship("directory_of_client", foreign_keys=[id_client])
-    recipient = relationship("directory_of_client", foreign_keys=[id_client])
+    id_model = Column('id_model', postgresql.ARRAY(Integer))
+    # ("data", postgresql.ARRAY(Integer, dimensions=2))
+    quantity_pars_model = Column(
+        'quantity_pars_model', postgresql.ARRAY(Integer))
+    phase_1_model = Column('phase_1_model', postgresql.ARRAY(Boolean))
+    phase_2_model = Column('phase_2_model', postgresql.ARRAY(Boolean))
+    phase_3_model = Column('phase_3_model', postgresql.ARRAY(Boolean))
+    price_model_order = Column('price_model_order', postgresql.ARRAY(Integer))
+    # client = relationship("directory_of_client", foreign_keys=[id_client])
+    # recipient = relationship("directory_of_client", foreign_keys=[id_client])
 
 
 class directory_of_client(Base):

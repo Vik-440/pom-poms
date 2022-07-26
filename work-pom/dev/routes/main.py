@@ -117,4 +117,3 @@ def finance():
             return(return_data_from_finance(0)), 200
     except Exception as e:
         return f'Error in function finance: {e}', 500
-

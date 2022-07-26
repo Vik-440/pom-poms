@@ -24,10 +24,13 @@ with Session(engine) as session:
             phase_model_list1, phase_model_list2, phase_model_list3 = [], [], []
             # test = [1, 2, 3, 4]
             list_from_group = select(
-                directory_of_group.id_model, directory_of_group.quantity_pars_model,
-                directory_of_group.phase_1_model, directory_of_group.phase_2_model,
-                directory_of_group.phase_3_model, directory_of_group.price_model_order).filter_by(
-                id_order = id_order).order_by('id_group_model')
+                directory_of_group.id_model,
+                directory_of_group.quantity_pars_model,
+                directory_of_group.phase_1_model,
+                directory_of_group.phase_2_model,
+                directory_of_group.phase_3_model,
+                directory_of_group.price_model_order).filter_by(
+                id_order=id_order).order_by('id_group_model')
             group_list = session.execute(list_from_group)
             for row1 in group_list:
                 id_model_list.append(row1.id_model)
@@ -40,7 +43,8 @@ with Session(engine) as session:
             # phase_model_list1, phase_model_list2, phase_model_list3, 
             # price_model_order_list)
 
-            session.query(directory_of_order).filter(directory_of_order.id_order == id_order).update(
+            session.query(directory_of_order).filter(
+                directory_of_order.id_order == id_order).update(
                 {"id_model": (id_model_list),
                     "quantity_pars_model": (quantity_pars_model_list),
                     "phase_1_model": (phase_model_list1),
@@ -51,7 +55,8 @@ with Session(engine) as session:
             # print(id_order, "- is saved")
             # s1, s2, s3, s4, s5, s6 = [], [], [], [], [], []
             # download = select(
-            #     directory_of_order.id_model, directory_of_order.quantity_pars_model,
+            #     directory_of_order.id_model,
+            #     directory_of_order.quantity_pars_model,
             #     directory_of_order.phase_1_model, directory_of_order.phase_2_model,
             #     directory_of_order.phase_3_model, directory_of_order.price_model_order).filter_by(
             #     id_order = id_order).order_by('id_order')

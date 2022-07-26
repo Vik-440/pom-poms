@@ -1,11 +1,12 @@
 import json
-from select import select
-from pymysql import NULL
+# from select import select
+# from pymysql import NULL
 from sqlalchemy import func
 from datetime import datetime
 from sqlalchemy.orm import Session
 from db.models import directory_of_order, directory_of_client
-from db.models import directory_of_group, directory_of_payment
+from db.models import directory_of_payment
+# from db.models import directory_of_group
 from db.models import directory_of_model
 from db.models import engine
 
@@ -34,9 +35,9 @@ def return_data_from_main_page(asked):
 
         id_order = []
         full_block = []
-        tmp_kolor_model, tmp_kod_model, tmp_comment_model, \
-            tmp_quantity_pars_model, tmp_phase_1_model, \
-            tmp_phase_2_model, tmp_phase_3_model = [], [], [], [], [], [], []
+        # tmp_kolor_model, tmp_kod_model, tmp_comment_model, \
+        #     tmp_quantity_pars_model, tmp_phase_1_model, \
+        #     tmp_phase_2_model, tmp_phase_3_model = [], [], [], [], [], [], []
 
         ds = datetime.today().strftime('%Y-%m-%d')
         if 'data_start' in asked:
@@ -114,7 +115,7 @@ def return_data_from_main_page(asked):
                 tmp11 -= 1
                 id_model = m_id_model.pop(0)
                 gr_model = session.query(directory_of_model).filter_by(
-                id_model = id_model).all()
+                    id_model=id_model).all()
                 for row5 in gr_model:
                     m_kolor_model.append(row5.kolor_model)
                     m_kod_model.append(row5.kod_model)
@@ -128,7 +129,7 @@ def return_data_from_main_page(asked):
                 m_kolor_model = m_kolor_model[0]
                 m_kod_model = m_kod_model[0]
                 m_comment_model = m_comment_model[0]
-#     
+#
             id_client_2 = session.query(directory_of_client).filter_by(
                 id_client=row.id_client).all()
             if (len(str(id_client_2))) < 3:

@@ -1,4 +1,4 @@
-from array import ArrayType, array
+# from array import ArrayType, array
 from sqlalchemy import ARRAY, Date, ForeignKey, Numeric, create_engine, Column
 from sqlalchemy import Integer, String, Boolean, ARRAY
 from sqlalchemy.ext.declarative import declarative_base
@@ -27,7 +27,8 @@ class directory_of_order(Base):
 
     id_model = Column('id_model', postgresql.ARRAY(Integer))
     # ("data", postgresql.ARRAY(Integer, dimensions=2))
-    quantity_pars_model = Column('quantity_pars_model', postgresql.ARRAY(Integer))
+    quantity_pars_model = Column(
+        'quantity_pars_model', postgresql.ARRAY(Integer))
     phase_1_model = Column('phase_1_model', postgresql.ARRAY(Boolean))
     phase_2_model = Column('phase_2_model', postgresql.ARRAY(Boolean))
     phase_3_model = Column('phase_3_model', postgresql.ARRAY(Boolean))
