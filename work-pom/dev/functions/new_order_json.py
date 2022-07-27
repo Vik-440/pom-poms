@@ -94,6 +94,15 @@ def return_data_from_new_order_post(data_from_new_page):
             for row in ur_kod_1:
                 data_var.append(row.kod_model)
             data_new_page = {"kod_model": data_var}
+        elif 'ur_coach' in data_from_new_page:
+            search_data = data_from_new_page['ur_coach']
+            w206w = ('%' + str(search_data) + '%')
+            ur_coach_1 = session.query(directory_of_client).filter(
+                directory_of_client.coach.ilike(w206w)).all()
+            data_var = []
+            for row in ur_coach_1:
+                data_var.append(row.coach)
+            data_new_page = {"coach": data_var}
         elif 'sl_phone' in data_from_new_page:
             search_data = data_from_new_page['sl_phone']
             data_new_page = return_data_from_client(search_data, 0, 0)

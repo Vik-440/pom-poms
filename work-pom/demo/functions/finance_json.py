@@ -1,7 +1,7 @@
 import json
 from sqlalchemy import func
 from datetime import datetime, timedelta
-from sqlalchemy.orm import Session, mapper
+from sqlalchemy.orm import Session
 from db.models import directory_of_payment
 from db.models import directory_of_outlay, directory_of_outlay_class
 from db.models import engine
@@ -177,7 +177,7 @@ def return_data_from_payment_change(sender):
         payment = sender['payment']
         metod_payment = sender['metod_payment']
         data_payment = sender['data_payment']
-        rows = session.query(directory_of_payment).filter_by(
+        session.query(directory_of_payment).filter_by(
             id_payment=id_payment).update(
                 {'id_order': id_order, 'payment': payment,
                  'metod_payment': metod_payment, 'data_payment': data_payment})
@@ -192,7 +192,7 @@ def return_data_from_outlay_change(sender):
         id_outlay_class = sender['id_outlay_class']
         money_outlay = sender['money_outlay']
         comment_outlay = sender['comment_outlay']
-        rows = session.query(directory_of_outlay).filter_by(
+        session.query(directory_of_outlay).filter_by(
             id_outlay=id_outlay).update(
                 {'data_outlay': data_outlay,
                  'id_outlay_class': id_outlay_class,
@@ -234,8 +234,7 @@ def return_data_from_payment_balans(sender):
         data_end = sender['data_end']
         iban = sender['iban']
         cash = sender['cash']
-        full_block, id_payment, id_order, payment, metod_payment, data_payment\
-            = [], [], [], [], [], []
+        full_block, payment, metod_payment = [], [], []
 
         data_start_obj = datetime.strptime(data_start, '%Y-%m-%d')
         data_end_obj = datetime.strptime(data_end, '%Y-%m-%d')
@@ -315,7 +314,8 @@ def return_data_from_payment_balans(sender):
 
 
 def return_data_from_payment_stat(search):
-    with Session(engine) as session:
+    with Session(engine):
+        # as session:
         stat, stat_outlay = [], []
 
         sql_sum = directory_of_payment.payment
