@@ -1,5 +1,4 @@
 import json
-# from select import select
 # from pymysql import NULL
 from sqlalchemy import func
 from datetime import datetime
@@ -22,23 +21,28 @@ def return_data_from_main_page(asked):
             session.commit()
             one_block = {"id_order": "ok"}
             return json.dumps(one_block)
-        # if 'phase_id_order' in asked:
-        #     id_order=asked['phase_id_order']
-        #     phase_1_model=asked['phase_1_model']
-        #     phase_2_model=asked['phase_2_model']
-        #     phase_3_model=asked['phase_3_model']
-        #     rows=session.query(directory_of_group).filter_by(id_order=id_order
-        #         ).update({'phase_1_model':phase_1_model,'phase_2_model':phase_2_model,'phase_3_model':phase_3_model})
-        #     session.commit()
-        #     one_block = {"phase_id_order": "ok"}
-        #     return json.dumps(one_block)
+        if 'phase_id_order' in asked:
+            id_order = asked['phase_id_order']
+            if 'phase_1_model' in asked:
+                phase_1_model = asked['phase_1_model']
+                session.query(directory_of_order).filter(
+                    directory_of_order.id_order == id_order).update(
+                        {"phase_1_model": phase_1_model})
+            if 'phase_2_model' in asked:
+                phase_2_model = asked['phase_2_model']
+                session.query(directory_of_order).filter(
+                    directory_of_order.id_order == id_order).update(
+                        {"phase_2_model": phase_2_model})
+            if 'phase_3_model' in asked:
+                phase_3_model = asked['phase_3_model']
+                session.query(directory_of_order).filter(
+                    directory_of_order.id_order == id_order).update(
+                        {"phase_3_model": phase_3_model})
+            session.commit()
+            one_block = {"phase_id_order": "ok"}
+            return json.dumps(one_block)
 
-        id_order = []
-        full_block = []
-        # tmp_kolor_model, tmp_kod_model, tmp_comment_model, \
-        #     tmp_quantity_pars_model, tmp_phase_1_model, \
-        #     tmp_phase_2_model, tmp_phase_3_model = [], [], [], [], [], [], []
-
+        id_order, full_block = [], []
         ds = datetime.today().strftime('%Y-%m-%d')
         if 'data_start' in asked:
             data_start = asked['data_start']

@@ -1,14 +1,15 @@
-import json
-from unittest import result
-from sqlalchemy import select, true, update
-from sqlalchemy import func
-from datetime import datetime
+# import json
+# from unittest import result
+from sqlalchemy import select
+# from sqlalchemy import true, update
+# from sqlalchemy import func
+# from datetime import datetime
 from sqlalchemy.orm import Session
-from db.models import directory_of_order, directory_of_client
-from db.models import directory_of_group, directory_of_payment
-from db.models import directory_of_model
+from db.models import directory_of_order, directory_of_group
+# from db.models import directory_of_client, directory_of_payment
+# from db.models import directory_of_model
 from db.models import engine
-import datetime
+# import datetime
 
 
 with Session(engine) as session:
@@ -18,10 +19,11 @@ with Session(engine) as session:
     for row in id_list:
         id_order = int(row.id_order)
         if id_order < 2000:
-            
+
             id_model_list, quantity_pars_model_list = [], []
             price_model_order_list, phase_model_list = [], []
-            phase_model_list1, phase_model_list2, phase_model_list3 = [], [], []
+            phase_model_list1, phase_model_list2 = [], []
+            phase_model_list3 = []
             # test = [1, 2, 3, 4]
             list_from_group = select(
                 directory_of_group.id_model,
@@ -39,8 +41,8 @@ with Session(engine) as session:
                 phase_model_list2.append(row1.phase_2_model)
                 phase_model_list3.append(row1.phase_3_model)
                 price_model_order_list.append(row1.price_model_order)
-            # print(id_order, " - ", id_model_list, quantity_pars_model_list, 
-            # phase_model_list1, phase_model_list2, phase_model_list3, 
+            # print(id_order, " - ", id_model_list, quantity_pars_model_list,
+            # phase_model_list1, phase_model_list2, phase_model_list3,
             # price_model_order_list)
 
             session.query(directory_of_order).filter(
@@ -57,8 +59,10 @@ with Session(engine) as session:
             # download = select(
             #     directory_of_order.id_model,
             #     directory_of_order.quantity_pars_model,
-            #     directory_of_order.phase_1_model, directory_of_order.phase_2_model,
-            #     directory_of_order.phase_3_model, directory_of_order.price_model_order).filter_by(
+            #     directory_of_order.phase_1_model,
+            #       directory_of_order.phase_2_model,
+            #     directory_of_order.phase_3_model,
+            #       directory_of_order.price_model_order).filter_by(
             #     id_order = id_order).order_by('id_order')
             # order_list = session.execute(download)
             # for row1 in order_list:
@@ -68,11 +72,8 @@ with Session(engine) as session:
             #     s4 = (row1.phase_2_model)
             #     s5 = (row1.phase_3_model)
             #     s6 = (row1.price_model_order)
-                # print(id_order, " - ", s1, s2, s3, s4, s5, s6)
-                # print(s1[0], s3[1])
-
-
-            
+            #    # print(id_order, " - ", s1, s2, s3, s4, s5, s6)
+            #    # print(s1[0], s3[1])
 
 
 # with Session(engine) as session:
@@ -129,7 +130,7 @@ with Session(engine) as session:
 
 
 # ins = directory_of_model(
-#                     kod_model=data_from_new_page['kod_model'],    # int for all
+#                     kod_model=data_from_new_page['kod_model'],
 #                     id_color_1=int(data_from_new_page['id_color_1']),
 #                     id_color_part_1=int(data_from_new_page['id_color_part_1']),
 #                     id_color_2=int(data_from_new_page['id_color_2']),
@@ -143,7 +144,6 @@ with Session(engine) as session:
 #                     kolor_model=data_from_new_page['kolor_model'])
 #             session.add(ins)
 #             session.commit()
-
 
 
 # with Session(engine) as session:
