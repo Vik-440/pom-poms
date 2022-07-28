@@ -72,18 +72,14 @@ def return_data_from_finance(asked):
 
 def return_data_from_payment(sender):
     with Session(engine) as session:
-        w1 = sender[0]['payment_group']
-        while w1 > 0:
-            w1 -= 1
-            w2 = sender[1]
-            del sender[1]
-            z1 = directory_of_payment(id_order=w2['id_order'],
-                                      payment=w2['payment'],
-                                      metod_payment=w2['metod_payment'],
-                                      data_payment=w2['data_payment'])
-            session.add(z1)
+        z1 = directory_of_payment(
+            id_order=sender['id_order'],
+            payment=sender['payment'],
+            metod_payment=sender['metod_payment'],
+            data_payment=sender['data_payment'])
+        session.add(z1)
         session.commit()
-    return({"payment_group": "ok"})
+    return({"payment_set": "ok"})
 
 
 def return_data_from_outlay(sender):

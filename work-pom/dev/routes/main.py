@@ -42,7 +42,7 @@ def main_page():
             data = {"data_start": "2016-01-01"}
             return(return_data_from_main_page(data))
         else:
-            return f'Error in request.method: {e}', 500
+            return ({"request_metod": "error"}), 500
     except Exception as e:
         return f'Error in function mainpage: {e}', 500
 
@@ -93,8 +93,8 @@ def finance():
         if request.method == 'POST':
             request.data = request.get_json()
             if type(request.data) is list:
-                if 'payment_group' in request.data[0]:
-                    return (return_data_from_payment(request.data)), 200
+                # if 'payment_group' in request.data[0]:
+                #     return (return_data_from_payment(request.data)), 200
                 if 'outlay_group' in request.data[0]:
                     return (return_data_from_outlay(request.data)), 200
             elif type(request.data) is dict:
@@ -113,7 +113,20 @@ def finance():
                 if 'balans' in request.data:
                     return (return_data_from_payment_balans(request.data)), 200
             return({"testdata": "Test-POST-NOT-OK"})
-        else:
+        elif request.method == 'GET':
             return(return_data_from_finance(0)), 200
+        else:
+            return ({"Finance": "error"}), 500
+    except Exception as e:
+        return f'Error in function finance: {e}', 500
+
+
+@app.route('/finance/payment', methods=['POST'])
+def finance_payment():
+    try:
+        if request.method == 'POST':
+            request.data = request.get_json()
+            return (return_data_from_payment(request.data)), 200
+
     except Exception as e:
         return f'Error in function finance: {e}', 500
