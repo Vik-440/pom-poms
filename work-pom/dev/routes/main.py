@@ -112,7 +112,7 @@ def finance():
                     return (return_data_from_payment_stat(request.data)), 200
                 if 'balans' in request.data:
                     return (return_data_from_payment_balans(request.data)), 200
-            return({"testdata": "Test-POST-NOT-OK"})
+            return({"testdata": "Test-POST-error"}), 500
         elif request.method == 'GET':
             return(return_data_from_finance(0)), 200
         else:
@@ -127,6 +127,5 @@ def finance_payment():
         if request.method == 'POST':
             request.data = request.get_json()
             return (return_data_from_payment(request.data)), 200
-
     except Exception as e:
         return f'Error in function finance: {e}', 500
