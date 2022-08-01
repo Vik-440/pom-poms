@@ -150,11 +150,11 @@ export class FinancesComponent implements OnInit {
       }); 
     } else if (action === 'edited') {
       const params = {
-        id_payment: item.value.id_payment,
+        id_payment: +item.value.id_payment,
         data_payment: item.value.data_payment,
         metod_payment: item.value.metod_payment,
-        id_order: item.value.id_order,
-        payment: item.value.payment
+        id_order: +item.value.id_order,
+        payment: +item.value.payment
       };
 
       this.service.editPayment(params).subscribe(() => {
@@ -184,7 +184,18 @@ export class FinancesComponent implements OnInit {
       payment: +paymentForSave.payment
     }
     this.service.savePayment(params).subscribe(() => {
-
+      this.dataItems.controls[this.dataItems.controls.length - 1].patchValue({
+        status: 'edit'
+      })
+      this.datePrevious = paymentForSave.data_payment;
+      this.dataItems.push(this.fb.group({
+        data_payment: [this.datePrevious, Validators.required],
+        metod_payment: 'iban',
+        id_payment: null,
+        id_order: [null, Validators.required],
+        payment: [null, Validators.required],
+        status: 'ok'
+      }));
     })
   }
 }
