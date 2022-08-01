@@ -168,16 +168,15 @@ def return_data_from_outlay_search(sender):
     return json.dumps(full_block)
 
 
-def return_data_from_payment_change(sender):
+def return_data_from_payment_change(id, sender):
     try:
         with Session(engine)as session:
-            id_payment = sender['id_payment']
             id_order = sender['id_order']
             payment = sender['payment']
             metod_payment = sender['metod_payment']
             data_payment = sender['data_payment']
             session.query(directory_of_payment).filter_by(
-                id_payment=id_payment).update(
+                id_payment=id).update(
                     {'id_order': id_order, 'payment': payment,
                     'metod_payment': metod_payment, 'data_payment': data_payment})
             session.commit()
@@ -189,9 +188,6 @@ def return_data_from_payment_change(sender):
 def return_data_from_outlay_change(id, sender):
     try:
         with Session(engine)as session:
-            # id_outlay = id
-            # print(id)
-            # id_outlay = sender['id_outlay']
             data_outlay = sender['data_outlay']
             id_outlay_class = sender['id_outlay_class']
             money_outlay = sender['money_outlay']
