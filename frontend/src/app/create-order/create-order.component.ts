@@ -489,10 +489,6 @@ export class CreateOrderComponent implements OnInit {
     };
   }
 
-  lick() {
-    localStorage.setItem('data_plane_order', JSON.stringify(this.dataPlaneOrder));
-      localStorage.setItem('data_send_order', JSON.stringify(this.dataSendOrder));
-  }
   makeArrayDataOrder(key) {
     const result = [];
     this.orderForm.value.map(order => {

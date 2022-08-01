@@ -10,22 +10,54 @@
         </tr>
         </thead>
         <tbody>
-          <ng-container *ngFor="let item of mainItems">
+          <ng-container *ngFor="let item of dataItems.controls" [formGroup]="item">
             <tr>
-              <td>{{ item.data_payment }}</td>
-              <td>{{ item.metod_payment	}}</td>
-              <td>{{ item.id_order	}}</td>
-              <td>{{ item.payment	}}</td>
               <td>
-                <button class="btn-icon display-none">
-                  <img class="next-icon icon" src="./assets/img/icons/ok.svg" />
+                <input class="data-input"  [class.old]="item.value.status === 'edit'" [disabled]="item.value.status === 'edit' ? '' : null" 
+                [class.edit-field]="item.value.status !== 'edit'"  placeholder="yyyy-mm-dd" (click)="calendarPaymentStart.toggle()" [minDate]="{year: 2016, month: 1, day: 1}"
+          [maxDate]="{year: +todayYear, month: 12, day: 31}" formControlName="data_payment" ngbDatepicker #calendarPaymentStart="ngbDatepicker">
+
+              </td>
+              <td >
+                <select  [class.old]="item.value.status === 'edit'"  class="data-input"  
+                  [attr.disabled]="item.value.status === 'edit' ? '' : null"
+                  [class.edit-field]="item.value.status !== 'edit'" 
+                  formControlName="metod_payment">
+                    <option value="iban">iban</option>
+                    <option value="cash">cash</option>
+                </select>
+
+              </td>
+              <td><input [class.old]="item.value.status === 'edit'"  class="data-input" 
+                [attr.disabled]="item.value.status === 'edit' ? '' : null"  
+                [class.edit-field]="item.value.status !== 'edit'"  
+                type="text" 
+                formControlName="id_order">
+              </td>
+              <td><input [class.old]="item.value.status === 'edit'"  class="data-input" 
+                [attr.disabled]="item.value.status === 'edit' ? '' : null" 
+                [class.edit-field]="item.value.status !== 'edit'" 
+                type="text" 
+                formControlName="payment">
+              </td>
+              <td class="btns-actions" [ngSwitch]="item.value.status">
+                <button class="btn-icon bg-btn"  (click)="actionClick(item.value.status, item)" *ngSwitchCase="'edit'">
+                  <img class="edit-icon icon" src="./assets/img/icons/pencil.png" />
                 </button>
+                <div *ngSwitchCase="'process'" class="edit-actions">
+                  <button class="btn-icon sm-btn"  (click)="actionClick('close', item)" >
+                    <img class="icon icon-small"  src="./assets/img/icons/close.png">
+                  </button>
+                  <button class="btn-icon sm-btn"  (click)="actionClick('edited', item)">
+                    <img class="icon icon-small" src="./assets/img/icons/check.png">
+                  </button>
+                </div>
               </td>
             </tr>
-      </ng-container>
+          </ng-container>
         </tbody>
       </table>
-      <button class="save-btn left table-first--save">Зберегти</button>
+      <button class="save-btn left table-first--save" (click)="savePayment()" [disabled]="dataItems.controls[dataItems.controls.length - 1].invalid">Зберегти</button>
   </div>
   <div class="money">
     <div class="payments" [formGroup]="paymentFrom">
