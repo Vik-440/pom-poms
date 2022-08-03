@@ -18,6 +18,13 @@ from functions.finance_json import return_data_from_outlay_change
 from functions.finance_json import return_data_from_payment_id_order
 from functions.finance_json import return_data_from_payment_stat
 from functions.finance_json import return_data_from_payment_balans
+from log.logger import logger
+
+
+@app.route('/log', methods=['GET'])
+def get_log():
+    with open('pom-poms.log', 'r') as f:
+        return f.read()
 
 
 @app.route('/')
@@ -40,10 +47,12 @@ def main_page():
         # ds=datetime.today().strftime('%Y-%m-%d')
         elif request.method == 'GET':
             data = {"data_start": "2016-01-01"}
+            logger.info('Get main_page is work!')
             return(return_data_from_main_page(data))
         else:
             return ({"request_metod": "error"}), 500
     except Exception as e:
+        logger.error(f'Error in function mainpage: {e}')
         return f'Error in function mainpage: {e}', 500
 
 
@@ -57,6 +66,7 @@ def new_order():
         else:
             return (return_data_from_new_order())
     except Exception as e:
+        logger.error(f'Error in function new_order: {e}')
         return f'Error in function new_order: {e}', 500
 
 
@@ -84,6 +94,7 @@ def material():
         else:
             return(return_data_from_material(0)), 200
     except Exception as e:
+        logger.error(f'Error in function material: {e}')
         return f'Error in function material: {e}', 500
 
 
@@ -112,6 +123,7 @@ def finance():
         else:
             return ({"Finance": "error"}), 500
     except Exception as e:
+        logger.error(f'Error in function finance: {e}')
         return f'Error in function finance: {e}', 500
 
 
@@ -122,6 +134,7 @@ def finance_payment():
             request.data = request.get_json()
             return (return_data_from_payment(request.data)), 200
     except Exception as e:
+        logger.error(f'Error in function finance: {e}')
         return f'Error in function finance: {e}', 500
 
 
@@ -134,6 +147,7 @@ def finance_payment_change(id):
         else:
             return ({"error_message": "mistake method"}), 404
     except Exception as e:
+        logger.error(f'Error in function finance: {e}')
         return f'Error in function finance: {e}', 500
 
 
@@ -144,6 +158,7 @@ def finance_outlay():
         if request.method == 'POST':
             return (return_data_from_outlay(request.data)), 200
     except Exception as e:
+        logger.error(f'Error in function finance: {e}')
         return f'Error in function finance: {e}', 500
 
 
@@ -156,4 +171,5 @@ def finance_outlay_change(id):
         else:
             return ({"error_message": "mistake method"}), 404
     except Exception as e:
+        logger.error(f'Error in function finance: {e}')
         return f'Error in function finance: {e}', 500
