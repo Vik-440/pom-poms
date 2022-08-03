@@ -14,11 +14,12 @@ export class FinancesComponent implements OnInit {
 
   items = [];
   metodPayment;
+  outlayClass: string[];
   paymentFrom: FormGroup;
   spendingForm;
   dataItems: FormArray;
   periods: string[];
-  outlayData;
+  outlayData: FormArray;
   itemEdit;
   datePrevious = {
     year: new Date().getFullYear(),
@@ -48,10 +49,21 @@ export class FinancesComponent implements OnInit {
       payment: [null, Validators.required],
       status: 'edit'
     })])
+
+    this.outlayData = this.fb.array([this.fb.group({
+      data_outlay: [null, Validators.required],
+      outlay_class: [null, Validators.required],
+      money_outlay: [null, Validators.required],
+      comment_outlay: [null, Validators.required],
+      status: 'edit'
+    })])
     this.service.getFinances().subscribe((data: any) => {
       const copyData = data.slice(0);
       this.metodPayment = data[0].metod_payment;
-      this.outlayData = data[data.length - 1];
+      this.outlayClass = data[0].outlay_class;
+      const outlayItems = [data[data.length - 1]];
+      console.log(outlayItems);
+      
       const mainItems = copyData.slice(1, data.length - 1);
       if(mainItems.length) {
         this.dataItems.clear()
@@ -75,6 +87,27 @@ export class FinancesComponent implements OnInit {
           payment: [null, Validators.required],
           status: 'ok'
           }))
+      }
+
+      if(outlayItems) {
+        this.outlayData.clear()
+        outlayItems.forEach((item: any) => {
+          this.outlayData.push(this.fb.group({
+            data_outlay: [item.data_outlay, Validators.required],
+            outlay_class: [item.outlay_class, Validators.required],
+            money_outlay: [item.money_outlay, Validators.required],
+            comment_outlay: [item.comment_outlay, Validators.required],
+            status: 'edit'
+          }))
+        })
+
+        this.outlayData.push(this.fb.group({
+          data_outlay: [null, Validators.required],
+          outlay_class: [null, Validators.required],
+          money_outlay: [null, Validators.required],
+          comment_outlay: [null, Validators.required],
+          status: 'ok'
+        }))  
       }
     })
     this.periods = ['день', 'тиждень', 'місяць', 'квартал', 'рік']
@@ -197,5 +230,9 @@ export class FinancesComponent implements OnInit {
         status: 'ok'
       }));
     })
+  }
+
+  saveOutlay() {
+
   }
 }

@@ -19,13 +19,12 @@
 
               </td>
               <td >
-                <select  [class.old]="item.value.status === 'edit'"  class="data-input"  
-                  [attr.disabled]="item.value.status === 'edit' ? '' : null"
+                <ng-select [class.old]="item.value.status === 'edit'"  class="data-input" [clearable]="false"
+                  [readonly]="item.value.status === 'edit' ? true : false"
                   [class.edit-field]="item.value.status !== 'edit'" 
-                  formControlName="metod_payment">
-                    <option value="iban">iban</option>
-                    <option value="cash">cash</option>
-                </select>
+                  formControlName="metod_payment"
+                  [items]="metodPayment" >
+                </ng-select>
 
               </td>
               <td><input [class.old]="item.value.status === 'edit'"  class="data-input" 
@@ -129,5 +128,64 @@
         Застосувати
       </button>
   </div>
-  <div class="table-second"></div>
+</div>
+<div class="table-second">
+  <table class="table table-lg table-bordered mb-0 border-primary">
+    <thead>
+    <tr class="">
+      <th scope="col" sortable="id_order" class="date">дата</th>
+      <th scope="col" sortable="id_order" class="expense">витрата</th>
+      <th scope="col" sortable="id_order" class="sum">сума</th>
+      <th scope="col" sortable="id_order" class="comment">коментар</th>
+    </tr>
+    </thead>
+    <tbody>
+      <ng-container *ngFor="let item of outlayData.controls" [formGroup]="item">
+        <tr>
+          <td>
+            <input class="data-input"  [class.old]="item.value.status === 'edit'" [disabled]="item.value.status === 'edit' ? '' : null" 
+            [class.edit-field]="item.value.status !== 'edit'"  placeholder="yyyy-mm-dd" (click)="calendarOutlayStart.toggle()" [minDate]="{year: 2016, month: 1, day: 1}"
+      [maxDate]="{year: +todayYear, month: 12, day: 31}" formControlName="data_outlay" ngbDatepicker #calendarOutlayStart="ngbDatepicker">
+
+          </td>
+          <td >
+            <ng-select [class.old]="item.value.status === 'edit'"  class="data-input" [clearable]="false"
+                  [readonly]="item.value.status === 'edit' ? true : false"
+                  [class.edit-field]="item.value.status !== 'edit'" 
+                  formControlName="outlay_class"
+                  [items]="outlayClass" >
+                </ng-select>
+
+          </td>
+          <td><input [class.old]="item.value.status === 'edit'"  class="data-input" 
+            [attr.disabled]="item.value.status === 'edit' ? '' : null"  
+            [class.edit-field]="item.value.status !== 'edit'"  
+            type="text" 
+            formControlName="money_outlay">
+          </td>
+          <td><input [class.old]="item.value.status === 'edit'"  class="data-input" 
+            [attr.disabled]="item.value.status === 'edit' ? '' : null" 
+            [class.edit-field]="item.value.status !== 'edit'" 
+            type="text" 
+            formControlName="comment_outlay">
+          </td>
+          <td class="btns-actions" [ngSwitch]="item.value.status">
+            <button class="btn-icon bg-btn"  (click)="actionClick(item.value.status, item)" *ngSwitchCase="'edit'">
+              <img class="edit-icon icon" src="./assets/img/icons/pencil.png" />
+            </button>
+            <div *ngSwitchCase="'process'" class="edit-actions">
+              <button class="btn-icon sm-btn"  (click)="actionClick('close', item)" >
+                <img class="icon icon-small"  src="./assets/img/icons/close.png">
+              </button>
+              <button class="btn-icon sm-btn"  (click)="actionClick('edited', item)">
+                <img class="icon icon-small" src="./assets/img/icons/check.png">
+              </button>
+            </div>
+          </td>
+        </tr>
+      </ng-container>
+    </tbody>
+    </table>
+    <button class="save-btn left table-first--save" (click)="saveOutlay()" [disabled]="outlayData.controls[outlayData.controls.length - 1].invalid">Зберегти</button>
+</div>
 </div>

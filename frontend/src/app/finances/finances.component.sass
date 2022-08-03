@@ -1,8 +1,10 @@
-.table-first
+.table-first, .table-second
   display: flex
   flex-direction: column
   width: 457px !important
   overflow: unset
+  table
+    border: none
   &--save
     width: 89px
     align-self: flex-end
@@ -10,8 +12,17 @@
   tr
     height: 26px !important
     text-align: center
+    line-height: 13px
   .date
-    width: 118px
+    min-width: 100px 
+    width: 100px
+  .expense
+    width: 103px
+    min-width: 103px
+  .sum
+    width: 114px
+  .comment
+    width: 283px
   .form
     width: 103px
   .order
@@ -29,6 +40,7 @@
     border: 0.5px solid #9e9e9e
 .money
   margin-left: 54px
+  margin-right: 33px
   width: 104px
   &-header
     width: 104px
@@ -113,6 +125,8 @@
 ::ng-deep
   .ng-select.ng-select-single .ng-select-container .ng-value-container .ng-input
     top: 0
+  .ng-select.ng-select-disabled>.ng-select-container 
+    background-color: transparent !important
   .ng-select .ng-select-container .ng-value-container
     padding-left: 3px
   .ng-select .ng-select-container
@@ -122,3 +136,6 @@
   .ng-select.ng-select-single 
     .ng-select-container
       height: auto !important
+    &.data-input
+      .ng-select-container
+        height: 100% !important
