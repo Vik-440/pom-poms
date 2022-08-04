@@ -4,9 +4,14 @@ services:
     build: ./work-pom/demo
     ports:
       - "5000:5000"
+    volumes:
+      - log_volume:/etc/data/
     env_file:
       - dev.env
   angular:
     build: ./frontend
     ports:
       - "4200:80"
+
+volumes:
+  log_volume:
