@@ -92,8 +92,10 @@ export class FinancesComponent implements OnInit {
       if(outlayItems) {
         this.outlayData.clear()
         outlayItems.forEach((item: any) => {
+          const dataOutlay = item.data_outlay.split('-');
           this.outlayData.push(this.fb.group({
-            data_outlay: [item.data_outlay, Validators.required],
+            data_outlay: [{ year: +dataOutlay[0], month: +dataOutlay[1], day: +dataOutlay[2] }, Validators.required],
+            id_outlay: item.id_outlay,
             outlay_class: [item.outlay_class, Validators.required],
             money_outlay: [item.money_outlay, Validators.required],
             comment_outlay: [item.comment_outlay, Validators.required],
@@ -103,6 +105,7 @@ export class FinancesComponent implements OnInit {
 
         this.outlayData.push(this.fb.group({
           data_outlay: [null, Validators.required],
+          id_outlay: null,
           outlay_class: [null, Validators.required],
           money_outlay: [null, Validators.required],
           comment_outlay: [null, Validators.required],
@@ -170,7 +173,7 @@ export class FinancesComponent implements OnInit {
     })
   }
 
-  actionClick(action, item) {
+  actionClick(action, item, table = 'payment') {
     if(action === 'edit') {
       this.itemEdit = _.cloneDeep(item.value);
       item.patchValue({
@@ -182,9 +185,20 @@ export class FinancesComponent implements OnInit {
         status: 'edit'
       }); 
     } else if (action === 'edited') {
+      if(table === 'outlay') {
+        
+        const params = {
+          data_outlay: typeof item.value.data_outlay === 'string' ? item.value.data_outlay : this.editData(Object.values(item.value.data_outlay)),
+          id_outlay_class: item.value.id_outlay,
+          money_outlay: +item.value.money_outlay,
+          comment_outlay: item.value.comment_outlay
+        };
+        this.service.editOutlay(params).subscribe();
+        return;
+      }
       const params = {
         id_payment: +item.value.id_payment,
-        data_payment: item.value.data_payment,
+        data_payment: typeof item.value.data_payment === 'string' ? item.value.data_payment : this.editData(Object.values(item.value.data_payment)),
         metod_payment: item.value.metod_payment,
         id_order: +item.value.id_order,
         payment: +item.value.payment
@@ -233,6 +247,26 @@ export class FinancesComponent implements OnInit {
   }
 
   saveOutlay() {
+    const outlayForSave = this.outlayData.value[this.outlayData.value.length - 1];
+    const params = {
+      data_outlay: this.editData(Object.values(outlayForSave.data_outlay)),
+      id_outlay_class: outlayForSave.id_outlay,
+      money_outlay: +outlayForSave.money_outlay,
+      comment_outlay: outlayForSave.comment_outlay
+    };
 
+    this.service.saveOutlay(params).subscribe(() => {
+      this.outlayData.controls[this.outlayData.controls.length - 1].patchValue({
+        status: 'edit'
+      })
+      this.outlayData.push(this.fb.group({
+        data_outlay: [null, Validators.required],
+        outlay_class: [null, Validators.required],
+        id_outlay: null,
+        money_outlay: [null, Validators.required],
+        comment_outlay: [null, Validators.required],
+        status: 'ok'
+      })) 
+    })
   }
 }

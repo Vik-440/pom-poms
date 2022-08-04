@@ -19,10 +19,18 @@ export class FinancesPageService {
   }
 
   editPayment(params) {
-    return this.http.post(`http://127.0.0.1:5000/finance`, params);
+    return this.http.put(`http://127.0.0.1:5000/finance/payment/${params.id_payment}`, params);
   }
 
   savePayment(params) {
     return this.http.post(`http://127.0.0.1:5000/finance/payment`, params);
+  }
+
+  editOutlay(params) {
+    return this.http.put(`http://127.0.0.1:5000/finance/outlay/${params.id_outlay_class}`, params);
+  }
+
+  saveOutlay(params) {
+    return this.http.post(`http://127.0.0.1:5000/finance/outlay`, params);
   }
 }
