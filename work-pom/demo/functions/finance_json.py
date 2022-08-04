@@ -71,31 +71,33 @@ def return_data_from_finance(asked):
 
 
 def return_data_from_payment(sender):
-    with Session(engine) as session:
-        z1 = directory_of_payment(
-            id_order=sender['id_order'],
-            payment=sender['payment'],
-            metod_payment=sender['metod_payment'],
-            data_payment=sender['data_payment'])
-        session.add(z1)
-        session.commit()
-    return({"payment_set": "ok"})
+    try:
+        with Session(engine) as session:
+            z1 = directory_of_payment(
+                id_order=sender['id_order'],
+                payment=sender['payment'],
+                metod_payment=sender['metod_payment'],
+                data_payment=sender['data_payment'])
+            session.add(z1)
+            session.commit()
+        return({"payment_set": "ok"})
+    except Exception as e:
+        return f'Error in function finance: {e}', 500
 
 
 def return_data_from_outlay(sender):
-    with Session(engine) as session:
-        w1 = sender[0]['outlay_group']
-        while w1 > 0:
-            w1 -= 1
-            w2 = sender[1]
-            del sender[1]
-            z1 = directory_of_outlay(data_outlay=w2['data_outlay'],
-                                     id_outlay_class=w2['id_outlay_class'],
-                                     money_outlay=w2['money_outlay'],
-                                     comment_outlay=w2['comment_outlay'])
+    try:
+        with Session(engine) as session:
+            z1 = directory_of_outlay(
+                data_outlay=sender['data_outlay'],
+                id_outlay_class=sender['id_outlay_class'],
+                money_outlay=sender['money_outlay'],
+                comment_outlay=sender['comment_outlay'])
             session.add(z1)
-        session.commit()
-    return({"outlay_group": "ok"})
+            session.commit()
+        return({"outlay_set": "ok"})
+    except Exception as e:
+        return f'Error in function finance: {e}', 500
 
 
 def return_data_from_payment_search(sender):
@@ -166,36 +168,40 @@ def return_data_from_outlay_search(sender):
     return json.dumps(full_block)
 
 
-def return_data_from_payment_change(sender):
-    with Session(engine)as session:
-        id_payment = sender['id_payment']
-        id_order = sender['id_order']
-        payment = sender['payment']
-        metod_payment = sender['metod_payment']
-        data_payment = sender['data_payment']
-        session.query(directory_of_payment).filter_by(
-            id_payment=id_payment).update(
-                {'id_order': id_order, 'payment': payment,
-                 'metod_payment': metod_payment, 'data_payment': data_payment})
-        session.commit()
-    return({"id_payment": "ok"})
+def return_data_from_payment_change(id, sender):
+    try:
+        with Session(engine)as session:
+            id_order = sender['id_order']
+            payment = sender['payment']
+            metod_payment = sender['metod_payment']
+            data_payment = sender['data_payment']
+            session.query(directory_of_payment).filter_by(
+                id_payment=id).update(
+                    {'id_order': id_order, 'payment': payment,
+                    'metod_payment': metod_payment, 'data_payment': data_payment})
+            session.commit()
+        return({"id_payment": "ok"})
+    except Exception as e:
+        return f'Error in function finance: {e}', 500
 
 
-def return_data_from_outlay_change(sender):
-    with Session(engine)as session:
-        id_outlay = sender['id_outlay']
-        data_outlay = sender['data_outlay']
-        id_outlay_class = sender['id_outlay_class']
-        money_outlay = sender['money_outlay']
-        comment_outlay = sender['comment_outlay']
-        session.query(directory_of_outlay).filter_by(
-            id_outlay=id_outlay).update(
-                {'data_outlay': data_outlay,
-                 'id_outlay_class': id_outlay_class,
-                 'money_outlay': money_outlay,
-                 'comment_outlay': comment_outlay})
-        session.commit()
-    return({"id_outlay": "ok"})
+def return_data_from_outlay_change(id, sender):
+    try:
+        with Session(engine)as session:
+            data_outlay = sender['data_outlay']
+            id_outlay_class = sender['id_outlay_class']
+            money_outlay = sender['money_outlay']
+            comment_outlay = sender['comment_outlay']
+            session.query(directory_of_outlay).filter_by(
+                id_outlay=id).update(
+                    {'data_outlay': data_outlay,
+                    'id_outlay_class': id_outlay_class,
+                    'money_outlay': money_outlay,
+                    'comment_outlay': comment_outlay})
+            session.commit()
+        return({"id_outlay": "ok"})
+    except Exception as e:
+        return f'Error in function finance: {e}', 500
 
 
 def return_data_from_payment_id_order(sender):

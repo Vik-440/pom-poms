@@ -93,19 +93,13 @@ def finance():
         if request.method == 'POST':
             request.data = request.get_json()
             if type(request.data) is list:
-                # if 'payment_group' in request.data[0]:
-                #     return (return_data_from_payment(request.data)), 200
-                if 'outlay_group' in request.data[0]:
-                    return (return_data_from_outlay(request.data)), 200
+                pass
+
             elif type(request.data) is dict:
                 if 'payment_search' in request.data:
                     return (return_data_from_payment_search(request.data)), 200
                 if 'outlay_search' in request.data:
                     return (return_data_from_outlay_search(request.data)), 200
-                if 'id_payment' in request.data:
-                    return (return_data_from_payment_change(request.data)), 200
-                if 'id_outlay' in request.data:
-                    return (return_data_from_outlay_change(request.data)), 200
                 if 'id_order' in request.data:
                     return (return_data_from_payment_id_order(request.data))
                 if 'stat' in request.data:
@@ -127,5 +121,39 @@ def finance_payment():
         if request.method == 'POST':
             request.data = request.get_json()
             return (return_data_from_payment(request.data)), 200
+    except Exception as e:
+        return f'Error in function finance: {e}', 500
+
+
+@app.route('/finance/payment/<int:id>', methods=['PUT'])
+def finance_payment_change(id):
+    try:
+        if request.method == 'PUT':
+            request.data = request.get_json()
+            return (return_data_from_payment_change(id, request.data)), 200
+        else:
+            return ({"error_message": "mistake method"}), 404
+    except Exception as e:
+        return f'Error in function finance: {e}', 500
+
+
+@app.route('/finance/outlay', methods=['POST'])
+def finance_outlay():
+    request.data = request.get_json()
+    try:
+        if request.method == 'POST':
+            return (return_data_from_outlay(request.data)), 200
+    except Exception as e:
+        return f'Error in function finance: {e}', 500
+
+
+@app.route('/finance/outlay/<int:id>', methods=['PUT'])
+def finance_outlay_change(id):
+    request.data = request.get_json()
+    try:
+        if request.method == 'PUT':
+            return (return_data_from_outlay_change(id, request.data)), 200
+        else:
+            return ({"error_message": "mistake method"}), 404
     except Exception as e:
         return f'Error in function finance: {e}', 500
