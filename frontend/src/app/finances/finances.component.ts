@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import * as _ from 'lodash';
+import * as moment from 'moment';
+import { filter } from 'rxjs';
 import { FinancesPageService } from '../services/finances.service';
 
 @Component({
@@ -12,7 +14,6 @@ export class FinancesComponent implements OnInit {
 
   constructor(private service: FinancesPageService, private fb: FormBuilder) { }
 
-  items = [];
   metodPayment;
   outlayClass: string[];
   paymentFrom: FormGroup;
@@ -20,6 +21,9 @@ export class FinancesComponent implements OnInit {
   dataItems: FormArray;
   periods: string[];
   outlayData: FormArray;
+  statisticsPeriods;
+  statisticsData;
+  isShowStatistics = false;
   itemEdit;
   datePrevious = {
     year: new Date().getFullYear(),
@@ -28,6 +32,16 @@ export class FinancesComponent implements OnInit {
   };
   todayYear = new Date().getFullYear();
   ngOnInit(): void {
+    this.statisticsPeriods = [
+      'прогноз рік',
+      this.todayYear,
+      moment(new Date()).subtract(1, 'months').format('YYYY-MM'),
+      moment(new Date()).format('YYYY-MM'),
+      moment(new Date()).subtract(2, 'days').format('YYYY-MM-DD'),
+      moment(new Date()).subtract(1, 'days').format('YYYY-MM-DD'),
+      moment(new Date()).format('YYYY-MM-DD'),
+    ];
+    console.log(this.statisticsPeriods, new Date().getMonth(), );
     
     this.paymentFrom = this.fb.group({
       metod: [null, Validators.required],
@@ -62,8 +76,6 @@ export class FinancesComponent implements OnInit {
       this.metodPayment = data[0].metod_payment;
       this.outlayClass = data[0].outlay_class;
       const outlayItems = [data[data.length - 1]];
-      console.log(outlayItems);
-      
       const mainItems = copyData.slice(1, data.length - 1);
       if(mainItems.length) {
         this.dataItems.clear()
@@ -268,5 +280,17 @@ export class FinancesComponent implements OnInit {
         status: 'ok'
       })) 
     })
+  }
+
+  statisticsAtion() {
+    if(!this.isShowStatistics) {
+      this.service.getStatistics()
+        .subscribe((statistics) => {
+          this.statisticsData = statistics;
+          this.isShowStatistics = !this.isShowStatistics;
+        })
+    } else {
+      this.isShowStatistics = false;
+    }
   }
 }

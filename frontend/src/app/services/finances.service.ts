@@ -33,4 +33,8 @@ export class FinancesPageService {
   saveOutlay(params) {
     return this.http.post(`http://127.0.0.1:5000/finance/outlay`, params);
   }
+
+  getStatistics() {
+    return this.http.post(`http://127.0.0.1:5000/finance`, {"stat": "all"});
+  }
 }
