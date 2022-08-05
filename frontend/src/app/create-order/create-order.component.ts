@@ -56,6 +56,7 @@ export class CreateOrderComponent implements OnInit {
   kodItems;
   materialsItems;
   clientDataItems;
+  coachDataItems;
   infoForSave: any;
   commentOrder: string = '';
   discount: number = 0;

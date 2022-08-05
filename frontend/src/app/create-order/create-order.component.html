@@ -238,10 +238,25 @@
         placeholder="команда"
         addTagText="+ команда"
         formControlName="name_team"
-        (search)="changeClientInfo($event.term, 3, 'ur_team')" >
+        (search)="changeClientInfo($event.term, 3, 'ur_team')"
+        (change)="clearDataClient()" >
       </ng-select>
-      <input class="data-customer--coach" type="text" formControlName="coach" placeholder="тренер">
-      <input class="data-customer--comment-client" formControlName="comment_client" type="text" placeholder="коментар до клієнта">
+
+      <ng-select 
+        [clearSearchOnAdd]="false" 
+        appearance="outline" 
+        [items]="clientDataItems" 
+        type="text" 
+        class="datacustomer--select data-customer--coach" 
+        [addTag]="true"
+        [hideSelected]="true"
+        placeholder="тренер"
+        addTagText="+ тренер"
+        formControlName="coach"
+        (search)="changeClientInfo($event.term, 3, 'ur_coach')"
+        (change)="clearDataClient()" >
+      </ng-select>
+      <!-- <input class="data-customer--comment-client" formControlName="comment_client" type="text" placeholder="коментар до клієнта"> -->
       
     </div>
 
