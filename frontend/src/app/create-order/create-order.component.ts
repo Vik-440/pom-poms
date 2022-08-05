@@ -101,7 +101,7 @@ export class CreateOrderComponent implements OnInit {
           name_color_4: null,
           id_color_part_4: null,
           price_model: null,
-          quantity_pars_model: null,
+          quantity_pars_model: [null, Validators.required],
           sum_pars: null,
           comment_model: null,
           isNew: true,
@@ -172,10 +172,13 @@ export class CreateOrderComponent implements OnInit {
       order.get('price_model').valueChanges.pipe(
         tap(data => {
           order.patchValue({
-            sum_pars: data * order.value.quantity_pars_model
+            sum_pars: data * order.value.quantity_pars_model,
+            isNew: true
           })
         })
       ).subscribe()
+
+    
 
       order.get('id_color_1').valueChanges.subscribe(() => {
         order.patchValue({
@@ -355,7 +358,7 @@ export class CreateOrderComponent implements OnInit {
       id_color_4: null,
       id_color_part_4: null,
       price_model: null,
-      quantity_pars_model: null,
+      quantity_pars_model: [null, Validators.required],
       sum_pars: null,
       comment_model: null,
       isNew: true,
@@ -491,9 +494,13 @@ export class CreateOrderComponent implements OnInit {
 
   makeArrayDataOrder(key) {
     const result = [];
-    this.orderForm.value.map(order => {
-      result.push(order[key] || 0)
-    })
+    console.log(this.orderForm.value[key]);
+    
+    if(this.orderForm.value[key]) {
+      this.orderForm.value.map(order => {
+        result.push(order[key] || 0)
+      })
+    }
     return result;
   }
 
@@ -518,8 +525,10 @@ export class CreateOrderComponent implements OnInit {
     if(mode === 'create') {
       delete params.edit_real_order
     }
+    console.log(params);
+    
     this.service.saveOrder(params).subscribe((data: any) => {
-      this.idOrder = data.id_order;
+      this.idOrder = data.id_order || this.idOrder;
       this.doneOrder = true;
       localStorage.setItem('data_plane_order', JSON.stringify(this.dataPlaneOrder));
       localStorage.setItem('data_send_order', JSON.stringify(this.dataSendOrder));
@@ -613,7 +622,7 @@ export class CreateOrderComponent implements OnInit {
                 id_color_part_4: dataModel.id_color_part_4,
                 price_model: data.price_model_order[index],
                 comment_model: dataModel.comment_model,
-                quantity_pars_model: data.quantity_pars_model[index],
+                quantity_pars_model:[ data.quantity_pars_model[index], Validators.required],
                 sum_pars: data.quantity_pars_model[index] *  data.price_model_order[index],
                 isNew: false,
                 isChange: false

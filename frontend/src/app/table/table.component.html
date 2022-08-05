@@ -13,24 +13,12 @@
     </div>
     <div class="filters-data">
       <p class="filters-data--title">дата від</p>
-      <!-- <ngx-datepicker
-      formControlName="dataStart"
-      #dataStart
-      class="filters-data--datapicker"
-      [options]="options"
-    ></ngx-datepicker> -->
     <input class="filters-data--datapicker" placeholder="yyyy-mm-dd" (click)="calendarDataStart.toggle()" [minDate]="{year: 2016, month: 1, day: 1}"
     [maxDate]="{year: +todayYear, month: 12, day: 31}" formControlName="dataStart" ngbDatepicker #calendarDataStart="ngbDatepicker">
     <button class="filters-data--datapicker-remove" (click)="removeData('dataStart')">&#10005;</button>
     </div>
     <div class="filters-data">
       <p class="filters-data--title">дата до</p>
-      <!-- <ngx-datepicker
-      formControlName="dataEnd"
-      #dataEnd
-      class="filters-data--datapicker"
-      [options]="options"
-    ></ngx-datepicker> -->
 
     <input class="filters-data--datapicker" placeholder="yyyy-mm-dd" (click)="calendarDataEnd.toggle()" [minDate]="{year: 2016, month: 1, day: 1}"
     [maxDate]="{year: +todayYear, month: 12, day: 31}" formControlName="dataEnd" ngbDatepicker #calendarDataEnd="ngbDatepicker">
@@ -116,21 +104,21 @@
               <td class="pl0">
                 <div class="bb_solid" *ngFor="let item of order.phase_1_model">
                   <button class="check-btn">
-                    <img class="check-icon" [src]="order.phase_1_model ? './assets/img/icons/check.svg' : './assets/img/icons/uncheck.svg'" />
+                    <img class="check-icon" [src]="item ? './assets/img/icons/check.svg' : './assets/img/icons/uncheck.svg'" />
                   </button>
                 </div>
               </td>
               <td class="pl0">
                 <div class="bb_solid" *ngFor="let item of order.phase_2_model">
                   <button class="check-btn">
-                    <img class="check-icon" [src]="order.phase_2_model ? './assets/img/icons/check.svg' : './assets/img/icons/uncheck.svg'" />
+                    <img class="check-icon" [src]="item ? './assets/img/icons/check.svg' : './assets/img/icons/uncheck.svg'" />
                   </button>
                 </div>
               </td>
               <td class="pl0">
                 <div class="bb_solid" *ngFor="let item of order.phase_3_model">
                   <button class="check-btn">
-                    <img class="check-icon" [src]="order.phase_3_model ? './assets/img/icons/check.svg' : './assets/img/icons/uncheck.svg'" />
+                    <img class="check-icon" [src]="item ? './assets/img/icons/check.svg' : './assets/img/icons/uncheck.svg'" />
                   </button>
                 </div>
               </td>
