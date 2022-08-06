@@ -346,14 +346,14 @@ def return_data_from_edit_order(data_from_new_page):
             sum_payment = row.sum_payment
             fulfilled_order = row.fulfilled_order
             comment_order = row.comment_order
+            id_model = (row.id_model)
+            quantity_pars_model = (row.quantity_pars_model)
+            price_model_order = (row.price_model_order)
+            if len(id_model) == 1:
+                id_model = id_model[0]
+                quantity_pars_model = quantity_pars_model[0]
+                price_model_order = price_model_order[0]
 
-            id_model, quantity_pars_model, price_model_order = [], [], []
-            id_model_1 = session.query(directory_of_group).filter_by(
-                id_order=id_order)
-            for row1 in id_model_1:
-                id_model.append(row1.id_model)
-                quantity_pars_model.append(row1.quantity_pars_model)
-                price_model_order.append(row1.price_model_order)
             real_money_order_1 = session.query(
                 func.sum(directory_of_payment.payment).label(
                     'sum_order')).filter_by(
