@@ -493,13 +493,12 @@ export class CreateOrderComponent implements OnInit {
     };
   }
 
-  makeArrayDataOrder(key) {
+  makeArrayDataOrder(key, i = 0) {
     const result = [];
-    console.log(this.orderForm.value[key]);
     
-    if(this.orderForm.value[key]) {
+    if(this.orderForm.value[0][key]) {
       this.orderForm.value.map(order => {
-        result.push(order[key] || 0)
+        result.push(+order[key] || 0)
       })
     }
     return result;
@@ -507,17 +506,17 @@ export class CreateOrderComponent implements OnInit {
 
   saveAll(mode = 'create') {
     let params = {
-      id_order: this.idOrder,
+      id_order: +this.idOrder,
       data_order: [this.dateToday.year, this.dateToday.month, this.dateToday.day].join('-'),
       id_client: this.clientForm.value.id_client,
       id_recipient: !this.isRecipient ? this.clientForm.value.id_client : this.recipientForm.value.id_client, // (2 або ід_клієнт)
       id_model: this.makeArrayDataOrder('id_model'),
       price_model_order: this.makeArrayDataOrder('price_model'),
-      quantity_pars_model: this.makeArrayDataOrder('quantity_pars_model'),
+      quantity_pars_model: this.makeArrayDataOrder('quantity_pars_model', 0),
       data_plane_order: this.dataPlaneOrder ? [this.dataPlaneOrder.year, this.dataPlaneOrder.month, this.dataPlaneOrder.day].join('-') : null, // - прогнозована
       data_send_order: this.dataSendOrder ? [this.dataSendOrder.year, this.dataSendOrder.month, this.dataSendOrder.day].join('-') : null, //- бажана
       discont_order: this.discount,
-      sum_payment: this.sumAll(false).split('/')[0].trim(),
+      sum_payment: +this.sumAll(false).split('/')[0].trim(),
       fulfilled_order: false,
       comment_order: this.commentOrder,
       edit_real_order: this.idOrder,
@@ -529,7 +528,7 @@ export class CreateOrderComponent implements OnInit {
     console.log(params);
     
     this.service.saveOrder(params).subscribe((data: any) => {
-      this.idOrder = data.id_order || this.idOrder;
+      this.idOrder = +data.id_order || this.idOrder;
       this.doneOrder = true;
       localStorage.setItem('data_plane_order', JSON.stringify(this.dataPlaneOrder));
       localStorage.setItem('data_send_order', JSON.stringify(this.dataSendOrder));
