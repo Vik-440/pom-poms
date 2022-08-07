@@ -102,22 +102,22 @@
                 </div>
               </td>
               <td class="pl0">
-                <div class="bb_solid" *ngFor="let item of order.phase_1_model">
-                  <button class="check-btn">
+                <div class="bb_solid" *ngFor="let item of order.phase_1_model; let i = index">
+                  <button class="check-btn" (click)="changePhase(order, 'phase_1_model', i)">
                     <img class="check-icon" [src]="item ? './assets/img/icons/check.svg' : './assets/img/icons/uncheck.svg'" />
                   </button>
                 </div>
               </td>
               <td class="pl0">
-                <div class="bb_solid" *ngFor="let item of order.phase_2_model">
-                  <button class="check-btn">
+                <div class="bb_solid" *ngFor="let item of order.phase_2_model; let i = index">
+                  <button class="check-btn" (click)="changePhase(order, 'phase_2_model', i)">
                     <img class="check-icon" [src]="item ? './assets/img/icons/check.svg' : './assets/img/icons/uncheck.svg'" />
                   </button>
                 </div>
               </td>
               <td class="pl0">
-                <div class="bb_solid" *ngFor="let item of order.phase_3_model">
-                  <button class="check-btn">
+                <div class="bb_solid" *ngFor="let item of order.phase_3_model; let i = index">
+                  <button class="check-btn" (click)="changePhase(order, 'phase_3_model', i)">
                     <img class="check-icon" [src]="item ? './assets/img/icons/check.svg' : './assets/img/icons/uncheck.svg'" />
                   </button>
                 </div>
@@ -137,17 +137,17 @@
                 {{ order.quantity_pars_model }}
               </td>
               <td>
-                <button class="check-btn">
+                <button class="check-btn" (click)="changePhase(order, 'phase_1_model')">
                   <img class="check-icon" [src]="order.phase_1_model ? './assets/img/icons/check.svg' : './assets/img/icons/uncheck.svg'" />
                 </button>
               </td>
               <td>
-                <button class="check-btn">
+                <button class="check-btn" (click)="changePhase(order, 'phase_2_model')">
                   <img class="check-icon" [src]="order.phase_2_model ? './assets/img/icons/check.svg' : './assets/img/icons/uncheck.svg'" />
                 </button>
               </td>
               <td>
-                <button class="check-btn">
+                <button class="check-btn" (click)="changePhase(order, 'phase_3_model')">
                   <img class="check-icon" [src]="order.phase_3_model ? './assets/img/icons/check.svg' : './assets/img/icons/uncheck.svg'" />
                 </button>
               </td>

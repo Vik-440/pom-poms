@@ -359,4 +359,24 @@ validateInput(currentValue: NgbDate | null, input: string): NgbDate | null {
     // this[control].displayValue = '';
     this.filtersForm.get(control).patchValue('')
   }
+
+  changePhase(item, phase, index = -1) {
+    let params = {
+      phase_id_order: item.id_order,
+    }
+    if(index > 0) {
+      item[phase][index] = !item[phase][index];
+      params = {
+        ...params,
+        [phase]: [...item[phase]]
+      }
+    } else {
+      item[phase] = !item[phase];
+      params = {
+        ...params,
+        [phase]: [item[phase]]
+      }
+    }
+    this.service.changePase(params).subscribe();
+  }
 }

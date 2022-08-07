@@ -22,4 +22,7 @@ export class MainPage {
     return this.http.post(`http://127.0.0.1:5000/main_page`, params);
   }
 
+  changePase(params) {
+    return this.http.post(`http://127.0.0.1:5000/main_page`, params);
+  }
 }
