@@ -81,43 +81,43 @@
       <tbody>
         <ng-container  *ngFor="let order of ordersRow; let i = index">
           <tr  class="table--row">
-            <td [class.yellow]="order.comment_order"  ngxTooltip [tooltipContent]="order.comment_order">{{ order.id_order }}</td>
+            <td [class.yellow]="order.comment_order"  ngxTooltip [tooltipContent]="order.comment_order">
+              <a class="clickable" target="_blank" [routerLink]="['/create-order', {id: order.id_order}]">{{ order.id_order }}</a>
+            </td>
             <td>{{ order.data_order | date: 'yyyy-MM-dd'}}</td>
             <ng-container *ngIf="checkArray(order.kolor_model); else oneItem">
-             <!-- kolor_model -->
               <td class="td-left">
-                <div class="bb_solid" *ngFor="let kolor_model of order.kolor_model">
+                <div [id]="'kolorModel-' + j + '-' + i" class="bb_solid" *ngFor="let kolor_model of order.kolor_model; let j = index">
                   {{ kolor_model }}
                 </div>
               </td>
-               <!-- kod_model -->
               <td class="td-left">
-                <div class="bb_solid" ngxTooltip [tooltipContent]="order.comment_model[i]"  class="bb_solid" [ngClass]="checkCode(kod_model, order.comment_model[i], i)" *ngFor="let kod_model of order.kod_model; let i = index">
-                 {{kod_model}}
+                <div class="bb_solid"  [ngStyle]="changeHeight(j, i)" ngxTooltip [tooltipContent]="order.comment_model[i]"  class="bb_solid" [ngClass]="checkCode(kod_model, order.comment_model[i], i)" *ngFor="let kod_model of order.kod_model; let j = index">
+                  <a class="clickable" target="_blank" [routerLink]="['/create-order', {codeModel: kod_model}]">{{kod_model}}</a>
                 </div>
               </td>
               <td class="pl0">
-                <div class="bb_solid" *ngFor="let quantity_pars_model of order.quantity_pars_model">
+                <div class="bb_solid" [ngStyle]="changeHeight(j, i)" *ngFor="let quantity_pars_model of order.quantity_pars_model;  let j = index">
                   {{quantity_pars_model}}
                 </div>
               </td>
               <td class="pl0">
-                <div class="bb_solid" *ngFor="let item of order.phase_1_model; let i = index">
-                  <button class="check-btn" (click)="changePhase(order, 'phase_1_model', i)">
+                <div class="bb_solid" [ngStyle]="changeHeight(j, i)" *ngFor="let item of order.phase_1_model; let j = index">
+                  <button class="check-btn" (click)="changePhase(order, 'phase_1_model', j)">
                     <img class="check-icon" [src]="item ? './assets/img/icons/check.svg' : './assets/img/icons/uncheck.svg'" />
                   </button>
                 </div>
               </td>
               <td class="pl0">
-                <div class="bb_solid" *ngFor="let item of order.phase_2_model; let i = index">
-                  <button class="check-btn" (click)="changePhase(order, 'phase_2_model', i)">
+                <div class="bb_solid" [ngStyle]="changeHeight(j, i)" *ngFor="let item of order.phase_2_model; let j = index">
+                  <button class="check-btn" (click)="changePhase(order, 'phase_2_model', j)">
                     <img class="check-icon" [src]="item ? './assets/img/icons/check.svg' : './assets/img/icons/uncheck.svg'" />
                   </button>
                 </div>
               </td>
               <td class="pl0">
-                <div class="bb_solid" *ngFor="let item of order.phase_3_model; let i = index">
-                  <button class="check-btn" (click)="changePhase(order, 'phase_3_model', i)">
+                <div class="bb_solid" [ngStyle]="changeHeight(j, i)" *ngFor="let item of order.phase_3_model; let j = index">
+                  <button class="check-btn" (click)="changePhase(order, 'phase_3_model', j)">
                     <img class="check-icon" [src]="item ? './assets/img/icons/check.svg' : './assets/img/icons/uncheck.svg'" />
                   </button>
                 </div>
@@ -131,7 +131,7 @@
               </td>
               <!-- kod_model -->
               <td class="td-left pl5" ngxTooltip [tooltipContent]="order.comment_model" [class]="checkCode(order.kod_model, order.comment_model)">
-                {{ order.kod_model }}
+                <a class="clickable" target="_blank" [routerLink]="['/create-order', {codeModel: order.kod_model}]">{{order.kod_model}}</a>
               </td>
               <td>
                 {{ order.quantity_pars_model }}
@@ -154,8 +154,12 @@
             </ng-template>
 
             <td class="td-left pl5" [class]="countMoney(order)">{{ order.sum_payment + ' / ' +( order.real_money || 0) + ' / ' + getMoney((order.sum_payment - order.real_money).toFixed(2))}}</td>
-            <td class="td-left pl5 phone-client">{{ order.phone_client | mask: '00-000-000-00-00' || '-' }}</td>
-            <td class="td-left pl5" [class.green]="sityColor(order.sity)" ngxTooltip [tooltipContent]="tooltipCity(order)">{{ order.sity }}</td>
+            <td class="td-left pl5 phone-client"> 
+              <a class="clickable" target="_blank" [routerLink]="['/create-order', {phoneClient: order.phone_client}]">{{order.phone_client | mask: '00-000-000-00-00' || '-'}}</a> 
+            </td>
+            <td class="td-left pl5" [class.green]="sityColor(order.sity)" ngxTooltip [tooltipContent]="tooltipCity(order)">
+                <a class="clickable" target="_blank" [routerLink]="['/create-order', {phoneRecipient: order.phone_recipient}]">{{order.sity}}</a> 
+            </td>
             <td>{{ order.data_plane_order | date: 'yyyy-MM-dd'}}</td>
             <td>
               <button class="check-btn" (click)="makeDone(order.id_order, !order.fulfilled_order, i)">

@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import locale from 'date-fns/locale/en-US';
 import * as moment from 'moment';
@@ -15,7 +16,11 @@ import { CreateOrderService } from '../services/create-order.service';
 export class CreateOrderComponent implements OnInit {
 
   
-  constructor(private fb: FormBuilder, private service: CreateOrderService, private spinner: NgxSpinnerService) { }
+  constructor(
+    private fb: FormBuilder, 
+    private service: CreateOrderService, 
+    private spinner: NgxSpinnerService,
+    private route: ActivatedRoute) { }
 
   @Input() isNew: Boolean = true;
   displayMonths = 2;
@@ -55,7 +60,7 @@ export class CreateOrderComponent implements OnInit {
   isRecipient = false;
   kodItems;
   materialsItems;
-  clientDataItems;
+  clientDataItems = [];
   coachDataItems;
   infoForSave: any;
   commentOrder: string = '';
@@ -64,10 +69,21 @@ export class CreateOrderComponent implements OnInit {
 
   ngOnInit(): void {
     this.init();
-    this.viewChanges();
+    this.viewChanges(); 
     this.dataPlaneOrder = JSON.parse(localStorage.getItem('data_plane_order')) || null;
     this.dataSendOrder = JSON.parse(localStorage.getItem('data_send_order')) || null;
     this.dateToday = JSON.parse(localStorage.getItem('dateToday')) || null;
+    if(this.route.snapshot.params['id']) {
+      this.idOrder = +this.route.snapshot.params['id'];
+      this.getOrder();
+    } else if(this.route.snapshot.params['codeModel']) {
+      this.chooseKode(this.route.snapshot.params['codeModel'], 0, false)
+    } else if(this.route.snapshot.params['phoneClient']) {
+      this.selectedItemClient(this.route.snapshot.params['phoneClient'], 'sl_phone', this.clientForm,  'isSaveClient', false);
+    } else if(this.route.snapshot.params['phoneRecipient']) {
+      this.isRecipient = true;
+      this.selectedItemClient(this.route.snapshot.params['phoneRecipient'], 'sl_phone', this.recipientForm, 'isSaveRecipient', false);
+    }
   }
 
   init() {
@@ -271,7 +287,7 @@ export class CreateOrderComponent implements OnInit {
     }
   }
 
-  chooseKode(value, index) { 
+  chooseKode(value, index, ignore = true) { 
     if(!this.kodItems) {
       this.orderForm.controls.map((order, ind) => {
         if(ind === index && value) {
@@ -286,7 +302,7 @@ export class CreateOrderComponent implements OnInit {
         return;
       })
     }
-     if(this.kodItems?.includes(value)) {
+     if(this.kodItems?.includes(value) || !ignore) {
       this.orderForm.controls.map((order, ind) => {
         this.service.getInfoForOrder({ sl_kod: value }).subscribe((data: any) => {
           if(index === ind && Object.keys(data).length){
@@ -406,8 +422,8 @@ export class CreateOrderComponent implements OnInit {
     }
   }
 
-  selectedItemClient(value, keySend, form = this.clientForm, saveBtn = 'isSaveClient'){
-    if(value && this.clientDataItems.includes(value)) {
+  selectedItemClient(value, keySend, form = this.clientForm, saveBtn = 'isSaveClient', ignore = true){
+    if(value && this.clientDataItems.includes(value) || !ignore) {
       this.service.getInfoForOrder({ [keySend]: value })
       .pipe(filter(() => value))
       .subscribe((dataClient: any) => {
@@ -495,7 +511,6 @@ export class CreateOrderComponent implements OnInit {
 
   makeArrayDataOrder(key, i = 0) {
     const result = [];
-    
     if(this.orderForm.value[0][key]) {
       this.orderForm.value.map(order => {
         result.push(+order[key] || 0)
@@ -536,7 +551,7 @@ export class CreateOrderComponent implements OnInit {
     });
   }
 
-  getOrder(event) {
+  getOrder() {
     const params = {
       edit_order: this.idOrder
     };
@@ -598,7 +613,7 @@ export class CreateOrderComponent implements OnInit {
                 this.viewChanges();
               })
           }
-  
+
           data.id_model.forEach((model, index) => {
             if(index === 0) {
               this.orderForm.clear();

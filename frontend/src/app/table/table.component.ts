@@ -3,12 +3,12 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { NgbCalendar, NgbDate, NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
 import locale from 'date-fns/locale/en-US';
 // import * as moment from 'moment';
+import { Router } from '@angular/router';
 import * as moment from 'moment';
 import { DatepickerOptions } from 'ng2-datepicker';
 import { tap } from 'rxjs';
 import { CreateOrderService } from '../services/create-order.service';
 import { MainPage } from '../services/main-table.service';
-
 interface OrderInterface {
   id_order: number;
   data_order: string;
@@ -128,7 +128,8 @@ export class TableComponent implements OnInit, OnDestroy {
 
   constructor(
     private fb: FormBuilder, private service: MainPage, private calendar: NgbCalendar, public formatter: NgbDateParserFormatter,
-    private serviceOrders: CreateOrderService){
+    private serviceOrders: CreateOrderService,
+    private _router: Router){
 
   }
 
@@ -364,7 +365,7 @@ validateInput(currentValue: NgbDate | null, input: string): NgbDate | null {
     let params = {
       phase_id_order: item.id_order,
     }
-    if(index > 0) {
+    if(index > -1) {
       item[phase][index] = !item[phase][index];
       params = {
         ...params,
@@ -378,5 +379,11 @@ validateInput(currentValue: NgbDate | null, input: string): NgbDate | null {
       }
     }
     this.service.changePase(params).subscribe();
+  }
+
+  changeHeight(j, i) {
+    return {
+      height: `${document.querySelectorAll(`#kolorModel-${j}-${i}`)[0].clientHeight}px`
+    };
   }
 }
