@@ -33,7 +33,7 @@ def return_data_from_finance(asked):
             metod_payment.append(row.metod_payment)
             data_payment.append(str(row.data_payment))
         data_last_outlay_1 = session.query(directory_of_outlay).order_by(
-            directory_of_outlay.id_outlay.desc()).limit(1)
+            directory_of_outlay.id_outlay.desc()).limit(3)
         for row in data_last_outlay_1:
             id_outlay.append(row.id_outlay)
             data_outlay.append(str(row.data_outlay))
@@ -44,15 +44,15 @@ def return_data_from_finance(asked):
         one_block = {"metod_payment": ["iban", "cash"],
                      "outlay_class": data_outlay_class}
         full_block.append(one_block)
+
         q1 = block_json(id_payment, id_order, payment, metod_payment,
                         data_payment)
         q11 = {"id_payment": q1[0], "id_order": q1[1], "payment": q1[2],
                "metod_payment": q1[3], "data_payment": q1[4]}
         q1 = block_json(id_payment, id_order, payment, metod_payment,
                         data_payment)
-        q12 = {"id_payment": q1[0],
-               "id_order": q1[1], "payment": q1[2], "metod_payment": q1[3],
-               "data_payment": q1[4]}
+        q12 = {"id_payment": q1[0], "id_order": q1[1], "payment": q1[2],
+               "metod_payment": q1[3], "data_payment": q1[4]}
         q1 = block_json(id_payment, id_order, payment, metod_payment,
                         data_payment)
         q13 = {"id_payment": q1[0], "id_order": q1[1], "payment": q1[2],
@@ -63,10 +63,23 @@ def return_data_from_finance(asked):
 
         q4 = block_json(id_outlay, data_outlay, id_outlay_class, money_outlay,
                         comment_outlay)
-        one_block = {"id_outlay": q4[0], "data_outlay": q4[1],
+        one_block1 = {"id_outlay": q4[0], "data_outlay": q4[1],
                      "id_outlay_class": q4[2], "money_outlay": q4[3],
                      "comment_outlay": q4[4]}
-        full_block.append(one_block)
+        q4 = block_json(id_outlay, data_outlay, id_outlay_class, money_outlay,
+                        comment_outlay)
+        one_block2 = {"id_outlay": q4[0], "data_outlay": q4[1],
+                     "id_outlay_class": q4[2], "money_outlay": q4[3],
+                     "comment_outlay": q4[4]}
+        q4 = block_json(id_outlay, data_outlay, id_outlay_class, money_outlay,
+                        comment_outlay)
+        one_block3 = {"id_outlay": q4[0], "data_outlay": q4[1],
+                     "id_outlay_class": q4[2], "money_outlay": q4[3],
+                     "comment_outlay": q4[4]}
+
+        full_block.append(one_block3)
+        full_block.append(one_block2)
+        full_block.append(one_block1)
     return json.dumps(full_block)
 
 
