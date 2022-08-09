@@ -18,6 +18,8 @@ from functions.finance_json import return_data_from_outlay_change
 from functions.finance_json import return_data_from_payment_id_order
 from functions.finance_json import return_data_from_payment_stat
 from functions.finance_json import return_data_from_payment_balans
+from functions.finance_json import ret_dat_fin_pay_get
+from functions.finance_json import ret_dat_fin_out_get
 from log.logger import logger
 
 
@@ -36,7 +38,6 @@ def return_data_from_flask():
         "kod_model": "190-B05"}
 
     return jsonify(info), 200  # returning a JSON response
-
 
 @app.route('/main_page', methods=['GET', 'POST'])
 def main_page():
@@ -125,6 +126,36 @@ def finance():
     except Exception as e:
         logger.error(f'Error in function finance: {e}')
         return f'Error in function finance: {e}', 500
+
+
+@app.route('/finance/methods', methods=['GET'])
+def fin_met():
+    try:
+        full_block = {"metod_payment":["банк", "готівка"], 
+                      "outlay_class":["податок", "мат. осн.", "мат. доп.",
+                      "інстр.", "опл. роб.", "реклама", "інше"]}
+        return (full_block)
+    except Exception as e:
+        logger.error(f'Error in finance_methods GET: {e}')
+        return f'Error in finance_methods GET: {e}', 500
+
+
+@app.route('/finance/payments', methods=['GET'])
+def fin_pay():
+    try:
+        return (ret_dat_fin_pay_get()), 200
+    except Exception as e:
+        logger.error(f'Error in finance_payments GET: {e}')
+        return f'Error in finance_payments GET: {e}', 500
+
+
+@app.route('/finance/outlays', methods=['GET'])
+def fin_out():
+    try:
+        return (ret_dat_fin_out_get()), 200
+    except Exception as e:
+        logger.error(f'Error in finance_outlays GET: {e}')
+        return f'Error in finance_outlays GET: {e}', 500
 
 
 @app.route('/finance/payment', methods=['POST'])

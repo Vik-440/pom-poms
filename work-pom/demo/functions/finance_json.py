@@ -393,6 +393,54 @@ def return_stat(data_start_sql, data_end_sql, stat, sql_sum, sql_data):
     return(stat)
 
 
+def ret_dat_fin_pay_get():
+    with Session(engine) as session:
+        id_payment, id_order, payment = [], [], []
+        metod_payment, data_payment, full_block = [], [], []
+        pay_get = session.query(directory_of_payment).order_by(
+            directory_of_payment.id_payment.desc()).limit(3)
+        for row in pay_get:
+            id_payment.append(row.id_payment)
+            id_order.append(row.id_order)
+            payment.append(row.payment)
+            metod_payment.append(row.metod_payment)
+            data_payment.append(str(row.data_payment))
+        numb = 0
+        while numb < len(id_payment):
+            one_block = {"id_payment": id_payment[numb],
+                         "id_order": id_order[numb],
+                         "payment": payment[numb],
+                         "metod_payment": metod_payment[numb],
+                         "data_payment": data_payment[numb]}
+            full_block.insert(0, one_block)
+            numb += 1
+    return json.dumps(full_block)
+        
+
+def ret_dat_fin_out_get():
+    with Session(engine) as session:
+        id_outlay, data_outlay, id_outlay_class = [], [], []
+        money_outlay, comment_outlay, full_block = [], [], []
+        pay_get = session.query(directory_of_outlay).order_by(
+            directory_of_outlay.id_outlay.desc()).limit(3)
+        for row in pay_get:
+            id_outlay.append(row.id_outlay)
+            data_outlay.append(str(row.data_outlay))
+            id_outlay_class.append(row.id_outlay_class)
+            money_outlay.append(row.money_outlay)
+            comment_outlay.append(row.comment_outlay)
+        numb = 0
+        while numb < len(id_outlay):
+            one_block = {"id_outlay": id_outlay[numb],
+                         "data_outlay": data_outlay[numb],
+                         "id_outlay_class": id_outlay_class[numb],
+                         "money_outlay": money_outlay[numb],
+                         "comment_outlay": comment_outlay[numb]}
+            full_block.insert(0, one_block)
+            numb += 1
+    return json.dumps(full_block)
+
+
 def block_json(pos1, pos2, pos3, pos4, pos5):
     el1 = pos1[0]
     del pos1[0]
