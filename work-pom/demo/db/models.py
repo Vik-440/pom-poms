@@ -117,8 +117,6 @@ class directory_of_outlay(Base):
     data_outlay = Column('data_outlay', Date)
     id_outlay_class = Column('id_outlay_class', String)
     money_outlay = Column('money_outlay', Integer)
-    quantity_outlay = Column('quantity_outlay', Numeric(8, 2))
-    type_pc_outlay = Column('type_pc_outlay', String)
     comment_outlay = Column('comment_outlay', String)
 
 

@@ -266,7 +266,7 @@ def return_data_from_final_order(data_from_new_page):
         phase_pcs = []
         while s2s > 0:
             s2s -= 1
-            phase_pcs.append(True)
+            phase_pcs.append(False)
 
         if 'edit_real_order' in data_from_new_page:
             print("problems")

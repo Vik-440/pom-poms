@@ -349,19 +349,19 @@ def return_forecast(stat, sql_sum, sql_data):
     data_end_sql = (ds-time_step).strftime('%Y-%m-%d')
     stat = return_stat(data_start_sql, data_end_sql, stat, sql_sum, sql_data)
 
-    data_start_sql = datetime.now().replace(day=1, hour=0, minute=0, second=0)
-    data_end_sql = datetime.now().replace(day=31, hour=0, minute=0, second=0)
+    data_start_sql = datetime.today().replace(day=1) - timedelta(days=1)
+    data_end_sql = datetime.today().replace(day=31) + timedelta(days=1)
     stat = return_stat(data_start_sql, data_end_sql, stat, sql_sum, sql_data)
 
     time_step = timedelta(days=30)
     dss = ds-time_step
-    data_start_sql = dss.replace(day=1, hour=0, minute=0, second=0)
-    data_end_sql = data_start_sql+time_step
+    data_start_sql = dss.replace(day=1) - timedelta(days=1)
+    data_end_sql = data_start_sql + time_step + timedelta(days=1)
     stat = return_stat(data_start_sql, data_end_sql, stat, sql_sum, sql_data)
 
     time_step = timedelta(days=365)
-    data_start_sql = ds.replace(month=1, day=1, hour=0, minute=0, second=0)
-    data_end_sql = data_start_sql+time_step
+    data_start_sql = ds.replace(month=1, day=1) - timedelta(days=1)
+    data_end_sql = ds.replace(month=12, day=31) + timedelta(days=1)
     stat = return_stat(data_start_sql, data_end_sql, stat, sql_sum, sql_data)
     days_year = ds - data_start_sql
     forecast = round((stat[0]/days_year.days)*365, 2)
