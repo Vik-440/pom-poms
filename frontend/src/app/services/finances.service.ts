@@ -14,8 +14,20 @@ export class FinancesPageService {
     return this.http.get(`http://127.0.0.1:5000/finance`);
   }
 
+  getMethods() {
+    return this.http.get('http://127.0.0.1:5000/finance/methods');
+  }
+
   getFilters(params) {
     return this.http.post(`http://127.0.0.1:5000/finance`, params);
+  }
+
+  getPayments() {
+    return this.http.get('http://127.0.0.1:5000/finance/payments');
+  }
+
+  getOutlays() {
+    return this.http.get('http://127.0.0.1:5000/finance/outlays');
   }
 
   editPayment(params) {

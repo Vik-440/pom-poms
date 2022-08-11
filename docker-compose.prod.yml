@@ -1,17 +1,14 @@
-version: "3"
+version: "3.7"
 services:
   flask:
     build: ./work-pom/demo
     ports:
       - "5000:5000"
-    volumes:
-      - log_volume:/etc/data/
     env_file:
       - dev.env
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
   angular:
     build: ./frontend
     ports:
       - "4200:80"
-
-volumes:
-  log_volume:
