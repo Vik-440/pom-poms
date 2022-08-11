@@ -151,19 +151,20 @@ setDataPayments(data) {
 
   sendFiltersPayments() {
 
-    let params = {
-      ...this.paymentFrom.value,
-      data_start: this.editData(Object.values(this.paymentFrom.value.data_start)),
-      data_end: this.editData(Object.values(this.paymentFrom.value.data_end)),
-      payment_search: 0,
-      iban: this.paymentFrom.value.metod === 'iban',
-      cash: this.paymentFrom.value.metod === 'cash'
-    };
-
+    let params
     if(this.paymentFrom.value.id_order) {
       params = {
         id_order: this.paymentFrom.value.id_order
       }
+    } else {
+      params = {
+        ...this.paymentFrom.value,
+        data_start: this.editData(Object.values(this.paymentFrom.value.data_start)),
+        data_end: this.editData(Object.values(this.paymentFrom.value.data_end)),
+        payment_search: 0,
+        iban: this.paymentFrom.value.metod === 'iban',
+        cash: this.paymentFrom.value.metod === 'cash'
+      };
     }
     delete params['metod'];
     this.service.getFilters(params).subscribe((data: any) => {
