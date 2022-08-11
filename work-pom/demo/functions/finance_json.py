@@ -252,7 +252,7 @@ def return_data_from_payment_balans(sender):
         full_block, payment, metod_payment = [], [], []
 
         data_start_obj = datetime.strptime(data_start, '%Y-%m-%d')
-        data_end_obj = datetime.strptime(data_end, '%Y-%m-%d')
+        data_end_obj = datetime.strptime(data_end, '%Y-%m-%d') + timedelta(days=1)
 
         days = data_end_obj - data_start_obj
         day = days.days

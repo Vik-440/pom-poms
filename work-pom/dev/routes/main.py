@@ -104,28 +104,62 @@ def finance():
     try:
         if request.method == 'POST':
             request.data = request.get_json()
-            if type(request.data) is list:
-                pass
+            # if type(request.data) is list:
+            #     pass
 
-            elif type(request.data) is dict:
-                if 'payment_search' in request.data:
-                    return (return_data_from_payment_search(request.data)), 200
-                if 'outlay_search' in request.data:
-                    return (return_data_from_outlay_search(request.data)), 200
-                if 'id_order' in request.data:
-                    return (return_data_from_payment_id_order(request.data))
-                if 'stat' in request.data:
-                    return (return_data_from_payment_stat(request.data)), 200
-                if 'balans' in request.data:
-                    return (return_data_from_payment_balans(request.data)), 200
+            # elif type(request.data) is dict:
+            # if 'payment_search' in request.data:
+            #     return (return_data_from_payment_search(request.data)), 200
+            if 'outlay_search' in request.data:
+                return (return_data_from_outlay_search(request.data)), 200
+            # if 'id_order' in request.data:
+            #     return (return_data_from_payment_id_order(request.data)), 200# +
+            if 'stat' in request.data:
+                return (return_data_from_payment_stat(request.data)), 200# +
+            # if 'balans' in request.data:
+            #     return (return_data_from_payment_balans(request.data)), 200# -
             return({"testdata": "Test-POST-error"}), 500
-        elif request.method == 'GET':
-            return(return_data_from_finance(0)), 200
+        # elif request.method == 'GET':
+        #     pass
+            # return(return_data_from_finance(0)), 200
         else:
             return ({"Finance": "error"}), 500
     except Exception as e:
         logger.error(f'Error in function finance: {e}')
         return f'Error in function finance: {e}', 500
+
+
+@app.route('/finance/payments/statics', methods=['POST'])
+def fin_pay_balans():
+    try:
+        request.data = request.get_json()
+        if 'balans' in request.data:
+            return (return_data_from_payment_balans(request.data)), 200
+    except Exception as e:
+        logger.error(f'Error in finance_payments_balans POST: {e}')
+        return f'Error in finance_payments GET: {e}', 500
+
+
+@app.route('/finance/payments', methods=['POST'])
+def fin_pay_search():
+    try:
+        request.data = request.get_json()
+        if 'payment_search' in request.data:
+            return (return_data_from_payment_search(request.data)), 200
+    except Exception as e:
+        logger.error(f'Error in finance_payments_search POST: {e}')
+        return f'Error in finance_payments GET: {e}', 500
+
+
+@app.route('/finance/order_payments', methods=['POST'])
+def fin_pay_order():
+    try:
+        request.data = request.get_json()
+        if 'id_order' in request.data:
+            return (return_data_from_payment_id_order(request.data)), 200
+    except Exception as e:
+        logger.error(f'Error in finance_payments_order POST: {e}')
+        return f'Error in finance_payments GET: {e}', 500
 
 
 @app.route('/finance/methods', methods=['GET'])
