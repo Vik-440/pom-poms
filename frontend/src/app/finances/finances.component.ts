@@ -45,7 +45,7 @@ export class FinancesComponent implements OnInit {
       moment(new Date()).subtract(1, 'days').format('YYYY-MM-DD'),
       moment(new Date()).format('YYYY-MM-DD'),
     ];
-    console.log(this.statisticsPeriods, new Date().getMonth(), );
+
     
     this.paymentFrom = this.fb.group({
       metod: [null, Validators.required],
@@ -77,31 +77,30 @@ export class FinancesComponent implements OnInit {
     })])
 
     this.service.getPayments().subscribe((data: any) => {
-    this.dataItems.clear()
-        data.forEach((item, i) => {
-          const dataArray = item.data_payment.split('-');
-          
-          this.dataItems.push(this.fb.group({
-            data_payment: [{ year: +dataArray[0], month: +dataArray[1], day: +dataArray[2] }, Validators.required],
-            metod_payment: [item.metod_payment, Validators.required],
-            id_payment: [item.id_payment],
-            id_order: [item.id_order, Validators.required],
-            payment: [item.payment, Validators.required],
-            status: 'edit'
-          }));
-        });
-        this.datePrevious = JSON.parse(localStorage.getItem('date_payment')) || null;
-        this.dataItems.push(this.fb.group({
-          data_payment: [this.datePrevious, Validators.required],
-          metod_payment: ['iban', Validators.required],
-          id_order: [null, Validators.required],
-          id_payment: null,
-          payment: [null, Validators.required],
-          status: 'ok'
-          }))
+      this.setDataPayments(data);
     });
 
     this.service.getOutlays().subscribe((data: any) => {
+this.setDataOutlay(data);
+    })
+    this.periods = ['день', 'тиждень', 'місяць', 'квартал', 'рік']
+  }
+
+  removeEmptyValues(object) {
+    const newObject = {
+      ...object
+    };
+    for (var key in newObject) {
+        if (newObject.hasOwnProperty(key)) {
+            var value = newObject[key];
+            if (value === null || value === undefined || value === '') {
+                delete newObject[key];
+            }
+        }
+    }
+    return newObject;
+}
+setDataOutlay(data) {
   this.outlayData.clear()
   data.forEach((item: any) => {
           const dataOutlay = item.data_outlay.split('-');
@@ -123,23 +122,30 @@ export class FinancesComponent implements OnInit {
           comment_outlay: [null, Validators.required],
           status: 'ok'
         }))  
-    })
-    this.periods = ['день', 'тиждень', 'місяць', 'квартал', 'рік']
-  }
-
-  removeEmptyValues(object) {
-    const newObject = {
-      ...object
-    };
-    for (var key in newObject) {
-        if (newObject.hasOwnProperty(key)) {
-            var value = newObject[key];
-            if (value === null || value === undefined || value === '') {
-                delete newObject[key];
-            }
-        }
-    }
-    return newObject;
+}
+setDataPayments(data) {
+  this.dataItems.clear()
+        data.forEach((item, i) => {
+          const dataArray = item.data_payment.split('-');
+          
+          this.dataItems.push(this.fb.group({
+            data_payment: [{ year: +dataArray[0], month: +dataArray[1], day: +dataArray[2] }, Validators.required],
+            metod_payment: [item.metod_payment, Validators.required],
+            id_payment: [item.id_payment],
+            id_order: [item.id_order, Validators.required],
+            payment: [item.payment, Validators.required],
+            status: 'edit'
+          }));
+        });
+        this.datePrevious = JSON.parse(localStorage.getItem('date_payment')) || null;
+        this.dataItems.push(this.fb.group({
+          data_payment: [this.datePrevious, Validators.required],
+          metod_payment: ['iban', Validators.required],
+          id_order: [null, Validators.required],
+          id_payment: null,
+          payment: [null, Validators.required],
+          status: 'ok'
+          }))
 }
 
 
@@ -161,7 +167,7 @@ export class FinancesComponent implements OnInit {
     }
     delete params['metod'];
     this.service.getFilters(params).subscribe((data: any) => {
-      // this.mainItems = data;
+      this.setDataPayments(data)
     })
   }
 
@@ -180,7 +186,7 @@ export class FinancesComponent implements OnInit {
       outlay_search: 0
     }
     this.service.getFilters(params).subscribe((data: any) => {
-      // this.mainItems = data;
+      this.setDataOutlay(data);
     })
   }
 
