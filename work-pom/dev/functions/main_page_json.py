@@ -1,11 +1,9 @@
 import json
-# from pymysql import NULL
 from sqlalchemy import func
 from datetime import datetime
 from sqlalchemy.orm import Session
 from db.models import directory_of_order, directory_of_client
 from db.models import directory_of_payment
-# from db.models import directory_of_group
 from db.models import directory_of_model
 from db.models import engine
 
@@ -56,7 +54,6 @@ def return_data_from_main_page(asked):
         id_client3 = []
         if 'fulfilled_order' in asked:
             fulfilled_order_1 = asked['fulfilled_order']
-        # else: fulfilled_order_1='FALSE'#false
         if 'phone_client' in asked:
             phone_client_tmp = str(asked['phone_client'])
             id_client_1 = session.query(directory_of_client).filter_by(
@@ -155,7 +152,7 @@ def return_data_from_main_page(asked):
                 m_zip_code = (row1.zip_code)
                 m_street_house_apartment = (row1.street_house_apartment)
                 m_sity = (row1.sity)
-#
+###
             real_money_1 = session.query(func.sum(
                 directory_of_payment.payment).label('my_sum')).filter_by(
                 id_order=row.id_order).first()
