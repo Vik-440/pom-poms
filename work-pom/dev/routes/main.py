@@ -39,6 +39,7 @@ def return_data_from_flask():
 
     return jsonify(info), 200  # returning a JSON response
 
+
 @app.route('/main_page', methods=['GET', 'POST'])
 def main_page():
     try:
@@ -165,8 +166,8 @@ def fin_pay_order():
 @app.route('/finance/methods', methods=['GET'])
 def fin_met():
     try:
-        full_block = {"metod_payment":["банк", "готівка"], 
-                      "outlay_class":["податок", "мат. осн.", "мат. доп.",
+        full_block = {"metod_payment": ["банк", "готівка"],
+                      "outlay_class": ["податок", "мат. осн.", "мат. доп.",
                       "інстр.", "опл. роб.", "реклама", "інше"]}
         return (full_block)
     except Exception as e:
