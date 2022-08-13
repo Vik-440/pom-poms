@@ -7,7 +7,7 @@ app.config['JSON_AS_ASCII'] = False
 
 
 with app.app_context():
-    from routes.main import *
+    from routes.main import *  # noqa: F401, F403
 
 
 if __name__ == '__main__':

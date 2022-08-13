@@ -124,7 +124,7 @@ def return_data_from_material_change(search):
         for row in tmp_color:
             tmp_bab = row.bab_quantity_color + search['bab_quantity_color']
             tmp_weight = row.weight_color + search['weight_color']
-        rows = session.query(directory_of_color).filter_by(
+        session.query(directory_of_color).filter_by(
             id_color=tmp_id_color).update({
                 'bab_quantity_color': tmp_bab, 'weight_color': tmp_weight})
         session.commit()
@@ -147,7 +147,7 @@ def return_data_from_material_change_full(search):
         reserve_color = search['reserve_color'],
         weight_10m_color = search['weight_10m_color']
 
-        rows = session.query(directory_of_color).filter_by(
+        session.query(directory_of_color).filter_by(
             id_color=tmp_id_color).update(
                 {'name_color': name_color, 'width_color': width_color,
                  'bab_quantity_color': bab_quantity_color,
