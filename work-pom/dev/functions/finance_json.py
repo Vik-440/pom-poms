@@ -64,18 +64,18 @@ def return_data_from_finance(asked):
         q4 = block_json(id_outlay, data_outlay, id_outlay_class, money_outlay,
                         comment_outlay)
         one_block1 = {"id_outlay": q4[0], "data_outlay": q4[1],
-                     "id_outlay_class": q4[2], "money_outlay": q4[3],
-                     "comment_outlay": q4[4]}
+                      "id_outlay_class": q4[2], "money_outlay": q4[3],
+                      "comment_outlay": q4[4]}
         q4 = block_json(id_outlay, data_outlay, id_outlay_class, money_outlay,
                         comment_outlay)
         one_block2 = {"id_outlay": q4[0], "data_outlay": q4[1],
-                     "id_outlay_class": q4[2], "money_outlay": q4[3],
-                     "comment_outlay": q4[4]}
+                      "id_outlay_class": q4[2], "money_outlay": q4[3],
+                      "comment_outlay": q4[4]}
         q4 = block_json(id_outlay, data_outlay, id_outlay_class, money_outlay,
                         comment_outlay)
         one_block3 = {"id_outlay": q4[0], "data_outlay": q4[1],
-                     "id_outlay_class": q4[2], "money_outlay": q4[3],
-                     "comment_outlay": q4[4]}
+                      "id_outlay_class": q4[2], "money_outlay": q4[3],
+                      "comment_outlay": q4[4]}
 
         full_block.append(one_block3)
         full_block.append(one_block2)
@@ -191,7 +191,8 @@ def return_data_from_payment_change(id, sender):
             session.query(directory_of_payment).filter_by(
                 id_payment=id).update(
                     {'id_order': id_order, 'payment': payment,
-                    'metod_payment': metod_payment, 'data_payment': data_payment})
+                     'metod_payment': metod_payment,
+                     'data_payment': data_payment})
             session.commit()
         return({"id_payment": "ok"})
     except Exception as e:
@@ -208,9 +209,9 @@ def return_data_from_outlay_change(id, sender):
             session.query(directory_of_outlay).filter_by(
                 id_outlay=id).update(
                     {'data_outlay': data_outlay,
-                    'id_outlay_class': id_outlay_class,
-                    'money_outlay': money_outlay,
-                    'comment_outlay': comment_outlay})
+                     'id_outlay_class': id_outlay_class,
+                     'money_outlay': money_outlay,
+                     'comment_outlay': comment_outlay})
             session.commit()
         return({"id_outlay": "ok"})
     except Exception as e:
@@ -252,7 +253,8 @@ def return_data_from_payment_balans(sender):
         full_block, payment, metod_payment = [], [], []
 
         data_start_obj = datetime.strptime(data_start, '%Y-%m-%d')
-        data_end_obj = datetime.strptime(data_end, '%Y-%m-%d') + timedelta(days=1)
+        data_end_obj = datetime.strptime(
+            data_end, '%Y-%m-%d') + timedelta(days=1)
 
         days = data_end_obj - data_start_obj
         day = days.days
@@ -415,7 +417,7 @@ def ret_dat_fin_pay_get():
             full_block.insert(0, one_block)
             numb += 1
     return json.dumps(full_block)
-        
+
 
 def ret_dat_fin_out_get():
     with Session(engine) as session:
