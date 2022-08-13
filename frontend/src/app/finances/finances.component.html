@@ -67,16 +67,15 @@
           <ng-select
             class="money-select--input"
             formControlName="metod"
-             [items]="metodPayment" >
+            [items]="[metodPayment[0], metodPayment[1], 'всі']" 
+          >
           </ng-select>
         </div>
-  
         <div class="money-select">
           <p class="money-select--header">дата від</p>
           <input class="calendar" placeholder="yyyy-mm-dd" (click)="calendarPaymentStart.toggle()" [minDate]="{year: 2016, month: 1, day: 1}"
           [maxDate]="{year: +todayYear, month: 12, day: 31}" formControlName="data_start" ngbDatepicker #calendarPaymentStart="ngbDatepicker">
         </div>
-  
         <div class="money-select">
           <p class="money-select--header">дата до</p>
           <input class="calendar" placeholder="yyyy-mm-dd" (click)="calendarPaymentEnd.toggle()" [minDate]="{year: 2016, month: 1, day: 1}"
@@ -194,7 +193,7 @@
     <button class="statistics--btn" (click)="statisticsAtion()" [class.purple]="isShowStatistics">
       {{isShowStatistics ? 'Сховати статистику' : 'Показати статитику'}}
     </button>
-    <table *ngIf="isShowStatistics" class="table table-lg table-bordered mb-0 border-primary statistics--table">
+    <table *ngIf="isShowStatistics && !statisticsPayments" class="table table-lg table-bordered mb-0 border-primary statistics--table">
       <thead>
         <th scope="col" class="date">дата</th>
         <th scope="col" class="payments">оплати</th>
@@ -208,6 +207,24 @@
             <td>{{ statisticsData.stat_payment[i] }}</td>
             <td>{{ statisticsData.stat_outlay[i] }}</td>
             <td>{{ statisticsData.stat_payment[i] - statisticsData.stat_outlay[i] }}</td>
+          </tr>
+        </ng-container>
+      </tbody>
+    </table>
+    <table *ngIf="isShowStatistics && statisticsPayments"  class="table table-lg table-bordered mb-0 border-primary statistics--table">
+      <thead>
+        <th scope="col" class="date">{{paymentFrom.value.period}}</th>
+        <th scope="col" class="payments">тип платежу</th>
+        <th scope="col" class="outlaies">сума за період</th>
+        <th scope="col" class="balans">кіл-ть платежів</th>
+      </thead>
+      <tbody>
+        <ng-container *ngFor="let item of statisticsPayments; let i = index">
+          <tr>
+            <td>{{ item.data_payment }}</td>
+            <td>{{ item.metod_payment }}</td>
+            <td>{{ item.payment }}</td>
+            <td>{{ item.payment_quantity}}</td>
           </tr>
         </ng-container>
       </tbody>
