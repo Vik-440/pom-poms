@@ -8,7 +8,7 @@ from functions.material_json import return_data_from_material_one
 from functions.material_json import return_data_from_material_change
 from functions.material_json import return_data_from_material_new
 from functions.material_json import return_data_from_material_change_full
-from functions.finance_json import return_data_from_finance
+# from functions.finance_json import return_data_from_finance
 from functions.finance_json import return_data_from_payment
 from functions.finance_json import return_data_from_outlay
 from functions.finance_json import return_data_from_payment_search
@@ -38,6 +38,7 @@ def return_data_from_flask():
         "kod_model": "190-B05"}
 
     return jsonify(info), 200  # returning a JSON response
+
 
 @app.route('/main_page', methods=['GET', 'POST'])
 def main_page():
@@ -99,31 +100,15 @@ def material():
         return f'Error in function material: {e}', 500
 
 
-@app.route('/finance', methods=['GET', 'POST'])
+@app.route('/finance', methods=['POST'])
 def finance():
     try:
-        if request.method == 'POST':
-            request.data = request.get_json()
-            # if type(request.data) is list:
-            #     pass
-
-            # elif type(request.data) is dict:
-            # if 'payment_search' in request.data:
-            #     return (return_data_from_payment_search(request.data)), 200
-            if 'outlay_search' in request.data:
-                return (return_data_from_outlay_search(request.data)), 200
-            # if 'id_order' in request.data:
-            #     return (return_data_from_payment_id_order(request.data)), 200# +
-            if 'stat' in request.data:
-                return (return_data_from_payment_stat(request.data)), 200# +
-            # if 'balans' in request.data:
-            #     return (return_data_from_payment_balans(request.data)), 200# -
-            return({"testdata": "Test-POST-error"}), 500
-        # elif request.method == 'GET':
-        #     pass
-            # return(return_data_from_finance(0)), 200
-        else:
-            return ({"Finance": "error"}), 500
+        request.data = request.get_json()
+        if 'outlay_search' in request.data:
+            return (return_data_from_outlay_search(request.data)), 200
+        if 'stat' in request.data:
+            return (return_data_from_payment_stat(request.data)), 200
+        return({"testdata": "Test-POST-error"}), 500
     except Exception as e:
         logger.error(f'Error in function finance: {e}')
         return f'Error in function finance: {e}', 500
@@ -165,9 +150,10 @@ def fin_pay_order():
 @app.route('/finance/methods', methods=['GET'])
 def fin_met():
     try:
-        full_block = {"metod_payment":["банк", "готівка"], 
-                      "outlay_class":["податок", "мат. осн.", "мат. доп.",
-                      "інстр.", "опл. роб.", "реклама", "інше"]}
+        full_block = {"metod_payment": ["банк", "готівка"],
+                      "outlay_class": [
+                        "податок", "мат. осн.", "мат. доп.",
+                        "інстр.", "опл. роб.", "реклама", "інше"]}
         return (full_block)
     except Exception as e:
         logger.error(f'Error in finance_methods GET: {e}')
