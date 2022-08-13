@@ -18,8 +18,12 @@ export class FinancesPageService {
     return this.http.get('http://127.0.0.1:5000/finance/methods');
   }
 
-  getFilters(params) {
-    return this.http.post(`http://127.0.0.1:5000/finance`, params);
+  getStaticPayments(params) {
+    return this.http.post('http://127.0.0.1:5000/finance/payments/statics', params)
+  }
+
+  getFilters(params, urlEnd = '') {
+    return this.http.post(`http://127.0.0.1:5000/finance${urlEnd}`, params);
   }
 
   getPayments() {
@@ -39,7 +43,7 @@ export class FinancesPageService {
   }
 
   editOutlay(params) {
-    return this.http.put(`http://127.0.0.1:5000/finance/outlay/${params.id_outlay_class}`, params);
+    return this.http.put(`http://127.0.0.1:5000/finance/outlay/${params.id_outlay}`, params);
   }
 
   saveOutlay(params) {

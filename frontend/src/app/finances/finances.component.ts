@@ -14,7 +14,7 @@ export class FinancesComponent implements OnInit {
 
   constructor(private service: FinancesPageService, private fb: FormBuilder) { }
 
-  metodPayment;
+  metodPayment = [];
   outlayClass: string[];
   paymentFrom: FormGroup;
   spendingForm;
@@ -24,6 +24,7 @@ export class FinancesComponent implements OnInit {
   statisticsPeriods;
   statisticsData;
   isShowStatistics = false;
+  statisticsPayments;
   itemEdit;
   datePrevious = {
     year: new Date().getFullYear(),
@@ -34,6 +35,8 @@ export class FinancesComponent implements OnInit {
   ngOnInit(): void {
     this.service.getMethods().subscribe((data: any) => {
       this.metodPayment = data.metod_payment;
+      console.log(this.metodPayment, ['всі', this.metodPayment].flat());
+      
       this.outlayClass = data.outlay_class;
     })
     this.statisticsPeriods = [
@@ -71,6 +74,7 @@ export class FinancesComponent implements OnInit {
     this.outlayData = this.fb.array([this.fb.group({
       data_outlay: [null, Validators.required],
       id_outlay_class: [null, Validators.required],
+      id_outlay: null,
       money_outlay: [null, Validators.required],
       comment_outlay: [null, Validators.required],
       status: 'edit'
@@ -156,20 +160,33 @@ setDataPayments(data) {
       params = {
         id_order: this.paymentFrom.value.id_order
       }
-    } else {
+      this.service.getFilters(params, '/order_payments').subscribe((data: any) => {
+        this.setDataPayments(data)
+      })
+    } else if(this.paymentFrom.value.period) {
       params = {
-        ...this.paymentFrom.value,
         data_start: this.editData(Object.values(this.paymentFrom.value.data_start)),
         data_end: this.editData(Object.values(this.paymentFrom.value.data_end)),
-        payment_search: 0,
+        iban: this.paymentFrom.value.metod === 'банк' || this.paymentFrom.value.metod === 'всі',
+        cash: this.paymentFrom.value.metod === 'готівка' || this.paymentFrom.value.metod === 'всі',
+        balans: this.paymentFrom.value.period
+      };
+
+      this.service.getStaticPayments(params).subscribe((data: any) => {
+        this.isShowStatistics = true;
+        this.statisticsPayments = data;
+      })
+    } else {
+      params = {
+        data_start: this.editData(Object.values(this.paymentFrom.value.data_start)),
+        data_end: this.editData(Object.values(this.paymentFrom.value.data_end)),
         iban: this.paymentFrom.value.metod === 'iban',
         cash: this.paymentFrom.value.metod === 'cash'
       };
-    }
-    delete params['metod'];
-    this.service.getFilters(params).subscribe((data: any) => {
+       this.service.getFilters(params).subscribe((data: any) => {
       this.setDataPayments(data)
     })
+    }
   }
 
   editData(data) {
@@ -204,14 +221,20 @@ setDataPayments(data) {
       }); 
     } else if (action === 'edited') {
       if(table === 'outlay') {
+        console.log(item);
         
         const params = {
           data_outlay: typeof item.value.data_outlay === 'string' ? item.value.data_outlay : this.editData(Object.values(item.value.data_outlay)),
-          id_outlay_class: item.value.id_outlay,
+          id_outlay_class: item.value.id_outlay_class,
+          id_outlay: item.value.id_outlay,
           money_outlay: +item.value.money_outlay,
           comment_outlay: item.value.comment_outlay
         };
-        this.service.editOutlay(params).subscribe();
+        this.service.editOutlay(params).subscribe(() => {
+          item.patchValue({
+            status: 'edit'
+          })
+        });
         return;
       }
       const params = {
@@ -297,6 +320,7 @@ setDataPayments(data) {
         })
     } else {
       this.isShowStatistics = false;
+      this.statisticsPayments = [];
     }
   }
 }
