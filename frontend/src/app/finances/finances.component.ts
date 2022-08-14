@@ -35,8 +35,6 @@ export class FinancesComponent implements OnInit {
   ngOnInit(): void {
     this.service.getMethods().subscribe((data: any) => {
       this.metodPayment = data.metod_payment;
-      console.log(this.metodPayment, ['всі', this.metodPayment].flat());
-      
       this.outlayClass = data.outlay_class;
     })
     this.statisticsPeriods = [
@@ -54,7 +52,7 @@ export class FinancesComponent implements OnInit {
       metod: [null, Validators.required],
       data_start: [null, Validators.required],
       data_end: [null, Validators.required],
-      period: [null, Validators.required],
+      period: [null],
       id_order: null
     });
     this.spendingForm = this.fb.group({
@@ -180,8 +178,8 @@ setDataPayments(data) {
       params = {
         data_start: this.editData(Object.values(this.paymentFrom.value.data_start)),
         data_end: this.editData(Object.values(this.paymentFrom.value.data_end)),
-        iban: this.paymentFrom.value.metod === 'iban',
-        cash: this.paymentFrom.value.metod === 'cash'
+        iban: this.paymentFrom.value.metod === 'банк' || this.paymentFrom.value.metod === 'всі',
+        cash: this.paymentFrom.value.metod === 'готівка' || this.paymentFrom.value.metod === 'всі',
       };
        this.service.getFilters(params).subscribe((data: any) => {
       this.setDataPayments(data)
@@ -220,9 +218,7 @@ setDataPayments(data) {
         status: 'edit'
       }); 
     } else if (action === 'edited') {
-      if(table === 'outlay') {
-        console.log(item);
-        
+      if(table === 'outlay') {     
         const params = {
           data_outlay: typeof item.value.data_outlay === 'string' ? item.value.data_outlay : this.editData(Object.values(item.value.data_outlay)),
           id_outlay_class: item.value.id_outlay_class,

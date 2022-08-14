@@ -1,9 +1,7 @@
-import { Component, Directive, EventEmitter, Input, OnDestroy, OnInit, Output, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { Component, Directive, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { NgbCalendar, NgbDate, NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
 import locale from 'date-fns/locale/en-US';
-// import * as moment from 'moment';
-import { Router } from '@angular/router';
 import * as moment from 'moment';
 import { DatepickerOptions } from 'ng2-datepicker';
 import { tap } from 'rxjs';
@@ -110,9 +108,6 @@ export class TableComponent implements OnInit, OnDestroy {
   };
 
   isShowCalendar = false;
-  optionsDateStart: DatepickerOptions;
-  optionsDateEnd: DatepickerOptions;
-  optionsDownloaded: DatepickerOptions;
 
   dataDateForm: FormGroup;
   phoneClients = [];
@@ -124,13 +119,13 @@ export class TableComponent implements OnInit, OnDestroy {
     { id: 2, value: false, name: 'всі' },
     { id: 3, value: '', name: 'не виконані' },
   ];
-  @ViewChildren(SortDirective) headers: QueryList<SortDirective>;
 
   constructor(
-    private fb: FormBuilder, private service: MainPage, private calendar: NgbCalendar, public formatter: NgbDateParserFormatter,
-    private serviceOrders: CreateOrderService,
-    private _router: Router){
-
+    private fb: FormBuilder, 
+    private service: MainPage, 
+    private calendar: NgbCalendar, 
+    public formatter: NgbDateParserFormatter,
+    private serviceOrders: CreateOrderService){
   }
 
   ngOnInit() {
@@ -150,31 +145,6 @@ export class TableComponent implements OnInit, OnDestroy {
       dateStart: null,
       dateEnd: null
     });
-
-    this.optionsDateStart = {
-      ...this.options
-    }
-
-    this.optionsDateEnd = {
-      ...this.options
-    }
-
-    this.optionsDownloaded = {
-      ...this.options
-    }
-    this.dataDateForm.valueChanges.pipe(
-      tap(value => {
-        this.optionsDateStart = {
-          ...this.optionsDateStart,
-          maxDate: new Date(value.dateEnd)
-        }
-
-        this.optionsDateEnd = {
-          ...this.optionsDateEnd,
-          minDate: new Date(value.dateStart)
-        }
-      })
-    ).subscribe();
  }
 
  ngOnDestroy(){
@@ -245,22 +215,6 @@ validateInput(currentValue: NgbDate | null, input: string): NgbDate | null {
     return '';
   }
 
-  onSort({column, direction}: SortEvent) {
-    this.headers.forEach(header => {
-      if (header.sortable !== column) {
-        header.direction = '';
-      }
-    });
-
-    if (direction === '' || column === '') {
-      this.ordersRow = orders;
-    } else {
-      this.ordersRow = [...orders].sort((a, b) => {
-        const res = compare(a[column], b[column]);
-        return direction === 'asc' ? res : -res;
-      });
-    }
-  }
 
   getMoney(sum) {
     return Number(sum).toFixed(sum.toString().endsWith('.00') ? null : 2)
@@ -292,8 +246,6 @@ validateInput(currentValue: NgbDate | null, input: string): NgbDate | null {
   }
 
   applyFilters() {
-    console.log(this.filtersForm);
-    
     let params: any = {
       data_start: this.editData(Object.values(this.filtersForm.value.dataStart)),
       data_end: this.editData(Object.values(this.filtersForm.value.dataEnd)),
@@ -324,7 +276,6 @@ validateInput(currentValue: NgbDate | null, input: string): NgbDate | null {
 
   changeSpeed() {
     const days = Math.ceil(this.queue/this.speed);
-    // this.dateDownloaded = moment().add(days, 'days').format('MM/DD/YYYY') ;
     this.dateDownloaded = moment().weekday(0).add(days, 'days').format('YYYY-MM-DD') ;
   }
 
@@ -356,8 +307,7 @@ validateInput(currentValue: NgbDate | null, input: string): NgbDate | null {
   removeData(control) {
     this.options = {
       ...this.options
-    }
-    // this[control].displayValue = '';
+    };
     this.filtersForm.get(control).patchValue('')
   }
 

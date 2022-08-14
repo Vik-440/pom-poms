@@ -74,12 +74,12 @@
         <div class="money-select">
           <p class="money-select--header">дата від</p>
           <input class="calendar" placeholder="yyyy-mm-dd" (click)="calendarPaymentStart.toggle()" [minDate]="{year: 2016, month: 1, day: 1}"
-          [maxDate]="{year: +todayYear, month: 12, day: 31}" formControlName="data_start" ngbDatepicker #calendarPaymentStart="ngbDatepicker">
+          [maxDate]="paymentFrom.value.data_end" formControlName="data_start" ngbDatepicker #calendarPaymentStart="ngbDatepicker">
         </div>
         <div class="money-select">
           <p class="money-select--header">дата до</p>
           <input class="calendar" placeholder="yyyy-mm-dd" (click)="calendarPaymentEnd.toggle()" [minDate]="{year: 2016, month: 1, day: 1}"
-          [maxDate]="{year: +todayYear, month: 12, day: 31}" formControlName="data_end" ngbDatepicker #calendarPaymentEnd="ngbDatepicker">
+          [maxDate]="{year: +todayYear, month: 12, day: 31}" [minDate]="paymentFrom.value.data_start" formControlName="data_end" ngbDatepicker #calendarPaymentEnd="ngbDatepicker">
         </div>
 
   
@@ -193,7 +193,7 @@
     <button class="statistics--btn" (click)="statisticsAtion()" [class.purple]="isShowStatistics">
       {{isShowStatistics ? 'Сховати статистику' : 'Показати статитику'}}
     </button>
-    <table *ngIf="isShowStatistics && !statisticsPayments" class="table table-lg table-bordered mb-0 border-primary statistics--table">
+    <table *ngIf="isShowStatistics && !statisticsPayments.length" class="table table-lg table-bordered mb-0 border-primary statistics--table">
       <thead>
         <th scope="col" class="date">дата</th>
         <th scope="col" class="payments">оплати</th>
@@ -211,7 +211,7 @@
         </ng-container>
       </tbody>
     </table>
-    <table *ngIf="isShowStatistics && statisticsPayments"  class="table table-lg table-bordered mb-0 border-primary statistics--table">
+    <table *ngIf="isShowStatistics && statisticsPayments.length"  class="table table-lg table-bordered mb-0 border-primary statistics--table">
       <thead>
         <th scope="col" class="date">{{paymentFrom.value.period}}</th>
         <th scope="col" class="payments">тип платежу</th>

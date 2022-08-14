@@ -540,7 +540,6 @@ export class CreateOrderComponent implements OnInit {
     if(mode === 'create') {
       delete params.edit_real_order
     }
-    console.log(params);
     
     this.service.saveOrder(params).subscribe((data: any) => {
       this.idOrder = +data.id_order || this.idOrder;
