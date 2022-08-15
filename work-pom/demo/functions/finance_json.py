@@ -379,7 +379,7 @@ def return_forecast(stat, sql_sum, sql_data):
     data_end_sql = ds.replace(month=12, day=31) + timedelta(days=1)
     stat = return_stat(data_start_sql, data_end_sql, stat, sql_sum, sql_data)
     days_year = ds - data_start_sql
-    forecast = round((stat[0]/days_year.days)*365, 2)
+    forecast = round((stat[0]/days_year.days)*365, 0)
     stat.insert(0, forecast)
 
     return(stat)
