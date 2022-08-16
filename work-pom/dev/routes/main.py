@@ -141,8 +141,7 @@ def fin_pay_balans():
 def fin_pay_search():
     try:
         request.data = request.get_json()
-        if 'payment_search' in request.data:
-            return (return_data_from_payment_search(request.data)), 200
+        return (return_data_from_payment_search(request.data)), 200
     except Exception as e:
         logger.error(f'Error in finance_payments_search POST: {e}')
         return f'Error in finance_payments GET: {e}', 500

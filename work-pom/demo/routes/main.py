@@ -100,15 +100,27 @@ def material():
         return f'Error in function material: {e}', 500
 
 
-@app.route('/finance', methods=['POST'])
+@app.route('/finance', methods=['GET', 'POST'])
 def finance():
     try:
-        request.data = request.get_json()
-        if 'outlay_search' in request.data:
-            return (return_data_from_outlay_search(request.data)), 200
-        if 'stat' in request.data:
-            return (return_data_from_payment_stat(request.data)), 200
-        return({"testdata": "Test-POST-error"}), 500
+        if request.method == 'POST':
+            request.data = request.get_json()
+            # if type(request.data) is list:
+            #     pass
+
+            # elif type(request.data) is dict:
+            # if 'payment_search' in request.data:
+            #     return (return_data_from_payment_search(request.data)), 200
+            if 'outlay_search' in request.data:
+                return (return_data_from_outlay_search(request.data)), 200
+            if 'stat' in request.data:
+                return (return_data_from_payment_stat(request.data)), 200
+            return({"testdata": "Test-POST-error"}), 500
+        # elif request.method == 'GET':
+        #     pass
+            # return(return_data_from_finance(0)), 200
+        else:
+            return ({"Finance": "error"}), 500
     except Exception as e:
         logger.error(f'Error in function finance: {e}')
         return f'Error in function finance: {e}', 500
@@ -129,8 +141,7 @@ def fin_pay_balans():
 def fin_pay_search():
     try:
         request.data = request.get_json()
-        if 'payment_search' in request.data:
-            return (return_data_from_payment_search(request.data)), 200
+        return (return_data_from_payment_search(request.data)), 200
     except Exception as e:
         logger.error(f'Error in finance_payments_search POST: {e}')
         return f'Error in finance_payments GET: {e}', 500
