@@ -17,44 +17,42 @@ import { FinancesComponent } from './finances/finances.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { ReserveComponent } from './reserve/reserve.component';
 import { SortDirective, TableComponent } from './table/table.component';
-import { NgxSpinnerModule } from "ngx-spinner";
+import { NgxSpinnerModule } from 'ngx-spinner';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 @NgModule({
-  declarations: [
-    AppComponent,
-    SortDirective,
-    TableComponent,
-    NavbarComponent,
-    CreateOrderComponent,
-    ReserveComponent,
-    FinancesComponent,
-  ],
-  imports: [
-    NgToggleModule,
-    BrowserAnimationsModule,
-    NgxMaskModule.forRoot(),
-    BrowserModule,
-    AppRoutingModule,
-    HttpClientModule,
-    NgbModule,
-    CommonModule,
-    DatepickerModule,
-    FormsModule,
-    NgSelectModule,
-    NgxSpinnerModule,
-    ReactiveFormsModule,
-    TooltipModule.forRoot({
-        placement: 'top',
-        arrow: 'true',
-        arrowType: 'sharp',
-        allowHTML: true,
-        maxWidth: 200
-      } as unknown as TooltipOptions)
-  ],
-  providers: [
-    { provide: 'API_URL', useValue: environment.apiUrl }
-  ],
-  bootstrap: [AppComponent],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    declarations: [
+        AppComponent,
+        SortDirective,
+        TableComponent,
+        NavbarComponent,
+        CreateOrderComponent,
+        ReserveComponent,
+        FinancesComponent,
+    ],
+    imports: [
+        NgToggleModule,
+        BrowserAnimationsModule,
+        NgxMaskModule.forRoot(),
+        BrowserModule,
+        AppRoutingModule,
+        HttpClientModule,
+        NgbModule,
+        CommonModule,
+        DatepickerModule,
+        FormsModule,
+        NgSelectModule,
+        NgxSpinnerModule,
+        ReactiveFormsModule,
+        TooltipModule.forRoot({
+            placement: 'top',
+            arrow: 'true',
+            arrowType: 'sharp',
+            allowHTML: true,
+            maxWidth: 200,
+        } as unknown as TooltipOptions),
+    ],
+    providers: [{ provide: 'API_URL', useValue: environment.apiUrl }],
+    bootstrap: [AppComponent],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
-export class AppModule { }
+export class AppModule {}

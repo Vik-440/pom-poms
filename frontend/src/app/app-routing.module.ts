@@ -6,14 +6,14 @@ import { ReserveComponent } from './reserve/reserve.component';
 import { TableComponent } from './table/table.component';
 
 const routes: Routes = [
-  { path: '', component: TableComponent },
-  { path: 'create-order', component: CreateOrderComponent },
-  { path: 'materials', component: ReserveComponent },
-  { path: 'finances-page', component: FinancesComponent }
+    { path: '', component: TableComponent },
+    { path: 'create-order', component: CreateOrderComponent },
+    { path: 'materials', component: ReserveComponent },
+    { path: 'finances-page', component: FinancesComponent },
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes, { onSameUrlNavigation: 'reload' })],
-  exports: [RouterModule]
+    imports: [RouterModule.forRoot(routes, { onSameUrlNavigation: 'reload' })],
+    exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}
