@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import * as _ from 'lodash';
 import * as moment from 'moment';
-import { filter } from 'rxjs';
 import { FinancesPageService } from '../services/finances.service';
 
 @Component({
@@ -19,12 +18,12 @@ export class FinancesComponent implements OnInit {
   paymentFrom: FormGroup;
   spendingForm;
   dataItems: FormArray;
-  periods: string[];
+  periods: any[];
   outlayData: FormArray;
   statisticsPeriods;
   statisticsData;
   isShowStatistics = false;
-  statisticsPayments;
+  statisticsPayments = [];
   itemEdit;
   datePrevious = {
     year: new Date().getFullYear(),
@@ -32,6 +31,7 @@ export class FinancesComponent implements OnInit {
     month: new Date().getMonth()
   };
   todayYear = new Date().getFullYear();
+
   ngOnInit(): void {
     this.service.getMethods().subscribe((data: any) => {
       this.metodPayment = data.metod_payment;
@@ -83,9 +83,31 @@ export class FinancesComponent implements OnInit {
     });
 
     this.service.getOutlays().subscribe((data: any) => {
-this.setDataOutlay(data);
+        this.setDataOutlay(data);
     })
-    this.periods = ['день', 'тиждень', 'місяць', 'квартал', 'рік']
+
+    this.periods = [
+      {
+        show: 'день',
+        send: 'day'
+      },
+      {
+        show: 'тиждень',
+        send: 'week'
+      },
+      {
+        show: 'місяць',
+        send: 'month'
+      },
+      {
+        show: 'квартал',
+        send: 'quarter'
+      },
+      {
+        show: 'рік',
+        send: 'year'
+      }
+    ]
   }
 
   removeEmptyValues(object) {
@@ -102,10 +124,10 @@ this.setDataOutlay(data);
     }
     return newObject;
 }
-setDataOutlay(data) {
-  this.outlayData.clear()
-  data.forEach((item: any) => {
-          const dataOutlay = item.data_outlay.split('-');
+  setDataOutlay(data) {
+    this.outlayData.clear()
+    data.forEach((item: any) => {
+        const dataOutlay = item.data_outlay.split('-');
           this.outlayData.push(this.fb.group({
             data_outlay: [{ year: +dataOutlay[0], month: +dataOutlay[1], day: +dataOutlay[2] }, Validators.required],
             id_outlay: item.id_outlay,
@@ -114,7 +136,7 @@ setDataOutlay(data) {
             comment_outlay: [item.comment_outlay, Validators.required],
             status: 'edit'
           }))
-        })
+    })
 
         this.outlayData.push(this.fb.group({
           data_outlay: [null, Validators.required],
@@ -124,8 +146,8 @@ setDataOutlay(data) {
           comment_outlay: [null, Validators.required],
           status: 'ok'
         }))  
-}
-setDataPayments(data) {
+  }
+  setDataPayments(data) {
   this.dataItems.clear()
         data.forEach((item, i) => {
           const dataArray = item.data_payment.split('-');
@@ -181,7 +203,7 @@ setDataPayments(data) {
         iban: this.paymentFrom.value.metod === 'банк' || this.paymentFrom.value.metod === 'всі',
         cash: this.paymentFrom.value.metod === 'готівка' || this.paymentFrom.value.metod === 'всі',
       };
-       this.service.getFilters(params).subscribe((data: any) => {
+       this.service.getFilters(params, '/payments').subscribe((data: any) => {
       this.setDataPayments(data)
     })
     }
