@@ -161,7 +161,7 @@ def fin_pay_order():
 @app.route('/finance/methods', methods=['GET'])
 def fin_met():
     try:
-        full_block = {"metod_payment": ["банк", "готівка"],
+        full_block = {"metod_payment": ["iban", "cash"],
                       "outlay_class": [
                         "податок", "мат. осн.", "мат. доп.",
                         "інстр.", "опл. роб.", "реклама", "інше"]}
