@@ -7,6 +7,7 @@ import * as moment from 'moment';
 import { DatepickerOptions } from 'ng2-datepicker';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { filter, tap } from 'rxjs';
+import { modelsData } from 'src/assets/models-data/modelsData';
 import { CreateOrderService } from '../services/create-order.service';
 @Component({
     selector: 'app-create-order',
@@ -412,6 +413,9 @@ export class CreateOrderComponent implements OnInit {
 
     deleteOrder(index) {
         this.orderForm.controls.splice(index, 1);
+        this.orderForm.value.splice(index, 1);
+
+        navigator.clipboard.writeText('dfgfggfg');
     }
 
     saveOrder(index, order) {
@@ -702,5 +706,34 @@ export class CreateOrderComponent implements OnInit {
                     this.spinner.hide();
                 }
             });
+    }
+
+    copyScore() {
+        const copyText = [];
+        const sumAll = +this.sumAll(false).split('/')[0].trim();
+        this.orderForm.value.forEach((order, i) => {
+            copyText.push(
+                `${i + 1}. ${modelsData[order.kod_model.substring(0, 3)] || ''}, колір ${order.kolor_model}, код ${
+                    order.kod_model
+                }, кількість ${order.quantity_pars_model} пар, ціна ${order.price_model} грн/пар \n`
+            );
+        });
+
+        copyText.push(
+            `Прогнозована дата виготовлення ${
+                this.dataPlaneOrder
+                    ? [this.dataPlaneOrder.year, this.dataPlaneOrder.month, this.dataPlaneOrder.day].join('-')
+                    : null
+            } \n\n`
+        );
+        copyText.push(`**Всього до оплати ${sumAll}** \n`);
+        copyText.push(`Аванс від ${Math.floor((sumAll * 0.3) / 100) * 100}грн \n\n`);
+        copyText.push(
+            `**Обов'язково вказуйте призначення платежу: "П-(номер замовлення)"**, а після оплати проінформуйте нас про транзакцію.\n\n`
+        );
+        copyText.push(
+            `**Якщо Вам потрібно рахунок і накладна у паперовому вигляді, попередьте нас і ми покладемо їх до замовлення.** \n`
+        );
+        navigator.clipboard.writeText(copyText.join(''));
     }
 }
