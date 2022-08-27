@@ -5,7 +5,7 @@ from sqlalchemy import select
 # from sqlalchemy import func
 # from datetime import datetime
 from sqlalchemy.orm import Session
-from db.models import directory_of_order, directory_of_group
+from db.models import directory_of_order
 # from db.models import directory_of_client, directory_of_payment
 # from db.models import directory_of_model
 from db.models import engine
@@ -16,44 +16,83 @@ with Session(engine) as session:
     r_list = select(directory_of_order.id_order).order_by(
         'id_order')
     id_list = session.execute(r_list)
+    n_order = 0
     for row in id_list:
         id_order = int(row.id_order)
         if id_order < 2000:
-
-            id_model_list, quantity_pars_model_list = [], []
-            price_model_order_list, phase_model_list = [], []
-            phase_model_list1, phase_model_list2 = [], []
-            phase_model_list3 = []
-            # test = [1, 2, 3, 4]
+            n_order += 1
+            phase1_list, phase2_list, phase3_list = [], [], []
+            q_pos = []
             list_from_group = select(
-                directory_of_group.id_model,
-                directory_of_group.quantity_pars_model,
-                directory_of_group.phase_1_model,
-                directory_of_group.phase_2_model,
-                directory_of_group.phase_3_model,
-                directory_of_group.price_model_order).filter_by(
-                id_order=id_order).order_by('id_group_model')
-            group_list = session.execute(list_from_group)
-            for row1 in group_list:
-                id_model_list.append(row1.id_model)
-                quantity_pars_model_list.append(row1.quantity_pars_model)
-                phase_model_list1.append(row1.phase_1_model)
-                phase_model_list2.append(row1.phase_2_model)
-                phase_model_list3.append(row1.phase_3_model)
-                price_model_order_list.append(row1.price_model_order)
-            # print(id_order, " - ", id_model_list, quantity_pars_model_list,
-            # phase_model_list1, phase_model_list2, phase_model_list3,
-            # price_model_order_list)
+                directory_of_order.quantity_pars_model,
+                directory_of_order.fulfilled_order).filter_by(
+                id_order=id_order)
+            q_list = session.execute(list_from_group)
+            for row1 in q_list:
+                q_pos = row1.quantity_pars_model
+                fulfilled_order = row1.fulfilled_order
+            len_pos = len(q_pos)
+            for x in range(len_pos):
+                if fulfilled_order is True:
+                    phase1_list.append(0)
+                    phase2_list.append(0)
+                    phase3_list.append(0)
+                else:
+                    phase1_list.append(q_pos[x] * 2)
+                    phase2_list.append(q_pos[x] * 2)
+                    phase3_list.append(q_pos[x] * 2)
 
             session.query(directory_of_order).filter(
                 directory_of_order.id_order == id_order).update(
-                {"id_model": (id_model_list),
-                    "quantity_pars_model": (quantity_pars_model_list),
-                    "phase_1_model": (phase_model_list1),
-                    "phase_2_model": (phase_model_list2),
-                    "phase_3_model": (phase_model_list3),
-                    "price_model_order": (price_model_order_list)})
+                {"phase_1": (phase1_list),
+                 "phase_2": (phase2_list),
+                 "phase_3": (phase3_list)})
             session.commit()
+            print(n_order, " - order №_", id_order, " is fixed")
+
+
+# with Session(engine) as session:
+#     r_list = select(directory_of_order.id_order).order_by(
+#         'id_order')
+#     id_list = session.execute(r_list)
+#     for row in id_list:
+#         id_order = int(row.id_order)
+#         if id_order < 2000:
+
+#             id_model_list, quantity_pars_model_list = [], []
+#             price_model_order_list, phase_model_list = [], []
+#             phase_model_list1, phase_model_list2 = [], []
+#             phase_model_list3 = []
+#             # test = [1, 2, 3, 4]
+#             list_from_group = select(
+#                 directory_of_group.id_model,
+#                 directory_of_group.quantity_pars_model,
+#                 directory_of_group.phase_1_model,
+#                 directory_of_group.phase_2_model,
+#                 directory_of_group.phase_3_model,
+#                 directory_of_group.price_model_order).filter_by(
+#                 id_order=id_order).order_by('id_group_model')
+#             group_list = session.execute(list_from_group)
+#             for row1 in group_list:
+#                 id_model_list.append(row1.id_model)
+#                 quantity_pars_model_list.append(row1.quantity_pars_model)
+#                 phase_model_list1.append(row1.phase_1_model)
+#                 phase_model_list2.append(row1.phase_2_model)
+#                 phase_model_list3.append(row1.phase_3_model)
+#                 price_model_order_list.append(row1.price_model_order)
+#             # print(id_order, " - ", id_model_list, quantity_pars_model_list,
+#             # phase_model_list1, phase_model_list2, phase_model_list3,
+#             # price_model_order_list)
+
+#             session.query(directory_of_order).filter(
+#                 directory_of_order.id_order == id_order).update(
+#                 {"id_model": (id_model_list),
+#                     "quantity_pars_model": (quantity_pars_model_list),
+#                     "phase_1_model": (phase_model_list1),
+#                     "phase_2_model": (phase_model_list2),
+#                     "phase_3_model": (phase_model_list3),
+#                     "price_model_order": (price_model_order_list)})
+#             session.commit()
             # print(id_order, "- is saved")
             # s1, s2, s3, s4, s5, s6 = [], [], [], [], [], []
             # download = select(

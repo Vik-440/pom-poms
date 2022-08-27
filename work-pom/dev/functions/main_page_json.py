@@ -8,6 +8,39 @@ from db.models import directory_of_model
 from db.models import engine
 
 
+def change_main_phase(id_order, inform):
+    with Session(engine) as session:
+        check_sum = 0
+        if 'phase_1' in inform:
+            phase_int = inform['phase_1']
+            for row in phase_int:
+                check_sum = check_sum + row
+            session.query(directory_of_order).filter(
+                    directory_of_order.id_order == id_order).update({
+                        "phase_1": phase_int})
+        elif 'phase_2' in inform:
+            phase_int = inform['phase_2']
+            for row in phase_int:
+                check_sum = check_sum + row
+            session.query(directory_of_order).filter(
+                    directory_of_order.id_order == id_order).update({
+                        "phase_2": phase_int})
+        elif 'phase_3' in inform:
+            phase_int = inform['phase_3']
+            for row in phase_int:
+                check_sum = check_sum + row
+            session.query(directory_of_order).filter(
+                    directory_of_order.id_order == id_order).update({
+                        "phase_3": phase_int})
+        else:
+            one_block = {"phase_chenged": "error"}
+            return one_block
+
+        session.commit()
+        one_block = {"check_sum_phase": check_sum}
+    return one_block
+
+
 def return_data_from_main_page(asked):
     with Session(engine) as session:
         if 'fulfilled_id_order' in asked:
@@ -108,6 +141,9 @@ def return_data_from_main_page(asked):
             m_phase_1_model = row.phase_1_model
             m_phase_2_model = row.phase_2_model
             m_phase_3_model = row.phase_3_model
+            m_phase_1 = row.phase_1
+            m_phase_2 = row.phase_2
+            m_phase_3 = row.phase_3
             m_id_model = row.id_model
 
             tmp11 = len(m_id_model)
@@ -127,6 +163,9 @@ def return_data_from_main_page(asked):
                 m_phase_1_model = m_phase_1_model[0]
                 m_phase_2_model = m_phase_2_model[0]
                 m_phase_3_model = m_phase_3_model[0]
+                m_phase_1 = m_phase_1[0]
+                m_phase_2 = m_phase_2[0]
+                m_phase_3 = m_phase_3[0]
                 m_kolor_model = m_kolor_model[0]
                 m_kod_model = m_kod_model[0]
                 m_comment_model = m_comment_model[0]
@@ -168,6 +207,9 @@ def return_data_from_main_page(asked):
                          "phase_1_model": m_phase_1_model,
                          "phase_2_model": m_phase_2_model,
                          "phase_3_model": m_phase_3_model,
+                         "phase_1": m_phase_1,
+                         "phase_2": m_phase_2,
+                         "phase_3": m_phase_3,
                          "sum_payment": m_sum_payment,
                          "real_money": m_real_money,
                          "phone_client": m_phone_client,

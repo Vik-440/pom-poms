@@ -33,6 +33,9 @@ class directory_of_order(Base):
     phase_2_model = Column('phase_2_model', postgresql.ARRAY(Boolean))
     phase_3_model = Column('phase_3_model', postgresql.ARRAY(Boolean))
     price_model_order = Column('price_model_order', postgresql.ARRAY(Integer))
+    phase_1 = Column('phase_1', postgresql.ARRAY(Integer))
+    phase_2 = Column('phase_2', postgresql.ARRAY(Integer))
+    phase_3 = Column('phase_3', postgresql.ARRAY(Integer))
     # client = relationship("directory_of_client", foreign_keys=[id_client])
     # recipient = relationship("directory_of_client", foreign_keys=[id_client])
 
