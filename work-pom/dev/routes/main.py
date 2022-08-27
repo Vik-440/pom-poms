@@ -8,7 +8,6 @@ from functions.material_json import return_data_from_material_one
 from functions.material_json import return_data_from_material_change
 from functions.material_json import return_data_from_material_new
 from functions.material_json import return_data_from_material_change_full
-# from functions.finance_json import return_data_from_finance
 from functions.finance_json import return_data_from_payment
 from functions.finance_json import return_data_from_outlay
 from functions.finance_json import return_data_from_payment_search
@@ -36,7 +35,6 @@ def return_data_from_flask():
         "data_order": "2022-02-23",
         "kolor_model": "малиновий",
         "kod_model": "190-B05"}
-
     return jsonify(info), 200  # returning a JSON response
 
 
@@ -91,7 +89,6 @@ def material():
                 data = return_data_from_material_change_full(request.data)
             else:
                 data = {"запит ": "не вірний"}
-            # data={"testdata" : "Test-POST-OK"}
             return data, 200
         else:
             return(return_data_from_material(0)), 200
@@ -105,20 +102,11 @@ def finance():
     try:
         if request.method == 'POST':
             request.data = request.get_json()
-            # if type(request.data) is list:
-            #     pass
-
-            # elif type(request.data) is dict:
-            # if 'payment_search' in request.data:
-            #     return (return_data_from_payment_search(request.data)), 200
             if 'outlay_search' in request.data:
                 return (return_data_from_outlay_search(request.data)), 200
             if 'stat' in request.data:
                 return (return_data_from_payment_stat(request.data)), 200
             return({"testdata": "Test-POST-error"}), 500
-        # elif request.method == 'GET':
-        #     pass
-            # return(return_data_from_finance(0)), 200
         else:
             return ({"Finance": "error"}), 500
     except Exception as e:
