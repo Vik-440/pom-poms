@@ -267,9 +267,12 @@ def return_data_from_final_order(data_from_new_page):
         while s2s > 0:
             s2s -= 1
             phase_pcs.append(False)
+        phase_int = []
+        for y in data_from_new_page['quantity_pars_model']:
+            phase_int.append(y * 2)
 
         if 'edit_real_order' in data_from_new_page:
-            print("problems")
+            # print("problems")
             x1x = int(data_from_new_page['edit_real_order'])
             if x1x != id_order:
                 raise Exception("This order number is real - 1p")
@@ -288,6 +291,9 @@ def return_data_from_final_order(data_from_new_page):
                     "phase_1_model": phase_pcs,
                     "phase_2_model": phase_pcs,
                     "phase_3_model": phase_pcs,
+                    "phase_1": phase_int,
+                    "phase_2": phase_int,
+                    "phase_3": phase_int,
                     "id_model": data_from_new_page['id_model'],
                     "quantity_pars_model": data_from_new_page[
                         'quantity_pars_model'],
@@ -318,6 +324,9 @@ def return_data_from_final_order(data_from_new_page):
             phase_1_model=phase_pcs,
             phase_2_model=phase_pcs,
             phase_3_model=phase_pcs,
+            phase_1=phase_int,
+            phase_2=phase_int,
+            phase_3=phase_int,
             id_model=data_from_new_page['id_model'],
             quantity_pars_model=data_from_new_page['quantity_pars_model'],
             price_model_order=data_from_new_page['price_model_order'])

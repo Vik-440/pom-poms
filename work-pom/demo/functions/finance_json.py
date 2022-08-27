@@ -93,7 +93,7 @@ def return_data_from_payment(sender):
                 data_payment=sender['data_payment'])
             session.add(z1)
             session.commit()
-        return({"payment_set": "ok"})
+        return ({"payment_set": "ok"})
     except Exception as e:
         return f'Error in function finance: {e}', 500
 
@@ -108,7 +108,7 @@ def return_data_from_outlay(sender):
                 comment_outlay=sender['comment_outlay'])
             session.add(z1)
             session.commit()
-        return({"outlay_set": "ok"})
+        return ({"outlay_set": "ok"})
     except Exception as e:
         return f'Error in function finance: {e}', 500
 
@@ -119,12 +119,12 @@ def return_data_from_payment_search(sender):
         data_end = sender['data_end']
         iban = sender['iban']
         cash = sender['cash']
-        if iban and not(cash):
+        if iban and not (cash):
             payment_search_1 = session.query(directory_of_payment).filter(
                 directory_of_payment.data_payment >= data_start,
                 directory_of_payment.data_payment <= data_end).filter_by(
                     metod_payment="iban").all()
-        elif cash and not(iban):
+        elif cash and not (iban):
             payment_search_1 = session.query(directory_of_payment).filter(
                 directory_of_payment.data_payment >= data_start,
                 directory_of_payment.data_payment <= data_end).filter_by(
@@ -194,7 +194,7 @@ def return_data_from_payment_change(id, sender):
                      'metod_payment': metod_payment,
                      'data_payment': data_payment})
             session.commit()
-        return({"id_payment": "ok"})
+        return ({"id_payment": "ok"})
     except Exception as e:
         return f'Error in function finance: {e}', 500
 
@@ -213,7 +213,7 @@ def return_data_from_outlay_change(id, sender):
                      'money_outlay': money_outlay,
                      'comment_outlay': comment_outlay})
             session.commit()
-        return({"id_outlay": "ok"})
+        return ({"id_outlay": "ok"})
     except Exception as e:
         return f'Error in function finance: {e}', 500
 
@@ -286,7 +286,7 @@ def return_data_from_payment_balans(sender):
             data_end_sql = data_start_sql+timedelta(days=364)
 
         while day > 0:
-            if iban and not(cash):
+            if iban and not (cash):
                 metod_payment = 'iban'
                 payment_1 = session.query(
                     func.sum(directory_of_payment.payment).label('my_sum'),
@@ -296,7 +296,7 @@ def return_data_from_payment_balans(sender):
                     directory_of_payment.data_payment >= data_start_sql,
                     directory_of_payment.data_payment <= data_end_sql
                     ).filter_by(metod_payment="iban").first()
-            elif cash and not(iban):
+            elif cash and not (iban):
                 metod_payment = 'cash'
                 payment_1 = session.query(
                     func.sum(directory_of_payment.payment).label('my_sum'),
@@ -379,10 +379,10 @@ def return_forecast(stat, sql_sum, sql_data):
     data_end_sql = ds.replace(month=12, day=31) + timedelta(days=1)
     stat = return_stat(data_start_sql, data_end_sql, stat, sql_sum, sql_data)
     days_year = ds - data_start_sql
-    forecast = round((stat[0]/days_year.days)*365, 0)
+    forecast = round((stat[0]/days_year.days)*365, 2)
     stat.insert(0, forecast)
 
-    return(stat)
+    return (stat)
 
 
 def return_stat(data_start_sql, data_end_sql, stat, sql_sum, sql_data):
@@ -392,7 +392,7 @@ def return_stat(data_start_sql, data_end_sql, stat, sql_sum, sql_data):
         for row in payment_1:
             payment = payment_1.my_sum
         stat.insert(0, payment)
-    return(stat)
+    return (stat)
 
 
 def ret_dat_fin_pay_get():

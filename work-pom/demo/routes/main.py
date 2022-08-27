@@ -1,6 +1,7 @@
 from flask import jsonify, request
 from app import app
 from functions.main_page_json import return_data_from_main_page
+from functions.main_page_json import change_main_phase
 from functions.new_order_json import return_data_from_new_order
 from functions.new_order_json import return_data_from_new_order_post
 from functions.material_json import return_data_from_material
@@ -8,7 +9,6 @@ from functions.material_json import return_data_from_material_one
 from functions.material_json import return_data_from_material_change
 from functions.material_json import return_data_from_material_new
 from functions.material_json import return_data_from_material_change_full
-# from functions.finance_json import return_data_from_finance
 from functions.finance_json import return_data_from_payment
 from functions.finance_json import return_data_from_outlay
 from functions.finance_json import return_data_from_payment_search
@@ -36,7 +36,6 @@ def return_data_from_flask():
         "data_order": "2022-02-23",
         "kolor_model": "малиновий",
         "kod_model": "190-B05"}
-
     return jsonify(info), 200  # returning a JSON response
 
 
@@ -45,12 +44,12 @@ def main_page():
     try:
         if request.method == 'POST':
             request.data = request.get_json()
-            return(return_data_from_main_page(request.data))
+            return (return_data_from_main_page(request.data))
         # ds=datetime.today().strftime('%Y-%m-%d')
         elif request.method == 'GET':
             data = {"data_start": "2016-01-01"}
             logger.info('Get main_page is work!')
-            return(return_data_from_main_page(data))
+            return (return_data_from_main_page(data))
         else:
             return ({"request_metod": "error"}), 500
     except Exception as e:
@@ -91,10 +90,9 @@ def material():
                 data = return_data_from_material_change_full(request.data)
             else:
                 data = {"запит ": "не вірний"}
-            # data={"testdata" : "Test-POST-OK"}
             return data, 200
         else:
-            return(return_data_from_material(0)), 200
+            return (return_data_from_material(0)), 200
     except Exception as e:
         logger.error(f'Error in function material: {e}')
         return f'Error in function material: {e}', 500
@@ -105,20 +103,11 @@ def finance():
     try:
         if request.method == 'POST':
             request.data = request.get_json()
-            # if type(request.data) is list:
-            #     pass
-
-            # elif type(request.data) is dict:
-            # if 'payment_search' in request.data:
-            #     return (return_data_from_payment_search(request.data)), 200
             if 'outlay_search' in request.data:
                 return (return_data_from_outlay_search(request.data)), 200
             if 'stat' in request.data:
                 return (return_data_from_payment_stat(request.data)), 200
-            return({"testdata": "Test-POST-error"}), 500
-        # elif request.method == 'GET':
-        #     pass
-            # return(return_data_from_finance(0)), 200
+            return ({"testdata": "Test-POST-error"}), 500
         else:
             return ({"Finance": "error"}), 500
     except Exception as e:
@@ -164,7 +153,9 @@ def fin_met():
         full_block = {"metod_payment": ["iban", "cash"],
                       "outlay_class": [
                         "податок", "мат. осн.", "мат. доп.",
-                        "інстр.", "опл. роб.", "реклама", "інше"]}
+                        "інстр.", "опл. роб.", "реклама", "інше"],
+                      "filter_class": [
+                        "day", "week", "month", "quarter", "year"]}
         return (full_block)
     except Exception as e:
         logger.error(f'Error in finance_methods GET: {e}')
@@ -235,3 +226,16 @@ def finance_outlay_change(id):
     except Exception as e:
         logger.error(f'Error in function finance: {e}')
         return f'Error in function finance: {e}', 500
+
+
+@app.route('/main_page/phase/<int:id>', methods=['PUT'])
+def main_phase(id):
+    request.data = request.get_json()
+    try:
+        if request.method == 'PUT':
+            return (change_main_phase(id, request.data)), 200
+        else:
+            return ({"error_message": "mistake method"}), 404
+    except Exception as e:
+        logger.error(f'Error in function main_phase: {e}')
+        return f'Error in function main_phase: {e}', 500
