@@ -8,6 +8,7 @@ import { DatepickerOptions } from 'ng2-datepicker';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { filter, tap } from 'rxjs';
 import { modelsData } from 'src/assets/models-data/modelsData';
+import { formatNumber } from 'src/common/common';
 import { CreateOrderService } from '../services/create-order.service';
 @Component({
     selector: 'app-create-order',
@@ -709,13 +710,13 @@ export class CreateOrderComponent implements OnInit {
     }
 
     copyScore() {
-        const copyText = [];
+        const copyText = [`**Замовлення № ${this.idOrder}**\n\n`];
         const sumAll = +this.sumAll(false).split('/')[0].trim();
         this.orderForm.value.forEach((order, i) => {
             copyText.push(
-                `${i + 1}. ${modelsData[order.kod_model.substring(0, 3)] || ''}, колір ${order.kolor_model}, код ${
-                    order.kod_model
-                }, кількість ${order.quantity_pars_model} пар, ціна ${order.price_model} грн/пар \n`
+                    `${i + 1}. ${modelsData[order.kod_model.substring(0, 3)] || modelsData[order.kod_model.substring(0, 2)] || ''}, колір ${order.kolor_model}, код ${
+                        order.kod_model
+                    }, кількість ${order.quantity_pars_model} пар, ціна ${formatNumber(order.price_model)} грн/пар \n`
             );
         });
 
@@ -726,10 +727,10 @@ export class CreateOrderComponent implements OnInit {
                     : null
             } \n\n`
         );
-        copyText.push(`**Всього до оплати ${sumAll}** \n`);
-        copyText.push(`Аванс від ${Math.floor((sumAll * 0.3) / 100) * 100}грн \n\n`);
+        copyText.push(`**Всього до оплати ${formatNumber(sumAll)}** грн\n`);
+        copyText.push(`Аванс від ${formatNumber(Math.floor((sumAll * 0.3) / 100) * 100)} грн \n\n`);
         copyText.push(
-            `**Обов'язково вказуйте призначення платежу: "П-(номер замовлення)"**, а після оплати проінформуйте нас про транзакцію.\n\n`
+            `**Обов'язково вказуйте призначення платежу: "П-${this.idOrder}"**, а після оплати проінформуйте нас про транзакцію.\n\n`
         );
         copyText.push(
             `**Якщо Вам потрібно рахунок і накладна у паперовому вигляді, попередьте нас і ми покладемо їх до замовлення.** \n`
@@ -737,3 +738,4 @@ export class CreateOrderComponent implements OnInit {
         navigator.clipboard.writeText(copyText.join(''));
     }
 }
+
