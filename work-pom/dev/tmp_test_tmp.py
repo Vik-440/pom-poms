@@ -1,4 +1,3 @@
-# import json
 # from unittest import result
 from sqlalchemy import select
 # from sqlalchemy import true, update
@@ -10,45 +9,54 @@ from db.models import directory_of_order
 # from db.models import directory_of_model
 from db.models import engine
 # import datetime
+import json
+# from flask import jsonify, request
+
+from routes.main import return_data_from_flask
+from routes.main import tmp_test_tmp
+x = tmp_test_tmp()
+print(x)
+a = json.loads(x)
+print(a["ping"])
 
 
-with Session(engine) as session:
-    r_list = select(directory_of_order.id_order).order_by(
-        'id_order')
-    id_list = session.execute(r_list)
-    n_order = 0
-    for row in id_list:
-        id_order = int(row.id_order)
-        if id_order < 2000:
-            n_order += 1
-            phase1_list, phase2_list, phase3_list = [], [], []
-            q_pos = []
-            list_from_group = select(
-                directory_of_order.quantity_pars_model,
-                directory_of_order.fulfilled_order).filter_by(
-                id_order=id_order)
-            q_list = session.execute(list_from_group)
-            for row1 in q_list:
-                q_pos = row1.quantity_pars_model
-                fulfilled_order = row1.fulfilled_order
-            len_pos = len(q_pos)
-            for x in range(len_pos):
-                if fulfilled_order is True:
-                    phase1_list.append(0)
-                    phase2_list.append(0)
-                    phase3_list.append(0)
-                else:
-                    phase1_list.append(q_pos[x] * 2)
-                    phase2_list.append(q_pos[x] * 2)
-                    phase3_list.append(q_pos[x] * 2)
+# with Session(engine) as session:
+#     r_list = select(directory_of_order.id_order).order_by(
+#         'id_order')
+#     id_list = session.execute(r_list)
+#     n_order = 0
+#     for row in id_list:
+#         id_order = int(row.id_order)
+#         if id_order < 2000:
+#             n_order += 1
+#             phase1_list, phase2_list, phase3_list = [], [], []
+#             q_pos = []
+#             list_from_group = select(
+#                 directory_of_order.quantity_pars_model,
+#                 directory_of_order.fulfilled_order).filter_by(
+#                 id_order=id_order)
+#             q_list = session.execute(list_from_group)
+#             for row1 in q_list:
+#                 q_pos = row1.quantity_pars_model
+#                 fulfilled_order = row1.fulfilled_order
+#             len_pos = len(q_pos)
+#             for x in range(len_pos):
+#                 if fulfilled_order is True:
+#                     phase1_list.append(0)
+#                     phase2_list.append(0)
+#                     phase3_list.append(0)
+#                 else:
+#                     phase1_list.append(q_pos[x] * 2)
+#                     phase2_list.append(q_pos[x] * 2)
+#                     phase3_list.append(q_pos[x] * 2)
 
-            session.query(directory_of_order).filter(
-                directory_of_order.id_order == id_order).update(
-                {"phase_1": (phase1_list),
-                 "phase_2": (phase2_list),
-                 "phase_3": (phase3_list)})
-            session.commit()
-            print(n_order, " - order №_", id_order, " is fixed")
+#             session.query(directory_of_order).filter(
+#                 directory_of_order.id_order == id_order).update(
+#                 {"phase_1": (phase1_list),
+#                  "phase_2": (phase2_list),
+#                  "phase_3": (phase3_list)})
+#             session.commit()
+#             print(n_order, " - order №_", id_order, " is fixed")
 
 
 # with Session(engine) as session:
