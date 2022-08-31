@@ -40,7 +40,7 @@ def return_data_from_flask():
 
 
 def tmp_test_tmp():
-    x = {"ping": "pong"}
+    x = {"ping": "pong", "ping_1": "pong_1"}
     return (x)
 
 

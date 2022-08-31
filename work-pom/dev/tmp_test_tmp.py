@@ -1,23 +1,26 @@
 # from unittest import result
-from sqlalchemy import select
+# from sqlalchemy import select
 # from sqlalchemy import true, update
 # from sqlalchemy import func
 # from datetime import datetime
-from sqlalchemy.orm import Session
-from db.models import directory_of_order
+# from sqlalchemy.orm import Session
+# from db.models import directory_of_order
 # from db.models import directory_of_client, directory_of_payment
 # from db.models import directory_of_model
-from db.models import engine
+# from db.models import engine
 # import datetime
-import json
+# import json
 # from flask import jsonify, request
 
-from routes.main import return_data_from_flask
+# from routes.main import return_data_from_flask
 from routes.main import tmp_test_tmp
+from routes.main import ret_dat_fin_pay_get
+y = ret_dat_fin_pay_get()
 x = tmp_test_tmp()
-print(x)
-a = json.loads(x)
-print(a["ping"])
+print(ret_dat_fin_pay_get())
+print(y)
+# a = json.loads(y)
+# print(a)
 
 
 # with Session(engine) as session:
@@ -101,26 +104,26 @@ print(a["ping"])
 #                     "phase_3_model": (phase_model_list3),
 #                     "price_model_order": (price_model_order_list)})
 #             session.commit()
-            # print(id_order, "- is saved")
-            # s1, s2, s3, s4, s5, s6 = [], [], [], [], [], []
-            # download = select(
-            #     directory_of_order.id_model,
-            #     directory_of_order.quantity_pars_model,
-            #     directory_of_order.phase_1_model,
-            #       directory_of_order.phase_2_model,
-            #     directory_of_order.phase_3_model,
-            #       directory_of_order.price_model_order).filter_by(
-            #     id_order = id_order).order_by('id_order')
-            # order_list = session.execute(download)
-            # for row1 in order_list:
-            #     s1 = ((row1.id_model))
-            #     s2 = (row1.quantity_pars_model)
-            #     s3 = (row1.phase_1_model)
-            #     s4 = (row1.phase_2_model)
-            #     s5 = (row1.phase_3_model)
-            #     s6 = (row1.price_model_order)
-            #    # print(id_order, " - ", s1, s2, s3, s4, s5, s6)
-            #    # print(s1[0], s3[1])
+#            # print(id_order, "- is saved")
+#            # s1, s2, s3, s4, s5, s6 = [], [], [], [], [], []
+#            # download = select(
+#            #     directory_of_order.id_model,
+#            #     directory_of_order.quantity_pars_model,
+#            #     directory_of_order.phase_1_model,
+#            #       directory_of_order.phase_2_model,
+#            #     directory_of_order.phase_3_model,
+#            #       directory_of_order.price_model_order).filter_by(
+#            #     id_order = id_order).order_by('id_order')
+#            # order_list = session.execute(download)
+#            # for row1 in order_list:
+#            #     s1 = ((row1.id_model))
+#            #     s2 = (row1.quantity_pars_model)
+#            #     s3 = (row1.phase_1_model)
+#            #     s4 = (row1.phase_2_model)
+#            #     s5 = (row1.phase_3_model)
+#            #     s6 = (row1.price_model_order)
+#            #    # print(id_order, " - ", s1, s2, s3, s4, s5, s6)
+#            #    # print(s1[0], s3[1])
 
 
 # with Session(engine) as session:
