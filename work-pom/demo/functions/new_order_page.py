@@ -267,9 +267,10 @@ def return_data_from_final_order(data_from_new_page):
         while s2s > 0:
             s2s -= 1
             phase_pcs.append(False)
-        phase_int = []
+        phase_int, phase_int3 = [], []
         for y in data_from_new_page['quantity_pars_model']:
             phase_int.append(y * 2)
+            phase_int3.append(y)
 
         if 'edit_real_order' in data_from_new_page:
             # print("problems")
@@ -293,7 +294,7 @@ def return_data_from_final_order(data_from_new_page):
                     "phase_3_model": phase_pcs,
                     "phase_1": phase_int,
                     "phase_2": phase_int,
-                    "phase_3": phase_int,
+                    "phase_3": phase_int3,
                     "id_model": data_from_new_page['id_model'],
                     "quantity_pars_model": data_from_new_page[
                         'quantity_pars_model'],
