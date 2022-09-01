@@ -1,11 +1,10 @@
-# from array import ArrayType, array
 from sqlalchemy import Date, ForeignKey, create_engine, Column
 from sqlalchemy import Integer, String, Boolean
 from sqlalchemy.ext.declarative import declarative_base
-# from sqlalchemy.orm import relationship
 from dotenv import load_dotenv
-import os
 from sqlalchemy.dialects import postgresql
+import os
+
 
 load_dotenv()
 url = os.getenv("PSQL_URL")
