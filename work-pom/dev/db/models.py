@@ -4,10 +4,9 @@ from sqlalchemy.ext.declarative import declarative_base
 from dotenv import load_dotenv
 from sqlalchemy.dialects import postgresql
 import os
+from log.logger import logger
 
 
-load_dotenv()
-url = os.getenv("PSQL_URL")
 Base = declarative_base()
 
 
@@ -72,21 +71,6 @@ class directory_of_model(Base):
     comment_model = Column('comment_model', String)
 
 
-# class directory_of_group(Base):
-#     __tablename__ = 'directory_of_group'
-#     id_group_model = Column('id_group_model', Integer, primary_key=True)
-#     id_model = Column('id_model', Integer, ForeignKey(
-#         'directory_of_model.id_model'))
-#     id_order = Column('id_order', Integer)
-#     quantity_pars_model = Column('quantity_pars_model', Integer)
-#     phase_1_model = Column('phase_1_model', Boolean)
-#     phase_2_model = Column('phase_2_model', Boolean)
-#     phase_3_model = Column('phase_3_model', Boolean)
-#     price_model_order = Column('price_model_order', Integer)
-
-#     model = relationship("directory_of_model", foreign_keys=[id_model])
-
-
 class directory_of_payment(Base):
     __tablename__ = 'directory_of_payment'
     id_payment = Column('id_payment', Integer, primary_key=True)
@@ -128,6 +112,36 @@ class directory_of_outlay_class(Base):
     outlay_class = Column('outlay_class', String)
 
 
-engine = create_engine(url)
+load_dotenv()
+setup_db = "DEV"
+try:
+    if setup_db == "PROD":
+        url = os.getenv("PSQL_URL")
+    elif setup_db == "DEV":
+        url = os.getenv("PSQL_URL_TEST")
+    else:
+        raise (Exception('Please insert correct setup(dev or prod)!'))
+except Exception as e:
+    logger.error(f'Error in function return_engine: {e}')
 
+
+engine = create_engine(url)
 Base.metadata.create_all(engine)
+
+# # setup: str
+# def engine():
+#     try:
+#         setup = os.environ.get('SETUP')
+#         if 1 == 1:
+#         # if setup == 'PROD':
+#             url = os.environ.get('PSQL_URL')
+#             url = os.getenv("PSQL_URL")
+#         elif setup == 'DEV':
+#             url = os.environ.get('PSQL_URL_TEST')
+#         else:
+#             raise (Exception('Please insert correct setup(dev or prod)!'))
+#         engine = create_engine(url)
+#         Base.metadata.create_all(engine)
+#         return engine
+#     except Exception as e:
+#         logger.error(f'Error in function return_engine: {e}')

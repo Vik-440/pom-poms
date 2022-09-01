@@ -1,5 +1,11 @@
 from flask import Flask
 from flask_cors import CORS
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+port = int(os.getenv("PORT"))
+
 
 app = Flask(__name__)
 CORS(app)
@@ -11,4 +17,4 @@ with app.app_context():
 
 
 if __name__ == '__main__':
-    app.run(debug=False)
+    app.run(debug=True, port=port)

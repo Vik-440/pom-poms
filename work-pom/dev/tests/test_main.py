@@ -2,11 +2,55 @@
 # from app import app
 # client = TestClient(app)
 import json
+# from urllib import response
 from routes.main import tmp_test_tmp
 from routes.main import return_data_from_new_order
 from routes.main import return_data_from_main_page
 from routes.main import fin_met
 from routes.main import change_main_phase
+from app import app
+# from flask import json
+
+
+def test_ziro():
+    response = app.test_client().get('/')
+    origin_data = {"id_order": 0}
+    origin_data_1 = 0
+    test_data = json.loads(response.data)
+    test_data_1 = test_data['id_order']
+    assert response.status_code == 200
+    assert test_data == origin_data
+    assert test_data_1 == origin_data_1
+
+
+def test_main_page_get_flask():
+    response = app.test_client().post('/main_page', data=json.dumps(
+        {"data_start": "2016-06-15", "data_end": "2016-06-15",
+         "fulfilled_order": False}), content_type='application/json',)
+    test_data_0 = (response.get_data(as_text=True)).replace(
+        "[", " ").replace("]", " ")
+    test_data = json.loads(test_data_0)
+    print(test_data)
+    assert response.status_code == 200
+    assert (test_data["comment_model"]) is None
+    assert (test_data["comment_order"]) == ""
+    assert (test_data["data_order"]) == "2016-06-15"
+    assert (test_data["first_name_client"]) == "Ольга"
+    assert (test_data["fulfilled_order"]) is True
+    assert (test_data["id_order"]) == 0
+    assert (test_data["kod_model"]) == "190-12"
+    assert (test_data["kolor_model"]) == "Червоний"
+    assert (test_data["phase_1"]) == 0
+    assert (test_data["phase_2"]) == 0
+    assert (test_data["phase_3"]) == 0
+    assert (test_data["phone_client"]) == "380631756435"
+    assert (test_data["phone_recipient"]) == "380631756435"
+    assert (test_data["quantity_pars_model"]) == 3
+    assert (test_data["real_money"]) == 450
+    assert (test_data["second_name_client"]) == "Коробенко"
+    assert (test_data["sity"]) == "Самовивіз"
+    assert (test_data["sum_payment"]) == 450
+    assert (test_data["zip_code"]) is None
 
 
 def test_ping_pong():

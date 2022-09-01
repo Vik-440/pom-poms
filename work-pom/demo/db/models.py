@@ -6,9 +6,8 @@ from sqlalchemy.ext.declarative import declarative_base
 from dotenv import load_dotenv
 import os
 from sqlalchemy.dialects import postgresql
+from log.logger import logger
 
-load_dotenv()
-url = os.getenv("PSQL_URL")
 Base = declarative_base()
 
 
@@ -129,6 +128,18 @@ class directory_of_outlay_class(Base):
     outlay_class = Column('outlay_class', String)
 
 
-engine = create_engine(url)
+load_dotenv()
+setup_db = "PROD"
+try:
+    if setup_db == "PROD":
+        url = os.getenv("PSQL_URL")
+    elif setup_db == "DEV":
+        url = os.getenv("PSQL_URL_TEST")
+    else:
+        raise (Exception('Please insert correct setup(dev or prod)!'))
+except Exception as e:
+    logger.error(f'Error in function return_engine: {e}')
 
+
+engine = create_engine(url)
 Base.metadata.create_all(engine)
