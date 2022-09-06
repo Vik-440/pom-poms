@@ -27,10 +27,18 @@ def test_main_page_get_flask():
     response = app.test_client().post('/main_page', data=json.dumps(
         {"data_start": "2016-06-15", "data_end": "2016-06-15",
          "fulfilled_order": False}), content_type='application/json',)
-    test_data_0 = (response.get_data(as_text=True)).replace(
-        "[", " ").replace("]", " ")
+
+    # test_data_0x = response.get_data(as_text=True)
+    # test_data_0x1 = {}
+    # for i in test_data_0x:
+    #     test_data_0x1.update(i)
+    test_data_0 = ((response.get_data(as_text=True)).replace(
+        "[", "").replace("]", ""))
+    # print((test_data_0))
     test_data = json.loads(test_data_0)
     print(test_data)
+    print("test_data_0 is data_type: ", type(test_data_0))
+    print("test_data is data_type: ", type(test_data))
     assert response.status_code == 200
     assert (test_data["comment_model"]) is None
     assert (test_data["comment_order"]) == ""
