@@ -1,6 +1,6 @@
 ## Pom-poms
 
-This is a project for my own use, for my own business. 
+This is a project for private business company Pompoms. 
 In this project, I'm responsible for backend part
 
 ### Technical stack

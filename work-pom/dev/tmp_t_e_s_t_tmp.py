@@ -1,54 +1,91 @@
-# import json
 # from unittest import result
-from sqlalchemy import select
+# from sqlalchemy import select
 # from sqlalchemy import true, update
 # from sqlalchemy import func
 # from datetime import datetime
-from sqlalchemy.orm import Session
-from db.models import directory_of_order
+# from sqlalchemy.orm import Session
+# from db.models import directory_of_order
 # from db.models import directory_of_client, directory_of_payment
 # from db.models import directory_of_model
-from db.models import engine
+# from db.models import engine
 # import datetime
+# import json
+# from flask import jsonify, request
+
+import calendar
+from datetime import datetime, timedelta
+ds = datetime.today()
+ds1 = ds.strftime('%Y-%m-%d')
+dsy = int(ds.strftime('%Y'))
+dsm = int(ds.strftime('%m'))
+print(dsy, dsm)
+data_start_sql = datetime.today().replace(day=1).strftime('%Y-%m-%d')
+data_end_sql = datetime.today().replace(day=(
+    calendar.monthrange(dsy, dsm)[1])).strftime('%Y-%m-%d')
+print(data_start_sql, data_end_sql)
+
+data_start_sql = (((datetime.today()).replace(day=1)-timedelta(
+    days=1))).replace(day=1).strftime('%Y-%m-%d')
+data_end_sql = ((datetime.today()).replace(
+        day=1)-timedelta(days=1)).strftime('%Y-%m-%d')
+print(data_start_sql, data_end_sql)
+# this year
+data_start_sql = ds.replace(month=1, day=1).strftime('%Y-%m-%d')
+data_end_sql = ds.replace(month=12, day=31).strftime('%Y-%m-%d')
+print(data_start_sql, data_end_sql)
+
+days_year = (ds-ds.replace(month=1, day=1))
+forecast = round((5555/days_year.days)*365)
+print(days_year, forecast)
+
+# from routes.main import return_data_from_flask
+# from routes.main import tmp_test_tmp
+# from routes.main import ret_dat_fin_pay_get
+# y = ret_dat_fin_pay_get()
+# x = tmp_test_tmp()
+# print(ret_dat_fin_pay_get())
+# print(y)
+# a = json.loads(y)
+# print(a)
 
 
-with Session(engine) as session:
-    r_list = select(directory_of_order.id_order).order_by(
-        'id_order')
-    id_list = session.execute(r_list)
-    n_order = 0
-    for row in id_list:
-        id_order = int(row.id_order)
-        if id_order < 2000:
-            n_order += 1
-            phase1_list, phase2_list, phase3_list = [], [], []
-            q_pos = []
-            list_from_group = select(
-                directory_of_order.quantity_pars_model,
-                directory_of_order.fulfilled_order).filter_by(
-                id_order=id_order)
-            q_list = session.execute(list_from_group)
-            for row1 in q_list:
-                q_pos = row1.quantity_pars_model
-                fulfilled_order = row1.fulfilled_order
-            len_pos = len(q_pos)
-            for x in range(len_pos):
-                if fulfilled_order is True:
-                    phase1_list.append(0)
-                    phase2_list.append(0)
-                    phase3_list.append(0)
-                else:
-                    phase1_list.append(q_pos[x] * 2)
-                    phase2_list.append(q_pos[x] * 2)
-                    phase3_list.append(q_pos[x] * 2)
+# with Session(engine) as session:
+#     r_list = select(directory_of_order.id_order).order_by(
+#         'id_order')
+#     id_list = session.execute(r_list)
+#     n_order = 0
+#     for row in id_list:
+#         id_order = int(row.id_order)
+#         if id_order < 2000:
+#             n_order += 1
+#             phase1_list, phase2_list, phase3_list = [], [], []
+#             q_pos = []
+#             list_from_group = select(
+#                 directory_of_order.quantity_pars_model,
+#                 directory_of_order.fulfilled_order).filter_by(
+#                 id_order=id_order)
+#             q_list = session.execute(list_from_group)
+#             for row1 in q_list:
+#                 q_pos = row1.quantity_pars_model
+#                 fulfilled_order = row1.fulfilled_order
+#             len_pos = len(q_pos)
+#             for x in range(len_pos):
+#                 if fulfilled_order is True:
+#                     phase1_list.append(0)
+#                     phase2_list.append(0)
+#                     phase3_list.append(0)
+#                 else:
+#                     phase1_list.append(q_pos[x] * 2)
+#                     phase2_list.append(q_pos[x] * 2)
+#                     phase3_list.append(q_pos[x] * 2)
 
-            session.query(directory_of_order).filter(
-                directory_of_order.id_order == id_order).update(
-                {"phase_1": (phase1_list),
-                 "phase_2": (phase2_list),
-                 "phase_3": (phase3_list)})
-            session.commit()
-            print(n_order, " - order №_", id_order, " is fixed")
+#             session.query(directory_of_order).filter(
+#                 directory_of_order.id_order == id_order).update(
+#                 {"phase_1": (phase1_list),
+#                  "phase_2": (phase2_list),
+#                  "phase_3": (phase3_list)})
+#             session.commit()
+#             print(n_order, " - order №_", id_order, " is fixed")
 
 
 # with Session(engine) as session:
@@ -93,26 +130,26 @@ with Session(engine) as session:
 #                     "phase_3_model": (phase_model_list3),
 #                     "price_model_order": (price_model_order_list)})
 #             session.commit()
-            # print(id_order, "- is saved")
-            # s1, s2, s3, s4, s5, s6 = [], [], [], [], [], []
-            # download = select(
-            #     directory_of_order.id_model,
-            #     directory_of_order.quantity_pars_model,
-            #     directory_of_order.phase_1_model,
-            #       directory_of_order.phase_2_model,
-            #     directory_of_order.phase_3_model,
-            #       directory_of_order.price_model_order).filter_by(
-            #     id_order = id_order).order_by('id_order')
-            # order_list = session.execute(download)
-            # for row1 in order_list:
-            #     s1 = ((row1.id_model))
-            #     s2 = (row1.quantity_pars_model)
-            #     s3 = (row1.phase_1_model)
-            #     s4 = (row1.phase_2_model)
-            #     s5 = (row1.phase_3_model)
-            #     s6 = (row1.price_model_order)
-            #    # print(id_order, " - ", s1, s2, s3, s4, s5, s6)
-            #    # print(s1[0], s3[1])
+#            # print(id_order, "- is saved")
+#            # s1, s2, s3, s4, s5, s6 = [], [], [], [], [], []
+#            # download = select(
+#            #     directory_of_order.id_model,
+#            #     directory_of_order.quantity_pars_model,
+#            #     directory_of_order.phase_1_model,
+#            #       directory_of_order.phase_2_model,
+#            #     directory_of_order.phase_3_model,
+#            #       directory_of_order.price_model_order).filter_by(
+#            #     id_order = id_order).order_by('id_order')
+#            # order_list = session.execute(download)
+#            # for row1 in order_list:
+#            #     s1 = ((row1.id_model))
+#            #     s2 = (row1.quantity_pars_model)
+#            #     s3 = (row1.phase_1_model)
+#            #     s4 = (row1.phase_2_model)
+#            #     s5 = (row1.phase_3_model)
+#            #     s6 = (row1.price_model_order)
+#            #    # print(id_order, " - ", s1, s2, s3, s4, s5, s6)
+#            #    # print(s1[0], s3[1])
 
 
 # with Session(engine) as session:

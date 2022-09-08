@@ -1,4 +1,5 @@
-from flask import jsonify, request
+from flask import request
+#  jsonify
 from app import app
 from functions.main_page_json import return_data_from_main_page
 from functions.main_page_json import change_main_phase
@@ -31,12 +32,14 @@ def get_log():
 
 @app.route('/')
 def return_data_from_flask():
-    info = {
-        "id_order": 541,
-        "data_order": "2022-02-23",
-        "kolor_model": "малиновий",
-        "kod_model": "190-B05"}
-    return jsonify(info), 200  # returning a JSON response
+    info = {"id_order": 0}
+    return (info), 200  # returning a JSON response
+
+
+# @app.route('/')
+def tmp_test_tmp():
+    x = {"ping": "pong", "ping_1": "pong_1"}
+    return (x)
 
 
 @app.route('/main_page', methods=['GET', 'POST'])

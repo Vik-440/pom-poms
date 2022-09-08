@@ -39,6 +39,11 @@ def return_data_from_flask():
     return jsonify(info), 200  # returning a JSON response
 
 
+def tmp_test_tmp():
+    x = {"ping": "pong", "ping_1": "pong_1"}
+    return (x)
+
+
 @app.route('/main_page', methods=['GET', 'POST'])
 def main_page():
     try:

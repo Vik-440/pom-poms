@@ -95,7 +95,7 @@ def return_data_from_main_page(asked):
                 id_client3 = row0.id_client
         if 'phone_client' in asked:
             if 'fulfilled_order' in asked:
-                if fulfilled_order:
+                if fulfilled_order_1:
                     id_order_1 = session.query(directory_of_order).filter(
                         directory_of_order.data_order >= data_start,
                         directory_of_order.data_order <= data_end).filter_by(
@@ -129,8 +129,17 @@ def return_data_from_main_page(asked):
                 directory_of_order.data_order >= data_start,
                 directory_of_order.data_order <= data_end).filter_by(
                 fulfilled_order='FALSE').order_by('id_order').all()
+        count_order = []
+        for roww in id_order_1:
+            count_order.append(roww.id_order)
+        if len(count_order) == 0:
+            id_order_max = session.query(func.max(
+                directory_of_order.id_order)).first()
+            tmp_order = int(id_order_max[0])
+            id_order_1 = session.query(directory_of_order).filter_by(
+                id_order=tmp_order).all()
+
         for row in id_order_1:
-            # q0 = datetime.now()
             m_id_order = row.id_order
             m_comment_order = row.comment_order
             m_data_order = (str(row.data_order))
