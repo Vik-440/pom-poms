@@ -23,4 +23,8 @@ export class MainPage {
     changePase(params) {
         return this.http.post(`http://127.0.0.1:5000/main_page`, params);
     }
+
+    sendPhase(id, params) {
+        return this.http.put(`http://127.0.0.1:5000/main_page/phase/${id}`, params);
+    }
 }

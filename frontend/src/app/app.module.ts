@@ -19,6 +19,8 @@ import { ReserveComponent } from './reserve/reserve.component';
 import { SortDirective, TableComponent } from './table/table.component';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { AlertComponent } from './alert/alert.component';
+import { ClickOutsideModule } from 'ng-click-outside';
 @NgModule({
     declarations: [
         AppComponent,
@@ -28,6 +30,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
         CreateOrderComponent,
         ReserveComponent,
         FinancesComponent,
+        AlertComponent,
     ],
     imports: [
         NgToggleModule,
@@ -36,6 +39,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
         BrowserModule,
         AppRoutingModule,
         HttpClientModule,
+        ClickOutsideModule,
         NgbModule,
         CommonModule,
         DatepickerModule,

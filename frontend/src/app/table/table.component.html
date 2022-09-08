@@ -102,24 +102,36 @@
                 </div>
               </td>
               <td class="pl0">
-                <div class="bb_solid" [ngStyle]="changeHeight(j, i)" *ngFor="let item of order.phase_1_model; let j = index">
-                  <button class="check-btn" (click)="changePhase(order, 'phase_1_model', j)">
-                    <img class="check-icon" [src]="item ? './assets/img/icons/check.svg' : './assets/img/icons/uncheck.svg'" />
-                  </button>
+                <div class="bb_solid" [ngStyle]="changeHeight(j, i)" *ngFor="let item of order.phase_1; let j = index">
+                  <input (clickOutside)="clickOutside(j, 'phase_1', order, 'phase_1'+ i + j)" type="number" 
+                  [value]="item" 
+                  [id]="'phase_1'+ i + j"
+                  class="phase-input" 
+                  (click)="changePhases(order, j, 'phase_1', $event, item)" 
+                  (change)="changePhases(order, j, 'phase_1', $event, item)" 
+                  (keyup.enter)="sendPhases(order, j, 'phase_1', $event, item)">
                 </div>
               </td>
               <td class="pl0">
-                <div class="bb_solid" [ngStyle]="changeHeight(j, i)" *ngFor="let item of order.phase_2_model; let j = index">
-                  <button class="check-btn" (click)="changePhase(order, 'phase_2_model', j)">
-                    <img class="check-icon" [src]="item ? './assets/img/icons/check.svg' : './assets/img/icons/uncheck.svg'" />
-                  </button>
+                <div class="bb_solid" [ngStyle]="changeHeight(j, i)" *ngFor="let item of order.phase_2; let j = index">
+                  <input (clickOutside)="clickOutside(j, 'phase_2', order, 'phase_2'+ i + j)" type="number" 
+                  [value]="item" 
+                  [id]="'phase_2'+ i + j"
+                  class="phase-input" 
+                  (click)="changePhases(order, j, 'phase_2', $event, item)" 
+                  (change)="changePhases(order, j, 'phase_2', $event, item)" 
+                  (keyup.enter)="sendPhases(order, j, 'phase_2', $event, item)">
                 </div>
               </td>
               <td class="pl0">
-                <div class="bb_solid" [ngStyle]="changeHeight(j, i)" *ngFor="let item of order.phase_3_model; let j = index">
-                  <button class="check-btn" (click)="changePhase(order, 'phase_3_model', j)">
-                    <img class="check-icon" [src]="item ? './assets/img/icons/check.svg' : './assets/img/icons/uncheck.svg'" />
-                  </button>
+                <div class="bb_solid" [ngStyle]="changeHeight(j, i)" *ngFor="let item of order.phase_3; let j = index">
+                  <input (clickOutside)="clickOutside(j, 'phase_3', order, 'phase_3'+ i + j)" type="number" 
+                  [value]="item" 
+                  [id]="'phase_3'+ i + j"
+                  class="phase-input" 
+                  (click)="changePhases(order, j, 'phase_3', $event, item)" 
+                  (change)="changePhases(order, j, 'phase_3', $event, item)" 
+                  (keyup.enter)="sendPhases(order, j, 'phase_3', $event, item)">
                 </div>
               </td>
             </ng-container>
@@ -136,20 +148,34 @@
               <td>
                 {{ order.quantity_pars_model }}
               </td>
-              <td>
-                <button class="check-btn" (click)="changePhase(order, 'phase_1_model')">
-                  <img class="check-icon" [src]="order.phase_1_model ? './assets/img/icons/check.svg' : './assets/img/icons/uncheck.svg'" />
-                </button>
+              <td >
+                <input (clickOutside)="clickO(i, 'phase_1', order, phase1)" type="number" 
+                      [(value)]="order.phase_1" 
+                      class="phase-input" 
+                      #phase1
+                      (click)="changePhase(order, 'phase_1', $event)" 
+                      (change)="changePhase(order, 'phase_1', $event)" 
+                      (keyup.enter)="sendPhase(order, 'phase_1', $event)">
               </td>
               <td>
-                <button class="check-btn" (click)="changePhase(order, 'phase_2_model')">
-                  <img class="check-icon" [src]="order.phase_2_model ? './assets/img/icons/check.svg' : './assets/img/icons/uncheck.svg'" />
-                </button>
+                <input type="number"
+                      (clickOutside)="clickO(i, 'phase_2', order, phase2)"
+                      [(value)]="order.phase_2" 
+                      class="phase-input" 
+                      #phase2
+                      (click)="changePhase(order, 'phase_2', $event)"
+                      (change)="changePhase(order, 'phase_2', $event)" 
+                      (keyup.enter)="sendPhase(order, 'phase_2', $event)">
               </td>
               <td>
-                <button class="check-btn" (click)="changePhase(order, 'phase_3_model')">
-                  <img class="check-icon" [src]="order.phase_3_model ? './assets/img/icons/check.svg' : './assets/img/icons/uncheck.svg'" />
-                </button>
+                <input type="number" 
+                      (clickOutside)="clickO(i, 'phase_3', order, phase3)"
+                      [(value)]="order.phase_3" 
+                      class="phase-input" 
+                      #phase3
+                      (click)="changePhase(order, 'phase_3', $event)"
+                      (change)="changePhase(order, 'phase_3', $event)" 
+                      (keyup.enter)="sendPhase(order, 'phase_3', $event)">
               </td>
             </ng-template>
 
@@ -178,3 +204,5 @@
   </ng-template>
 
 </div>
+
+<app-alert *ngIf="alert.isShow" [type]="alert.type" [message]="alert.message" (closed)="alertChange($event)"></app-alert>

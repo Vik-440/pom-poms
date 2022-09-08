@@ -33,6 +33,7 @@
     "moment": "^2.29.3",
     "moment-business-days": "^1.2.0",
     "mydatepicker": "^2.6.11",
+    "ng-click-outside": "^9.0.1",
     "ng2-datepicker": "^12.0.0",
     "ngx-mask": "^13.1.13",
     "ngx-spinner": "^13.1.1",

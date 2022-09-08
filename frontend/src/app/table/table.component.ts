@@ -4,9 +4,10 @@ import { NgbCalendar, NgbDate, NgbDateParserFormatter } from '@ng-bootstrap/ng-b
 import locale from 'date-fns/locale/en-US';
 import * as moment from 'moment';
 import { DatepickerOptions } from 'ng2-datepicker';
-import { tap } from 'rxjs';
+import * as _ from 'lodash'
 import { CreateOrderService } from '../services/create-order.service';
 import { MainPage } from '../services/main-table.service';
+import { logging } from 'protractor';
 interface OrderInterface {
     id_order: number;
     data_order: string;
@@ -16,6 +17,9 @@ interface OrderInterface {
     kolor_cell_model: string[] | string;
     quantity_pars_model: number[] | number;
     kolor_cell_pars: string[] | string;
+    phase_1: number;
+    phase_2: number;
+    phase_3: number;
     phase_1_model: boolean[] | boolean;
     phase_2_model: boolean[] | boolean;
     phase_3_model: boolean[] | boolean;
@@ -29,13 +33,10 @@ interface OrderInterface {
     comment_order: number[] | number;
 }
 
-const orders: OrderInterface[] = [];
 
 export type SortColumn = keyof OrderInterface | '';
 export type SortDirection = 'asc' | 'desc' | '';
 const rotate: { [key: string]: SortDirection } = { asc: 'desc', desc: '', '': 'asc' };
-
-const compare = (v1: any, v2: any) => (v1 < v2 ? -1 : v1 > v2 ? 1 : 0);
 
 export interface SortEvent {
     column: SortColumn;
@@ -70,6 +71,11 @@ export class TableComponent implements OnInit, OnDestroy {
     @ViewChild('dataStart') dataStart;
     @ViewChild('dataEnd') dataEnd;
     filtersForm: FormGroup;
+    alert = {
+        type: '',
+        message: '',
+        isShow: false
+    }
     ordersRow = [];
     switchConfig = {
         labels: {
@@ -325,24 +331,144 @@ export class TableComponent implements OnInit, OnDestroy {
         this.filtersForm.get(control).patchValue('');
     }
 
-    changePhase(item, phase, index = -1) {
-        let params = {
-            phase_id_order: item.id_order,
-        };
-        if (index > -1) {
-            item[phase][index] = !item[phase][index];
-            params = {
-                ...params,
-                [phase]: [...item[phase]],
-            };
+
+    changePhases(order, indexPhase, phase, event, item) {
+        if(event && event.type == 'click') {
+            event.target.value = '';
+
         } else {
-            item[phase] = !item[phase];
-            params = {
-                ...params,
-                [phase]: [item[phase]],
-            };
+            this.ordersRow.forEach((order) => {
+                if(order.id_order === item.id_order) {
+                    order = {
+                        ...order,
+                        [phase]: order[order],
+                    }
+                }
+            })
+        }     
+    }
+
+    changePhase(item, phase, e, item2) {
+        if(e && e.type == 'click') {
+            e.target.value = '';
+
+        } else {
+            this.ordersRow.forEach((order) => {
+                if(order.id_order === item.id_order) {
+                    order = {
+                        ...order,
+                        [phase]: order[order],
+                    }
+                }
+            })
         }
-        this.service.changePase(params).subscribe();
+    }
+
+    sendPhase(item, phase, e) {
+        const params = {
+            [phase]: [item[phase] - e.target.value]
+        };
+  
+        
+        this.service.sendPhase(item.id_order, params).subscribe((data: any) => {
+            if(data.check_sum_phase === params[phase][0]) {
+                this.alert = {
+                    isShow: true,
+                    type: 'success',
+                    message: 'Дані змінено'
+                };
+                this.ordersRow = this.ordersRow.map((order, index) => {
+                    if(order.id_order === item.id_order) {
+                        order = {
+                            ...order,
+                            [phase]: params[phase][0],
+                        }
+                        item[phase] = params[phase][0]
+                    }
+                    return order;
+                })
+            } else {
+                this.alert = {
+                    isShow: true,
+                    type: 'danger',
+                    message: 'Дані не збігаються'
+                };
+            }
+            setTimeout(() => {
+                this.alertChange(false);
+            }, 3000);
+        });
+    }
+
+    sendPhases(order, phaseIndex, phase, event, item) {
+        const params = [...order[phase]];
+        params[phaseIndex] = item - event.target.value;
+
+        this.service.sendPhase(order.id_order, {[phase]: params}).subscribe((data: any) => {
+            if(data.check_sum_phase === params.reduce( (accumulator, currentValue) => accumulator + currentValue)) {
+                this.alert = {
+                    isShow: true,
+                    type: 'success',
+                    message: 'Дані змінено'
+                };
+    
+                this.ordersRow = this.ordersRow.map((orderItem, index) => {
+                    if(orderItem.id_order === order.id_order) {   
+                        orderItem = {
+                            ...orderItem,
+                            [phase]: [...params],
+                        }
+                    }
+                    return orderItem;
+                });
+            } else {
+                this.alert = {
+                    isShow: true,
+                    type: 'danger',
+                    message: 'Дані не збігаються'
+                };
+            }
+            setTimeout(() => {
+                this.alertChange(false);
+            }, 3000);
+        })
+    }
+
+    click2(e, item, q) {
+
+if(item) {
+    this.ordersRow.forEach((order) => {
+        if(order.id_order === item.id_order) {
+            order = {
+                ...order,
+                phase_1: 3,
+            }
+            
+        }
+    })
+    // this.ordersRow[0].phase_1 = 3
+}
+        
+        
+    }
+
+    clickO(index, phase, order, phaseEl) {
+
+        phaseEl.value = order[phase];
+
+const a = _.cloneDeep(order[phase]);
+
+        this.ordersRow[index][phase] = a    
+        this.ordersRow = this.ordersRow;
+    
+    }
+
+    clickOutside(indexPhase, phase, order, phaseEl) {
+        (document.getElementById(phaseEl) as HTMLInputElement).value = order[phase][indexPhase];
+    }
+
+    alertChange(e) {
+        this.alert.isShow = e;    
     }
 
     changeHeight(j, i) {
