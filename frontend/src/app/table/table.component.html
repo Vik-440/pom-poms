@@ -68,9 +68,9 @@
         <th class="color" scope="col" sortable="kolor_model">Кольори </th>
         <th class="code" scope="col" sortable="kod_model">Код</th>
         <th class="quantity" scope="col" sortable="quantity_pars_model">К-сть</th>
-        <th scope="col" sortable="phase_1_model" class="phase">1</th>
-        <th scope="col" sortable="phase_2_model" class="phase">2</th>
-        <th scope="col" sortable="phase_3_model" class="phase">3</th>
+        <th scope="col" sortable="phase_1_model" class="phase"><span>1</span><div>{{ getSumPhases('phase_1') }}</div></th>
+        <th scope="col" sortable="phase_2_model" class="phase"><span>2</span><div>{{ getSumPhases('phase_2') }}</div></th>
+        <th scope="col" sortable="phase_3_model" class="phase"><span>3</span><div>{{ getSumPhases('phase_3') }}</div></th>
         <th scope="col" sortable="money" class="money">Сума, грн</th>
         <th scope="col" sortable="money" class="phone">№ телефону</th>
         <th class="sity" scope="col" sortable="sity">Місто</th>
@@ -102,7 +102,7 @@
                 </div>
               </td>
               <td class="pl0">
-                <div class="bb_solid" [ngStyle]="changeHeight(j, i)" *ngFor="let item of order.phase_1; let j = index">
+                <div class="bb_solid phases" [ngStyle]="changeHeight(j, i)" *ngFor="let item of order.phase_1; let j = index">
                   <input (clickOutside)="clickOutside(j, 'phase_1', order, 'phase_1'+ i + j)" type="number" 
                   [value]="item" 
                   [id]="'phase_1'+ i + j"
@@ -113,7 +113,7 @@
                 </div>
               </td>
               <td class="pl0">
-                <div class="bb_solid" [ngStyle]="changeHeight(j, i)" *ngFor="let item of order.phase_2; let j = index">
+                <div class="bb_solid phases" [ngStyle]="changeHeight(j, i)" *ngFor="let item of order.phase_2; let j = index">
                   <input (clickOutside)="clickOutside(j, 'phase_2', order, 'phase_2'+ i + j)" type="number" 
                   [value]="item" 
                   [id]="'phase_2'+ i + j"
@@ -124,7 +124,7 @@
                 </div>
               </td>
               <td class="pl0">
-                <div class="bb_solid" [ngStyle]="changeHeight(j, i)" *ngFor="let item of order.phase_3; let j = index">
+                <div class="bb_solid phases" [ngStyle]="changeHeight(j, i)" *ngFor="let item of order.phase_3; let j = index">
                   <input (clickOutside)="clickOutside(j, 'phase_3', order, 'phase_3'+ i + j)" type="number" 
                   [value]="item" 
                   [id]="'phase_3'+ i + j"

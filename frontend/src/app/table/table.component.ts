@@ -237,15 +237,26 @@ export class TableComponent implements OnInit, OnDestroy {
         let sum: number = 0;
         this.ordersRow.map((item) => {
             if (!item.fulfilled_order) {
-                sum += Array.isArray(item.quantity_pars_model)
-                    ? item.quantity_pars_model.reduce((partialSum, a) => partialSum + a, 0)
-                    : item.quantity_pars_model;
+                sum += Array.isArray(item.phase_1)
+                    ? item.phase_1.reduce((partialSum, a) => partialSum + a, 0)
+                    : item.phase_1;
             }
         });
         this.queue = sum;
-        return sum;
+        return sum/2;
     }
 
+    getSumPhases(phase){
+        let sum: number = 0;
+        this.ordersRow.map((item) => {
+            if (!item.fulfilled_order) {
+                sum += Array.isArray(item[phase])
+                    ? item[phase].reduce((partialSum, a) => partialSum + a, 0)
+                    : item[phase];
+            }
+        })
+        return sum;
+    }
     sityColor(city) {
         return city.includes('самовивіз');
     }
@@ -292,8 +303,19 @@ export class TableComponent implements OnInit, OnDestroy {
 
     changeSpeed() {
         const days = Math.ceil(this.queue / this.speed);
-        this.dateDownloaded = moment().weekday(0).add(days, 'days').format('YYYY-MM-DD');
+        this.dateDownloaded = this.addWeekdays( Number.isFinite(days) ? days : 0);
     }
+
+    addWeekdays(days) {
+        let date = moment().weekday(0);
+        while (days > 0) {
+          date = date.add(1, 'days');
+          if (date.isoWeekday() !== 6) {
+            days -= 1;
+          }
+        };
+        return date.add(1, 'days').format('YYYY-MM-DD');
+      }
 
     makeDone(id, fulfilledOrder, i) {
         this.service.makeDoneOrder({ fulfilled_id_order: id, fulfilled_order: fulfilledOrder }).subscribe(() => {
