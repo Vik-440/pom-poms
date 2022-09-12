@@ -130,6 +130,7 @@ class directory_of_outlay_class(Base):
 
 load_dotenv()
 setup_db = "PROD"
+# setup_db = "DEV"
 try:
     if setup_db == "PROD":
         url = os.getenv("PSQL_URL")

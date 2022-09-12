@@ -292,9 +292,9 @@ def return_data_from_final_order(data_from_new_page):
                     "phase_1_model": phase_pcs,
                     "phase_2_model": phase_pcs,
                     "phase_3_model": phase_pcs,
-                    "phase_1": phase_int,
-                    "phase_2": phase_int,
-                    "phase_3": phase_int3,
+                    # "phase_1": phase_int,
+                    # "phase_2": phase_int,
+                    # "phase_3": phase_int3,
                     "id_model": data_from_new_page['id_model'],
                     "quantity_pars_model": data_from_new_page[
                         'quantity_pars_model'],
@@ -327,7 +327,7 @@ def return_data_from_final_order(data_from_new_page):
             phase_3_model=phase_pcs,
             phase_1=phase_int,
             phase_2=phase_int,
-            phase_3=phase_int,
+            phase_3=phase_int3,
             id_model=data_from_new_page['id_model'],
             quantity_pars_model=data_from_new_page['quantity_pars_model'],
             price_model_order=data_from_new_page['price_model_order'])

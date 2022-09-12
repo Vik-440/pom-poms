@@ -46,9 +46,22 @@ def return_data_from_main_page(asked):
         if 'fulfilled_id_order' in asked:
             id_order = asked['fulfilled_id_order']
             fulfilled_order = asked['fulfilled_order']
-            session.query(directory_of_order).filter_by(
-                id_order=id_order).update(
-                    {'fulfilled_order': fulfilled_order})
+            if asked['fulfilled_order'] is False:
+                session.query(directory_of_order).filter_by(
+                    id_order=id_order).update(
+                        {'fulfilled_order': fulfilled_order})
+            else:
+                res_ph = []
+                ch_ph = session.query(directory_of_order.phase_1).filter_by(
+                    id_order=id_order).all()
+                for www in ch_ph:
+                    for k in www.phase_1:
+                        res_ph.append(0)
+                session.query(directory_of_order).filter_by(
+                    id_order=id_order).update(
+                        {'fulfilled_order': fulfilled_order,
+                         'phase_1': res_ph, 'phase_2': res_ph,
+                         'phase_3': res_ph})
             session.commit()
             one_block = {"id_order": "ok"}
             return json.dumps(one_block)
