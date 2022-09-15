@@ -53,3 +53,4 @@ env/
 __pycache__/
 .vscode/
 *.log
+alembic.ini
