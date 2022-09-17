@@ -214,8 +214,8 @@ export class FinancesComponent implements OnInit {
             params = {
                 data_start: this.editData(Object.values(this.paymentFrom.value.data_start)),
                 data_end: this.editData(Object.values(this.paymentFrom.value.data_end)),
-                iban: this.paymentFrom.value.metod === 'банк' || this.paymentFrom.value.metod === 'всі',
-                cash: this.paymentFrom.value.metod === 'готівка' || this.paymentFrom.value.metod === 'всі',
+                iban: this.paymentFrom.value.metod === 'iban' || this.paymentFrom.value.metod === 'всі',
+                cash: this.paymentFrom.value.metod === 'cash' || this.paymentFrom.value.metod === 'всі',
             };
             this.service.getFilters(params, '/payments').subscribe((data: any) => {
                 this.setDataPayments(data);
