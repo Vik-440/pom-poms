@@ -713,10 +713,11 @@ export class CreateOrderComponent implements OnInit {
         const copyText = [`**Замовлення № ${this.idOrder}**\n\n`];
         const sumAll = +this.sumAll(false).split('/')[0].trim();
         this.orderForm.value.forEach((order, i) => {
+            const type = modelsData[order.kod_model.substring(0, 3)] || modelsData[order.kod_model.substring(0, 2)] || '';       
             copyText.push(
-                    `${i + 1}. ${modelsData[order.kod_model.substring(0, 3)] || modelsData[order.kod_model.substring(0, 2)] || ''}, колір ${order.kolor_model}, код ${
+                    `${i + 1}. ${type}, колір ${order.kolor_model}, код ${
                         order.kod_model
-                    }, кількість ${order.quantity_pars_model} пар, ціна ${formatNumber(order.price_model)} грн/пара\n`
+                    }, кількість ${order.quantity_pars_model} ${type.includes('брелок') ? 'шт' : 'пар'}, ціна ${formatNumber(order.price_model)} грн/${type.includes('брелок') ? 'шт' : 'пара'}\n`
             );
         });
 
