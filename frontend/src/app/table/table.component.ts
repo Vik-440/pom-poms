@@ -242,7 +242,7 @@ export class TableComponent implements OnInit, OnDestroy {
                     : item.phase_1;
             }
         });
-        this.queue = sum;
+        this.queue = sum/2;
         return sum/2;
     }
 
@@ -303,18 +303,18 @@ export class TableComponent implements OnInit, OnDestroy {
 
     changeSpeed() {
         const days = Math.ceil(this.queue / this.speed);
-        this.dateDownloaded = this.addWeekdays( Number.isFinite(days) ? days : 0);
+        this.dateDownloaded = this.addWeekdays(Number.isFinite(days) ? days : 0);
     }
 
     addWeekdays(days) {
-        let date = moment().weekday(0);
+        let date = moment().add(1, 'days');
         while (days > 0) {
-          date = date.add(1, 'days');
-          if (date.isoWeekday() !== 6) {
-            days -= 1;
-          }
+            if (date.isoWeekday() !== 7) {
+                days -= 1;
+            } 
+            date = date.add(1, 'days');
         };
-        return date.add(1, 'days').format('YYYY-MM-DD');
+        return date.isoWeekday() === 7 ? date.add(1, 'days').format('YYYY-MM-DD') : date.format('YYYY-MM-DD');
       }
 
     makeDone(id, fulfilledOrder, i) {
@@ -328,14 +328,15 @@ export class TableComponent implements OnInit, OnDestroy {
     }
 
     tooltipCity(order) {
+        const regexPhone = /(\d{2})(\d{3})(\d{3})(\d{2})(\d{2})/g;
         const tooltip = [
-            'Н.П. №' + order.np_number,
+            'Н.П. №' + order.np_number ,
             order.first_name_client + ' ' + order.second_name_client,
-            order.phone_recipient,
+            order.phone_recipient.replace(regexPhone,'$1-' + '$2-' + '$3-' + '$4-' + '$5'),
             order.zip_code,
             order.street_house_apartment,
         ];
-        return tooltip.filter((n) => n).join(', ');
+        return tooltip.filter((data) => data).join('\n');
     }
 
     changePhone(event) {
