@@ -122,10 +122,10 @@ class directory_of_outlay(Base):
     comment_outlay = Column('comment_outlay', String)
 
 
-class directory_of_outlay_class(Base):
-    __tablename__ = 'directory_of_outlay_class'
-    id_outlay_class = Column('id_outlay_class', Integer, primary_key=True)
-    outlay_class = Column('outlay_class', String)
+# class directory_of_outlay_class(Base):
+#     __tablename__ = 'directory_of_outlay_class'
+#     id_outlay_class = Column('id_outlay_class', Integer, primary_key=True)
+#     outlay_class = Column('outlay_class', String)
 
 
 load_dotenv()
