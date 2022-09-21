@@ -88,8 +88,6 @@
           <ng-select 
             class="money-select--input"
             formControlName="period"
-            bindLabel="show"
-            bindValue="send"
             [items]="periods" >
           </ng-select>
         </div>
@@ -195,7 +193,7 @@
     <button class="statistics--btn" (click)="statisticsAtion()" [class.purple]="isShowStatistics">
       {{isShowStatistics ? 'Сховати статистику' : 'Показати статитику'}}
     </button>
-    <table *ngIf="isShowStatistics && !statisticsPayments.length" class="table table-lg table-bordered mb-0 border-primary statistics--table">
+    <table *ngIf="isShowStatistics && !statisticsPeriods.length" class="table table-lg table-bordered mb-0 border-primary statistics--table">
       <thead>
         <th scope="col" class="date">дата</th>
         <th scope="col" class="payments">оплати</th>

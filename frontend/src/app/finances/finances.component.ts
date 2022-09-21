@@ -17,7 +17,7 @@ export class FinancesComponent implements OnInit {
     paymentFrom: FormGroup;
     spendingForm;
     dataItems: FormArray;
-    periods: any[];
+    periods: string[];
     outlayData: FormArray;
     statisticsPeriods;
     statisticsData;
@@ -35,6 +35,7 @@ export class FinancesComponent implements OnInit {
         this.service.getMethods().subscribe((data: any) => {
             this.metodPayment = data.metod_payment;
             this.outlayClass = data.outlay_class;
+            this.periods = data.filter_class;
         });
         this.statisticsPeriods = [
             'прогноз рік',
@@ -87,29 +88,6 @@ export class FinancesComponent implements OnInit {
         this.service.getOutlays().subscribe((data: any) => {
             this.setDataOutlay(data);
         });
-
-        this.periods = [
-            {
-                show: 'день',
-                send: 'day',
-            },
-            {
-                show: 'тиждень',
-                send: 'week',
-            },
-            {
-                show: 'місяць',
-                send: 'month',
-            },
-            {
-                show: 'квартал',
-                send: 'quarter',
-            },
-            {
-                show: 'рік',
-                send: 'year',
-            },
-        ];
     }
 
     removeEmptyValues(object) {
@@ -126,6 +104,7 @@ export class FinancesComponent implements OnInit {
         }
         return newObject;
     }
+
     setDataOutlay(data) {
         this.outlayData.clear();
         data.forEach((item: any) => {
@@ -156,6 +135,7 @@ export class FinancesComponent implements OnInit {
             })
         );
     }
+
     setDataPayments(data) {
         this.dataItems.clear();
         data.forEach((item, i) => {
