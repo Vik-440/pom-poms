@@ -10,6 +10,7 @@ import { filter, tap } from 'rxjs';
 import { modelsData } from 'src/assets/models-data/modelsData';
 import { formatNumber } from 'src/common/common';
 import { CreateOrderService } from '../services/create-order.service';
+import { MainPageService } from '../services/main-table.service';
 @Component({
     selector: 'app-create-order',
     templateUrl: './create-order.component.html',
@@ -20,7 +21,8 @@ export class CreateOrderComponent implements OnInit {
         private fb: FormBuilder,
         private service: CreateOrderService,
         private spinner: NgxSpinnerService,
-        private route: ActivatedRoute
+        private route: ActivatedRoute,
+        private serviceMain: MainPageService
     ) {}
 
     @Input() isNew: Boolean = true;
@@ -737,6 +739,15 @@ export class CreateOrderComponent implements OnInit {
             `**Якщо Вам потрібно рахунок і накладна у паперовому вигляді, попередьте нас і ми покладемо їх до замовлення.** \n`
         );
         navigator.clipboard.writeText(copyText.join(''));
+    }
+
+    makeOrderDone() {
+        this.serviceMain.makeDoneOrder({
+            fulfilled_id_order: this.idOrder,
+            fulfilled_order: !this.fulfilledOrder
+        }).subscribe(() => {
+            this.fulfilledOrder = !this.fulfilledOrder;
+        })
     }
 }
 

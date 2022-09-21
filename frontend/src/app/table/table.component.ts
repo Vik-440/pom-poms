@@ -2,12 +2,11 @@ import { Component, Directive, EventEmitter, Input, OnDestroy, OnInit, Output, V
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { NgbCalendar, NgbDate, NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
 import locale from 'date-fns/locale/en-US';
+import * as _ from 'lodash';
 import * as moment from 'moment';
 import { DatepickerOptions } from 'ng2-datepicker';
-import * as _ from 'lodash'
 import { CreateOrderService } from '../services/create-order.service';
-import { MainPage } from '../services/main-table.service';
-import { logging } from 'protractor';
+import { MainPageService } from '../services/main-table.service';
 interface OrderInterface {
     id_order: number;
     data_order: string;
@@ -127,7 +126,7 @@ export class TableComponent implements OnInit, OnDestroy {
 
     constructor(
         private fb: FormBuilder,
-        private service: MainPage,
+        private service: MainPageService,
         private calendar: NgbCalendar,
         public formatter: NgbDateParserFormatter,
         private serviceOrders: CreateOrderService
