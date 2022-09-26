@@ -189,6 +189,7 @@ export class FinancesComponent implements OnInit {
             this.service.getStaticPayments(params).subscribe((data: any) => {
                 this.isShowStatistics = true;
                 this.statisticsPayments = data;
+                this.statisticsData = [];
             });
         } else {
             params = {
@@ -341,11 +342,15 @@ export class FinancesComponent implements OnInit {
         if (!this.isShowStatistics) {
             this.service.getStatistics().subscribe((statistics) => {
                 this.statisticsData = statistics;
-                this.isShowStatistics = !this.isShowStatistics;
+                this.isShowStatistics = true;
             });
         } else {
             this.isShowStatistics = false;
             this.statisticsPayments = [];
         }
     }
+
+    isEmptyObject(obj) {
+        return !(obj && (Object.keys(obj).length === 0));
+     }
 }

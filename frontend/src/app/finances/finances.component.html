@@ -193,7 +193,7 @@
     <button class="statistics--btn" (click)="statisticsAtion()" [class.purple]="isShowStatistics">
       {{isShowStatistics ? 'Сховати статистику' : 'Показати статитику'}}
     </button>
-    <table *ngIf="isShowStatistics && !statisticsPeriods.length" class="table table-lg table-bordered mb-0 border-primary statistics--table">
+    <table *ngIf="isShowStatistics && isEmptyObject(statisticsData)" class="table table-lg table-bordered mb-0 border-primary statistics--table">
       <thead>
         <th scope="col" class="date">дата</th>
         <th scope="col" class="payments">оплати</th>
