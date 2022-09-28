@@ -26,9 +26,11 @@
               <td [class.grey]="idEdit === item.id_color" (click)="editItem(item.id_color)">{{ item.model}}</td>
               <td [class.grey]="idEdit === item.id_color" (click)="editItem(item.id_color)">{{ item.pars}}</td>
               <td class="epmty"></td>
-              <td class="white"><input type="text" class="mat-val--intp"
-                [value]="reverseItemsCorrect.controls[index].value?.weight_color" 
-                (change)="changeMaterial(reverseItemsCorrect.controls[index], $event.target.value, 'weight_color', item.id_color)"></td>
+              <td class="white">
+                <input type="text" class="mat-val--intp"
+                  [value]="reverseItemsCorrect.controls[index].value?.weight_color" 
+                  (keyup.enter)="calculateMat(reverseItemsCorrect.controls[index])"
+                  (change)="changeMaterial(reverseItemsCorrect.controls[index], $event.target.value, 'weight_color', item.id_color)"></td>
               <td class="white"><input type="text" class="mat-val--intp" 
                 [value]="reverseItemsCorrect.controls[index].value.bab_quantity_color" 
                 (change)="changeMaterial(reverseItemsCorrect.controls[index], $event.target.value, 'bab_quantity_color', item.id_color)"></td>
@@ -100,7 +102,11 @@
         <input type="text" class="edit-table--field-inp" formControlName="weight_color">
       </div>
       <div class="edit-table--field-note">
-        <input type="text" class="edit-table--field-note-inp" placeholder="примітка" formControlName="comment_color">
+        <textarea type="text" 
+                  class="edit-table--field-note-inp" 
+                  placeholder="примітка" 
+                  formControlName="comment_color">
+        </textarea>
       </div>
     </div>
     <button class="save-btn" (click)="saveMaterial()" [disabled]="reverseItemData.invalid">

@@ -134,6 +134,23 @@ export class ReserveComponent implements OnInit {
         }
     }
 
+    calculateMat(form) {
+        console.log(form);
+        form.patchValue({
+            weight_color: this.calculateString(form.value.weight_color)
+        })  
+        
+    }
+
+    calculateString(value) {
+        let total = 0;
+        value = value.toString().match(/[+\-]*(\.\d+|\d+(\.\d+)?)/g) || [];  
+        while (value.length) {
+          total += parseFloat(value.shift());
+        }
+        return total;
+      }
+
     changeMaterial(item, value, field, id) {
         this.idChange.push(id);
         this.isHideOk = false;
