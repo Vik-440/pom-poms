@@ -713,7 +713,8 @@ export class CreateOrderComponent implements OnInit {
 
     copyScore() {
         const copyText = [`**Замовлення № ${this.idOrder}**\n\n`];
-        const sumAll = +this.sumAll(false).split('/')[0].trim();
+        const sumAll = +this.sumAll(true).split('/')[0].trim();
+        
         this.orderForm.value.forEach((order, i) => {
             const type = modelsData[order.kod_model.substring(0, 3)] || modelsData[order.kod_model.substring(0, 2)] || '';       
             copyText.push(
@@ -733,7 +734,7 @@ export class CreateOrderComponent implements OnInit {
         copyText.push(`**Всього до оплати ${formatNumber(sumAll)}** грн\n`);
         copyText.push(`Аванс від ${formatNumber(Math.floor((sumAll * 0.3) / 100) * 100)} грн \n\n`);
         copyText.push(
-            `**Обов'язково вказуйте призначення платежу: "П-${this.idOrder}"**, а після оплати проінформуйте нас про транзакцію.\n\n`
+            `**Обов'язково вказуйте призначення платежу: "Рахунок П-${this.idOrder}"**, а після оплати проінформуйте нас про транзакцію.\n\n`
         );
         copyText.push(
             `**Якщо Вам потрібно рахунок і накладна у паперовому вигляді, попередьте нас і ми покладемо їх до замовлення.** \n`
