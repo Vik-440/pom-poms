@@ -65,26 +65,6 @@ def return_data_from_main_page(asked):
             session.commit()
             one_block = {"id_order": "ok"}
             return json.dumps(one_block)
-        if 'phase_id_order' in asked:
-            id_order = asked['phase_id_order']
-            if 'phase_1_model' in asked:
-                phase_1_model = asked['phase_1_model']
-                session.query(directory_of_order).filter(
-                    directory_of_order.id_order == id_order).update(
-                        {"phase_1_model": phase_1_model})
-            if 'phase_2_model' in asked:
-                phase_2_model = asked['phase_2_model']
-                session.query(directory_of_order).filter(
-                    directory_of_order.id_order == id_order).update(
-                        {"phase_2_model": phase_2_model})
-            if 'phase_3_model' in asked:
-                phase_3_model = asked['phase_3_model']
-                session.query(directory_of_order).filter(
-                    directory_of_order.id_order == id_order).update(
-                        {"phase_3_model": phase_3_model})
-            session.commit()
-            one_block = {"phase_id_order": "ok"}
-            return json.dumps(one_block)
 
         id_order, full_block = [], []
         ds = datetime.today().strftime('%Y-%m-%d')
@@ -137,11 +117,13 @@ def return_data_from_main_page(asked):
                     directory_of_order.data_order >= data_start,
                     directory_of_order.data_order <= data_end).order_by(
                     'id_order').all()
+#///
         else:
             id_order_1 = session.query(directory_of_order).filter(
                 directory_of_order.data_order >= data_start,
                 directory_of_order.data_order <= data_end).filter_by(
-                fulfilled_order='FALSE').order_by('id_order').all()
+                fulfilled_order='FALSE').order_by('data_plane_order').all()
+#///
         count_order = []
         for roww in id_order_1:
             count_order.append(roww.id_order)
@@ -226,9 +208,6 @@ def return_data_from_main_page(asked):
                          "kod_model": m_kod_model,
                          "comment_model": m_comment_model,
                          "quantity_pars_model": m_quantity_pars_model,
-                         "phase_1_model": m_phase_1_model,
-                         "phase_2_model": m_phase_2_model,
-                         "phase_3_model": m_phase_3_model,
                          "phase_1": m_phase_1,
                          "phase_2": m_phase_2,
                          "phase_3": m_phase_3,
