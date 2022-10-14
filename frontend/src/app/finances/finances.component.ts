@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import * as _ from 'lodash';
 import * as moment from 'moment';
+import { forkJoin } from 'rxjs';
 import { FinancesPageService } from '../services/finances.service';
 
 @Component({
@@ -11,7 +12,7 @@ import { FinancesPageService } from '../services/finances.service';
 })
 export class FinancesComponent implements OnInit {
     constructor(private service: FinancesPageService, private fb: FormBuilder) {}
-
+    isShowSpinner = false;
     metodPayment = [];
     outlayClass: string[];
     paymentFrom: FormGroup;
@@ -30,13 +31,13 @@ export class FinancesComponent implements OnInit {
         month: new Date().getMonth(),
     };
     todayYear = new Date().getFullYear();
-
+    alert = {
+        type: '',
+        message: '',
+        isShow: false
+    }
     ngOnInit(): void {
-        this.service.getMethods().subscribe((data: any) => {
-            this.metodPayment = data.metod_payment;
-            this.outlayClass = data.outlay_class;
-            this.periods = data.filter_class;
-        });
+
         this.statisticsPeriods = [
             'прогноз рік',
             this.todayYear,
@@ -81,13 +82,22 @@ export class FinancesComponent implements OnInit {
             }),
         ]);
 
-        this.service.getPayments().subscribe((data: any) => {
-            this.setDataPayments(data);
-        });
+        this.isShowSpinner = true;
+        forkJoin([
+            this.service.getMethods(), 
+            this.service.getPayments(),
+            this.service.getOutlays()
+        ]).subscribe((data: any[]) => {
+            this.metodPayment = data[0].metod_payment;
+            this.outlayClass = data[0].outlay_class;
+            this.periods = data[0].filter_class;
+            this.setDataPayments(data[1]);
+            this.setDataOutlay(data[2]);
+            this.isShowSpinner = false;
+        }, () => {
+            this.isShowSpinner = false;
+        })
 
-        this.service.getOutlays().subscribe((data: any) => {
-            this.setDataOutlay(data);
-        });
     }
 
     removeEmptyValues(object) {
@@ -168,14 +178,30 @@ export class FinancesComponent implements OnInit {
         );
     }
 
+    requestIncorrect() {
+        this.isShowSpinner = false;
+        this.alert = {
+            isShow: true,
+            type: 'danger',
+            message: 'Уппс, щось пішло не так'
+        };
+        setTimeout(() => {
+            this.alertChange(false);
+        }, 3000);
+    }
+    
     sendFiltersPayments() {
         let params;
         if (this.paymentFrom.value.id_order) {
             params = {
                 id_order: this.paymentFrom.value.id_order,
             };
+            this.isShowSpinner = true;
             this.service.getFilters(params, '/order_payments').subscribe((data: any) => {
                 this.setDataPayments(data);
+                this.isShowSpinner = false;
+            }, () => {
+                this.requestIncorrect();
             });
         } else if (this.paymentFrom.value.period) {
             params = {
@@ -185,11 +211,14 @@ export class FinancesComponent implements OnInit {
                 cash: this.paymentFrom.value.metod === 'готівка' || this.paymentFrom.value.metod === 'всі',
                 balans: this.paymentFrom.value.period,
             };
-
+            this.isShowSpinner = true;
             this.service.getStaticPayments(params).subscribe((data: any) => {
                 this.isShowStatistics = true;
                 this.statisticsPayments = data;
                 this.statisticsData = [];
+                this.isShowSpinner = false;
+            }, () => {
+                this.requestIncorrect();
             });
         } else {
             params = {
@@ -198,8 +227,12 @@ export class FinancesComponent implements OnInit {
                 iban: this.paymentFrom.value.metod === 'iban' || this.paymentFrom.value.metod === 'всі',
                 cash: this.paymentFrom.value.metod === 'cash' || this.paymentFrom.value.metod === 'всі',
             };
+            this.isShowSpinner = true;
             this.service.getFilters(params, '/payments').subscribe((data: any) => {
                 this.setDataPayments(data);
+                this.isShowSpinner = false;
+            }, () => {
+                this.requestIncorrect();
             });
         }
     }
@@ -220,8 +253,12 @@ export class FinancesComponent implements OnInit {
             data_end: this.editData(Object.values(this.spendingForm.value.data_end)),
             outlay_search: 0,
         };
+        this.isShowSpinner = true;
         this.service.getFilters(params).subscribe((data: any) => {
             this.setDataOutlay(data);
+            this.isShowSpinner = false;
+        }, () => {
+            this.requestIncorrect();
         });
     }
 
@@ -252,6 +289,14 @@ export class FinancesComponent implements OnInit {
                     item.patchValue({
                         status: 'edit',
                     });
+                    this.alert = {
+                        isShow: true,
+                        type: 'success',
+                        message: 'Збережено'
+                    }
+                    setTimeout(() => {
+                        this.alertChange(false);
+                    }, 3000);
                 });
                 return;
             }
@@ -270,6 +315,14 @@ export class FinancesComponent implements OnInit {
                 item.patchValue({
                     status: 'edit',
                 });
+                this.alert = {
+                    isShow: true,
+                    type: 'success',
+                    message: 'Збережено'
+                }
+                setTimeout(() => {
+                    this.alertChange(false);
+                }, 3000);
             });
         } else if (action === 'ok') {
             localStorage.setItem('date_payment', JSON.stringify(this.dataItems.value.data_payment));
@@ -294,6 +347,7 @@ export class FinancesComponent implements OnInit {
             id_order: +paymentForSave.id_order,
             payment: +paymentForSave.payment,
         };
+        this.isShowSpinner = true;
         this.service.savePayment(params).subscribe(() => {
             this.dataItems.controls[this.dataItems.controls.length - 1].patchValue({
                 status: 'edit',
@@ -309,6 +363,17 @@ export class FinancesComponent implements OnInit {
                     status: 'ok',
                 })
             );
+            this.isShowSpinner = false;
+            this.alert = {
+                isShow: true,
+                type: 'success',
+                message: 'Збережено'
+            }
+            setTimeout(() => {
+                this.alertChange(false);
+            }, 3000);
+        }, () => {
+            this.requestIncorrect();
         });
     }
 
@@ -320,8 +385,9 @@ export class FinancesComponent implements OnInit {
             money_outlay: +outlayForSave.money_outlay,
             comment_outlay: outlayForSave.comment_outlay,
         };
-
+        this.isShowSpinner = true;
         this.service.saveOutlay(params).subscribe(() => {
+            this.isShowSpinner = false;
             this.outlayData.controls[this.outlayData.controls.length - 1].patchValue({
                 status: 'edit',
             });
@@ -335,14 +401,26 @@ export class FinancesComponent implements OnInit {
                     status: 'ok',
                 })
             );
+            this.alert = {
+                isShow: true,
+                type: 'success',
+                message: 'Збережено'
+            }
+            setTimeout(() => {
+                this.alertChange(false);
+            }, 3000);
+        }, () => {
+            this.requestIncorrect();
         });
     }
 
     statisticsAtion() {
         if (!this.isShowStatistics) {
+            this.isShowSpinner = true;
             this.service.getStatistics().subscribe((statistics) => {
                 this.statisticsData = statistics;
                 this.isShowStatistics = true;
+                this.isShowSpinner = false;
             });
         } else {
             this.isShowStatistics = false;
@@ -353,4 +431,8 @@ export class FinancesComponent implements OnInit {
     isEmptyObject(obj) {
         return !(obj && (Object.keys(obj).length === 0));
      }
+
+     alertChange(e) {
+        this.alert.isShow = e;    
+    }
 }

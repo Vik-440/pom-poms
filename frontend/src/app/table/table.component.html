@@ -205,4 +205,10 @@
 
 </div>
 
+
+<div *ngIf="isShowSpinner" class="d-flex justify-content-center spinner-wrapper">
+  <div class="spinner-grow spinner-border-sm" role="status" aria-hidden="true">
+    <span class="sr-only">Loading...</span>
+  </div>
+</div>
 <app-alert *ngIf="alert.isShow" [type]="alert.type" [message]="alert.message" (closed)="alertChange($event)"></app-alert>

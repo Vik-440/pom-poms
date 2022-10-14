@@ -3,38 +3,43 @@
     <div class="table-responsive table table-reserve">
       <table class="table table-lg table-bordered mb-0 border-primary">
         <thead>
-        <tr class="center-data">
-          <th scope="col" sortable="id_order" class="id">id</th>
-          <th scope="col" sortable="data_order" class="color">колір</th>
-          <th scope="col" sortable="width" class="width">ширина </th>
-          <th scope="col" sortable="babin" class="babin">бабін</th>
-          <th class="quantity" scope="col" sortable="quantity_pars_model" class="clean-width">чиста вага</th>
-          <th scope="col" sortable="phase_1_model" class="model">модель</th>
-          <th scope="col" sortable="phase_2_model" class="pars">пар</th>
-          <th class="epmty"></th>
-          <th colspan="2" scope="col" sortable="id_order" class="mat-val ml22">мат / зміна / втулк</th>
-        </tr>
+          <tr class="center-data">
+            <th scope="col" sortable="id_order" class="id">id</th>
+            <th scope="col" sortable="data_order" class="color">колір</th>
+            <th scope="col" sortable="width" class="width">ширина </th>
+            <th scope="col" sortable="babin" class="babin">бабін</th>
+            <th class="quantity" scope="col" sortable="quantity_pars_model" class="clean-width">чиста вага</th>
+            <th scope="col" sortable="phase_1_model" class="model">модель</th>
+            <th scope="col" sortable="phase_2_model" class="pars">пар</th>
+            <th class="epmty"></th>
+            <th colspan="2" scope="col" sortable="id_order" class="mat-val ml22">мат / зміна / втулк</th>
+          </tr>
         </thead>
         <tbody>
-           <ng-container  *ngFor="let item of reserveItems; let index = index">
+          <ng-container *ngFor="let item of reserveItems; let index = index">
             <tr>
               <td [class.grey]="idEdit === item.id_color" (click)="editItem(item.id_color)">{{ item.id_color }}</td>
-              <td [class.grey]="idEdit === item.id_color" (click)="editItem(item.id_color)" class="name-color">{{ item.name_color}}</td>
+              <td [class.grey]="idEdit === item.id_color" (click)="editItem(item.id_color)" class="name-color">{{
+                item.name_color}}</td>
               <td [class.grey]="idEdit === item.id_color" (click)="editItem(item.id_color)">{{ item.width_color}}</td>
-              <td [class.grey]="idEdit === item.id_color" (click)="editItem(item.id_color)"> {{ item.bab_quantity_color }}</td>
+              <td [class.grey]="idEdit === item.id_color" (click)="editItem(item.id_color)"> {{ item.bab_quantity_color
+                }}</td>
               <td [class.grey]="idEdit === item.id_color" (click)="editItem(item.id_color)">{{ item.weight_color}}</td>
               <td [class.grey]="idEdit === item.id_color" (click)="editItem(item.id_color)">{{ item.model}}</td>
               <td [class.grey]="idEdit === item.id_color" (click)="editItem(item.id_color)">{{ item.pars}}</td>
               <td class="epmty"></td>
               <td class="white">
                 <input type="text" class="mat-val--intp"
-                  [value]="reverseItemsCorrect.controls[index].value?.weight_color" 
+                  [value]="reverseItemsCorrect.controls[index].value?.weight_color"
                   (keyup.enter)="calculateMat(reverseItemsCorrect.controls[index])"
-                  (change)="changeMaterial(reverseItemsCorrect.controls[index], $event.target.value, 'weight_color', item.id_color)"></td>
-              <td class="white"><input type="text" class="mat-val--intp" 
-                [value]="reverseItemsCorrect.controls[index].value.bab_quantity_color" 
-                (change)="changeMaterial(reverseItemsCorrect.controls[index], $event.target.value, 'bab_quantity_color', item.id_color)"></td>
-              <button (click)="saveChangesMat(item.id_color, reverseItemsCorrect.controls[index])" class="btn-icon display-none" [class.display-show]="!isHideOk && idChange.includes(item.id_color)">
+                  (change)="changeMaterial(reverseItemsCorrect.controls[index], $event.target.value, 'weight_color', item.id_color)">
+              </td>
+              <td class="white"><input type="text" class="mat-val--intp"
+                  [value]="reverseItemsCorrect.controls[index].value.bab_quantity_color"
+                  (change)="changeMaterial(reverseItemsCorrect.controls[index], $event.target.value, 'bab_quantity_color', item.id_color)">
+              </td>
+              <button (click)="saveChangesMat(item.id_color, reverseItemsCorrect.controls[index])"
+                class="btn-icon display-none" [class.display-show]="!isHideOk && idChange.includes(item.id_color)">
                 <img class="next-icon icon" src="./assets/img/icons/ok.svg" />
               </button>
             </tr>
@@ -42,16 +47,12 @@
         </tbody>
       </table>
     </div>
-   
+
     <div class="materials">
       <div class="materials-title title">Матеріали</div>
       <div class="materials-active">
         <p class="materials-active--title">наявність</p>
-        <ng-select 
-           bindLabel="name" 
-           [(ngModel)]="filterMaterial"
-           [items]="materialFilter"
-           bindValue="id" >
+        <ng-select bindLabel="name" [(ngModel)]="filterMaterial" [items]="materialFilter" bindValue="id">
         </ng-select>
       </div>
       <button class="materials-apply" (click)="getMaterialByFilter()">
@@ -102,10 +103,7 @@
         <input type="text" class="edit-table--field-inp" formControlName="weight_color">
       </div>
       <div class="edit-table--field-note">
-        <textarea type="text" 
-                  class="edit-table--field-note-inp" 
-                  placeholder="примітка" 
-                  formControlName="comment_color">
+        <textarea type="text" class="edit-table--field-note-inp" placeholder="примітка" formControlName="comment_color">
         </textarea>
       </div>
     </div>
@@ -114,3 +112,12 @@
     </button>
   </div>
 </div>
+
+<div *ngIf="isShowSpinner" class="d-flex justify-content-center spinner-wrapper">
+  <div class="spinner-grow spinner-border-sm" role="status" aria-hidden="true">
+    <span class="sr-only">Loading...</span>
+  </div>
+</div>
+
+<app-alert *ngIf="alert.isShow" [type]="alert.type" [message]="alert.message" (closed)="alertChange($event)">
+</app-alert>

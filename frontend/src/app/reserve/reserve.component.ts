@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { switchMap } from 'rxjs';
 import { MaterialPageService } from '../services/materials.service';
 
@@ -19,6 +19,12 @@ export class ReserveComponent implements OnInit {
     idChange = [];
     isHideOk = true;
     filterMaterial = null;
+    isShowSpinner = false;
+    alert = {
+        type: '',
+        message: '',
+        isShow: false
+    }
     ngOnInit(): void {
         this.servieMaterial.getListMaterial().subscribe((data: any) => {
             this.reserveItems = data.sort((a, b) => a.name_color - b.name_color);
@@ -97,19 +103,27 @@ export class ReserveComponent implements OnInit {
                 color_change_full: this.reverseItemData.value.id_color,
             };
         }
+        this.isShowSpinner = true;
 
         this.servieMaterial.saveMaterial(params).subscribe(() => {
             this.servieMaterial.getListMaterial().subscribe((data) => {
+                this.isShowSpinner = false;
                 this.reserveItems = data;
                 this.reverseItemData.reset();
+            }, () => {
+                this.isShowSpinner = false;
             });
+        }, () => {
+            this.isShowSpinner = false;
         });
     }
 
     getMaterialByFilter() {
+        this.isShowSpinner = true;
         if (this.filterMaterial) {
             this.servieMaterial.getFullAllMaterial({ id_color: this.filterMaterial }).subscribe((data: any) => {
                 this.reserveItems = data.sort((a, b) => a.name_color - b.name_color);
+                this.isShowSpinner = false;
                 this.reserveItems.map((item) => {
                     this.reverseItemsCorrect.push(
                         this.fb.group({
@@ -122,6 +136,7 @@ export class ReserveComponent implements OnInit {
         } else {
             this.servieMaterial.getListMaterial().subscribe((data: any) => {
                 this.reserveItems = data.sort((a, b) => a.name_color - b.name_color);
+                this.isShowSpinner = false;
                 this.reserveItems.map((item) => {
                     this.reverseItemsCorrect.push(
                         this.fb.group({
@@ -135,7 +150,6 @@ export class ReserveComponent implements OnInit {
     }
 
     calculateMat(form) {
-        console.log(form);
         form.patchValue({
             weight_color: this.calculateString(form.value.weight_color)
         })  
@@ -160,6 +174,7 @@ export class ReserveComponent implements OnInit {
     }
 
     saveChangesMat(id, item) {
+        this.isShowSpinner = true;
         const params = {
             color_change: id,
             bab_quantity_color: +item.value.bab_quantity_color,
@@ -169,9 +184,37 @@ export class ReserveComponent implements OnInit {
             .saveMaterial(params)
             .pipe(switchMap(() => this.servieMaterial.getListMaterial()))
             .subscribe((data: any) => {
+                this.isShowSpinner = false;
                 this.idChange = this.idChange.filter((i) => i !== id);
                 this.reserveItems = data.sort((a, b) => a.name_color - b.name_color);
+                this.reverseItemData.patchValue({
+                    bab_quantity_color: this.reverseItemData.value.bab_quantity_color + params.bab_quantity_color,
+                    weight_color: this.reverseItemData.value.weight_color + params.weight_color
+                });
+                this.isShowSpinner = false;
+                this.alert = {
+                    isShow: true,
+                    type: 'success',
+                    message: 'Дані збережено'
+                };
+                setTimeout(() => {
+                    this.alertChange(false);
+                }, 3000);
                 item.reset();
+            }, () => {
+                this.isShowSpinner = false;
+                this.alert = {
+                    isShow: true,
+                    type: 'danger',
+                    message: 'Уппс, щось пішло не так'
+                };
+                setTimeout(() => {
+                    this.alertChange(false);
+                }, 3000);
             });
+    }
+
+    alertChange(e) {
+        this.alert.isShow = e;    
     }
 }

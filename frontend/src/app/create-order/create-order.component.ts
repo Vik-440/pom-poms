@@ -27,6 +27,7 @@ export class CreateOrderComponent implements OnInit {
 
     @Input() isNew: Boolean = true;
     displayMonths = 2;
+    isShowSpinner = false;
     model: NgbDateStruct;
     navigation = 'select';
     showWeekNumbers = false;
@@ -69,7 +70,11 @@ export class CreateOrderComponent implements OnInit {
     commentOrder: string = '';
     discount: number = 0;
     doneOrder: Boolean = false;
-
+    alert = {
+        type: '',
+        message: '',
+        isShow: false
+    }
     ngOnInit(): void {
         this.init();
         this.viewChanges();
@@ -102,6 +107,9 @@ export class CreateOrderComponent implements OnInit {
     }
 
     init() {
+        this.commentOrder = '';
+        this.isSaveClient = false;
+        this.isSaveRecipient = false;
         this.dateForms = this.fb.group({
             data_order: moment().format('YYYY-MM-DD'),
             data_plane_order: null,
@@ -417,8 +425,6 @@ export class CreateOrderComponent implements OnInit {
     deleteOrder(index) {
         this.orderForm.controls.splice(index, 1);
         this.orderForm.value.splice(index, 1);
-
-        navigator.clipboard.writeText('dfgfggfg');
     }
 
     saveOrder(index, order) {
@@ -437,12 +443,23 @@ export class CreateOrderComponent implements OnInit {
             comment_model: order.value.comment_model,
             kolor_model: order.value.kolor_model || 0,
         };
-
+        this.isShowSpinner = true;
         this.service.getInfoForOrder(params).subscribe((data: any) => {
             order.patchValue({
                 isNew: false,
                 id_model: data.id_model,
             });
+            this.isShowSpinner = false;
+        }, () => {
+            this.isShowSpinner = false;
+            this.alert = {
+                isShow: true,
+                type: 'danger',
+                message: 'Уппс, щось пішло не так'
+            };
+            setTimeout(() => {
+                this.alertChange(false);
+            }, 3000);
         });
     }
 
@@ -502,12 +519,23 @@ export class CreateOrderComponent implements OnInit {
             comment_client: this.clientForm.value.comment_client,
             sity: this.clientForm.value.sity,
         };
-
+        this.isShowSpinner = true;
         this.service.getInfoForOrder(params).subscribe((data: any) => {
+            this.isShowSpinner = false;
             this.clientForm.patchValue({
                 id_client: data.id_recipient || this.clientForm.value.id_client,
             });
             this.isSaveClient = true;
+        }, () => {
+            this.isShowSpinner = false;
+            this.alert = {
+                isShow: true,
+                type: 'danger',
+                message: 'Уппс, щось пішло не так'
+            };
+            setTimeout(() => {
+                this.alertChange(false);
+            }, 3000);
         });
     }
 
@@ -527,12 +555,23 @@ export class CreateOrderComponent implements OnInit {
             comment_client: this.recipientForm.value.comment_client,
             sity: this.recipientForm.value.sity,
         };
-
+        this.isShowSpinner = true;
         this.service.getInfoForOrder(params).subscribe((data: any) => {
             this.recipientForm.patchValue({
                 id_client: data.id_recipient,
             });
+            this.isSaveClient = false;
             this.isSaveRecipient = true;
+        }, () => {
+            this.isShowSpinner = false;
+            this.alert = {
+                isShow: true,
+                type: 'danger',
+                message: 'Уппс, щось пішло не так'
+            };
+            setTimeout(() => {
+                this.alertChange(false);
+            }, 3000);
         });
     }
 
@@ -590,15 +629,61 @@ export class CreateOrderComponent implements OnInit {
         });
     }
 
+    setClientData(dataClient) {
+        this.clientForm.setValue(
+            {
+                coach: dataClient?.coach,
+                comment_client: dataClient.comment_client,
+                first_name_client: dataClient.first_name_client,
+                id_client: dataClient.id_client,
+                name_team: dataClient.name_team,
+                phone_client: dataClient.phone_client,
+                second_name_client: dataClient.second_name_client,
+                sity: dataClient.sity,
+                street_house_apartment: dataClient.street_house_apartment,
+                surname_client: dataClient.surname_client,
+                zip_code: dataClient.zip_code,
+                np_number: dataClient.np_number,
+            },
+            { emitEvent: false }
+        );
+        this.isSaveClient = true;
+        this.viewChanges();
+    }
+
+    setRecipientData(dataRecipient) {
+        this.recipientForm.setValue(
+            {
+                coach: dataRecipient?.coach,
+                comment_client: dataRecipient.comment_client,
+                first_name_client: dataRecipient.first_name_client,
+                id_client: dataRecipient.id_client,
+                name_team: dataRecipient.name_team,
+                phone_client: dataRecipient.phone_client,
+                second_name_client: dataRecipient.second_name_client,
+                sity: dataRecipient.sity,
+                street_house_apartment: dataRecipient.street_house_apartment,
+                surname_client: dataRecipient.surname_client,
+                zip_code: dataRecipient.zip_code,
+                np_number: dataRecipient.np_number,
+            },
+            { emitEvent: false }
+        );
+
+        this.isSaveRecipient = true;
+        this.viewChanges();
+    }
+
     getOrder() {
         const params = {
             edit_order: this.idOrder,
         };
+        this.isShowSpinner = true;
         this.service
             .getInfoForOrder(params)
             .pipe(
                 tap(() => {
-                    this.spinner.show();
+                    this.isShowSpinner = true;
                 })
             )
             .subscribe((data: any) => {
@@ -612,101 +697,68 @@ export class CreateOrderComponent implements OnInit {
                     this.dataSendOrder = { year: +arrDateSend[0], month: +arrDateSend[1], day: +arrDateSend[2] };
                     this.discount = data.discont_order;
                     this.fulfilledOrder = data.fulfilled_order;
-                    this.service.getInfoForOrder({ open_id_client: data.id_client }).subscribe((dataClient: any) => {
-                        this.clientForm.setValue(
-                            {
-                                coach: dataClient?.coach,
-                                comment_client: dataClient.comment_client,
-                                first_name_client: dataClient.first_name_client,
-                                id_client: dataClient.id_client,
-                                name_team: dataClient.name_team,
-                                phone_client: dataClient.phone_client,
-                                second_name_client: dataClient.second_name_client,
-                                sity: dataClient.sity,
-                                street_house_apartment: dataClient.street_house_apartment,
-                                surname_client: dataClient.surname_client,
-                                zip_code: dataClient.zip_code,
-                                np_number: dataClient.np_number,
-                            },
-                            { emitEvent: false }
-                        );
-                        this.isSaveClient = true;
-                        this.viewChanges();
-                    });
+                    this.service.getInfoForOrder({ open_id_client: data.id_client })
+                    .subscribe((dataClient: any) => {
+                        this.isShowSpinner = false;
+                        this.setClientData(dataClient);
+                        if (data.id_client !== data.id_recipient) {
+                            this.isRecipient = true;
+                            this.service
+                                .getInfoForOrder({ open_id_client: data.id_recipient })
+                                .subscribe((dataRecipient: any) => {
+                                   this.setRecipientData(dataRecipient);
 
-                    if (data.id_client !== data.id_recipient) {
-                        this.isRecipient = true;
-                        this.service
-                            .getInfoForOrder({ open_id_client: data.id_recipient })
-                            .subscribe((dataRecipient: any) => {
-                                this.recipientForm.setValue(
-                                    {
-                                        coach: dataRecipient?.coach,
-                                        comment_client: dataRecipient.comment_client,
-                                        first_name_client: dataRecipient.first_name_client,
-                                        id_client: dataRecipient.id_client,
-                                        name_team: dataRecipient.name_team,
-                                        phone_client: dataRecipient.phone_client,
-                                        second_name_client: dataRecipient.second_name_client,
-                                        sity: dataRecipient.sity,
-                                        street_house_apartment: dataRecipient.street_house_apartment,
-                                        surname_client: dataRecipient.surname_client,
-                                        zip_code: dataRecipient.zip_code,
-                                        np_number: dataRecipient.np_number,
-                                    },
-                                    { emitEvent: false }
-                                );
-
-                                this.isSaveRecipient = true;
-                                this.viewChanges();
-                            });
-                    }
-
-                    data.id_model.forEach((model, index) => {
-                        if (index === 0) {
-                            this.orderForm.clear();
+                                   data.id_model.forEach((model, index) => {
+                                    if (index === 0) {
+                                        this.orderForm.clear();
+                                    }
+                                    this.service.getInfoForOrder({ open_id_model: model })
+                                    .subscribe((dataModel: any) => {
+                                        this.orderForm.push(
+                                            this.fb.group({
+                                                id_model: dataModel.id_model,
+                                                kod_model: dataModel.kod_model,
+                                                kolor_model: dataModel.kolor_model,
+                                                name_color_1: dataModel.name_color_1 || null,
+                                                id_color_part_1: dataModel.id_color_part_1,
+                                                id_color_1: dataModel.id_color_1,
+                                                id_color_2: dataModel.id_color_2,
+                                                id_color_3: dataModel.id_color_3,
+                                                id_color_4: dataModel.id_color_4,
+                                                name_color_2: dataModel.name_color_2 || null,
+                                                id_color_part_2: dataModel.id_color_part_2,
+                                                name_color_3: dataModel.name_color_3 || null,
+                                                id_color_part_3: dataModel.id_color_part_3,
+                                                name_color_4: dataModel.name_color_4 || null,
+                                                id_color_part_4: dataModel.id_color_part_4,
+                                                price_model: data.price_model_order[index],
+                                                comment_model: dataModel.comment_model,
+                                                quantity_pars_model: [data.quantity_pars_model[index], Validators.required],
+                                                sum_pars: data.quantity_pars_model[index] * data.price_model_order[index],
+                                                isNew: false,
+                                                isChange: false,
+                                            })
+                                        );
+                                        this.viewChanges();
+                                    });
+                                });
+                                });
                         }
-                        this.service.getInfoForOrder({ open_id_model: model }).subscribe((dataModel: any) => {
-                            this.orderForm.push(
-                                this.fb.group({
-                                    id_model: dataModel.id_model,
-                                    kod_model: dataModel.kod_model,
-                                    kolor_model: dataModel.kolor_model,
-                                    name_color_1: dataModel.name_color_1 || null,
-                                    id_color_part_1: dataModel.id_color_part_1,
-                                    id_color_1: dataModel.id_color_1,
-                                    id_color_2: dataModel.id_color_2,
-                                    id_color_3: dataModel.id_color_3,
-                                    id_color_4: dataModel.id_color_4,
-                                    name_color_2: dataModel.name_color_2 || null,
-                                    id_color_part_2: dataModel.id_color_part_2,
-                                    name_color_3: dataModel.name_color_3 || null,
-                                    id_color_part_3: dataModel.id_color_part_3,
-                                    name_color_4: dataModel.name_color_4 || null,
-                                    id_color_part_4: dataModel.id_color_part_4,
-                                    price_model: data.price_model_order[index],
-                                    comment_model: dataModel.comment_model,
-                                    quantity_pars_model: [data.quantity_pars_model[index], Validators.required],
-                                    sum_pars: data.quantity_pars_model[index] * data.price_model_order[index],
-                                    isNew: false,
-                                    isChange: false,
-                                })
-                            );
-                            this.viewChanges();
-                        });
                     });
+                  
                     this.priceAll.patchValue({
                         sum_payment: data.sum_payment,
                     });
-                    this.spinner.hide();
                     this.isNew = false;
                 } else {
+                    console.log(1);
+                    
                     this.init();
                     this.viewChanges();
                     this.isNew = true;
                     this.dataPlaneOrder = null;
                     this.dataSendOrder = null;
-                    this.spinner.hide();
+                    this.isShowSpinner = false;
                 }
             });
     }
@@ -740,6 +792,15 @@ export class CreateOrderComponent implements OnInit {
             `**Якщо Вам потрібно рахунок і накладна у паперовому вигляді, попередьте нас і ми покладемо їх до замовлення.** \n`
         );
         navigator.clipboard.writeText(copyText.join(''));
+        this.isShowSpinner = false;
+            this.alert = {
+                isShow: true,
+                type: 'success',
+                message: 'Дані скопіювано'
+            };
+            setTimeout(() => {
+                this.alertChange(false);
+            }, 3000);
     }
 
     makeOrderDone() {
@@ -749,6 +810,11 @@ export class CreateOrderComponent implements OnInit {
         }).subscribe(() => {
             this.fulfilledOrder = !this.fulfilledOrder;
         })
+    }
+
+
+    alertChange(e) {
+        this.alert.isShow = e;    
     }
 }
 

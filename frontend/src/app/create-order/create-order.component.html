@@ -168,7 +168,6 @@
         addTagText="+ тренер" formControlName="coach" (search)="changeClientInfo($event.term, 3, 'ur_coach')"
         (change)="clearDataClient()">
       </ng-select>
-      <!-- <input class="data-customer--comment-client" formControlName="comment_client" type="text" placeholder="коментар до клієнта"> -->
 
     </div>
 
@@ -249,6 +248,10 @@
   </div>
 </div>
 
-<ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#fff" type="pacman" [fullScreen]="true">
-  <p style="color: white"> Loading... </p>
-</ngx-spinner>
+<div *ngIf="isShowSpinner" class="d-flex justify-content-center spinner-wrapper">
+  <div class="spinner-grow spinner-border-sm" role="status" aria-hidden="true">
+    <span class="sr-only">Loading...</span>
+  </div>
+</div>
+
+<app-alert *ngIf="alert.isShow" [type]="alert.type" [message]="alert.message" (closed)="alertChange($event)"></app-alert>

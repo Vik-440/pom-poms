@@ -5,6 +5,7 @@ import locale from 'date-fns/locale/en-US';
 import * as _ from 'lodash';
 import * as moment from 'moment';
 import { DatepickerOptions } from 'ng2-datepicker';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { CreateOrderService } from '../services/create-order.service';
 import { MainPageService } from '../services/main-table.service';
 interface OrderInterface {
@@ -75,6 +76,7 @@ export class TableComponent implements OnInit, OnDestroy {
         message: '',
         isShow: false
     }
+    isShowSpinner = false;
     ordersRow = [];
     switchConfig = {
         labels: {
@@ -129,7 +131,8 @@ export class TableComponent implements OnInit, OnDestroy {
         private service: MainPageService,
         private calendar: NgbCalendar,
         public formatter: NgbDateParserFormatter,
-        private serviceOrders: CreateOrderService
+        private serviceOrders: CreateOrderService,
+        private spinner: NgxSpinnerService
     ) {}
 
     ngOnInit() {
@@ -272,6 +275,7 @@ export class TableComponent implements OnInit, OnDestroy {
     }
 
     applyFilters() {
+        this.isShowSpinner = true;
         let params: any = {
             data_start: this.editData(Object.values(this.filtersForm.value.dataStart)),
             data_end: this.editData(Object.values(this.filtersForm.value.dataEnd)),
@@ -297,6 +301,7 @@ export class TableComponent implements OnInit, OnDestroy {
         }
         this.service.getListWithFilters(params).subscribe((data: any) => {
             this.ordersRow = data;
+            this.isShowSpinner = false;
         });
     }
 
@@ -399,6 +404,9 @@ export class TableComponent implements OnInit, OnDestroy {
                     type: 'success',
                     message: 'Дані змінено'
                 };
+                setTimeout(() => {
+                    this.alertChange(false);
+                }, 3000);
                 this.ordersRow = this.ordersRow.map((order, index) => {
                     if(order.id_order === item.id_order) {
                         order = {
@@ -433,7 +441,9 @@ export class TableComponent implements OnInit, OnDestroy {
                     type: 'success',
                     message: 'Дані змінено'
                 };
-    
+                setTimeout(() => {
+                    this.alertChange(false);
+                }, 3000);
                 this.ordersRow = this.ordersRow.map((orderItem, index) => {
                     if(orderItem.id_order === order.id_order) {   
                         orderItem = {

@@ -1,62 +1,59 @@
 <div class="page pl63 mt27 finance-page">
   <div class="table-responsive table table-first">
-      <table class="table table-lg table-bordered mb-0 border-primary">
-        <thead>
+    <table class="table table-lg table-bordered mb-0 border-primary">
+      <thead>
         <tr class="center-data-second">
           <th scope="col" sortable="id_order" class="date">дата</th>
           <th scope="col" sortable="id_order" class="form">форма</th>
           <th scope="col" sortable="id_order" class="order">№ замовлення</th>
           <th scope="col" sortable="id_order" class="sum">сума</th>
         </tr>
-        </thead>
-        <tbody>
-          <ng-container *ngFor="let item of dataItems.controls" [formGroup]="item">
-            <tr>
-              <td>
-                <input class="data-input"  [class.old]="item.value.status === 'edit'" [disabled]="item.value.status === 'edit' ? '' : null" 
-                [class.edit-field]="item.value.status !== 'edit'"  placeholder="yyyy-mm-dd" (click)="calendarPaymentStart.toggle()" [minDate]="{year: 2016, month: 1, day: 1}"
-          [maxDate]="{year: +todayYear, month: 12, day: 31}" formControlName="data_payment" ngbDatepicker #calendarPaymentStart="ngbDatepicker">
+      </thead>
+      <tbody>
+        <ng-container *ngFor="let item of dataItems.controls" [formGroup]="item">
+          <tr>
+            <td>
+              <input class="data-input" [class.old]="item.value.status === 'edit'"
+                [disabled]="item.value.status === 'edit' ? '' : null" [class.edit-field]="item.value.status !== 'edit'"
+                placeholder="yyyy-mm-dd" (click)="calendarPaymentStart.toggle()"
+                [minDate]="{year: 2016, month: 1, day: 1}" [maxDate]="{year: +todayYear, month: 12, day: 31}"
+                formControlName="data_payment" ngbDatepicker #calendarPaymentStart="ngbDatepicker">
+            </td>
+            <td>
+              <ng-select [class.old]="item.value.status === 'edit'" class="data-input" [clearable]="false"
+                [readonly]="item.value.status === 'edit' ? true : false"
+                [class.edit-field]="item.value.status !== 'edit'" formControlName="metod_payment"
+                [items]="metodPayment">
+              </ng-select>
 
-              </td>
-              <td >
-                <ng-select [class.old]="item.value.status === 'edit'"  class="data-input" [clearable]="false"
-                  [readonly]="item.value.status === 'edit' ? true : false"
-                  [class.edit-field]="item.value.status !== 'edit'" 
-                  formControlName="metod_payment"
-                  [items]="metodPayment" >
-                </ng-select>
-
-              </td>
-              <td><input [class.old]="item.value.status === 'edit'"  class="data-input" 
-                [attr.disabled]="item.value.status === 'edit' ? '' : null"  
-                [class.edit-field]="item.value.status !== 'edit'"  
-                type="text" 
-                formControlName="id_order">
-              </td>
-              <td><input [class.old]="item.value.status === 'edit'"  class="data-input" 
-                [attr.disabled]="item.value.status === 'edit' ? '' : null" 
-                [class.edit-field]="item.value.status !== 'edit'" 
-                type="text" 
-                formControlName="payment">
-              </td>
-              <td class="btns-actions" [ngSwitch]="item.value.status">
-                <button class="btn-icon bg-btn"  (click)="actionClick(item.value.status, item)" *ngSwitchCase="'edit'">
-                  <img class="edit-icon icon" src="./assets/img/icons/pencil.png" />
+            </td>
+            <td><input [class.old]="item.value.status === 'edit'" class="data-input"
+                [attr.disabled]="item.value.status === 'edit' ? '' : null"
+                [class.edit-field]="item.value.status !== 'edit'" type="text" formControlName="id_order">
+            </td>
+            <td><input [class.old]="item.value.status === 'edit'" class="data-input"
+                [attr.disabled]="item.value.status === 'edit' ? '' : null"
+                [class.edit-field]="item.value.status !== 'edit'" type="text" formControlName="payment">
+            </td>
+            <td class="btns-actions" [ngSwitch]="item.value.status">
+              <button class="btn-icon bg-btn" (click)="actionClick(item.value.status, item)" *ngSwitchCase="'edit'">
+                <img class="edit-icon icon" src="./assets/img/icons/pencil.png" />
+              </button>
+              <div *ngSwitchCase="'process'" class="edit-actions">
+                <button class="btn-icon sm-btn" (click)="actionClick('close', item)">
+                  <img class="icon icon-small" src="./assets/img/icons/close.png">
                 </button>
-                <div *ngSwitchCase="'process'" class="edit-actions">
-                  <button class="btn-icon sm-btn"  (click)="actionClick('close', item)" >
-                    <img class="icon icon-small"  src="./assets/img/icons/close.png">
-                  </button>
-                  <button class="btn-icon sm-btn"  (click)="actionClick('edited', item)">
-                    <img class="icon icon-small" src="./assets/img/icons/check.png">
-                  </button>
-                </div>
-              </td>
-            </tr>
-          </ng-container>
-        </tbody>
-      </table>
-      <button class="save-btn left table-first--save" (click)="savePayment()" [disabled]="dataItems.controls[dataItems.controls.length - 1].invalid">Зберегти</button>
+                <button class="btn-icon sm-btn" (click)="actionClick('edited', item)">
+                  <img class="icon icon-small" src="./assets/img/icons/check.png">
+                </button>
+              </div>
+            </td>
+          </tr>
+        </ng-container>
+      </tbody>
+    </table>
+    <button class="save-btn left table-first--save" (click)="savePayment()"
+      [disabled]="dataItems.controls[dataItems.controls.length - 1].invalid">Зберегти</button>
   </div>
   <div class="money">
     <div class="payments" [formGroup]="paymentFrom">
@@ -64,42 +61,35 @@
       <div class="money-selects">
         <div class="money-select">
           <p class="money-select--header">метод оплати</p>
-          <ng-select
-            class="money-select--input"
-            formControlName="metod"
-            [items]="[metodPayment[0], metodPayment[1], 'всі']" 
-          >
+          <ng-select class="money-select--input" formControlName="metod"
+            [items]="[metodPayment[0], metodPayment[1], 'всі']">
           </ng-select>
         </div>
         <div class="money-select">
           <p class="money-select--header">дата від</p>
-          <input class="calendar" placeholder="yyyy-mm-dd" (click)="calendarPaymentStart.toggle()" [minDate]="{year: 2016, month: 1, day: 1}"
-          [maxDate]="paymentFrom.value.data_end" formControlName="data_start" ngbDatepicker #calendarPaymentStart="ngbDatepicker">
+          <input class="calendar" placeholder="yyyy-mm-dd" (click)="calendarPaymentStart.toggle()"
+            [minDate]="{year: 2016, month: 1, day: 1}" [maxDate]="paymentFrom.value.data_end"
+            formControlName="data_start" ngbDatepicker #calendarPaymentStart="ngbDatepicker">
         </div>
         <div class="money-select">
           <p class="money-select--header">дата до</p>
-          <input class="calendar" placeholder="yyyy-mm-dd" (click)="calendarPaymentEnd.toggle()" [minDate]="{year: 2016, month: 1, day: 1}"
-          [maxDate]="{year: +todayYear, month: 12, day: 31}" [minDate]="paymentFrom.value.data_start" formControlName="data_end" ngbDatepicker #calendarPaymentEnd="ngbDatepicker">
+          <input class="calendar" placeholder="yyyy-mm-dd" (click)="calendarPaymentEnd.toggle()"
+            [minDate]="{year: 2016, month: 1, day: 1}" [maxDate]="{year: +todayYear, month: 12, day: 31}"
+            [minDate]="paymentFrom.value.data_start" formControlName="data_end" ngbDatepicker
+            #calendarPaymentEnd="ngbDatepicker">
         </div>
-
-  
         <div class="money-select">
           <p class="money-select--header">період</p>
-          <ng-select 
-            class="money-select--input"
-            formControlName="period"
-            [items]="periods" >
+          <ng-select class="money-select--input" formControlName="period" [items]="periods">
           </ng-select>
         </div>
-  
         <div class="money-select">
           <p class="money-select--header">№ замовлення</p>
           <input type="number" class="money-select--input" formControlName="id_order">
         </div>
       </div>
 
-      <button class="payments-apply apply" 
-        (click)="sendFiltersPayments()" 
+      <button class="payments-apply apply" (click)="sendFiltersPayments()"
         [disabled]="paymentFrom.invalid && !paymentFrom.value.id_order">
         Застосувати
       </button>
@@ -108,127 +98,138 @@
     <div class="spending" [formGroup]="spendingForm">
       <div class="money-header">Витрати</div>
       <div class="money-selects">
-  
+
         <div class="money-select">
           <p class="money-select--header">дата від</p>
-          <input class="calendar" placeholder="yyyy-mm-dd" (click)="calendarSpendFrom.toggle()" [minDate]="{year: 2016, month: 1, day: 1}"
-          [maxDate]="{year: +todayYear, month: 12, day: 31}" formControlName="data_start" ngbDatepicker #calendarSpendFrom="ngbDatepicker">
+          <input class="calendar" placeholder="yyyy-mm-dd" (click)="calendarSpendFrom.toggle()"
+            [minDate]="{year: 2016, month: 1, day: 1}" [maxDate]="{year: +todayYear, month: 12, day: 31}"
+            formControlName="data_start" ngbDatepicker #calendarSpendFrom="ngbDatepicker">
         </div>
-  
+
         <div class="money-select">
           <p class="money-select--header">дата до</p>
-          <input class="calendar" placeholder="yyyy-mm-dd" (click)="calendarSpendEnd.toggle()" [minDate]="{year: 2016, month: 1, day: 1}"
-          [maxDate]="{year: +todayYear, month: 12, day: 31}" formControlName="data_end" ngbDatepicker #calendarSpendEnd="ngbDatepicker">
+          <input class="calendar" placeholder="yyyy-mm-dd" (click)="calendarSpendEnd.toggle()"
+            [minDate]="{year: 2016, month: 1, day: 1}" [maxDate]="{year: +todayYear, month: 12, day: 31}"
+            formControlName="data_end" ngbDatepicker #calendarSpendEnd="ngbDatepicker">
         </div>
       </div>
-      <button class="spending-apply apply" 
-        (click)="sendSpendingFilters()" 
-        [disabled]="spendingForm.invalid">
+      <button class="spending-apply apply" (click)="sendSpendingFilters()" [disabled]="spendingForm.invalid">
         Застосувати
       </button>
+    </div>
   </div>
-</div>
-<div class="table-second">
-  <div>
-    <table class="table table-lg table-bordered mb-0 border-primary">
-      <thead>
-      <tr class="">
-        <th scope="col" sortable="id_order" class="date">дата</th>
-        <th scope="col" sortable="id_order" class="expense">витрата</th>
-        <th scope="col" sortable="id_order" class="sum">сума</th>
-        <th scope="col" sortable="id_order" class="comment">коментар</th>
-      </tr>
-      </thead>
-      <tbody>
-        <ng-container *ngFor="let item of outlayData.controls" [formGroup]="item">
-          <tr>
-            <td>
-              <input class="data-input"  [class.old]="item.value.status === 'edit'" [disabled]="item.value.status === 'edit' ? '' : null" 
-              [class.edit-field]="item.value.status !== 'edit'"  placeholder="yyyy-mm-dd" (click)="calendarOutlayStart.toggle()" [minDate]="{year: 2016, month: 1, day: 1}"
-        [maxDate]="{year: +todayYear, month: 12, day: 31}" formControlName="data_outlay" ngbDatepicker #calendarOutlayStart="ngbDatepicker">
-  
-            </td>
-            <td >
-              <ng-select [class.old]="item.value.status === 'edit'"  class="data-input" [clearable]="false"
-                    [readonly]="item.value.status === 'edit' ? true : false"
-                    [class.edit-field]="item.value.status !== 'edit'" 
-                    formControlName="id_outlay_class"
-                    [items]="outlayClass" >
-                  </ng-select>
-  
-            </td>
-            <td><input [class.old]="item.value.status === 'edit'"  class="data-input" 
-              [attr.disabled]="item.value.status === 'edit' ? '' : null"  
-              [class.edit-field]="item.value.status !== 'edit'"  
-              type="text" 
-              formControlName="money_outlay">
-            </td>
-            <td><input [class.old]="item.value.status === 'edit'"  class="data-input" 
-              [attr.disabled]="item.value.status === 'edit' ? '' : null" 
-              [class.edit-field]="item.value.status !== 'edit'" 
-              type="text" 
-              formControlName="comment_outlay">
-            </td>
-            <td class="btns-actions" [ngSwitch]="item.value.status">
-              <button class="btn-icon bg-btn"  (click)="actionClick(item.value.status, item, 'outlay')" *ngSwitchCase="'edit'">
-                <img class="edit-icon icon" src="./assets/img/icons/pencil.png" />
-              </button>
-              <div *ngSwitchCase="'process'" class="edit-actions">
-                <button class="btn-icon sm-btn"  (click)="actionClick('close', item, 'outlay')" >
-                  <img class="icon icon-small"  src="./assets/img/icons/close.png">
-                </button>
-                <button class="btn-icon sm-btn"  (click)="actionClick('edited', item, 'outlay')">
-                  <img class="icon icon-small" src="./assets/img/icons/check.png">
-                </button>
-              </div>
-            </td>
+  <div class="table-second">
+    <div>
+      <table class="table table-lg table-bordered mb-0 border-primary">
+        <thead>
+          <tr class="">
+            <th scope="col" sortable="id_order" class="date">дата</th>
+            <th scope="col" sortable="id_order" class="expense">витрата</th>
+            <th scope="col" sortable="id_order" class="sum">сума</th>
+            <th scope="col" sortable="id_order" class="comment">коментар</th>
           </tr>
-        </ng-container>
-      </tbody>
+        </thead>
+        <tbody>
+          <ng-container *ngFor="let item of outlayData.controls" [formGroup]="item">
+            <tr>
+              <td>
+                <input class="data-input" [class.old]="item.value.status === 'edit'"
+                  [disabled]="item.value.status === 'edit' ? '' : null"
+                  [class.edit-field]="item.value.status !== 'edit'" placeholder="yyyy-mm-dd"
+                  (click)="calendarOutlayStart.toggle()" [minDate]="{year: 2016, month: 1, day: 1}"
+                  [maxDate]="{year: +todayYear, month: 12, day: 31}" formControlName="data_outlay" ngbDatepicker
+                  #calendarOutlayStart="ngbDatepicker">
+
+              </td>
+              <td>
+                <ng-select [class.old]="item.value.status === 'edit'" class="data-input" [clearable]="false"
+                  [readonly]="item.value.status === 'edit' ? true : false"
+                  [class.edit-field]="item.value.status !== 'edit'" formControlName="id_outlay_class"
+                  [items]="outlayClass">
+                </ng-select>
+
+              </td>
+              <td><input [class.old]="item.value.status === 'edit'" class="data-input"
+                  [attr.disabled]="item.value.status === 'edit' ? '' : null"
+                  [class.edit-field]="item.value.status !== 'edit'" type="text" formControlName="money_outlay">
+              </td>
+              <td><input [class.old]="item.value.status === 'edit'" class="data-input"
+                  [attr.disabled]="item.value.status === 'edit' ? '' : null"
+                  [class.edit-field]="item.value.status !== 'edit'" type="text" formControlName="comment_outlay">
+              </td>
+              <td class="btns-actions" [ngSwitch]="item.value.status">
+                <button class="btn-icon bg-btn" (click)="actionClick(item.value.status, item, 'outlay')"
+                  *ngSwitchCase="'edit'">
+                  <img class="edit-icon icon" src="./assets/img/icons/pencil.png" />
+                </button>
+                <div *ngSwitchCase="'process'" class="edit-actions">
+                  <button class="btn-icon sm-btn" (click)="actionClick('close', item, 'outlay')">
+                    <img class="icon icon-small" src="./assets/img/icons/close.png">
+                  </button>
+                  <button class="btn-icon sm-btn" (click)="actionClick('edited', item, 'outlay')">
+                    <img class="icon icon-small" src="./assets/img/icons/check.png">
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </ng-container>
+        </tbody>
       </table>
-      <button class="save-btn left table-first--save" (click)="saveOutlay()" [disabled]="outlayData.controls[outlayData.controls.length - 1].invalid">Зберегти</button>
-  
-  </div>
-  <div class="statistics">
-    <button class="statistics--btn" (click)="statisticsAtion()" [class.purple]="isShowStatistics">
-      {{isShowStatistics ? 'Сховати статистику' : 'Показати статитику'}}
-    </button>
-    <table *ngIf="isShowStatistics && isEmptyObject(statisticsData)" class="table table-lg table-bordered mb-0 border-primary statistics--table">
-      <thead>
-        <th scope="col" class="date">дата</th>
-        <th scope="col" class="payments">оплати</th>
-        <th scope="col" class="outlaies">витрати</th>
-        <th scope="col" class="balans">баланс</th>
-      </thead>
-      <tbody>
-        <ng-container *ngFor="let item of statisticsPeriods; let i = index">
-          <tr>
-            <td>{{ item }}</td>
-            <td>{{ statisticsData.stat_payment[i] }}</td>
-            <td>{{ statisticsData.stat_outlay[i] }}</td>
-            <td>{{ statisticsData.stat_payment[i] - statisticsData.stat_outlay[i] }}</td>
-          </tr>
-        </ng-container>
-      </tbody>
-    </table>
-    <table *ngIf="isShowStatistics && statisticsPayments.length"  class="table table-lg table-bordered mb-0 border-primary statistics--table">
-      <thead>
-        <th scope="col" class="date">{{paymentFrom.value.period}}</th>
-        <th scope="col" class="payments">тип платежу</th>
-        <th scope="col" class="outlaies">сума за період</th>
-        <th scope="col" class="balans">кіл-ть платежів</th>
-      </thead>
-      <tbody>
-        <ng-container *ngFor="let item of statisticsPayments; let i = index">
-          <tr>
-            <td>{{ item.data_payment }}</td>
-            <td>{{ item.metod_payment }}</td>
-            <td>{{ item.payment }}</td>
-            <td>{{ item.payment_quantity}}</td>
-          </tr>
-        </ng-container>
-      </tbody>
-    </table>
-  </div>
+      <button class="save-btn left table-first--save" (click)="saveOutlay()"
+        [disabled]="outlayData.controls[outlayData.controls.length - 1].invalid">Зберегти</button>
+
+    </div>
+    <div class="statistics">
+      <button class="statistics--btn" (click)="statisticsAtion()" [class.purple]="isShowStatistics">
+        {{isShowStatistics ? 'Сховати статистику' : 'Показати статитику'}}
+      </button>
+      <table *ngIf="isShowStatistics && isEmptyObject(statisticsData)"
+        class="table table-lg table-bordered mb-0 border-primary statistics--table">
+        <thead>
+          <th scope="col" class="date">дата</th>
+          <th scope="col" class="payments">оплати</th>
+          <th scope="col" class="outlaies">витрати</th>
+          <th scope="col" class="balans">баланс</th>
+        </thead>
+        <tbody>
+          <ng-container *ngFor="let item of statisticsPeriods; let i = index">
+            <tr>
+              <td>{{ item }}</td>
+              <td>{{ statisticsData.stat_payment[i] }}</td>
+              <td>{{ statisticsData.stat_outlay[i] }}</td>
+              <td>{{ statisticsData.stat_payment[i] - statisticsData.stat_outlay[i] }}</td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+      <table *ngIf="isShowStatistics && statisticsPayments.length"
+        class="table table-lg table-bordered mb-0 border-primary statistics--table">
+        <thead>
+          <th scope="col" class="date">{{paymentFrom.value.period}}</th>
+          <th scope="col" class="payments">тип платежу</th>
+          <th scope="col" class="outlaies">сума за період</th>
+          <th scope="col" class="balans">кіл-ть платежів</th>
+        </thead>
+        <tbody>
+          <ng-container *ngFor="let item of statisticsPayments; let i = index">
+            <tr>
+              <td>{{ item.data_payment }}</td>
+              <td>{{ item.metod_payment }}</td>
+              <td>{{ item.payment }}</td>
+              <td>{{ item.payment_quantity}}</td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+    </div>
   </div>
 </div>
+
+<div *ngIf="isShowSpinner" class="d-flex justify-content-center spinner-wrapper">
+  <div class="spinner-grow spinner-border-sm" role="status" aria-hidden="true">
+    <span class="sr-only">Loading...</span>
+  </div>
+</div>
+
+<app-alert *ngIf="alert.isShow" [type]="alert.type" [message]="alert.message" (closed)="alertChange($event)">
+</app-alert>
