@@ -117,13 +117,13 @@ def return_data_from_main_page(asked):
                     directory_of_order.data_order >= data_start,
                     directory_of_order.data_order <= data_end).order_by(
                     'id_order').all()
-#///
+# =
         else:
             id_order_1 = session.query(directory_of_order).filter(
                 directory_of_order.data_order >= data_start,
                 directory_of_order.data_order <= data_end).filter_by(
                 fulfilled_order='FALSE').order_by('data_plane_order').all()
-#///
+# =
         count_order = []
         for roww in id_order_1:
             count_order.append(roww.id_order)
