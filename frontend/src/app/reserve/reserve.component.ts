@@ -24,7 +24,7 @@ export class ReserveComponent implements OnInit {
         type: '',
         message: '',
         isShow: false
-    }
+    };
     ngOnInit(): void {
         this.servieMaterial.getListMaterial().subscribe((data: any) => {
             this.reserveItems = data.sort((a, b) => a.name_color - b.name_color);
@@ -91,7 +91,7 @@ export class ReserveComponent implements OnInit {
             ...this.reverseItemData.value,
         };
 
-        delete params['id_color'];
+        delete params.id_color;
         if (this.isNewMaterial) {
             params = {
                 ...params,
@@ -152,13 +152,13 @@ export class ReserveComponent implements OnInit {
     calculateMat(form) {
         form.patchValue({
             weight_color: this.calculateString(form.value.weight_color)
-        })  
-        
+        });
+
     }
 
     calculateString(value) {
         let total = 0;
-        value = value.toString().match(/[+\-]*(\.\d+|\d+(\.\d+)?)/g) || [];  
+        value = value.toString().match(/[+\-]*(\.\d+|\d+(\.\d+)?)/g) || [];
         while (value.length) {
           total += parseFloat(value.shift());
         }
@@ -215,6 +215,6 @@ export class ReserveComponent implements OnInit {
     }
 
     alertChange(e) {
-        this.alert.isShow = e;    
+        this.alert.isShow = e;
     }
 }

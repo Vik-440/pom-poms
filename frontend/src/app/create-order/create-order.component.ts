@@ -38,7 +38,7 @@ export class CreateOrderComponent implements OnInit {
     isGetPostR: Boolean = false;
     recipientForm: FormGroup;
     priceAll: FormGroup;
-    idOrder: number = 0;
+    idOrder = 0;
     isSaveClient: Boolean = false;
     isSaveRecipient: Boolean;
     fulfilledOrder: Boolean = false;
@@ -47,7 +47,7 @@ export class CreateOrderComponent implements OnInit {
         format: 'yyyy-MM-dd',
         formatDays: 'EEEEE',
         firstCalendarDay: 1,
-        locale: locale,
+        locale,
         position: 'bottom',
         placeholder: 'dd.mm.yyyy',
         calendarClass: 'datepicker-default',
@@ -67,37 +67,37 @@ export class CreateOrderComponent implements OnInit {
     clientDataItems = [];
     coachDataItems;
     infoForSave: any;
-    commentOrder: string = '';
-    discount: number = 0;
+    commentOrder = '';
+    discount = 0;
     doneOrder: Boolean = false;
     alert = {
         type: '',
         message: '',
         isShow: false
-    }
+    };
     ngOnInit(): void {
         this.init();
         this.viewChanges();
         this.dataPlaneOrder = JSON.parse(localStorage.getItem('data_plane_order')) || null;
         this.dataSendOrder = JSON.parse(localStorage.getItem('data_send_order')) || null;
         this.dateToday = JSON.parse(localStorage.getItem('dateToday')) || null;
-        if (this.route.snapshot.params['id']) {
-            this.idOrder = +this.route.snapshot.params['id'];
+        if (this.route.snapshot.params.id) {
+            this.idOrder = +this.route.snapshot.params.id;
             this.getOrder();
-        } else if (this.route.snapshot.params['codeModel']) {
-            this.chooseKode(this.route.snapshot.params['codeModel'], 0, false);
-        } else if (this.route.snapshot.params['phoneClient']) {
+        } else if (this.route.snapshot.params.codeModel) {
+            this.chooseKode(this.route.snapshot.params.codeModel, 0, false);
+        } else if (this.route.snapshot.params.phoneClient) {
             this.selectedItemClient(
-                this.route.snapshot.params['phoneClient'],
+                this.route.snapshot.params.phoneClient,
                 'sl_phone',
                 this.clientForm,
                 'isSaveClient',
                 false
             );
-        } else if (this.route.snapshot.params['phoneRecipient']) {
+        } else if (this.route.snapshot.params.phoneRecipient) {
             this.isRecipient = true;
             this.selectedItemClient(
-                this.route.snapshot.params['phoneRecipient'],
+                this.route.snapshot.params.phoneRecipient,
                 'sl_phone',
                 this.recipientForm,
                 'isSaveRecipient',
@@ -595,7 +595,7 @@ export class CreateOrderComponent implements OnInit {
     }
 
     saveAll(mode = 'create') {
-        let params = {
+        const params = {
             id_order: +this.idOrder,
             data_order: [this.dateToday.year, this.dateToday.month, this.dateToday.day].join('-'),
             id_client: this.clientForm.value.id_client,
@@ -608,7 +608,7 @@ export class CreateOrderComponent implements OnInit {
                 : null, // - прогнозована
             data_send_order: this.dataSendOrder
                 ? [this.dataSendOrder.year, this.dataSendOrder.month, this.dataSendOrder.day].join('-')
-                : null, //- бажана
+                : null, // - бажана
             discont_order: this.discount,
             sum_payment: +this.sumAll(false).split('/')[0].trim(),
             fulfilled_order: false,
@@ -706,53 +706,19 @@ export class CreateOrderComponent implements OnInit {
                             this.service
                                 .getInfoForOrder({ open_id_client: data.id_recipient })
                                 .subscribe((dataRecipient: any) => {
-                                   this.setRecipientData(dataRecipient);
-
-                                   data.id_model.forEach((model, index) => {
-                                    if (index === 0) {
-                                        this.orderForm.clear();
-                                    }
-                                    this.service.getInfoForOrder({ open_id_model: model })
-                                    .subscribe((dataModel: any) => {
-                                        this.orderForm.push(
-                                            this.fb.group({
-                                                id_model: dataModel.id_model,
-                                                kod_model: dataModel.kod_model,
-                                                kolor_model: dataModel.kolor_model,
-                                                name_color_1: dataModel.name_color_1 || null,
-                                                id_color_part_1: dataModel.id_color_part_1,
-                                                id_color_1: dataModel.id_color_1,
-                                                id_color_2: dataModel.id_color_2,
-                                                id_color_3: dataModel.id_color_3,
-                                                id_color_4: dataModel.id_color_4,
-                                                name_color_2: dataModel.name_color_2 || null,
-                                                id_color_part_2: dataModel.id_color_part_2,
-                                                name_color_3: dataModel.name_color_3 || null,
-                                                id_color_part_3: dataModel.id_color_part_3,
-                                                name_color_4: dataModel.name_color_4 || null,
-                                                id_color_part_4: dataModel.id_color_part_4,
-                                                price_model: data.price_model_order[index],
-                                                comment_model: dataModel.comment_model,
-                                                quantity_pars_model: [data.quantity_pars_model[index], Validators.required],
-                                                sum_pars: data.quantity_pars_model[index] * data.price_model_order[index],
-                                                isNew: false,
-                                                isChange: false,
-                                            })
-                                        );
-                                        this.viewChanges();
-                                    });
+                            this.setRecipientData(dataRecipient);
+                            this.getModels(data);
                                 });
-                                });
+                        } else {
+                            this.getModels(data);
                         }
                     });
-                  
+
                     this.priceAll.patchValue({
                         sum_payment: data.sum_payment,
                     });
                     this.isNew = false;
                 } else {
-                    console.log(1);
-                    
                     this.init();
                     this.viewChanges();
                     this.isNew = true;
@@ -763,12 +729,51 @@ export class CreateOrderComponent implements OnInit {
             });
     }
 
+    getModels(data) {
+        data.id_model.forEach((model, index) => {
+            if (index === 0) {
+                this.orderForm.clear();
+            }
+            console.log(model);
+
+            this.service.getInfoForOrder({ open_id_model: model })
+            .subscribe((dataModel: any) => {
+                this.orderForm.push(
+                    this.fb.group({
+                        id_model: dataModel.id_model,
+                        kod_model: dataModel.kod_model,
+                        kolor_model: dataModel.kolor_model,
+                        name_color_1: dataModel.name_color_1 || null,
+                        id_color_part_1: dataModel.id_color_part_1,
+                        id_color_1: dataModel.id_color_1,
+                        id_color_2: dataModel.id_color_2,
+                        id_color_3: dataModel.id_color_3,
+                        id_color_4: dataModel.id_color_4,
+                        name_color_2: dataModel.name_color_2 || null,
+                        id_color_part_2: dataModel.id_color_part_2,
+                        name_color_3: dataModel.name_color_3 || null,
+                        id_color_part_3: dataModel.id_color_part_3,
+                        name_color_4: dataModel.name_color_4 || null,
+                        id_color_part_4: dataModel.id_color_part_4,
+                        price_model: data.price_model_order[index],
+                        comment_model: dataModel.comment_model,
+                        quantity_pars_model: [data.quantity_pars_model[index], Validators.required],
+                        sum_pars: data.quantity_pars_model[index] * data.price_model_order[index],
+                        isNew: false,
+                        isChange: false,
+                    })
+                );
+                this.viewChanges();
+            });
+        });
+    }
+
     copyScore() {
         const copyText = [`**Замовлення № ${this.idOrder}**\n\n`];
         const sumAll = +this.sumAll(true).split('/')[0].trim();
-        
+
         this.orderForm.value.forEach((order, i) => {
-            const type = modelsData[order.kod_model.substring(0, 3)] || modelsData[order.kod_model.substring(0, 2)] || '';       
+            const type = modelsData[order.kod_model.substring(0, 3)] || modelsData[order.kod_model.substring(0, 2)] || '';
             copyText.push(
                     `${i + 1}. ${type}, колір ${order.kolor_model}, код ${
                         order.kod_model
@@ -793,12 +798,12 @@ export class CreateOrderComponent implements OnInit {
         );
         navigator.clipboard.writeText(copyText.join(''));
         this.isShowSpinner = false;
-            this.alert = {
+        this.alert = {
                 isShow: true,
                 type: 'success',
                 message: 'Дані скопіювано'
             };
-            setTimeout(() => {
+        setTimeout(() => {
                 this.alertChange(false);
             }, 3000);
     }
@@ -809,12 +814,12 @@ export class CreateOrderComponent implements OnInit {
             fulfilled_order: !this.fulfilledOrder
         }).subscribe(() => {
             this.fulfilledOrder = !this.fulfilledOrder;
-        })
+        });
     }
 
 
     alertChange(e) {
-        this.alert.isShow = e;    
+        this.alert.isShow = e;
     }
 }
 

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
 
@@ -7,7 +7,7 @@ import { Location } from '@angular/common';
     templateUrl: './navbar.component.html',
     styleUrls: ['./navbar.component.sass'],
 })
-export class NavbarComponent implements OnInit {
+export class NavbarComponent {
     [x: string]: any;
 
     constructor(private _router: Router, public _location: Location) {
@@ -15,5 +15,4 @@ export class NavbarComponent implements OnInit {
     }
 
     navbarCollapsed = true;
-    ngOnInit(): void {}
 }

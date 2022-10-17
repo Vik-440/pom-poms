@@ -35,7 +35,7 @@ export class FinancesComponent implements OnInit {
         type: '',
         message: '',
         isShow: false
-    }
+    };
     ngOnInit(): void {
 
         this.statisticsPeriods = [
@@ -84,7 +84,7 @@ export class FinancesComponent implements OnInit {
 
         this.isShowSpinner = true;
         forkJoin([
-            this.service.getMethods(), 
+            this.service.getMethods(),
             this.service.getPayments(),
             this.service.getOutlays()
         ]).subscribe((data: any[]) => {
@@ -96,7 +96,7 @@ export class FinancesComponent implements OnInit {
             this.isShowSpinner = false;
         }, () => {
             this.isShowSpinner = false;
-        })
+        });
 
     }
 
@@ -104,9 +104,9 @@ export class FinancesComponent implements OnInit {
         const newObject = {
             ...object,
         };
-        for (var key in newObject) {
+        for (let key in newObject) {
             if (newObject.hasOwnProperty(key)) {
-                var value = newObject[key];
+                let value = newObject[key];
                 if (value === null || value === undefined || value === '') {
                     delete newObject[key];
                 }
@@ -189,7 +189,7 @@ export class FinancesComponent implements OnInit {
             this.alertChange(false);
         }, 3000);
     }
-    
+
     sendFiltersPayments() {
         let params;
         if (this.paymentFrom.value.id_order) {
@@ -293,7 +293,7 @@ export class FinancesComponent implements OnInit {
                         isShow: true,
                         type: 'success',
                         message: 'Збережено'
-                    }
+                    };
                     setTimeout(() => {
                         this.alertChange(false);
                     }, 3000);
@@ -319,7 +319,7 @@ export class FinancesComponent implements OnInit {
                     isShow: true,
                     type: 'success',
                     message: 'Збережено'
-                }
+                };
                 setTimeout(() => {
                     this.alertChange(false);
                 }, 3000);
@@ -368,7 +368,7 @@ export class FinancesComponent implements OnInit {
                 isShow: true,
                 type: 'success',
                 message: 'Збережено'
-            }
+            };
             setTimeout(() => {
                 this.alertChange(false);
             }, 3000);
@@ -405,7 +405,7 @@ export class FinancesComponent implements OnInit {
                 isShow: true,
                 type: 'success',
                 message: 'Збережено'
-            }
+            };
             setTimeout(() => {
                 this.alertChange(false);
             }, 3000);
@@ -433,6 +433,6 @@ export class FinancesComponent implements OnInit {
      }
 
      alertChange(e) {
-        this.alert.isShow = e;    
+        this.alert.isShow = e;
     }
 }

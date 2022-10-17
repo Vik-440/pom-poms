@@ -1,4 +1,4 @@
-import { Component, Directive, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { NgbCalendar, NgbDate, NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
 import locale from 'date-fns/locale/en-US';
@@ -33,35 +33,6 @@ interface OrderInterface {
     comment_order: number[] | number;
 }
 
-
-export type SortColumn = keyof OrderInterface | '';
-export type SortDirection = 'asc' | 'desc' | '';
-const rotate: { [key: string]: SortDirection } = { asc: 'desc', desc: '', '': 'asc' };
-
-export interface SortEvent {
-    column: SortColumn;
-    direction: SortDirection;
-}
-
-@Directive({
-    selector: 'th[sortable]',
-    host: {
-        '[class.asc]': 'direction === "asc"',
-        '[class.desc]': 'direction === "desc"',
-        '(click)': 'rotate()',
-    },
-})
-export class SortDirective {
-    @Input() sortable: SortColumn = '';
-    @Input() direction: SortDirection = '';
-    @Output() sort = new EventEmitter<SortEvent>();
-
-    rotate() {
-        this.direction = rotate[this.direction];
-        this.sort.emit({ column: this.sortable, direction: this.direction });
-    }
-}
-
 @Component({
     selector: 'app-table',
     templateUrl: './table.component.html',
@@ -75,7 +46,7 @@ export class TableComponent implements OnInit, OnDestroy {
         type: '',
         message: '',
         isShow: false
-    }
+    };
     isShowSpinner = false;
     ordersRow = [];
     switchConfig = {
@@ -106,7 +77,7 @@ export class TableComponent implements OnInit, OnDestroy {
         format: 'yyyy-MM-dd',
         formatDays: 'EEEEE',
         firstCalendarDay: 1, // 0 - Sunday, 1 - Monday
-        locale: locale,
+        locale,
         position: 'bottom',
         placeholder: '',
         calendarClass: 'datepicker-default',
@@ -119,7 +90,7 @@ export class TableComponent implements OnInit, OnDestroy {
     phoneClients = [];
     dateDownloaded = '';
     speed: number;
-    queue: number = 0;
+    queue = 0;
     fulfilledOrderItems = [
         { id: 1, value: true, name: 'виконані' },
         { id: 2, value: false, name: 'всі' },
@@ -236,7 +207,7 @@ export class TableComponent implements OnInit, OnDestroy {
         return Number(sum).toFixed(sum.toString().endsWith('.00') ? null : 2);
     }
     getFulfilledOrder() {
-        let sum: number = 0;
+        let sum = 0;
         this.ordersRow.map((item) => {
             if (!item.fulfilled_order) {
                 sum += Array.isArray(item.phase_1)
@@ -244,19 +215,19 @@ export class TableComponent implements OnInit, OnDestroy {
                     : item.phase_1;
             }
         });
-        this.queue = sum/2;
-        return sum/2;
+        this.queue = sum / 2;
+        return sum / 2;
     }
 
     getSumPhases(phase){
-        let sum: number = 0;
+        let sum = 0;
         this.ordersRow.map((item) => {
             if (!item.fulfilled_order) {
                 sum += Array.isArray(item[phase])
                     ? item[phase].reduce((partialSum, a) => partialSum + a, 0)
                     : item[phase];
             }
-        })
+        });
         return sum;
     }
     sityColor(city) {
@@ -315,9 +286,9 @@ export class TableComponent implements OnInit, OnDestroy {
         while (days > 0) {
             if (date.isoWeekday() !== 7) {
                 days -= 1;
-            } 
+            }
             date = date.add(1, 'days');
-        };
+        }
         return date.isoWeekday() === 7 ? date.add(1, 'days').format('YYYY-MM-DD') : date.format('YYYY-MM-DD');
       }
 
@@ -336,7 +307,7 @@ export class TableComponent implements OnInit, OnDestroy {
         const tooltip = [
             'Н.П. №' + order.np_number ,
             order.first_name_client + ' ' + order.second_name_client,
-            order.phone_recipient.replace(regexPhone,'$1-' + '$2-' + '$3-' + '$4-' + '$5'),
+            order.phone_recipient.replace(regexPhone, '$1-' + '$2-' + '$3-' + '$4-' + '$5'),
             order.zip_code,
             order.street_house_apartment,
         ];
@@ -360,34 +331,34 @@ export class TableComponent implements OnInit, OnDestroy {
 
 
     changePhases(order, indexPhase, phase, event, item) {
-        if(event && event.type == 'click') {
+        if (event && event.type == 'click') {
             event.target.value = '';
 
         } else {
             this.ordersRow.forEach((order) => {
-                if(order.id_order === item.id_order) {
+                if (order.id_order === item.id_order) {
                     order = {
                         ...order,
                         [phase]: order[order],
-                    }
+                    };
                 }
-            })
-        }     
+            });
+        }
     }
 
     changePhase(item, phase, e, item2) {
-        if(e && e.type == 'click') {
+        if (e && e.type == 'click') {
             e.target.value = '';
 
         } else {
             this.ordersRow.forEach((order) => {
-                if(order.id_order === item.id_order) {
+                if (order.id_order === item.id_order) {
                     order = {
                         ...order,
                         [phase]: order[order],
-                    }
+                    };
                 }
-            })
+            });
         }
     }
 
@@ -395,10 +366,10 @@ export class TableComponent implements OnInit, OnDestroy {
         const params = {
             [phase]: [item[phase] - e.target.value]
         };
-  
-        
+
+
         this.service.sendPhase(item.id_order, params).subscribe((data: any) => {
-            if(data.check_sum_phase === params[phase][0]) {
+            if (data.check_sum_phase === params[phase][0]) {
                 this.alert = {
                     isShow: true,
                     type: 'success',
@@ -408,15 +379,15 @@ export class TableComponent implements OnInit, OnDestroy {
                     this.alertChange(false);
                 }, 3000);
                 this.ordersRow = this.ordersRow.map((order, index) => {
-                    if(order.id_order === item.id_order) {
+                    if (order.id_order === item.id_order) {
                         order = {
                             ...order,
                             [phase]: params[phase][0],
-                        }
-                        item[phase] = params[phase][0]
+                        };
+                        item[phase] = params[phase][0];
                     }
                     return order;
-                })
+                });
             } else {
                 this.alert = {
                     isShow: true,
@@ -435,7 +406,7 @@ export class TableComponent implements OnInit, OnDestroy {
         params[phaseIndex] = item - event.target.value;
 
         this.service.sendPhase(order.id_order, {[phase]: params}).subscribe((data: any) => {
-            if(data.check_sum_phase === params.reduce( (accumulator, currentValue) => accumulator + currentValue)) {
+            if (data.check_sum_phase === params.reduce( (accumulator, currentValue) => accumulator + currentValue)) {
                 this.alert = {
                     isShow: true,
                     type: 'success',
@@ -445,11 +416,11 @@ export class TableComponent implements OnInit, OnDestroy {
                     this.alertChange(false);
                 }, 3000);
                 this.ordersRow = this.ordersRow.map((orderItem, index) => {
-                    if(orderItem.id_order === order.id_order) {   
+                    if (orderItem.id_order === order.id_order) {
                         orderItem = {
                             ...orderItem,
                             [phase]: [...params],
-                        }
+                        };
                     }
                     return orderItem;
                 });
@@ -463,36 +434,36 @@ export class TableComponent implements OnInit, OnDestroy {
             setTimeout(() => {
                 this.alertChange(false);
             }, 3000);
-        })
+        });
     }
 
     click2(e, item, q) {
 
-if(item) {
+if (item) {
     this.ordersRow.forEach((order) => {
-        if(order.id_order === item.id_order) {
+        if (order.id_order === item.id_order) {
             order = {
                 ...order,
                 phase_1: 3,
-            }
-            
+            };
+
         }
-    })
+    });
     // this.ordersRow[0].phase_1 = 3
 }
-        
-        
+
+
     }
 
     clickO(index, phase, order, phaseEl) {
 
         phaseEl.value = order[phase];
 
-const a = _.cloneDeep(order[phase]);
+        const a = _.cloneDeep(order[phase]);
 
-        this.ordersRow[index][phase] = a    
+        this.ordersRow[index][phase] = a;
         this.ordersRow = this.ordersRow;
-    
+
     }
 
     clickOutside(indexPhase, phase, order, phaseEl) {
@@ -500,7 +471,7 @@ const a = _.cloneDeep(order[phase]);
     }
 
     alertChange(e) {
-        this.alert.isShow = e;    
+        this.alert.isShow = e;
     }
 
     changeHeight(j, i) {
