@@ -180,7 +180,7 @@ export class TableComponent implements OnInit, OnDestroy {
 
     countMoney(order) {
         const interest = (100 * order.real_money) / order.sum_payment;
-        if (interest < 25) {
+        if (interest < 10) {
             return 'red';
         } else if (interest >= 100) {
             return 'green';

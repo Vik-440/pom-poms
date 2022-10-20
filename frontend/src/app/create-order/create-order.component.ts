@@ -560,7 +560,8 @@ export class CreateOrderComponent implements OnInit {
             this.recipientForm.patchValue({
                 id_client: data.id_recipient,
             });
-            this.isSaveClient = false;
+            this.isSaveClient = false;  
+            this.isShowSpinner = false;
             this.isSaveRecipient = true;
         }, () => {
             this.isShowSpinner = false;
