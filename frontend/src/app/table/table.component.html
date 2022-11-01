@@ -102,7 +102,7 @@
                 </div>
               </td>
               <td class="pl0">
-                <div class="bb_solid phases" [ngStyle]="changeHeight(j, i)" *ngFor="let item of order.phase_1; let j = index">
+                <div class="bb_solid phases" [ngStyle]="changeHeight(j, i)" *ngFor="let item of order.phase_1; let j = index" [class.green]="item === 0">
                   <input (clickOutside)="clickOutside(j, 'phase_1', order, 'phase_1'+ i + j)" type="number" 
                   [value]="item" 
                   [id]="'phase_1'+ i + j"
@@ -113,7 +113,7 @@
                 </div>
               </td>
               <td class="pl0">
-                <div class="bb_solid phases" [ngStyle]="changeHeight(j, i)" *ngFor="let item of order.phase_2; let j = index">
+                <div class="bb_solid phases" [ngStyle]="changeHeight(j, i)" *ngFor="let item of order.phase_2; let j = index" [class.green]="item === 0">
                   <input (clickOutside)="clickOutside(j, 'phase_2', order, 'phase_2'+ i + j)" type="number" 
                   [value]="item" 
                   [id]="'phase_2'+ i + j"
@@ -124,7 +124,7 @@
                 </div>
               </td>
               <td class="pl0">
-                <div class="bb_solid phases" [ngStyle]="changeHeight(j, i)" *ngFor="let item of order.phase_3; let j = index">
+                <div class="bb_solid phases" [ngStyle]="changeHeight(j, i)" *ngFor="let item of order.phase_3; let j = index" [class.green]="item === 0">
                   <input (clickOutside)="clickOutside(j, 'phase_3', order, 'phase_3'+ i + j)" type="number" 
                   [value]="item" 
                   [id]="'phase_3'+ i + j"
@@ -151,7 +151,8 @@
               <td >
                 <input (clickOutside)="clickO(i, 'phase_1', order, phase1)" type="number" 
                       [(value)]="order.phase_1" 
-                      class="phase-input" 
+                      class="phase-input"
+                      [class.green]="order.phase_1 === 0" 
                       #phase1
                       (click)="changePhase(order, 'phase_1', $event)" 
                       (change)="changePhase(order, 'phase_1', $event)" 
@@ -162,6 +163,7 @@
                       (clickOutside)="clickO(i, 'phase_2', order, phase2)"
                       [(value)]="order.phase_2" 
                       class="phase-input" 
+                      [class.green]="order.phase_2 === 0"
                       #phase2
                       (click)="changePhase(order, 'phase_2', $event)"
                       (change)="changePhase(order, 'phase_2', $event)" 
@@ -172,6 +174,7 @@
                       (clickOutside)="clickO(i, 'phase_3', order, phase3)"
                       [(value)]="order.phase_3" 
                       class="phase-input" 
+                      [class.green]="order.phase_3 === 0"
                       #phase3
                       (click)="changePhase(order, 'phase_3', $event)"
                       (change)="changePhase(order, 'phase_3', $event)" 
