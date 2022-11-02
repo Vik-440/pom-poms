@@ -142,9 +142,9 @@ def return_data_from_main_page(asked):
             m_fulfilled_order = (row.fulfilled_order)
             m_sum_payment = (row.sum_payment - row.discont_order)
             m_quantity_pars_model = (row.quantity_pars_model)
-            m_phase_1_model = row.phase_1_model
-            m_phase_2_model = row.phase_2_model
-            m_phase_3_model = row.phase_3_model
+            # m_phase_1_model = row.phase_1_model
+            # m_phase_2_model = row.phase_2_model
+            # m_phase_3_model = row.phase_3_model
             m_phase_1 = row.phase_1
             m_phase_2 = row.phase_2
             m_phase_3 = row.phase_3
@@ -164,9 +164,9 @@ def return_data_from_main_page(asked):
 
             if len(list(m_quantity_pars_model)) == 1:
                 m_quantity_pars_model = m_quantity_pars_model[0]
-                m_phase_1_model = m_phase_1_model[0]
-                m_phase_2_model = m_phase_2_model[0]
-                m_phase_3_model = m_phase_3_model[0]
+                # m_phase_1_model = m_phase_1_model[0]
+                # m_phase_2_model = m_phase_2_model[0]
+                # m_phase_3_model = m_phase_3_model[0]
                 m_phase_1 = m_phase_1[0]
                 m_phase_2 = m_phase_2[0]
                 m_phase_3 = m_phase_3[0]

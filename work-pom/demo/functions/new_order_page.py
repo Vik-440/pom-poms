@@ -262,11 +262,11 @@ def return_data_from_final_order(data_from_new_page):
         check_order = session.query(directory_of_order).filter_by(
             id_order=id_order).scalar()
 
-        s2s = len((data_from_new_page['id_model']))
-        phase_pcs = []
-        while s2s > 0:
-            s2s -= 1
-            phase_pcs.append(False)
+        # s2s = len((data_from_new_page['id_model']))
+        # phase_pcs = []
+        # while s2s > 0:
+        #     s2s -= 1
+        #     phase_pcs.append(False)
         phase_int, phase_int3 = [], []
         for y in data_from_new_page['quantity_pars_model']:
             phase_int.append(y * 2)
@@ -289,12 +289,14 @@ def return_data_from_final_order(data_from_new_page):
                     "sum_payment": data_from_new_page['sum_payment'],
                     "fulfilled_order": data_from_new_page['fulfilled_order'],
                     "comment_order": data_from_new_page['comment_order'],
-                    "phase_1_model": phase_pcs,
-                    "phase_2_model": phase_pcs,
-                    "phase_3_model": phase_pcs,
-                    # "phase_1": phase_int,
-                    # "phase_2": phase_int,
-                    # "phase_3": phase_int3,
+                    # "phase_1_model": phase_pcs,
+                    # "phase_2_model": phase_pcs,
+                    # "phase_3_model": phase_pcs,
+#
+                    "phase_1": phase_int,
+                    "phase_2": phase_int,
+                    "phase_3": phase_int3,
+#
                     "id_model": data_from_new_page['id_model'],
                     "quantity_pars_model": data_from_new_page[
                         'quantity_pars_model'],
@@ -322,9 +324,9 @@ def return_data_from_final_order(data_from_new_page):
             sum_payment=data_from_new_page['sum_payment'],
             fulfilled_order=data_from_new_page['fulfilled_order'],
             comment_order=data_from_new_page['comment_order'],
-            phase_1_model=phase_pcs,
-            phase_2_model=phase_pcs,
-            phase_3_model=phase_pcs,
+            # phase_1_model=phase_pcs,
+            # phase_2_model=phase_pcs,
+            # phase_3_model=phase_pcs,
             phase_1=phase_int,
             phase_2=phase_int,
             phase_3=phase_int3,
