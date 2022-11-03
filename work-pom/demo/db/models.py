@@ -28,9 +28,9 @@ class directory_of_order(Base):
     # ("data", postgresql.ARRAY(Integer, dimensions=2))
     quantity_pars_model = Column(
         'quantity_pars_model', postgresql.ARRAY(Integer))
-    phase_1_model = Column('phase_1_model', postgresql.ARRAY(Boolean))
-    phase_2_model = Column('phase_2_model', postgresql.ARRAY(Boolean))
-    phase_3_model = Column('phase_3_model', postgresql.ARRAY(Boolean))
+    # phase_1_model = Column('phase_1_model', postgresql.ARRAY(Boolean))
+    # phase_2_model = Column('phase_2_model', postgresql.ARRAY(Boolean))
+    # phase_3_model = Column('phase_3_model', postgresql.ARRAY(Boolean))
     price_model_order = Column('price_model_order', postgresql.ARRAY(Integer))
     phase_1 = Column('phase_1', postgresql.ARRAY(Integer))
     phase_2 = Column('phase_2', postgresql.ARRAY(Integer))
