@@ -284,7 +284,7 @@ def return_data_from_final_order(data_from_new_page):
                     "id_client": data_from_new_page['id_client'],
                     "id_recipient": data_from_new_page['id_recipient'],
                     "data_plane_order": data_from_new_page['data_plane_order'],
-                    "data_send_order": data_from_new_page['data_send_order'],
+                    # "data_send_order": data_from_new_page['data_send_order'],
                     "discont_order": data_from_new_page['discont_order'],
                     "sum_payment": data_from_new_page['sum_payment'],
                     "fulfilled_order": data_from_new_page['fulfilled_order'],
@@ -292,11 +292,11 @@ def return_data_from_final_order(data_from_new_page):
                     # "phase_1_model": phase_pcs,
                     # "phase_2_model": phase_pcs,
                     # "phase_3_model": phase_pcs,
-#
+
                     "phase_1": phase_int,
                     "phase_2": phase_int,
                     "phase_3": phase_int3,
-#
+
                     "id_model": data_from_new_page['id_model'],
                     "quantity_pars_model": data_from_new_page[
                         'quantity_pars_model'],
@@ -319,7 +319,7 @@ def return_data_from_final_order(data_from_new_page):
             id_client=data_from_new_page['id_client'],
             id_recipient=data_from_new_page['id_recipient'],
             data_plane_order=data_from_new_page['data_plane_order'],
-            data_send_order=data_from_new_page['data_send_order'],
+            # data_send_order=data_from_new_page['data_send_order'],
             discont_order=data_from_new_page['discont_order'],
             sum_payment=data_from_new_page['sum_payment'],
             fulfilled_order=data_from_new_page['fulfilled_order'],
@@ -353,7 +353,7 @@ def return_data_from_edit_order(data_from_new_page):
             id_client = row.id_client
             id_recipient = row.id_recipient
             data_plane_order = str(row.data_plane_order)
-            data_send_order = str(row.data_send_order)
+            # data_send_order = str(row.data_plane_order)
             discont_order = row.discont_order
             sum_payment = row.sum_payment
             fulfilled_order = row.fulfilled_order
@@ -379,7 +379,7 @@ def return_data_from_edit_order(data_from_new_page):
             one_block = {"id_order": id_order, "data_order": data_order,
                          "id_client": id_client, "id_recipient": id_recipient,
                          "data_plane_order": data_plane_order,
-                         "data_send_order": data_send_order,
+                         "data_send_order": data_plane_order,   # delete
                          "discont_order": discont_order,
                          "sum_payment": sum_payment,
                          "fulfilled_order": fulfilled_order,

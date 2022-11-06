@@ -18,7 +18,7 @@ class directory_of_order(Base):
     data_plane_order = Column('data_plane_order', Date)
     id_client = Column('id_client', Integer)
     id_recipient = Column('id_recipient', Integer)
-    data_send_order = Column('data_send_order', Date)
+    # data_send_order = Column('data_send_order', Date)
     fulfilled_order = Column('fulfilled_order', Boolean)
     sum_payment = Column('sum_payment', Integer)
     discont_order = Column('discont_order', Integer)

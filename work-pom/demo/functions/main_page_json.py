@@ -57,11 +57,14 @@ def return_data_from_main_page(asked):
                 for www in ch_ph:
                     for k in www.phase_1:
                         res_ph.append(0)
+                ds = datetime.today().strftime('%Y-%m-%d')
                 session.query(directory_of_order).filter_by(
                     id_order=id_order).update(
                         {'fulfilled_order': fulfilled_order,
                          'phase_1': res_ph, 'phase_2': res_ph,
-                         'phase_3': res_ph})
+                         'phase_3': res_ph,
+                         'data_plane_order': ds})
+
             session.commit()
             one_block = {"id_order": "ok"}
             return json.dumps(one_block)
