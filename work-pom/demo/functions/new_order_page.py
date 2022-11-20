@@ -361,6 +361,9 @@ def return_data_from_edit_order(data_from_new_page):
             id_model = (row.id_model)
             quantity_pars_model = (row.quantity_pars_model)
             price_model_order = (row.price_model_order)
+            phase_1 = row.phase_1
+            phase_2 = row.phase_2
+            phase_3 = row.phase_3
             # if len(id_model) == 1:
             #     id_model = id_model[0]
             #     quantity_pars_model = quantity_pars_model[0]
@@ -386,5 +389,7 @@ def return_data_from_edit_order(data_from_new_page):
                          "comment_order": comment_order, "id_model": id_model,
                          "quantity_pars_model": quantity_pars_model,
                          "price_model_order": price_model_order,
-                         "real_money_order": real_money_order}
+                         "real_money_order": real_money_order,
+                         "phase_1": phase_1, "phase_2": phase_2,
+                         "phase_3": phase_3}
     return one_block
