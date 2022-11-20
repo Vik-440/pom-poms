@@ -67,16 +67,17 @@ def get_main(get_query):
                 if len(id_client_list) != 0:
                     list_order = session.query(db_o).filter(
                         db_o.data_order >= ds,
-                        db_o.data_order <= df,
-                        db_o.id_client.in_(id_client_list)).order_by(
-                        'id_order').all()
-                elif len(id_model_list) != 0:
-                    list_order = session.query(db_o).filter(
-                        db_o.data_order >= ds,
                         db_o.data_order <= df, sa.or_(
                             db_o.id_client.in_(id_client_list),
                             db_o.id_recipient.in_(id_client_list))).order_by(
                         'id_order').all()
+                # elif len(id_model_list) != 0:
+                #     list_order = session.query(db_o).filter(
+                #         db_o.data_order >= ds,
+                #         db_o.data_order <= df, sa.or_(
+                #             db_o.id_client.in_(id_client_list),
+                #             db_o.id_recipient.in_(id_client_list))).order_by(
+                #         'id_order').all()
                 else:
                     list_order = session.query(db_o).filter(
                         db_o.data_order >= ds,
@@ -91,13 +92,13 @@ def get_main(get_query):
                             db_o.id_recipient.in_(id_client_list))).filter_by(
                         fulfilled_order=fulfilled).order_by(
                         'id_order').all()
-                elif len(id_model_list) != 0:
-                    list_order = session.query(db_o).filter(
-                        db_o.data_order >= ds,
-                        db_o.data_order <= df,
-                        db_o.id_model.in_(id_model_list)).filter_by(
-                        fulfilled_order=fulfilled).order_by(
-                        'id_order').all()
+                # elif len(id_model_list) != 0:
+                #     list_order = session.query(db_o).filter(
+                #         db_o.data_order >= ds,
+                #         db_o.data_order <= df,
+                #         db_o.id_model.in_(id_model_list)).filter_by(
+                #         fulfilled_order=fulfilled).order_by(
+                #         'id_order').all()
                 else:
                     list_order = session.query(db_o).filter(
                         db_o.data_order >= ds,
