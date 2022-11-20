@@ -20,6 +20,7 @@ from functions.finance_json import return_data_from_payment_stat
 from functions.finance_json import return_data_from_payment_balans
 from functions.finance_json import ret_dat_fin_pay_get
 from functions.finance_json import ret_dat_fin_out_get
+from functions.get_main_json import get_main
 from log.logger import logger
 
 
@@ -42,6 +43,20 @@ def return_data_from_flask():
 def tmp_test_tmp():
     x = {"ping": "pong", "ping_1": "pong_1"}
     return (x)
+
+
+@app.route('/main', methods=['GET'])
+def main():
+    try:
+        if request.method == 'GET':
+            data = request.args
+            logger.info('Get main is work!')
+            return (get_main(data))
+        else:
+            return ({"request_metod": "error"}), 500
+    except Exception as e:
+        logger.error(f'Error in function main: {e}')
+        return f'Error in function main: {e}', 500
 
 
 @app.route('/main_page', methods=['GET', 'POST'])
