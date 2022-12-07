@@ -364,10 +364,6 @@ def return_data_from_edit_order(data_from_new_page):
             phase_1 = row.phase_1
             phase_2 = row.phase_2
             phase_3 = row.phase_3
-            # if len(id_model) == 1:
-            #     id_model = id_model[0]
-            #     quantity_pars_model = quantity_pars_model[0]
-            #     price_model_order = price_model_order[0]
 
             real_money_order_1 = session.query(
                 func.sum(directory_of_payment.payment).label(

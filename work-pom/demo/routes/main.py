@@ -1,4 +1,4 @@
-from flask import jsonify, request
+from flask import request  # jsonify
 from app import app
 from functions.main_page_json import return_data_from_main_page
 from functions.main_page_json import change_main_phase
@@ -21,6 +21,7 @@ from functions.finance_json import return_data_from_payment_balans
 from functions.finance_json import ret_dat_fin_pay_get
 from functions.finance_json import ret_dat_fin_out_get
 from functions.get_main_json import get_main
+from functions.get_main_json import change_main_phase_get
 from log.logger import logger
 
 
@@ -32,12 +33,8 @@ def get_log():
 
 @app.route('/')
 def return_data_from_flask():
-    info = {
-        "id_order": 541,
-        "data_order": "2022-02-23",
-        "kolor_model": "малиновий",
-        "kod_model": "190-B05"}
-    return jsonify(info), 200  # returning a JSON response
+    info = {"id_order": 0}
+    return (info), 200  # returning a JSON response
 
 
 def tmp_test_tmp():
@@ -254,6 +251,19 @@ def main_phase(id):
     try:
         if request.method == 'PUT':
             return (change_main_phase(id, request.data)), 200
+        else:
+            return ({"error_message": "mistake method"}), 404
+    except Exception as e:
+        logger.error(f'Error in function main_phase: {e}')
+        return f'Error in function main_phase: {e}', 500
+
+
+@app.route('/main/phase/<int:id>', methods=['PUT'])
+def main_phase_get(id):
+    request.data = request.get_json()
+    try:
+        if request.method == 'PUT':
+            return (change_main_phase_get(id, request.data)), 200
         else:
             return ({"error_message": "mistake method"}), 404
     except Exception as e:

@@ -1,7 +1,8 @@
 # from array import ArrayType, array
 from sqlalchemy import Date, ForeignKey, create_engine, Column
 from sqlalchemy import Integer, String, Boolean
-from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import declarative_base
+# from sqlalchemy.ext.declarative import declarative_base
 # from sqlalchemy.orm import relationship
 from dotenv import load_dotenv
 import os
@@ -9,6 +10,24 @@ from sqlalchemy.dialects import postgresql
 from log.logger import logger
 
 Base = declarative_base()
+# future = True
+
+load_dotenv()
+setup_db = "PROD"
+# setup_db = "DEV"
+try:
+    if setup_db == "PROD":
+        url = os.getenv("PSQL_URL")
+    elif setup_db == "DEV":
+        url = os.getenv("PSQL_URL_TEST")
+    else:
+        raise (Exception('Please insert correct setup(dev or prod)!'))
+except Exception as e:
+    logger.error(f'Error in function return_engine: {e}')
+
+
+engine = create_engine(url, future=True)
+Base.metadata.create_all(engine)
 
 
 class directory_of_order(Base):
@@ -126,21 +145,3 @@ class directory_of_outlay(Base):
 #     __tablename__ = 'directory_of_outlay_class'
 #     id_outlay_class = Column('id_outlay_class', Integer, primary_key=True)
 #     outlay_class = Column('outlay_class', String)
-
-
-load_dotenv()
-setup_db = "PROD"
-# setup_db = "DEV"
-try:
-    if setup_db == "PROD":
-        url = os.getenv("PSQL_URL")
-    elif setup_db == "DEV":
-        url = os.getenv("PSQL_URL_TEST")
-    else:
-        raise (Exception('Please insert correct setup(dev or prod)!'))
-except Exception as e:
-    logger.error(f'Error in function return_engine: {e}')
-
-
-engine = create_engine(url)
-Base.metadata.create_all(engine)

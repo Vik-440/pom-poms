@@ -3,85 +3,9 @@ from sqlalchemy import func
 from datetime import datetime, timedelta
 from sqlalchemy.orm import Session
 from db.models import directory_of_payment
-from db.models import directory_of_outlay  #, directory_of_outlay_class
+from db.models import directory_of_outlay
 from db.models import engine
 import calendar
-
-
-# def return_data_from_finance(asked):
-#     with Session(engine) as session:
-#         data_outlay_class = []
-#         id_payment = []
-#         id_order = []
-#         payment = []
-#         metod_payment = []
-#         data_payment = []
-#         full_block = []
-#         id_outlay = []
-#         data_outlay = []
-#         id_outlay_class = []
-#         money_outlay = []
-#         comment_outlay = []
-#         data_outlay_class_1 = session.query(directory_of_outlay_class).all()
-#         for row in data_outlay_class_1:
-#             data_outlay_class.append(row.outlay_class)
-#         data_last_payment_1 = session.query(directory_of_payment).order_by(
-#             directory_of_payment.id_payment.desc()).limit(3)
-#         for row in data_last_payment_1:
-#             id_payment.append(row.id_payment)
-#             id_order.append(row.id_order)
-#             payment.append(row.payment)
-#             metod_payment.append(row.metod_payment)
-#             data_payment.append(str(row.data_payment))
-#         data_last_outlay_1 = session.query(directory_of_outlay).order_by(
-#             directory_of_outlay.id_outlay.desc()).limit(3)
-#         for row in data_last_outlay_1:
-#             id_outlay.append(row.id_outlay)
-#             data_outlay.append(str(row.data_outlay))
-#             id_outlay_class.append(row.id_outlay_class)
-#             money_outlay.append(row.money_outlay)
-#             comment_outlay.append(row.comment_outlay)
-
-#         one_block = {"metod_payment": ["iban", "cash"],
-#                      "outlay_class": data_outlay_class}
-#         full_block.append(one_block)
-
-#         q1 = block_json(id_payment, id_order, payment, metod_payment,
-#                         data_payment)
-#         q11 = {"id_payment": q1[0], "id_order": q1[1], "payment": q1[2],
-#                "metod_payment": q1[3], "data_payment": q1[4]}
-#         q1 = block_json(id_payment, id_order, payment, metod_payment,
-#                         data_payment)
-#         q12 = {"id_payment": q1[0], "id_order": q1[1], "payment": q1[2],
-#                "metod_payment": q1[3], "data_payment": q1[4]}
-#         q1 = block_json(id_payment, id_order, payment, metod_payment,
-#                         data_payment)
-#         q13 = {"id_payment": q1[0], "id_order": q1[1], "payment": q1[2],
-#                "metod_payment": q1[3], "data_payment": q1[4]}
-#         full_block.append(q13)
-#         full_block.append(q12)
-#         full_block.append(q11)
-
-#         q4 = block_json(id_outlay, data_outlay, id_outlay_class, money_outlay,
-#                         comment_outlay)
-#         one_block1 = {"id_outlay": q4[0], "data_outlay": q4[1],
-#                       "id_outlay_class": q4[2], "money_outlay": q4[3],
-#                       "comment_outlay": q4[4]}
-#         q4 = block_json(id_outlay, data_outlay, id_outlay_class, money_outlay,
-#                         comment_outlay)
-#         one_block2 = {"id_outlay": q4[0], "data_outlay": q4[1],
-#                       "id_outlay_class": q4[2], "money_outlay": q4[3],
-#                       "comment_outlay": q4[4]}
-#         q4 = block_json(id_outlay, data_outlay, id_outlay_class, money_outlay,
-#                         comment_outlay)
-#         one_block3 = {"id_outlay": q4[0], "data_outlay": q4[1],
-#                       "id_outlay_class": q4[2], "money_outlay": q4[3],
-#                       "comment_outlay": q4[4]}
-
-#         full_block.append(one_block3)
-#         full_block.append(one_block2)
-#         full_block.append(one_block1)
-#     return json.dumps(full_block)
 
 
 def return_data_from_payment(sender):

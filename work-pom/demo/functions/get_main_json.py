@@ -1,8 +1,9 @@
 import json
-from sqlalchemy import func
 import sqlalchemy as sa
 from datetime import datetime
+from sqlalchemy import func
 from sqlalchemy.orm import Session
+from sqlalchemy.future import select
 from db.models import directory_of_order as db_o
 from db.models import directory_of_client as db_c
 from db.models import directory_of_payment as db_p
@@ -24,9 +25,15 @@ def get_main(get_query):
             id_client_list, id_model_list = [], []
             if 'phone_client' in get_query:
                 phone_client = get_query['phone_client']
-                pre_list = session.query(db_c).filter_by(
-                    phone_client=phone_client).order_by(
-                    'id_client').all()
+# # #
+                stmt = select(db_c).where(db_c.phone_client == phone_client)\
+                    .order_by(db_c.id_client)
+                pre_list = session.execute(stmt).scalars()
+# # #
+                # pre_list = session.query(db_c).filter_by(
+                #     phone_client=phone_client).order_by(
+                #     'id_client').all()
+# # #
                 id_client_list = list_search(pre_list)
             elif 'second_name_client' in get_query:
                 second_name_client = get_query['second_name_client']
@@ -108,6 +115,7 @@ def get_main(get_query):
 #
             count_order = []
             for row in list_order:
+                # print(row.id_order)
                 count_order.append(row.id_order)
             if len(count_order) == 0:
                 id_order_max = session.query(func.max(
@@ -129,7 +137,7 @@ def get_main(get_query):
                 m_phase_2 = row.phase_2
                 m_phase_3 = row.phase_3
                 m_id_model = row.id_model
-
+#
                 tmp_len_1 = len(m_id_model)
                 m_kolor_model, m_kod_model, m_comment_model, = [], [], []
                 while tmp_len_1 > 0:
@@ -212,3 +220,36 @@ def list_search(list_sql_in):
     for row in list_sql_in:
         list_sql_out.append(row.id_client)
     return list_sql_out
+
+
+def change_main_phase_get(id_order, inform):
+    with Session(engine) as session:
+        check_sum = 0
+        if 'phase_1' in inform:
+            phase_int = inform['phase_1']
+            for row in phase_int:
+                check_sum = check_sum + row
+            session.query(db_o).filter(
+                    db_o.id_order == id_order).update({
+                        "phase_1": phase_int})
+        elif 'phase_2' in inform:
+            phase_int = inform['phase_2']
+            for row in phase_int:
+                check_sum = check_sum + row
+            session.query(db_o).filter(
+                    db_o.id_order == id_order).update({
+                        "phase_2": phase_int})
+        elif 'phase_3' in inform:
+            phase_int = inform['phase_3']
+            for row in phase_int:
+                check_sum = check_sum + row
+            session.query(db_o).filter(
+                    db_o.id_order == id_order).update({
+                        "phase_3": phase_int})
+        else:
+            one_block = {"phase_chenged": "error"}
+            return one_block
+
+        session.commit()
+        one_block = {"check_sum_phase": check_sum}
+    return one_block
