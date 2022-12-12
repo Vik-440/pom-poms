@@ -12,31 +12,43 @@
 # import json
 # from flask import jsonify, request
 
-import calendar
-from datetime import datetime, timedelta
-ds = datetime.today()
-ds1 = ds.strftime('%Y-%m-%d')
-dsy = int(ds.strftime('%Y'))
-dsm = int(ds.strftime('%m'))
-print(dsy, dsm)
-data_start_sql = datetime.today().replace(day=1).strftime('%Y-%m-%d')
-data_end_sql = datetime.today().replace(day=(
-    calendar.monthrange(dsy, dsm)[1])).strftime('%Y-%m-%d')
-print(data_start_sql, data_end_sql)
+list_test = [1, 2, 3, 4, 5, 6]
 
-data_start_sql = (((datetime.today()).replace(day=1)-timedelta(
-    days=1))).replace(day=1).strftime('%Y-%m-%d')
-data_end_sql = ((datetime.today()).replace(
-        day=1)-timedelta(days=1)).strftime('%Y-%m-%d')
-print(data_start_sql, data_end_sql)
-# this year
-data_start_sql = ds.replace(month=1, day=1).strftime('%Y-%m-%d')
-data_end_sql = ds.replace(month=12, day=31).strftime('%Y-%m-%d')
-print(data_start_sql, data_end_sql)
+if 1 in list_test:
+    print('1 is OK')
+elif 2 in list_test:
+    print('2 is OK')
+elif 3 in list_test:
+    print('3 is OK')
+else:
+    print('4 is OK')
 
-days_year = (ds-ds.replace(month=1, day=1))
-forecast = round((5555/days_year.days)*365)
-print(days_year, forecast)
+
+# import calendar
+# from datetime import datetime, timedelta
+# ds = datetime.today()
+# ds1 = ds.strftime('%Y-%m-%d')
+# dsy = int(ds.strftime('%Y'))
+# dsm = int(ds.strftime('%m'))
+# print(dsy, dsm)
+# data_start_sql = datetime.today().replace(day=1).strftime('%Y-%m-%d')
+# data_end_sql = datetime.today().replace(day=(
+#     calendar.monthrange(dsy, dsm)[1])).strftime('%Y-%m-%d')
+# print(data_start_sql, data_end_sql)
+
+# data_start_sql = (((datetime.today()).replace(day=1)-timedelta(
+#     days=1))).replace(day=1).strftime('%Y-%m-%d')
+# data_end_sql = ((datetime.today()).replace(
+#         day=1)-timedelta(days=1)).strftime('%Y-%m-%d')
+# print(data_start_sql, data_end_sql)
+# # this year
+# data_start_sql = ds.replace(month=1, day=1).strftime('%Y-%m-%d')
+# data_end_sql = ds.replace(month=12, day=31).strftime('%Y-%m-%d')
+# print(data_start_sql, data_end_sql)
+
+# days_year = (ds-ds.replace(month=1, day=1))
+# forecast = round((5555/days_year.days)*365)
+# print(days_year, forecast)
 
 # from routes.main import return_data_from_flask
 # from routes.main import tmp_test_tmp

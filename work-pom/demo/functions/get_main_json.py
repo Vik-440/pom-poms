@@ -11,118 +11,180 @@ from db.models import directory_of_model as db_m
 from db.models import engine
 
 
-def get_main(get_query):
+def get_main(got_request):
+    """Main block for download the base table on main WEB page"""
     try:
         with Session(engine) as session:
-            df = datetime.today().strftime('%Y-%m-%d')
-            ds = '2016-01-01'
+            data_finish_search = datetime.today().strftime('%Y-%m-%d')
+            data_start_search = '2016-01-01'
             fulfilled = str('False')
-            if 'data_start' in get_query:
-                ds = get_query['data_start']
-            if 'data_finish' in get_query:
-                df = get_query['data_finish']
+            if 'data_start' in got_request:
+                data_start_search = got_request['data_start']
+            if 'data_finish' in got_request:
+                data_finish_search = got_request['data_finish']
+            if 'fulfilled' in got_request:
+                fulfilled = got_request['fulfilled']
 #
             id_client_list, id_model_list = [], []
-            if 'phone_client' in get_query:
-                phone_client = get_query['phone_client']
-# # #
-                stmt = select(db_c).where(db_c.phone_client == phone_client)\
+            if 'phone_client' in got_request:
+                phone_client = got_request['phone_client']
+                stmt = select(db_c.id_client)\
+                    .where(db_c.phone_client == phone_client)\
                     .order_by(db_c.id_client)
+                id_client_list.append(session.execute(stmt).scalar())
+            elif 'second_name_client' in got_request:
+                second_name_client = got_request['second_name_client']
+                stmt = select(db_c.id_client)\
+                    .where(db_c.second_name_client == second_name_client)\
+                    .order_by(db_c.id_client)
+                id_client_list.append(session.execute(stmt).scalar())
+            elif 'team' in got_request:
+                team = got_request['team']
+                stmt = select(db_c.id_client)\
+                    .where(db_c.team == team).order_by(db_c.id_client)
                 pre_list = session.execute(stmt).scalars()
-# # #
-                # pre_list = session.query(db_c).filter_by(
-                #     phone_client=phone_client).order_by(
-                #     'id_client').all()
-# # #
-                id_client_list = list_search(pre_list)
-            elif 'second_name_client' in get_query:
-                second_name_client = get_query['second_name_client']
-                pre_list = session.query(db_c).filter_by(
-                    second_name_client=second_name_client).order_by(
-                    'id_client').all()
-                id_client_list = list_search(pre_list)
-            elif 'team' in get_query:
-                team = get_query['team']
-                pre_list = session.query(db_c).filter_by(
-                    team=team).order_by(
-                    'id_client').all()
-                id_client_list = list_search(pre_list)
-            elif 'coach' in get_query:
-                coach = get_query['coach']
-                pre_list = session.query(db_c).filter_by(
-                    coach=coach).order_by(
-                    'id_client').all()
-                id_client_list = list_search(pre_list)
-            elif 'sity' in get_query:
-                sity = get_query['sity']
-                pre_list = session.query(db_c).filter_by(
-                    sity=sity).order_by(
-                    'id_client').all()
-                id_client_list = list_search(pre_list)
-            elif 'kod_model' in get_query:
-                id_model_list = []
-                kod_model = get_query['kod_model']
-                pre_list = session.query(db_m).filter_by(
-                    kod_model=kod_model).order_by(
-                    'id_model').all()
                 for row in pre_list:
-                    id_model_list.append(row.id_model)
+                    id_client_list.append(row)
+            elif 'coach' in got_request:
+                coach = got_request['coach']
+                stmt = select(db_c.id_client)\
+                    .where(db_c.coach == coach).order_by(db_c.id_client)
+                pre_list = session.execute(stmt).scalars()
+                for row in pre_list:
+                    id_client_list.append(row)
+            elif 'sity' in got_request:
+                sity = got_request['sity']
+                stmt = select(db_c.id_client)\
+                    .where(db_c.sity == sity).order_by(db_c.id_client)
+                pre_list = session.execute(stmt).scalars()
+                for row in pre_list:
+                    id_client_list.append(row)
 #
-            if 'fulfilled' in get_query:
-                fulfilled = get_query['fulfilled']
+            if 'kod_model' in got_request:
+                kod_model = got_request['kod_model']
+                stmt = select(db_m.id_model)\
+                    .where(db_m.kod_model == kod_model).order_by(db_m.id_model)
+                pre_list = session.execute(stmt).scalars()
+                for row in pre_list:
+                    id_model_list.append(row)
+            elif 'kod_model_like' in got_request:
+                kod_model_like = got_request['kod_model_like']
+                look_for_similar = ('%' + str(kod_model_like) + '%')
+                stmt = select(db_m.id_model)\
+                    .where(db_m.kod_model.like(look_for_similar))\
+                    .order_by(db_m.id_model)
+                pre_list = session.execute(stmt).scalars()
+                for row in pre_list:
+                    id_model_list.append(row)
+            elif 'kolor_like' in got_request:
+                kolor_model_like = got_request['kolor_like']
+                look_for_similar = ('%' + str(kolor_model_like) + '%')
+                stmt = select(db_m.id_model)\
+                    .where(db_m.kolor_model.like(look_for_similar))\
+                    .order_by(db_m.id_model)
+                pre_list = session.execute(stmt).scalars()
+                for row in pre_list:
+                    id_model_list.append(row)
+
+            # print(f'List of clients ({len(id_client_list)} pcs) - {id_client_list}')  # noqa: E501
+            # print(f'List of models ({len(id_model_list)} pcs) - {id_model_list}')  # noqa: E501
+# ###########################################################################
+# ###########################################################################
+            id_order_list = []
+            for id_model_cucle in id_model_list:
+                stmt = select(db_o.id_order)\
+                    .where(db_o.id_model.any(id_model_cucle))
+                pre_list = session.execute(stmt).scalars()
+                for row in pre_list:
+                    id_order_list.append(row)
+            # print(f'List of orders with searching models ({len(id_order_list)} pcs) - {id_order_list}')  # noqa: E501
+# ###########################################################################
+# ###########################################################################
+            select_modul = select(
+                db_o.id_order, db_o.comment_order, db_o.data_order,
+                db_o.data_plane_order, db_o.fulfilled_order, db_o.sum_payment,
+                db_o.discont_order, db_o.quantity_pars_model, db_o.phase_1,
+                db_o.phase_2, db_o.phase_3, db_o.id_model, db_o.id_client,
+                db_o.id_recipient)
             if fulfilled == 'all':
-                if len(id_client_list) != 0:
-                    list_order = session.query(db_o).filter(
-                        db_o.data_order >= ds,
-                        db_o.data_order <= df, sa.or_(
+                if id_client_list and not id_order_list:
+                    stmt = select_modul.where(
+                        db_o.data_order >= data_start_search,
+                        db_o.data_order <= data_finish_search,
+                        sa.or_(
                             db_o.id_client.in_(id_client_list),
-                            db_o.id_recipient.in_(id_client_list))).order_by(
-                        'id_order').all()
-                # elif len(id_model_list) != 0:
-                #     list_order = session.query(db_o).filter(
-                #         db_o.data_order >= ds,
-                #         db_o.data_order <= df, sa.or_(
-                #             db_o.id_client.in_(id_client_list),
-                #             db_o.id_recipient.in_(id_client_list))).order_by(
-                #         'id_order').all()
+                            db_o.id_recipient.in_(id_client_list)))\
+                        .order_by(db_o.id_order)
+                elif id_order_list and not id_client_list:
+                    stmt = select_modul.where(
+                        db_o.data_order >= data_start_search,
+                        db_o.data_order <= data_finish_search,
+                        db_o.id_order.in_(id_order_list))\
+                        .order_by(db_o.id_order)
+                elif id_order_list and id_client_list:
+                    stmt = select_modul.where(
+                        db_o.data_order >= data_start_search,
+                        db_o.data_order <= data_finish_search,
+                        sa.and_(
+                            db_o.id_order.in_(id_order_list),
+                            sa.or_(
+                                db_o.id_client.in_(id_client_list),
+                                db_o.id_recipient.in_(id_client_list))))\
+                        .order_by(db_o.id_order)
                 else:
-                    list_order = session.query(db_o).filter(
-                        db_o.data_order >= ds,
-                        db_o.data_order <= df).order_by(
-                        'id_order').all()
+                    stmt = select_modul.where(
+                        db_o.data_order >= data_start_search,
+                        db_o.data_order <= data_finish_search)\
+                        .order_by(db_o.id_order)
             else:
-                if len(id_client_list) != 0:
-                    list_order = session.query(db_o).filter(
-                        db_o.data_order >= ds,
-                        db_o.data_order <= df, sa.or_(
+                if id_client_list and not id_order_list:
+                    stmt = select_modul.where(
+                        db_o.data_order >= data_start_search,
+                        db_o.data_order <= data_finish_search,
+                        db_o.fulfilled_order == fulfilled,
+                        sa.or_(
                             db_o.id_client.in_(id_client_list),
-                            db_o.id_recipient.in_(id_client_list))).filter_by(
-                        fulfilled_order=fulfilled).order_by(
-                        'id_order').all()
-                # elif len(id_model_list) != 0:
-                #     list_order = session.query(db_o).filter(
-                #         db_o.data_order >= ds,
-                #         db_o.data_order <= df,
-                #         db_o.id_model.in_(id_model_list)).filter_by(
-                #         fulfilled_order=fulfilled).order_by(
-                #         'id_order').all()
+                            db_o.id_recipient.in_(id_client_list)))\
+                        .order_by(db_o.id_order)
+                elif id_order_list and not id_client_list:
+                    stmt = select_modul.where(
+                        db_o.data_order >= data_start_search,
+                        db_o.data_order <= data_finish_search,
+                        db_o.fulfilled_order == fulfilled,
+                        db_o.id_order.in_(id_order_list))\
+                        .order_by(db_o.id_order)
+                elif id_order_list and id_client_list:
+                    stmt = select_modul.where(
+                        db_o.data_order >= data_start_search,
+                        db_o.data_order <= data_finish_search,
+                        db_o.fulfilled_order == fulfilled,
+                        sa.and_(
+                            db_o.id_order.in_(id_order_list),
+                            sa.or_(
+                                db_o.id_client.in_(id_client_list),
+                                db_o.id_recipient.in_(id_client_list))))\
+                        .order_by(db_o.id_order)
                 else:
-                    list_order = session.query(db_o).filter(
-                        db_o.data_order >= ds,
-                        db_o.data_order <= df).filter_by(
-                        fulfilled_order=fulfilled).order_by(
-                        'data_plane_order').all()
-#
-            count_order = []
-            for row in list_order:
-                # print(row.id_order)
-                count_order.append(row.id_order)
-            if len(count_order) == 0:
-                id_order_max = session.query(func.max(
-                    db_o.id_order)).first()
-                tmp_order = int(id_order_max[0])
-                list_order = session.query(db_o).filter_by(
-                    id_order=tmp_order).all()
+                    if fulfilled:
+                        stmt = select_modul.where(
+                            db_o.data_order >= data_start_search,
+                            db_o.data_order <= data_finish_search,
+                            db_o.fulfilled_order == fulfilled)\
+                            .order_by(db_o.id_order)
+                    else:
+                        stmt = select_modul.where(
+                            db_o.data_order >= data_start_search,
+                            db_o.data_order <= data_finish_search,
+                            db_o.fulfilled_order == fulfilled)\
+                            .order_by(db_o.data_plane_order)
+
+            list_order = session.execute(stmt).all()
+
+            if not list_order:
+                stmt = select(func.max(db_o.id_order))
+                last_order = session.execute(stmt).scalar_one()
+                stmt = select_modul.where(db_o.id_order == last_order)
+                list_order = session.execute(stmt).all()
 #
             full_block = []
             for row in list_order:
@@ -138,13 +200,21 @@ def get_main(get_query):
                 m_phase_3 = row.phase_3
                 m_id_model = row.id_model
 #
-                tmp_len_1 = len(m_id_model)
                 m_kolor_model, m_kod_model, m_comment_model, = [], [], []
-                while tmp_len_1 > 0:
-                    tmp_len_1 -= 1
-                    id_model = m_id_model.pop(0)
-                    gr_model = session.query(db_m).filter_by(
-                        id_model=id_model).all()
+
+                # tmp_len_1 = len(m_id_model)
+                # while tmp_len_1 > 0:
+                #     tmp_len_1 -= 1
+                #     id_model = m_id_model.pop(0)
+
+                for id_model in m_id_model:
+
+                    # gr_model = session.query(db_m).filter_by(
+                    #     id_model=id_model).all()
+                    stmt = select(
+                        db_m.kolor_model, db_m.kod_model, db_m.comment_model)\
+                        .where(db_m.id_model == id_model)
+                    gr_model = session.execute(stmt).all()
                     for row5 in gr_model:
                         m_kolor_model.append(row5.kolor_model)
                         m_kod_model.append(row5.kod_model)
