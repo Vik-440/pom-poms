@@ -59,7 +59,6 @@ export class CreateOrderComponent implements OnInit {
     todayYear = new Date().getFullYear();
     dateToday = null;
     dataPlaneOrder = null;
-    dataSendOrder = null;
     dateForms: FormGroup;
     isRecipient = false;
     kodItems;
@@ -79,7 +78,6 @@ export class CreateOrderComponent implements OnInit {
         this.init();
         this.viewChanges();
         this.dataPlaneOrder = JSON.parse(localStorage.getItem('data_plane_order')) || null;
-        this.dataSendOrder = JSON.parse(localStorage.getItem('data_send_order')) || null;
         this.dateToday = JSON.parse(localStorage.getItem('dateToday')) || null;
         if (this.route.snapshot.params.id) {
             this.idOrder = +this.route.snapshot.params.id;
@@ -576,15 +574,6 @@ export class CreateOrderComponent implements OnInit {
         });
     }
 
-    changeDataPlaneOrder(d) {
-        const date = d._inputValue.split('-');
-        this.dataSendOrder = {
-            year: +date[0],
-            month: +date[1],
-            day: +date[2],
-        };
-    }
-
     makeArrayDataOrder(key, i = 0) {
         const result = [];
         if (this.orderForm.value[0][key]) {
@@ -607,9 +596,6 @@ export class CreateOrderComponent implements OnInit {
             data_plane_order: this.dataPlaneOrder
                 ? [this.dataPlaneOrder.year, this.dataPlaneOrder.month, this.dataPlaneOrder.day].join('-')
                 : null, // - прогнозована
-            data_send_order: this.dataSendOrder
-                ? [this.dataSendOrder.year, this.dataSendOrder.month, this.dataSendOrder.day].join('-')
-                : null, // - бажана
             discont_order: this.discount,
             sum_payment: +this.sumAll(false).split('/')[0].trim(),
             fulfilled_order: false,
@@ -625,7 +611,6 @@ export class CreateOrderComponent implements OnInit {
             this.idOrder = +data.id_order || this.idOrder;
             this.doneOrder = true;
             localStorage.setItem('data_plane_order', JSON.stringify(this.dataPlaneOrder));
-            localStorage.setItem('data_send_order', JSON.stringify(this.dataSendOrder));
             localStorage.setItem('dateToday', JSON.stringify(this.dateToday));
         });
     }
@@ -695,7 +680,6 @@ export class CreateOrderComponent implements OnInit {
                     this.commentOrder = data.comment_order;
                     this.dateToday = { year: +arrDataOrder[0], month: +arrDataOrder[1], day: +arrDataOrder[2] };
                     this.dataPlaneOrder = { year: +arrDataPlane[0], month: +arrDataPlane[1], day: +arrDataPlane[2] };
-                    this.dataSendOrder = { year: +arrDateSend[0], month: +arrDateSend[1], day: +arrDateSend[2] };
                     this.discount = data.discont_order;
                     this.fulfilledOrder = data.fulfilled_order;
                     this.service.getInfoForOrder({ open_id_client: data.id_client })
@@ -724,7 +708,6 @@ export class CreateOrderComponent implements OnInit {
                     this.viewChanges();
                     this.isNew = true;
                     this.dataPlaneOrder = null;
-                    this.dataSendOrder = null;
                     this.isShowSpinner = false;
                 }
             });
