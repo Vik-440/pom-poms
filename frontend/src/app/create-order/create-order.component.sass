@@ -94,7 +94,13 @@
   &__fields
     display: flex
     flex-direction: column
-    margin-left: 10px
+    margin-left: 25px
+    &--phashes
+      display: flex
+      & .phase
+        width: 20px
+        height: 26px
+        background: #FFFFFF
   &__field
     width: 205px
     height: 26px
@@ -110,6 +116,8 @@
       background: #FFFFFF
       border: 0.5px solid #203B4A
       box-sizing: border-box
+      &.pars
+        width: 66px
       &:first-child
         margin-bottom: 7px
     &--md
@@ -127,7 +135,7 @@
     &:first-child
       margin-bottom: 7px
     &--textarea
-      width: 262px
+      width: 150px
       height: 57px
       background: #FFFFFF
       border: 0.5px solid #203B4A
@@ -138,18 +146,18 @@
 .sum-up
   display: flex
   justify-content: flex-end
-  margin-right: 38px
+  margin-right: 60px
   &--sale
     margin-right: 11px
     & input
-      width: 128px
+      width: 68px
       height: 34px
       background: #FFFFFF
       border: 0.5px solid #203B4A
       box-sizing: border-box
   &--all
     & input
-      width: 199px
+      width: 130px
       height: 34px
       background: #FFFFFF
       border: 0.5px solid #203B4A
@@ -286,11 +294,10 @@ input
 
 .date-order
   position: absolute
-  right: 50px
+  right: 100px
   margin-top: 18px
   display: grid
-  grid-template-rows: repeat(2, 1fr)
-  grid-template-columns: 225px 30px
+  width: 225px
   & .btn-icon
     width: 30px
   &-icons
