@@ -216,11 +216,13 @@ export class CreateOrderComponent implements OnInit {
                 .valueChanges.pipe(
                     
                     tap((data) => {
-                        console.log(order, data,order.value.phase_3_default);
+                        const type =
+                        modelsData[order.value.kod_model?.substring(0, 3)] || modelsData[order.value.kod_model?.substring(0, 2)] || '';
+                        
                         order.patchValue({
                             sum_pars: data * order.value.price_model,
-                            phase_1: order.value.phase_1_default + data*2,
-                            phase_2: order.value.phase_2_default + data*2,
+                            phase_1: order.value.phase_1_default + (type.includes('брелок') ? +data : +(data*2)),
+                            phase_2: order.value.phase_2_default + (type.includes('брелок') ? +data : +(data*2)),
                             phase_3: order.value.phase_3_default + +data
                         });
                     })
