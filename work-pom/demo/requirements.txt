@@ -1,5 +1,11 @@
-sqlalchemy
-psycopg2-binary
-flask
-python-dotenv
-flask-cors
+# sqlalchemy
+# psycopg2-binary
+# flask
+# python-dotenv
+# flask-cors
+
+sqlalchemy==1.4.37
+psycopg2-binary==2.9.3
+flask==2.2.2
+python-dotenv==0.20.0
+flask-cors==3.0.10

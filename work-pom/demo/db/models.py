@@ -12,6 +12,7 @@ from log.logger import logger
 Base = declarative_base()
 # future = True
 
+
 load_dotenv()
 setup_db = "PROD"
 # setup_db = "DEV"

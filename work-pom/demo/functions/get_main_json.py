@@ -292,7 +292,7 @@ def list_search(list_sql_in):
     return list_sql_out
 
 
-def change_main_phase_get(id_order, inform):
+def change_phase_order_put(id_order, inform):
     with Session(engine) as session:
         check_sum = 0
         if 'phase_1' in inform:

@@ -21,7 +21,7 @@ from functions.finance_json import return_data_from_payment_balans
 from functions.finance_json import ret_dat_fin_pay_get
 from functions.finance_json import ret_dat_fin_out_get
 from functions.get_main_json import get_main
-from functions.get_main_json import change_main_phase_get
+from functions.get_main_json import change_phase_order_put
 from log.logger import logger
 
 
@@ -263,7 +263,7 @@ def main_phase_get(id):
     request.data = request.get_json()
     try:
         if request.method == 'PUT':
-            return (change_main_phase_get(id, request.data)), 200
+            return (change_phase_order_put(id, request.data)), 200
         else:
             return ({"error_message": "mistake method"}), 404
     except Exception as e:

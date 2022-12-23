@@ -378,7 +378,7 @@ def return_data_from_edit_order(data_from_new_page):
             one_block = {"id_order": id_order, "data_order": data_order,
                          "id_client": id_client, "id_recipient": id_recipient,
                          "data_plane_order": data_plane_order,
-                         "data_send_order": data_plane_order,   # delete
+                         #  "data_send_order": data_plane_order,   # delete
                          "discont_order": discont_order,
                          "sum_payment": sum_payment,
                          "fulfilled_order": fulfilled_order,
