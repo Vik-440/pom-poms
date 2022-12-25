@@ -708,7 +708,6 @@ export class CreateOrderComponent implements OnInit {
                 if (Object.keys(data).length) {
                     const arrDataOrder = data.data_order.split('-');
                     const arrDataPlane = data.data_plane_order.split('-');
-                    const arrDateSend = data.data_send_order.split('-');
                     this.commentOrder = data.comment_order;
                     this.dateToday = { year: +arrDataOrder[0], month: +arrDataOrder[1], day: +arrDataOrder[2] };
                     this.dataPlaneOrder = { year: +arrDataPlane[0], month: +arrDataPlane[1], day: +arrDataPlane[2] };
