@@ -195,14 +195,18 @@ def return_data_from_full_person(data_from_new_page):
         if j_second_name_client == 0:
             ins = directory_of_client(
                     phone_client=data_from_new_page['phone_client'],
-                    second_name_client=data_from_new_page[
-                        'second_name_client'],
-                    first_name_client=data_from_new_page['first_name_client'],
-                    surname_client=data_from_new_page['surname_client'],
-                    sity=data_from_new_page['sity'],
+                    # add capitalize
+                    second_name_client=str(
+                        data_from_new_page['second_name_client']).capitalize,
+                    first_name_client=str(
+                        data_from_new_page['first_name_client']).capitalize,
+                    surname_client=str(
+                        data_from_new_page['surname_client']).capitalize,
+                    sity=str(data_from_new_page['sity']).capitalize,
                     np_number=data_from_new_page['np_number'],
-                    team=data_from_new_page['name_team'],
-                    coach=data_from_new_page['coach'],
+                    team=str(data_from_new_page['name_team']).capitalize,
+                    coach=str(data_from_new_page['coach']).capitalize,
+                    # finish
                     zip_code=data_from_new_page['zip_code'],
                     street_house_apartment=data_from_new_page[
                         'street_house_apartment'],
@@ -219,15 +223,19 @@ def return_data_from_full_person(data_from_new_page):
             ins = session.query(directory_of_client).filter(
                 directory_of_client.id_client == tmp_id_client).update(
                     {'phone_client': data_from_new_page['phone_client'],
-                        'second_name_client': data_from_new_page[
-                            'second_name_client'],
-                        'first_name_client': data_from_new_page[
-                            'first_name_client'],
-                        'surname_client': data_from_new_page['surname_client'],
-                        'sity': data_from_new_page['sity'],
+                        # start capitalize
+                        'second_name_client': str(data_from_new_page[
+                            'second_name_client']).capitalize,
+                        'first_name_client': str(data_from_new_page[
+                            'first_name_client']).capitalize,
+                        'surname_client': str(
+                            data_from_new_page['surname_client']).capitalize,
+                        'sity': str(data_from_new_page['sity']).capitalize,
                         'np_number': data_from_new_page['np_number'],
-                        'team': data_from_new_page['name_team'],
-                        'coach': data_from_new_page['coach'],
+                        'team': str(
+                            data_from_new_page['name_team']).capitalize,
+                        'coach': str(data_from_new_page['coach']).capitalize,
+                        # finish
                         'zip_code': data_from_new_page['zip_code'],
                         'street_house_apartment': data_from_new_page[
                             'street_house_apartment'],

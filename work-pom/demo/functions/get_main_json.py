@@ -1,9 +1,9 @@
 import json
-import sqlalchemy as sa
+# import sqlalchemy as sa
 from datetime import datetime
-from sqlalchemy import func
+from sqlalchemy import func, select, update, or_, and_
 from sqlalchemy.orm import Session
-from sqlalchemy.future import select
+# from sqlalchemy.future import select
 from db.models import directory_of_order as db_o
 from db.models import directory_of_client as db_c
 from db.models import directory_of_payment as db_p
@@ -111,7 +111,7 @@ def get_main(got_request):
                     stmt = select_modul.where(
                         db_o.data_order >= data_start_search,
                         db_o.data_order <= data_finish_search,
-                        sa.or_(
+                        or_(
                             db_o.id_client.in_(id_client_list),
                             db_o.id_recipient.in_(id_client_list)))\
                         .order_by(db_o.id_order)
@@ -125,9 +125,9 @@ def get_main(got_request):
                     stmt = select_modul.where(
                         db_o.data_order >= data_start_search,
                         db_o.data_order <= data_finish_search,
-                        sa.and_(
+                        and_(
                             db_o.id_order.in_(id_order_list),
-                            sa.or_(
+                            or_(
                                 db_o.id_client.in_(id_client_list),
                                 db_o.id_recipient.in_(id_client_list))))\
                         .order_by(db_o.id_order)
@@ -142,7 +142,7 @@ def get_main(got_request):
                         db_o.data_order >= data_start_search,
                         db_o.data_order <= data_finish_search,
                         db_o.fulfilled_order == fulfilled,
-                        sa.or_(
+                        or_(
                             db_o.id_client.in_(id_client_list),
                             db_o.id_recipient.in_(id_client_list)))\
                         .order_by(db_o.id_order)
@@ -158,9 +158,9 @@ def get_main(got_request):
                         db_o.data_order >= data_start_search,
                         db_o.data_order <= data_finish_search,
                         db_o.fulfilled_order == fulfilled,
-                        sa.and_(
+                        and_(
                             db_o.id_order.in_(id_order_list),
-                            sa.or_(
+                            or_(
                                 db_o.id_client.in_(id_client_list),
                                 db_o.id_recipient.in_(id_client_list))))\
                         .order_by(db_o.id_order)
@@ -293,6 +293,7 @@ def list_search(list_sql_in):
 
 
 def change_phase_order_put(id_order, inform):
+    """Module for changing phases in order"""
     with Session(engine) as session:
         check_sum = 0
         if 'phase_1' in inform:
@@ -322,4 +323,37 @@ def change_phase_order_put(id_order, inform):
 
         session.commit()
         one_block = {"check_sum_phase": check_sum}
+    return one_block
+
+
+def changing_status_order(id_order: int, data: bool):
+    """Module for changing of fulfilled status"""
+    with Session(engine) as session:
+        check_sum = 0
+        status_order = data['status_order']
+        if not status_order:
+            stmt = update(db_o).where(
+                db_o.id_order == id_order).values(fulfilled_order=False)
+        else:
+            ds = datetime.today().strftime('%Y-%m-%d')
+            stmt = select(db_o.quantity_pars_model).where(
+                            db_o.id_order == id_order)
+            pre_data = session.execute(stmt).first()
+            phaze_to_ziro = []
+            for step in pre_data:
+                for k in step:
+                    phaze_to_ziro.append(0)
+            stmt = (
+                update(db_o)
+                .where(db_o.id_order == id_order)
+                .values(
+                    fulfilled_order=True,
+                    phase_1=phaze_to_ziro,
+                    phase_2=phaze_to_ziro,
+                    phase_3=phaze_to_ziro,
+                    data_plane_order=ds))
+        session.execute(stmt)
+        session.commit()
+        check_sum = sum([int(x) for x in str(id_order)])
+        one_block = {"check_sum_status": check_sum}
     return one_block

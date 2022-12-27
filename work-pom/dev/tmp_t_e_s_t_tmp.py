@@ -12,17 +12,10 @@
 # import json
 # from flask import jsonify, request
 
-list_test = [1, 2, 3, 4, 5, 6]
-
-if 1 in list_test:
-    print('1 is OK')
-elif 2 in list_test:
-    print('2 is OK')
-elif 3 in list_test:
-    print('3 is OK')
-else:
-    print('4 is OK')
-
+number = 123456
+xxx = sum([int(x) for x in str(number)])
+# yyy = lambda x: for x in xxx
+print(xxx)
 
 # import calendar
 # from datetime import datetime, timedelta

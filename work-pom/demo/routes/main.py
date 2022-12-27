@@ -22,6 +22,7 @@ from functions.finance_json import ret_dat_fin_pay_get
 from functions.finance_json import ret_dat_fin_out_get
 from functions.get_main_json import get_main
 from functions.get_main_json import change_phase_order_put
+from functions.get_main_json import changing_status_order
 from log.logger import logger
 
 
@@ -269,3 +270,12 @@ def main_phase_get(id):
     except Exception as e:
         logger.error(f'Error in function main_phase: {e}')
         return f'Error in function main_phase: {e}', 500
+
+
+@app.route('/main/status/<int:id>', methods=['PUT'])
+def main_status_order(id):
+    request.data = request.get_json()
+    try:
+        return (changing_status_order(id, request.data)), 200
+    except Exception as e:
+        return f'Error in function main_status_order: {e}', 500

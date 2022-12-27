@@ -48,7 +48,12 @@ def return_data_from_new_order_post(data_from_new_page):
                 directory_of_client.second_name_client.ilike(w206w)).all()
             data_var, id_var = [], []
             for row in ur_second_name_1:
-                data_var.append(row.second_name_client)
+                # changed block in 'ur' comands
+                second_name_client = row.second_name_client
+                first_name_client = row.first_name_client
+                answer_name = str(second_name_client + ' ' + first_name_client)
+                data_var.append(answer_name)
+# before I answered only clear 'second_name_client'
                 id_var.append(row.id_client)
             data_new_page = {"second_name_client": data_var,
                              "id_client": id_var}

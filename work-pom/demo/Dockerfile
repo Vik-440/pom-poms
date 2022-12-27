@@ -1,4 +1,4 @@
-# syntax=docker/dockerfile:experimental
+#syntax=docker/dockerfile:experimental
 FROM python:3.8-slim-buster
 RUN mkdir -p /app_flask
 WORKDIR /app_flask
