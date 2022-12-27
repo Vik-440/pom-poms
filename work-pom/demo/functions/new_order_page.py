@@ -297,14 +297,11 @@ def return_data_from_final_order(data_from_new_page):
                     "sum_payment": data_from_new_page['sum_payment'],
                     "fulfilled_order": data_from_new_page['fulfilled_order'],
                     "comment_order": data_from_new_page['comment_order'],
-                    # "phase_1_model": phase_pcs,
-                    # "phase_2_model": phase_pcs,
-                    # "phase_3_model": phase_pcs,
-
-                    "phase_1": phase_int,
-                    "phase_2": phase_int,
-                    "phase_3": phase_int3,
-
+                    # test changing
+                    "phase_1": data_from_new_page['phase_1'],
+                    "phase_2": data_from_new_page['phase_2'],
+                    "phase_3": data_from_new_page['phase_3'],
+                    # test changing finish
                     "id_model": data_from_new_page['id_model'],
                     "quantity_pars_model": data_from_new_page[
                         'quantity_pars_model'],
@@ -332,12 +329,14 @@ def return_data_from_final_order(data_from_new_page):
             sum_payment=data_from_new_page['sum_payment'],
             fulfilled_order=data_from_new_page['fulfilled_order'],
             comment_order=data_from_new_page['comment_order'],
-            # phase_1_model=phase_pcs,
-            # phase_2_model=phase_pcs,
-            # phase_3_model=phase_pcs,
-            phase_1=phase_int,
-            phase_2=phase_int,
-            phase_3=phase_int3,
+            # test changing
+            phase_1=data_from_new_page['phase_1'],
+            phase_2=data_from_new_page['phase_2'],
+            phase_3=data_from_new_page['phase_3'],
+            # phase_1=phase_int,
+            # phase_2=phase_int,
+            # phase_3=phase_int3,
+            # test changing finish
             id_model=data_from_new_page['id_model'],
             quantity_pars_model=data_from_new_page['quantity_pars_model'],
             price_model_order=data_from_new_page['price_model_order'])
