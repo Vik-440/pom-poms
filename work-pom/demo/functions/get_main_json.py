@@ -331,6 +331,7 @@ def changing_status_order(id_order: int, data: bool):
     with Session(engine) as session:
         check_sum = 0
         status_order = data['status_order']
+        # print(type(status_order), status_order)
         if not status_order:
             stmt = update(db_o).where(
                 db_o.id_order == id_order).values(fulfilled_order=False)
