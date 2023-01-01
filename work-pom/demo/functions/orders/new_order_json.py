@@ -1,19 +1,17 @@
-from functions.new_order_page import return_data_from_order_page
-from functions.new_order_page import return_data_from_client
-from functions.new_order_page import return_data_from_kod
-from functions.new_order_page import return_data_from_full_kod
-from functions.new_order_page import return_data_from_full_person
-from functions.new_order_page import return_data_from_final_order
-from functions.new_order_page import return_data_from_edit_order
 import json
 from sqlalchemy.orm import Session
-from db.models import directory_of_order, directory_of_client
-from db.models import directory_of_color, directory_of_model
 from db.models import engine
 
-# Session = sessionmaker(engine)
-# Session.configure(bind=engine)
-# session = Session()
+from functions.orders.new_order_page import (
+    return_data_from_order_page,
+    return_data_from_client,
+    return_data_from_kod,
+    return_data_from_full_kod,
+    return_data_from_full_person,
+    return_data_from_final_order,
+    return_data_from_edit_order)
+from db.models import directory_of_order, directory_of_client
+from db.models import directory_of_color, directory_of_model
 
 
 def return_data_from_new_order():

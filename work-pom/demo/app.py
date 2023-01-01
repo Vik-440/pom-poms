@@ -13,7 +13,10 @@ app.config['JSON_AS_ASCII'] = False
 
 
 with app.app_context():
-    from routes.main import *  # noqa: F401, F403
+    from routes.main_page import *  # noqa: F401, F403
+    from routes.order_page import *  # noqa: F401, F403
+    from routes.material_page import *  # noqa: F401, F403
+    from routes.finance_page import *  # noqa: F401, F403
 
 
 if __name__ == '__main__':

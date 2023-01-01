@@ -1,9 +1,7 @@
 import json
-# import sqlalchemy as sa
 from datetime import datetime
-from sqlalchemy import func, select, update, or_, and_
+from sqlalchemy import func, select, or_, and_
 from sqlalchemy.orm import Session
-# from sqlalchemy.future import select
 from db.models import directory_of_order as db_o
 from db.models import directory_of_client as db_c
 from db.models import directory_of_payment as db_p
@@ -85,10 +83,6 @@ def get_main(got_request):
                 pre_list = session.execute(stmt).scalars()
                 for row in pre_list:
                     id_model_list.append(row)
-
-            # print(f'List of clients ({len(id_client_list)} pcs) - {id_client_list}')  # noqa: E501
-            # print(f'List of models ({len(id_model_list)} pcs) - {id_model_list}')  # noqa: E501
-# ###########################################################################
 # ###########################################################################
             id_order_list = []
             for id_model_cucle in id_model_list:
@@ -97,8 +91,6 @@ def get_main(got_request):
                 pre_list = session.execute(stmt).scalars()
                 for row in pre_list:
                     id_order_list.append(row)
-            # print(f'List of orders with searching models ({len(id_order_list)} pcs) - {id_order_list}')  # noqa: E501
-# ###########################################################################
 # ###########################################################################
             select_modul = select(
                 db_o.id_order, db_o.comment_order, db_o.data_order,
@@ -202,15 +194,7 @@ def get_main(got_request):
 #
                 m_kolor_model, m_kod_model, m_comment_model, = [], [], []
 
-                # tmp_len_1 = len(m_id_model)
-                # while tmp_len_1 > 0:
-                #     tmp_len_1 -= 1
-                #     id_model = m_id_model.pop(0)
-
                 for id_model in m_id_model:
-
-                    # gr_model = session.query(db_m).filter_by(
-                    #     id_model=id_model).all()
                     stmt = select(
                         db_m.kolor_model, db_m.kod_model, db_m.comment_model)\
                         .where(db_m.id_model == id_model)
@@ -280,81 +264,5 @@ def get_main(got_request):
                              "first_name_client": m_first_name_client}
                 full_block.append(one_block)
         return json.dumps(full_block)
-#
     except Exception as e:
         return json.dumps(f'Error in function main: {e}')
-
-
-def list_search(list_sql_in):
-    list_sql_out = []
-    for row in list_sql_in:
-        list_sql_out.append(row.id_client)
-    return list_sql_out
-
-
-def change_phase_order_put(id_order, inform):
-    """Module for changing phases in order"""
-    with Session(engine) as session:
-        check_sum = 0
-        if 'phase_1' in inform:
-            phase_int = inform['phase_1']
-            for row in phase_int:
-                check_sum = check_sum + row
-            session.query(db_o).filter(
-                    db_o.id_order == id_order).update({
-                        "phase_1": phase_int})
-        elif 'phase_2' in inform:
-            phase_int = inform['phase_2']
-            for row in phase_int:
-                check_sum = check_sum + row
-            session.query(db_o).filter(
-                    db_o.id_order == id_order).update({
-                        "phase_2": phase_int})
-        elif 'phase_3' in inform:
-            phase_int = inform['phase_3']
-            for row in phase_int:
-                check_sum = check_sum + row
-            session.query(db_o).filter(
-                    db_o.id_order == id_order).update({
-                        "phase_3": phase_int})
-        else:
-            one_block = {"phase_chenged": "error"}
-            return one_block
-
-        session.commit()
-        one_block = {"check_sum_phase": check_sum}
-    return one_block
-
-
-def changing_status_order(id_order: int, data: bool):
-    """Module for changing of fulfilled status"""
-    with Session(engine) as session:
-        check_sum = 0
-        status_order = data['status_order']
-        # print(type(status_order), status_order)
-        if not status_order:
-            stmt = update(db_o).where(
-                db_o.id_order == id_order).values(fulfilled_order=False)
-        else:
-            ds = datetime.today().strftime('%Y-%m-%d')
-            stmt = select(db_o.quantity_pars_model).where(
-                            db_o.id_order == id_order)
-            pre_data = session.execute(stmt).first()
-            phaze_to_ziro = []
-            for step in pre_data:
-                for k in step:
-                    phaze_to_ziro.append(0)
-            stmt = (
-                update(db_o)
-                .where(db_o.id_order == id_order)
-                .values(
-                    fulfilled_order=True,
-                    phase_1=phaze_to_ziro,
-                    phase_2=phaze_to_ziro,
-                    phase_3=phaze_to_ziro,
-                    data_plane_order=ds))
-        session.execute(stmt)
-        session.commit()
-        check_sum = sum([int(x) for x in str(id_order)])
-        one_block = {"check_sum_status": check_sum}
-    return one_block
