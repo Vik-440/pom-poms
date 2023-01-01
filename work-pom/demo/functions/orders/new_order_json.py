@@ -10,8 +10,11 @@ from functions.orders.new_order_page import (
     return_data_from_full_person,
     return_data_from_final_order,
     return_data_from_edit_order)
-from db.models import directory_of_order, directory_of_client
-from db.models import directory_of_color, directory_of_model
+from db.models import (
+    directory_of_order as db_o,
+    directory_of_client as db_c,
+    directory_of_color as db_col,
+    directory_of_model as db_m)
 
 
 def return_data_from_new_order():
@@ -32,8 +35,8 @@ def return_data_from_new_order_post(data_from_new_page):
         elif 'ur_phone' in data_from_new_page:
             search_data = data_from_new_page['ur_phone']
             w206w = ('%' + str(search_data) + '%')
-            ur_phone_1 = session.query(directory_of_client).filter(
-                directory_of_client.phone_client.ilike(w206w)).all()
+            ur_phone_1 = session.query(db_c).filter(
+                db_c.phone_client.ilike(w206w)).all()
             data_var, id_var = [], []
             for row in ur_phone_1:
                 data_var.append(int(row.phone_client))
@@ -42,8 +45,8 @@ def return_data_from_new_order_post(data_from_new_page):
         elif 'ur_second_name' in data_from_new_page:
             search_data = data_from_new_page['ur_second_name']
             w206w = ('%' + str(search_data) + '%')
-            ur_second_name_1 = session.query(directory_of_client).filter(
-                directory_of_client.second_name_client.ilike(w206w)).all()
+            ur_second_name_1 = session.query(db_c).filter(
+                db_c.second_name_client.ilike(w206w)).all()
             data_var, id_var = [], []
             for row in ur_second_name_1:
                 # changed block in 'ur' comands
@@ -58,8 +61,8 @@ def return_data_from_new_order_post(data_from_new_page):
         elif 'ur_team' in data_from_new_page:
             search_data = data_from_new_page['ur_team']
             w206w = ('%' + str(search_data) + '%')
-            ur_team_1 = session.query(directory_of_client).filter(
-                directory_of_client.team.ilike(w206w)).all()
+            ur_team_1 = session.query(db_c).filter(
+                db_c.team.ilike(w206w)).all()
             data_var = []
             for row in ur_team_1:
                 if row.team not in data_var:
@@ -68,8 +71,8 @@ def return_data_from_new_order_post(data_from_new_page):
         elif 'ur_sity' in data_from_new_page:
             search_data = data_from_new_page['ur_sity']
             w206w = ('%' + str(search_data) + '%')
-            ur_sity_1 = session.query(directory_of_client).filter(
-                directory_of_client.sity.ilike(w206w)).all()
+            ur_sity_1 = session.query(db_c).filter(
+                db_c.sity.ilike(w206w)).all()
             data_var = []
             for row in ur_sity_1:
                 if row.sity not in data_var:
@@ -77,8 +80,8 @@ def return_data_from_new_order_post(data_from_new_page):
             data_new_page = {"sity": data_var}
         elif 'ur_kolor' in data_from_new_page:
             search_data = data_from_new_page['ur_kolor']
-            ur_kolor_1 = session.query(directory_of_color).filter(
-                directory_of_color.name_color.ilike(f'%{search_data}%')
+            ur_kolor_1 = session.query(db_col).filter(
+                db_col.name_color.ilike(f'%{search_data}%')
                 ).order_by('name_color').all()
             full_block = []
             for row in ur_kolor_1:
@@ -90,8 +93,8 @@ def return_data_from_new_order_post(data_from_new_page):
         elif 'ur_kod' in data_from_new_page:
             search_data = data_from_new_page['ur_kod']
             w206w = ('%' + str(search_data) + '%')
-            ur_kod_1 = session.query(directory_of_model).filter(
-                directory_of_model.kod_model.ilike(w206w)).order_by(
+            ur_kod_1 = session.query(db_m).filter(
+                db_m.kod_model.ilike(w206w)).order_by(
                     'kod_model').all()
             data_var = []
             for row in ur_kod_1:
@@ -100,8 +103,8 @@ def return_data_from_new_order_post(data_from_new_page):
         elif 'ur_coach' in data_from_new_page:
             search_data = data_from_new_page['ur_coach']
             w206w = ('%' + str(search_data) + '%')
-            ur_coach_1 = session.query(directory_of_client).filter(
-                directory_of_client.coach.ilike(w206w)).all()
+            ur_coach_1 = session.query(db_c).filter(
+                db_c.coach.ilike(w206w)).all()
             data_var = []
             for row in ur_coach_1:
                 data_var.append(row.coach)
@@ -136,7 +139,7 @@ def return_data_from_new_order_post(data_from_new_page):
         elif 'fulfilled_id_order' in data_from_new_page:
             id_order = data_from_new_page['fulfilled_id_order']
             fulfilled_order = data_from_new_page['fulfilled_order']
-            session.query(directory_of_order).filter_by(
+            session.query(db_o).filter_by(
                 id_order=id_order).update({'fulfilled_order': fulfilled_order})
             data_new_page = {"id_order": "ok"}
         elif 'edit_order' in data_from_new_page:

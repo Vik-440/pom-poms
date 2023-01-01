@@ -1,14 +1,17 @@
 from sqlalchemy import func
 from sqlalchemy.orm import Session
-from db.models import directory_of_order, directory_of_client
-from db.models import directory_of_color
-from db.models import directory_of_model, directory_of_payment
 from db.models import engine
+from db.models import (
+    directory_of_order as db_o,
+    directory_of_client as db_c,
+    directory_of_color as db_col,
+    directory_of_model as db_m,
+    directory_of_payment as db_p)
 
 
 def return_data_from_order_page():
     with Session(engine) as session:
-        id_new_order = session.query(func.max(directory_of_order.id_order))
+        id_new_order = session.query(func.max(db_o.id_order))
         for row222 in id_new_order:
             j_id_new_order = row222[0]+1
         time_last_order = '2022-12-31'
@@ -19,20 +22,20 @@ def return_data_from_order_page():
 def return_data_from_client(sl_phone, sl_second_name, open_id_client):
     with Session(engine) as session:
         if sl_phone == 0 and open_id_client == 0:
-            id_client_3 = session.query(directory_of_client).filter_by(
+            id_client_3 = session.query(db_c).filter_by(
                 second_name_client=sl_second_name).all()
         elif sl_second_name == 0 and open_id_client == 0:
             sl_phone = str(sl_phone)
-            id_client_3 = session.query(directory_of_client).filter_by(
+            id_client_3 = session.query(db_c).filter_by(
                 phone_client=str(sl_phone)).all()
         else:
-            id_client_3 = session.query(directory_of_client).filter_by(
+            id_client_3 = session.query(db_c).filter_by(
                 id_client=open_id_client).all()
         for row in id_client_3:
             j_id_client = row.id_client
             j_sity = row.sity
             j_name_team = row.team
-        phone_client_1 = session.query(directory_of_client).filter_by(
+        phone_client_1 = session.query(db_c).filter_by(
             id_client=j_id_client).all()
 
         for row1 in phone_client_1:
@@ -60,10 +63,10 @@ def return_data_from_client(sl_phone, sl_second_name, open_id_client):
 def return_data_from_kod(sl_kod, open_id_model):
     with Session(engine) as session:
         if open_id_model == 0:
-            id_model_1 = session.query(directory_of_model).filter_by(
+            id_model_1 = session.query(db_m).filter_by(
                 kod_model=sl_kod).all()
         else:
-            id_model_1 = session.query(directory_of_model).filter_by(
+            id_model_1 = session.query(db_m).filter_by(
                 id_model=open_id_model).all()
         for row in id_model_1:
             j_id_model = row.id_model
@@ -80,26 +83,26 @@ def return_data_from_kod(sl_kod, open_id_model):
             j_comment_model = row.comment_model
             j_kolor_model = row.kolor_model
 
-        name_color_0 = session.query(directory_of_color).filter_by(
+        name_color_0 = session.query(db_col).filter_by(
             id_color=j_id_color_1).all()
         for row in name_color_0:
             name_color_1 = row.name_color
         if j_id_color_2 != 0 and j_id_color_2 is not None:
-            name_color_0 = session.query(directory_of_color).filter_by(
+            name_color_0 = session.query(db_col).filter_by(
                 id_color=j_id_color_2).all()
             for row in name_color_0:
                 name_color_2 = row.name_color
         else:
             name_color_2 = 0
         if j_id_color_3 != 0 and j_id_color_3 is not None:
-            name_color_0 = session.query(directory_of_color).filter_by(
+            name_color_0 = session.query(db_col).filter_by(
                 id_color=j_id_color_3).all()
             for row in name_color_0:
                 name_color_3 = row.name_color
         else:
             name_color_3 = 0
         if j_id_color_4 != 0 and j_id_color_4 is not None:
-            name_color_0 = session.query(directory_of_color).filter_by(
+            name_color_0 = session.query(db_col).filter_by(
                 id_color=j_id_color_4).all()
             for row in name_color_0:
                 name_color_4 = row.name_color
@@ -131,12 +134,12 @@ def return_data_from_full_kod(data_from_new_page):
     with Session(engine) as session:
         j_id_model = 0
         search_data = data_from_new_page['kod_model']
-        id_model_1 = session.query(directory_of_model).filter_by(
+        id_model_1 = session.query(db_m).filter_by(
             kod_model=search_data).all()
         for row in id_model_1:
             j_id_model = row.id_model
         if j_id_model == 0:
-            ins = directory_of_model(
+            ins = db_m(
                     kod_model=data_from_new_page['kod_model'],    # int for all
                     id_color_1=int(data_from_new_page['id_color_1']),
                     id_color_part_1=int(data_from_new_page['id_color_part_1']),
@@ -152,14 +155,14 @@ def return_data_from_full_kod(data_from_new_page):
             session.add(ins)
             session.commit()
 
-            id_model_1 = session.query(directory_of_model).filter_by(
+            id_model_1 = session.query(db_m).filter_by(
                 kod_model=search_data).all()
             for row in id_model_1:
                 j_id_model = row.id_model
             one_block = {"id_model": j_id_model}
         else:
-            ins = session.query(directory_of_model).filter(
-                directory_of_model.id_model == j_id_model).update(
+            ins = session.query(db_m).filter(
+                db_m.id_model == j_id_model).update(
                     {'kod_model': data_from_new_page['kod_model'],
                         'id_color_1': int(data_from_new_page['id_color_1']),
                         'id_color_part_1': int(
@@ -187,7 +190,7 @@ def return_data_from_full_person(data_from_new_page):
     with Session(engine) as session:
         j_second_name_client = 0
         search_data = str(data_from_new_page['phone_client'])
-        second_name_client_1 = session.query(directory_of_client).filter_by(
+        second_name_client_1 = session.query(db_c).filter_by(
             phone_client=search_data).all()
         for row in second_name_client_1:
             j_second_name_client = row.second_name_client
@@ -204,7 +207,7 @@ def return_data_from_full_person(data_from_new_page):
         # coach = str(data_from_new_page['coach']).capitalize,
 
         if j_second_name_client == 0:
-            ins = directory_of_client(
+            ins = db_c(
                     phone_client=data_from_new_page['phone_client'],
                     # add capitalize
                     second_name_client=data_from_new_page[
@@ -225,7 +228,7 @@ def return_data_from_full_person(data_from_new_page):
             session.add(ins)
             session.commit()
 
-            id_client_1 = session.query(directory_of_client).filter_by(
+            id_client_1 = session.query(db_c).filter_by(
                 phone_client=search_data).all()
             for row in id_client_1:
                 j_id_client = row.id_client
@@ -236,8 +239,8 @@ def return_data_from_full_person(data_from_new_page):
             # test_city_1 = test_city.title()
             # print(f'Test_name has {type(test_city_1)} and is: {test_city_1}')
 
-            ins = session.query(directory_of_client).filter(
-                directory_of_client.id_client == tmp_id_client).update(
+            ins = session.query(db_c).filter(
+                db_c.id_client == tmp_id_client).update(
                     {'phone_client': data_from_new_page['phone_client'],
                         # start capitalize
                         'second_name_client': data_from_new_page[
@@ -269,21 +272,21 @@ def return_data_from_final_order(data_from_new_page):
         id_client = data_from_new_page['id_client']
         if id_client is None:
             return f'Error in client number: {e}', 500
-        check_client = session.query(directory_of_client).filter_by(
+        check_client = session.query(db_c).filter_by(
             id_client=id_client).scalar()
         if check_client is None:
             raise Exception("Error in real client number ")
         id_recipient = data_from_new_page['id_recipient']
         if id_recipient is None:
             return f'Error in recipient number: {e}', 500
-        check_client = session.query(directory_of_client).filter_by(
+        check_client = session.query(db_c).filter_by(
             id_client=id_recipient).scalar()
         if check_client is None:
             raise Exception("Error in real recipient number ")
         if data_from_new_page['quantity_pars_model'] is None:
             raise Exception("Error: quantity_pars is empty")
         id_order = int(data_from_new_page['id_order'])
-        check_order = session.query(directory_of_order).filter_by(
+        check_order = session.query(db_o).filter_by(
             id_order=id_order).scalar()
 
         # s2s = len((data_from_new_page['id_model']))
@@ -301,8 +304,8 @@ def return_data_from_final_order(data_from_new_page):
             x1x = int(data_from_new_page['edit_real_order'])
             if x1x != id_order:
                 raise Exception("This order number is real - 1p")
-            session.query(directory_of_order).filter(
-                directory_of_order.id_order == id_order).update(
+            session.query(db_o).filter(
+                db_o.id_order == id_order).update(
                    {"id_order": id_order,
                     "data_order": data_from_new_page['data_order'],
                     "id_client": data_from_new_page['id_client'],
@@ -331,10 +334,10 @@ def return_data_from_final_order(data_from_new_page):
             raise Exception("This order number is real - 2p")
         if id_order == 0:
             id_order_max = session.query(func.max(
-                directory_of_order.id_order)).first()
+                db_o.id_order)).first()
             id_order = int(id_order_max[0]) + 1
 
-        ins = directory_of_order(
+        ins = db_o(
             id_order=id_order,
             data_order=data_from_new_page['data_order'],
             id_client=data_from_new_page['id_client'],
@@ -368,7 +371,7 @@ def return_data_from_final_order(data_from_new_page):
 def return_data_from_edit_order(data_from_new_page):
     with Session(engine) as session:
         edit_order = data_from_new_page['edit_order']
-        id_order_1 = session.query(directory_of_order).filter_by(
+        id_order_1 = session.query(db_o).filter_by(
             id_order=edit_order).all()
         for row in id_order_1:
             id_order = row.id_order
@@ -389,7 +392,7 @@ def return_data_from_edit_order(data_from_new_page):
             phase_3 = row.phase_3
 
             real_money_order_1 = session.query(
-                func.sum(directory_of_payment.payment).label(
+                func.sum(db_p.payment).label(
                     'sum_order')).filter_by(
                     id_order=id_order).first()
             for row in real_money_order_1:
