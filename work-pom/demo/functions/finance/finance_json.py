@@ -251,27 +251,20 @@ def return_data_from_payment_balans(sender):
             data_start_sql = data_start_sql+time_step
             data_end_sql = data_end_sql+time_step
             day = day-step_day
-        # full_block={"testdata" : "in progres"}
     return json.dumps(full_block)
 
 
 def return_data_from_payment_stat(search):
     with Session(engine):
-        # as session:
         stat, stat_outlay = [], []
-
         sql_sum = directory_of_payment.payment
         sql_data = directory_of_payment.data_payment
         stat_payment = return_forecast(stat, sql_sum, sql_data)
-
         sql_sum = directory_of_outlay.money_outlay
         sql_data = directory_of_outlay.data_outlay
         stat_outlay = return_forecast(stat_outlay, sql_sum, sql_data)
-
         full_block = {"stat_payment": stat_payment, "stat_outlay": stat_outlay}
     return json.dumps(full_block)
-
-# work here now #
 
 
 def return_forecast(stat, sql_sum, sql_data):
@@ -288,32 +281,31 @@ def return_forecast(stat, sql_sum, sql_data):
     data_start_sql = (ds-time_step).strftime('%Y-%m-%d')
     data_end_sql = (ds-time_step).strftime('%Y-%m-%d')
     stat = return_stat(data_start_sql, data_end_sql, stat, sql_sum, sql_data)
-
     time_step = timedelta(days=2)
     data_start_sql = (ds-time_step).strftime('%Y-%m-%d')
     data_end_sql = (ds-time_step).strftime('%Y-%m-%d')
     stat = return_stat(data_start_sql, data_end_sql, stat, sql_sum, sql_data)
-
 #  this month
     data_start_sql = datetime.today().replace(day=1).strftime('%Y-%m-%d')
     data_end_sql = datetime.today().replace(day=(
         calendar.monthrange(dsy, dsm)[1])).strftime('%Y-%m-%d')
     stat = return_stat(data_start_sql, data_end_sql, stat, sql_sum, sql_data)
-
 # privius mohth
     data_start_sql = (((datetime.today()).replace(day=1)-timedelta(
         days=1))).replace(day=1).strftime('%Y-%m-%d')
     data_end_sql = ((datetime.today()).replace(
         day=1)-timedelta(days=1)).strftime('%Y-%m-%d')
     stat = return_stat(data_start_sql, data_end_sql, stat, sql_sum, sql_data)
-
 # this year
     data_start_sql = ds.replace(month=1, day=1).strftime('%Y-%m-%d')
     data_end_sql = ds.replace(month=12, day=31).strftime('%Y-%m-%d')
     stat = return_stat(data_start_sql, data_end_sql, stat, sql_sum, sql_data)
-
 # forecast this year
     days_year = (ds-ds.replace(month=1, day=1))
+    if stat[0] is None:
+        stat[0] = 0
+    if days_year is None or days_year == 0:
+        days_year = 1
     forecast = round((stat[0]/days_year.days)*365)
     stat.insert(0, forecast)
 
