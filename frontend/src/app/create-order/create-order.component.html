@@ -113,9 +113,9 @@
     <div class="date-order-item">
       <p class="date-order-item--title">Прогнозована дата відправки:</p>
       <div class="calendar-block">
-        <input class="form-control" placeholder="yyyy-mm-dd"
-          [minDate]="{year: 2016, month: 1, day: 1}" [maxDate]="{year: +todayYear, month: 12, day: 31}"
-          [(ngModel)]="dataPlaneOrder" ngbDatepicker #d="ngbDatepicker">
+        <input class="form-control" placeholder="yyyy-mm-dd" [minDate]="{year: 2016, month: 1, day: 1}"
+          [maxDate]="{year: +todayYear, month: 12, day: 31}" [(ngModel)]="dataPlaneOrder" ngbDatepicker
+          #d="ngbDatepicker">
         <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"><i
             class="bi bi-calendar"></i></button>
       </div>
@@ -129,12 +129,11 @@
         addTagText="+ новий номер телефону" formControlName="phone_client"
         (search)="changeClientInfo($event.term, 4, 'ur_phone')" (change)="selectedItemClient($event, 'sl_phone')">
       </ng-select>
-
-      <ng-select [clearSearchOnAdd]="false" appearance="outline" [items]="clientDataItems" type="text"
+      <ng-select [clearSearchOnAdd]="false" appearance="outline" [items]="clientDataItems"
         class="datacustomer--select data-customer--lastname" [addTag]="true" [hideSelected]="true"
-        placeholder="прізвище" addTagText="+ прізвище" formControlName="second_name_client"
+        bindLabel="secondName" placeholder="прізвище" addTagText="+ прізвище" formControlName="second_name_client"
         (search)="changeClientInfo($event.term, 3, 'ur_second_name')"
-        (change)="selectedItemClient($event, 'sl_second_name')">
+        (change)="selectedItemClient($event, 'open_id_client')">
       </ng-select>
       <input class="data-customer--firstname" type="text" placeholder="ім'я" formControlName="first_name_client">
       <ng-select [clearSearchOnAdd]="false" appearance="outline" [items]="clientDataItems" type="text"
@@ -191,11 +190,11 @@
         (change)="selectedItemClient($event, 'sl_phone', recipientForm, 'isSaveRecipient')">
       </ng-select>
 
-      <ng-select [clearSearchOnAdd]="false" appearance="outline" [items]="clientDataItems" type="text"
+      <ng-select [clearSearchOnAdd]="false" appearance="outline" [items]="clientDataItems"
         class="datacustomer--select data-customer--lastname" [addTag]="true" [hideSelected]="true"
-        placeholder="прізвище" addTagText="+ прізвище" formControlName="second_name_client"
+        bindLabel="secondName" placeholder="прізвище" addTagText="+ прізвище" formControlName="second_name_client"
         (search)="changeClientInfo($event.term, 3, 'ur_second_name')"
-        (change)="selectedItemClient($event, 'sl_second_name', recipientForm, 'isSaveRecipient')">
+        (change)="selectedItemClient($event, 'open_id_client', recipientForm, 'isSaveRecipient')">
       </ng-select>
       <input class="data-customer--firstname" type="text" placeholder="ім'я" formControlName="first_name_client">
       <ng-select [clearSearchOnAdd]="false" appearance="outline" [items]="clientDataItems" type="text"
@@ -244,4 +243,5 @@
   </div>
 </div>
 
-<app-alert *ngIf="alert.isShow" [type]="alert.type" [message]="alert.message" (closed)="alertChange($event)"></app-alert>
+<app-alert *ngIf="alert.isShow" [type]="alert.type" [message]="alert.message"
+  (closed)="alertChange($event)"></app-alert>

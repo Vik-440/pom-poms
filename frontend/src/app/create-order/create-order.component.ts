@@ -214,16 +214,17 @@ export class CreateOrderComponent implements OnInit {
             order
                 .get('quantity_pars_model')
                 .valueChanges.pipe(
-                    
                     tap((data) => {
                         const type =
-                        modelsData[order.value.kod_model?.substring(0, 3)] || modelsData[order.value.kod_model?.substring(0, 2)] || '';
-                        
+                            modelsData[order.value.kod_model?.substring(0, 3)] ||
+                            modelsData[order.value.kod_model?.substring(0, 2)] ||
+                            '';
+
                         order.patchValue({
                             sum_pars: data * order.value.price_model,
-                            phase_1: order.value.phase_1_default + (type.includes('брелок') ? +data : +(data*2)),
-                            phase_2: order.value.phase_2_default + (type.includes('брелок') ? +data : +(data*2)),
-                            phase_3: order.value.phase_3_default + +data
+                            phase_1: order.value.phase_1_default + (type.includes('брелок') ? +data : +(data * 2)),
+                            phase_2: order.value.phase_2_default + (type.includes('брелок') ? +data : +(data * 2)),
+                            phase_3: order.value.phase_3_default + +data,
                         });
                     })
                 )
@@ -483,43 +484,62 @@ export class CreateOrderComponent implements OnInit {
         );
     }
 
-    changeClientInfo(phone, minLength, keySend) {
-        if (phone.length >= minLength) {
-            this.service.getInfoForOrder({ [keySend]: phone }).subscribe((data: any) => {
-                this.clientDataItems = [...new Set([...Object.values(data)].flat())];
+    changeClientInfo(query, minLength, keySend) {
+        if (query.length >= minLength) {
+            this.service.getInfoForOrder({ [keySend]: query }).subscribe((data: any) => {
+                console.log(data);
+                if (keySend === 'ur_second_name') {
+                    this.clientDataItems = [];
+                    data.id_client.forEach((item, i) => {
+                        this.clientDataItems.push({
+                            id: item,
+                            secondName: data.second_name_client[i],
+                        });
+                    });
+                } else {
+                    this.clientDataItems = [...new Set([...Object.values(data)].flat())];
+                }
+                console.log(this.clientDataItems);
             });
         }
     }
 
     selectedItemClient(value, keySend, form = this.clientForm, saveBtn = 'isSaveClient', ignore = true) {
+        if (value && keySend === 'open_id_client') {
+            value = value.id;
+            this.sendDataClient(value, keySend, form, saveBtn);
+        }
         if ((value && this.clientDataItems.includes(value)) || !ignore) {
-            this.service
-                .getInfoForOrder({ [keySend]: value })
-                .pipe(filter(() => value))
-                .subscribe((dataClient: any) => {
-                    form.setValue(
-                        {
-                            coach: dataClient?.coach,
-                            comment_client: dataClient.comment_client,
-                            first_name_client: dataClient.first_name_client,
-                            id_client: dataClient.id_client,
-                            name_team: dataClient.name_team,
-                            phone_client: dataClient.phone_client,
-                            second_name_client: dataClient.second_name_client,
-                            sity: dataClient.sity,
-                            street_house_apartment: dataClient.street_house_apartment,
-                            surname_client: dataClient.surname_client,
-                            zip_code: dataClient.zip_code,
-                            np_number: dataClient.np_number,
-                        },
-                        { emitEvent: false }
-                    );
-                    this[saveBtn] = true;
-                });
+            this.sendDataClient(value, keySend, form, saveBtn);
         }
         this.clientDataItems = [];
     }
 
+    sendDataClient(value, keySend, form, saveBtn) {
+        this.service
+            .getInfoForOrder({ [keySend]: value })
+            .pipe(filter(() => value))
+            .subscribe((dataClient: any) => {
+                form.setValue(
+                    {
+                        coach: dataClient?.coach,
+                        comment_client: dataClient.comment_client,
+                        first_name_client: dataClient.first_name_client,
+                        id_client: dataClient.id_client,
+                        name_team: dataClient.name_team,
+                        phone_client: dataClient.phone_client,
+                        second_name_client: dataClient.second_name_client,
+                        sity: dataClient.sity,
+                        street_house_apartment: dataClient.street_house_apartment,
+                        surname_client: dataClient.surname_client,
+                        zip_code: dataClient.zip_code,
+                        np_number: dataClient.np_number,
+                    },
+                    { emitEvent: false }
+                );
+                this[saveBtn] = true;
+            });
+    }
     clearDataClient() {
         this.clientDataItems = [];
     }
@@ -613,7 +633,6 @@ export class CreateOrderComponent implements OnInit {
     }
 
     saveAll(mode = 'create') {
-
         const params = {
             id_order: +this.idOrder,
             data_order: [this.dateToday.year, this.dateToday.month, this.dateToday.day].join('-'),
@@ -777,7 +796,7 @@ export class CreateOrderComponent implements OnInit {
                         quantity_pars_model: [data.quantity_pars_model[index], Validators.required],
                         sum_pars: data.quantity_pars_model[index] * data.price_model_order[index],
                         isNew: false,
-                        isChange: false,  
+                        isChange: false,
                     })
                 );
                 this.viewChanges();
