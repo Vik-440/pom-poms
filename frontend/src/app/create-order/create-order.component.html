@@ -157,7 +157,8 @@
         addTagText="+ тренер" formControlName="coach" (search)="changeClientInfo($event.term, 3, 'ur_coach')"
         (change)="clearDataClient()">
       </ng-select>
-
+      <input class="data-customer--comment-client" type="text" formControlName="comment_client"
+        placeholder="коментар до клієнта">
     </div>
 
     <div class="check-person">
@@ -214,7 +215,6 @@
       <button class="data-customer--save save-btn ok-btn forms" *ngIf="isSaveRecipient">
         <img class="next-icon icon" src="./assets/img/icons/ok-btn.svg" />
       </button>
-      fff
       <input class="data-customer--comment-client" type="text" formControlName="comment_client"
         placeholder="коментар до клієнта">
 
