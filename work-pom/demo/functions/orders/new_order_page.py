@@ -196,31 +196,34 @@ def return_data_from_full_person(data_from_new_page):
             j_second_name_client = row.second_name_client
             tmp_id_client = row.id_client
 
-        # second_name_client = str(
-        #                 data_from_new_page['second_name_client']).capitalize,
-        # first_name_client = str(
-        #     data_from_new_page['first_name_client']).capitalize,
-        # surname_client = str(
-        #     data_from_new_page['surname_client']).capitalize,
-        # sity = str(data_from_new_page['sity']).capitalize,
-        # team = str(data_from_new_page['name_team']).capitalize,
-        # coach = str(data_from_new_page['coach']).capitalize,
+        second_name_client = data_from_new_page[
+                        'second_name_client'].title()
+        first_name_client = data_from_new_page[
+                        'first_name_client'].title()
+        surname_client = data_from_new_page[
+                        'surname_client']
+        if surname_client:
+            surname_client = surname_client.title()
+        sity = data_from_new_page['sity']
+        if sity:
+            sity = sity.title()
+        team = data_from_new_page['name_team']
+        if team:
+            team = team.title()
+        coach = data_from_new_page['coach']
+        if coach:
+            coach = coach.title()
 
         if j_second_name_client == 0:
             ins = db_c(
                     phone_client=data_from_new_page['phone_client'],
-                    # add capitalize
-                    second_name_client=data_from_new_page[
-                        'second_name_client'].title(),
-                    first_name_client=data_from_new_page[
-                        'first_name_client'].title(),
-                    surname_client=data_from_new_page[
-                        'surname_client'].title(),
-                    sity=data_from_new_page['sity'].title(),
+                    second_name_client=second_name_client,
+                    first_name_client=first_name_client,
+                    surname_client=surname_client,
+                    sity=sity,
                     np_number=data_from_new_page['np_number'],
-                    team=data_from_new_page['name_team'].title(),
-                    coach=data_from_new_page['coach'].title(),
-                    # finish
+                    team=team,
+                    coach=coach,
                     zip_code=data_from_new_page['zip_code'],
                     street_house_apartment=data_from_new_page[
                         'street_house_apartment'],
@@ -234,27 +237,16 @@ def return_data_from_full_person(data_from_new_page):
                 j_id_client = row.id_client
             one_block = {"id_client": j_id_client}
         else:
-
-            # test_city = data_from_new_page['sity']
-            # test_city_1 = test_city.title()
-            # print(f'Test_name has {type(test_city_1)} and is: {test_city_1}')
-
             ins = session.query(db_c).filter(
                 db_c.id_client == tmp_id_client).update(
                     {'phone_client': data_from_new_page['phone_client'],
-                        # start capitalize
-                        'second_name_client': data_from_new_page[
-                            'second_name_client'].title(),
-                        'first_name_client': data_from_new_page[
-                            'first_name_client'].title(),
-                        'surname_client':
-                            data_from_new_page['surname_client'].title(),
-                        'sity': data_from_new_page['sity'].title(),
+                        'second_name_client': second_name_client,
+                        'first_name_client': first_name_client,
+                        'surname_client': surname_client,
+                        'sity': sity,
                         'np_number': data_from_new_page['np_number'],
-                        'team':
-                            data_from_new_page['name_team'].title(),
-                        'coach': data_from_new_page['coach'].title(),
-                        # finish
+                        'team': team,
+                        'coach': coach,
                         'zip_code': data_from_new_page['zip_code'],
                         'street_house_apartment': data_from_new_page[
                             'street_house_apartment'],
