@@ -1,3 +1,4 @@
+"""This file waits for refactoring and drops"""
 from sqlalchemy import func
 from sqlalchemy.orm import Session
 from db.models import engine

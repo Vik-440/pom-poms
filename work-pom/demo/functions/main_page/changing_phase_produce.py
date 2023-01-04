@@ -1,30 +1,40 @@
+"""Module for changing phases of produce"""
+
 from sqlalchemy.orm import Session
+from sqlalchemy import update
 from db.models import directory_of_order as db_o
 from db.models import engine
 
 
-def change_phase_order_put(id_order, inform):
+def changing_order_phases(id_order, data):
     """Module for changing phases in order"""
     with Session(engine) as session:
-        if 'phase_1' in inform:
-            phase_int = inform['phase_1']
-            session.query(db_o).filter(
-                    db_o.id_order == id_order).update({
-                        "phase_1": phase_int})
-        elif 'phase_2' in inform:
-            phase_int = inform['phase_2']
-            session.query(db_o).filter(
-                    db_o.id_order == id_order).update({
-                        "phase_2": phase_int})
-        elif 'phase_3' in inform:
-            phase_int = inform['phase_3']
-            session.query(db_o).filter(
-                    db_o.id_order == id_order).update({
-                        "phase_3": phase_int})
-        else:
-            one_block = {"phase_chenged": "error"}
-            return one_block
+
+        if 'phase_1' in data:
+            phase_int = data['phase_1']
+            stmt = (
+                update(db_o)
+                .where(db_o.id_order == id_order)
+                .values(phase_1=phase_int))
+            session.execute(stmt)
+
+        if 'phase_2' in data:
+            phase_int = data['phase_2']
+            stmt = (
+                update(db_o)
+                .where(db_o.id_order == id_order)
+                .values(phase_2=phase_int))
+            session.execute(stmt)
+
+        if 'phase_3' in data:
+            phase_int = data['phase_3']
+            stmt = (
+                update(db_o)
+                .where(db_o.id_order == id_order)
+                .values(phase_3=phase_int))
+            session.execute(stmt)
 
         session.commit()
+
         one_block = {"message": "excellent"}
     return one_block

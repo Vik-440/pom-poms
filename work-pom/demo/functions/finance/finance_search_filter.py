@@ -1,72 +1,116 @@
+"""Module for functions for searching in finance DB - finished!"""
+
 import json
+from sqlalchemy import select
 from sqlalchemy.orm import Session
 from db.models import directory_of_payment as db_p
 from db.models import directory_of_outlay as db_ol
 from db.models import engine
 
 
-def return_data_from_payment_search(sender):
-    with Session(engine) as session:
-        data_start = sender['data_start']
-        data_end = sender['data_end']
-        iban = sender['iban']
-        cash = sender['cash']
-        if iban and not (cash):
-            payment_search_1 = session.query(db_p).filter(
-                db_p.data_payment >= data_start,
-                db_p.data_payment <= data_end).filter_by(
-                    metod_payment="iban").order_by(db_p.data_payment).all()
-        elif cash and not (iban):
-            payment_search_1 = session.query(db_p).filter(
-                db_p.data_payment >= data_start,
-                db_p.data_payment <= data_end).filter_by(
-                    metod_payment="cash").order_by(db_p.data_payment).all()
-        else:
-            payment_search_1 = session.query(db_p).filter(
-                db_p.data_payment >= data_start,
-                db_p.data_payment <= data_end).order_by(
-                    db_p.data_payment).all()
-
-        full_block = []
-        for row in payment_search_1:
-            one_block = {"id_payment": row.id_payment,
-                         "id_order": row.id_order,
-                         "payment": row.payment,
-                         "metod_payment": row.metod_payment,
-                         "data_payment": str(row.data_payment)}
-            full_block.append(one_block)
-    return json.dumps(full_block)
-
-
-def return_data_from_outlay_search(sender):
-    with Session(engine) as session:
-        data_start = sender['data_start']
-        data_end = sender['data_end']
-        full_block = []
-        outlay_search_1 = session.query(db_ol).filter(
-            db_ol.data_outlay >= data_start,
-            db_ol.data_outlay <= data_end).order_by(db_ol.data_outlay).all()
-        for row in outlay_search_1:
-            one_block = {"id_outlay": row.id_outlay,
-                         "data_outlay": str(row.data_outlay),
-                         "id_outlay_class": row.id_outlay_class,
-                         "money_outlay": row.money_outlay,
-                         "comment_outlay": row.comment_outlay}
-            full_block.append(one_block)
-    return json.dumps(full_block)
+def payment_searching(data):
+    """Search payments with filters (data and methods)"""
+    try:
+        with Session(engine) as session:
+            data_start = data['data_start']
+            data_end = data['data_end']
+            iban = data['iban']
+            cash = data['cash']
+            select_block = select(
+                    db_p.id_payment,
+                    db_p.id_order,
+                    db_p.payment,
+                    db_p.metod_payment,
+                    db_p.data_payment)
+            if iban and not (cash):
+                stmt = (
+                    select_block
+                    .where(db_p.data_payment >= data_start,
+                           db_p.data_payment <= data_end,
+                           db_p.metod_payment == 'iban')
+                    .order_by(db_p.data_payment))
+            elif cash and not (iban):
+                stmt = (
+                    select_block
+                    .where(db_p.data_payment >= data_start,
+                           db_p.data_payment <= data_end,
+                           db_p.metod_payment == 'cash')
+                    .order_by(db_p.data_payment))
+            else:
+                stmt = (
+                    select_block
+                    .where(db_p.data_payment >= data_start,
+                           db_p.data_payment <= data_end)
+                    .order_by(db_p.data_payment))
+            payments = session.execute(stmt).all()
+            full_block = []
+            for row in payments:
+                one_block = {"id_payment": row.id_payment,
+                             "id_order": row.id_order,
+                             "payment": row.payment,
+                             "metod_payment": row.metod_payment,
+                             "data_payment": str(row.data_payment)}
+                full_block.append(one_block)
+        return json.dumps(full_block)
+    except Exception as e:
+        return f'Error in function payment_searching: {e}', 500
 
 
-def return_data_from_payment_id_order(sender):
-    with Session(engine)as session:
-        tmp_order = sender['id_order']
-        full_block = []
-        payment_search_1 = session.query(db_p).filter_by(
-            id_order=tmp_order).order_by(db_p.data_payment).all()
-        for row in payment_search_1:
-            one_block = {"id_payment": row.id_payment,
-                         "id_order": row.id_order,
-                         "payment": row.payment,
-                         "metod_payment": row.metod_payment,
-                         "data_payment": str(row.data_payment)}
-            full_block.append(one_block)
-    return json.dumps(full_block)
+def outlay_searching(data):
+    """Search outlays with filters"""
+    try:
+        with Session(engine) as session:
+            data_start = data['data_start']
+            data_end = data['data_end']
+            select_block = select(
+                db_ol.id_outlay,
+                db_ol.data_outlay,
+                db_ol.id_outlay_class,
+                db_ol.money_outlay,
+                db_ol.comment_outlay)
+            stmt = (
+                select_block
+                .where(db_ol.data_outlay >= data_start,
+                       db_ol.data_outlay <= data_end)
+                .order_by(db_ol.data_outlay))
+            outlays = session.execute(stmt).all()
+            full_block = []
+            for row in outlays:
+                one_block = {"id_outlay": row.id_outlay,
+                             "data_outlay": str(row.data_outlay),
+                             "id_outlay_class": row.id_outlay_class,
+                             "money_outlay": row.money_outlay,
+                             "comment_outlay": row.comment_outlay}
+                full_block.append(one_block)
+        return json.dumps(full_block)
+    except Exception as e:
+        return f'Error in function outlay_searching: {e}', 500
+
+
+def payment_id_order_searching(data):
+    """Search payments by id order"""
+    try:
+        with Session(engine)as session:
+            id_order = data['id_order']
+            select_block = select(
+                    db_p.id_payment,
+                    db_p.id_order,
+                    db_p.payment,
+                    db_p.metod_payment,
+                    db_p.data_payment)
+            stmt = (
+                select_block
+                .where(db_p.id_order == id_order)
+                .order_by(db_p.data_payment))
+            payments = session.execute(stmt).all()
+            full_block = []
+            for row in payments:
+                one_block = {"id_payment": row.id_payment,
+                             "id_order": row.id_order,
+                             "payment": row.payment,
+                             "metod_payment": row.metod_payment,
+                             "data_payment": str(row.data_payment)}
+                full_block.append(one_block)
+        return json.dumps(full_block)
+    except Exception as e:
+        return f'Error in function payment_id_order_searching: {e}', 500

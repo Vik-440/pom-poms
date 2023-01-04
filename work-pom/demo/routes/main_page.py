@@ -2,7 +2,7 @@ from flask import request
 from app import app
 
 from functions.main_page.get_main_search import get_main
-from functions.main_page.changing_phase_produce import change_phase_order_put
+from functions.main_page.changing_phase_produce import changing_order_phases
 from functions.main_page.changing_status_order import changing_status_order
 
 from functions.main_page_json import return_data_from_main_page
@@ -64,7 +64,7 @@ def main_phase_get(id):
     request.data = request.get_json()
     try:
         if request.method == 'PUT':
-            return (change_phase_order_put(id, request.data)), 200
+            return (changing_order_phases(id, request.data)), 200
         else:
             return ({"error_message": "mistake method"}), 404
     except Exception as e:

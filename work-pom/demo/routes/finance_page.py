@@ -2,36 +2,34 @@ from flask import request
 from app import app
 
 from functions.finance.finance_crate_data import (
-    return_data_from_payment,
-    return_data_from_outlay)
+    creating_payment,
+    creating_outlay)
 from functions.finance.finance_change_data import (
-    return_data_from_payment_change,
-    return_data_from_outlay_change)
+    payment_changing,
+    outlay_changing)
 from functions.finance.finance_statistics import (
     return_data_from_payment_stat,
     return_data_from_payment_balans)
 from functions.finance.finance_search_filter import (
-    return_data_from_payment_search,
-    return_data_from_outlay_search,
-    return_data_from_payment_id_order)
+    payment_searching,
+    outlay_searching,
+    payment_id_order_searching)
 from functions.finance.finance_start_requests import (
-    ret_dat_fin_pay_get,
-    ret_dat_fin_out_get)
+    opening_last_payments,
+    opening_last_outlays)
 from log.logger import logger
 
 
-@app.route('/finance', methods=['GET', 'POST'])
+@app.route('/finance', methods=['POST'])
 def finance():
     try:
-        if request.method == 'POST':
-            request.data = request.get_json()
-            if 'outlay_search' in request.data:
-                return (return_data_from_outlay_search(request.data)), 200
-            if 'stat' in request.data:
-                return (return_data_from_payment_stat(request.data)), 200
-            return ({"testdata": "Test-POST-error"}), 500
+        request.data = request.get_json()
+        if 'outlay_search' in request.data:
+            return (outlay_searching(request.data)), 200
+        elif 'stat' in request.data:
+            return (return_data_from_payment_stat(request.data)), 200
         else:
-            return ({"Finance": "error"}), 500
+            return ({"message": "finance POST error"}), 500
     except Exception as e:
         logger.error(f'Error in function finance: {e}')
         return f'Error in function finance: {e}', 500
@@ -43,19 +41,21 @@ def fin_pay_balans():
         request.data = request.get_json()
         if 'balans' in request.data:
             return (return_data_from_payment_balans(request.data)), 200
+        else:
+            return ({"message": "payments/statics is error"}), 500
     except Exception as e:
-        logger.error(f'Error in finance_payments_balans POST: {e}')
-        return f'Error in finance_payments GET: {e}', 500
+        logger.error(f'Error in finance payments balans POST: {e}')
+        return f'Error in finance payments statics balans: {e}', 500
 
 
 @app.route('/finance/payments', methods=['POST'])
 def fin_pay_search():
     try:
         request.data = request.get_json()
-        return (return_data_from_payment_search(request.data)), 200
+        return (payment_searching(request.data)), 200
     except Exception as e:
         logger.error(f'Error in finance_payments_search POST: {e}')
-        return f'Error in finance_payments GET: {e}', 500
+        return f'Error in finance_payments POST: {e}', 500
 
 
 @app.route('/finance/order_payments', methods=['POST'])
@@ -63,10 +63,12 @@ def fin_pay_order():
     try:
         request.data = request.get_json()
         if 'id_order' in request.data:
-            return (return_data_from_payment_id_order(request.data)), 200
+            return (payment_id_order_searching(request.data)), 200
+        else:
+            return ({"message": "order_payments is error"}), 500
     except Exception as e:
         logger.error(f'Error in finance_payments_order POST: {e}')
-        return f'Error in finance_payments GET: {e}', 500
+        return f'Error in order_payments POST: {e}', 500
 
 
 @app.route('/finance/methods', methods=['GET'])
@@ -87,7 +89,7 @@ def fin_met():
 @app.route('/finance/payments', methods=['GET'])
 def fin_pay():
     try:
-        return (ret_dat_fin_pay_get()), 200
+        return (opening_last_payments()), 200
     except Exception as e:
         logger.error(f'Error in finance_payments GET: {e}')
         return f'Error in finance_payments GET: {e}', 500
@@ -96,7 +98,7 @@ def fin_pay():
 @app.route('/finance/outlays', methods=['GET'])
 def fin_out():
     try:
-        return (ret_dat_fin_out_get()), 200
+        return (opening_last_outlays()), 200
     except Exception as e:
         logger.error(f'Error in finance_outlays GET: {e}')
         return f'Error in finance_outlays GET: {e}', 500
@@ -107,7 +109,7 @@ def finance_payment():
     try:
         if request.method == 'POST':
             request.data = request.get_json()
-            return (return_data_from_payment(request.data)), 200
+            return (creating_payment(request.data)), 200
     except Exception as e:
         logger.error(f'Error in function finance: {e}')
         return f'Error in function finance: {e}', 500
@@ -118,7 +120,7 @@ def finance_payment_change(id):
     try:
         if request.method == 'PUT':
             request.data = request.get_json()
-            return (return_data_from_payment_change(id, request.data)), 200
+            return (payment_changing(id, request.data)), 200
         else:
             return ({"error_message": "mistake method"}), 404
     except Exception as e:
@@ -131,18 +133,18 @@ def finance_outlay():
     request.data = request.get_json()
     try:
         if request.method == 'POST':
-            return (return_data_from_outlay(request.data)), 200
+            return (creating_outlay(request.data)), 200
     except Exception as e:
         logger.error(f'Error in function finance: {e}')
         return f'Error in function finance: {e}', 500
 
 
 @app.route('/finance/outlay/<int:id>', methods=['PUT'])
-def finance_outlay_change(id):
+def finance_outlay_changing(id):
     request.data = request.get_json()
     try:
         if request.method == 'PUT':
-            return (return_data_from_outlay_change(id, request.data)), 200
+            return (outlay_changing(id, request.data)), 200
         else:
             return ({"error_message": "mistake method"}), 404
     except Exception as e:
