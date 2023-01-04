@@ -1,9 +1,6 @@
-# from array import ArrayType, array
 from sqlalchemy import Date, ForeignKey, create_engine, Column
 from sqlalchemy import Integer, String, Boolean
 from sqlalchemy.orm import declarative_base
-# from sqlalchemy.ext.declarative import declarative_base
-# from sqlalchemy.orm import relationship
 from dotenv import load_dotenv
 import os
 from sqlalchemy.dialects import postgresql
@@ -38,25 +35,18 @@ class directory_of_order(Base):
     data_plane_order = Column('data_plane_order', Date)
     id_client = Column('id_client', Integer)
     id_recipient = Column('id_recipient', Integer)
-    # data_send_order = Column('data_send_order', Date)
     fulfilled_order = Column('fulfilled_order', Boolean)
     sum_payment = Column('sum_payment', Integer)
     discont_order = Column('discont_order', Integer)
     comment_order = Column('comment_order', String)
 
     id_model = Column('id_model', postgresql.ARRAY(Integer))
-    # ("data", postgresql.ARRAY(Integer, dimensions=2))
     quantity_pars_model = Column(
         'quantity_pars_model', postgresql.ARRAY(Integer))
-    # phase_1_model = Column('phase_1_model', postgresql.ARRAY(Boolean))
-    # phase_2_model = Column('phase_2_model', postgresql.ARRAY(Boolean))
-    # phase_3_model = Column('phase_3_model', postgresql.ARRAY(Boolean))
     price_model_order = Column('price_model_order', postgresql.ARRAY(Integer))
     phase_1 = Column('phase_1', postgresql.ARRAY(Integer))
     phase_2 = Column('phase_2', postgresql.ARRAY(Integer))
     phase_3 = Column('phase_3', postgresql.ARRAY(Integer))
-    # client = relationship("directory_of_client", foreign_keys=[id_client])
-    # recipient = relationship("directory_of_client", foreign_keys=[id_client])
 
 
 class directory_of_client(Base):
@@ -92,21 +82,6 @@ class directory_of_model(Base):
     comment_model = Column('comment_model', String)
 
 
-# class directory_of_group(Base):
-#     __tablename__ = 'directory_of_group'
-#     id_group_model = Column('id_group_model', Integer, primary_key=True)
-#     id_model = Column('id_model', Integer, ForeignKey(
-#         'directory_of_model.id_model'))
-#     id_order = Column('id_order', Integer)
-#     quantity_pars_model = Column('quantity_pars_model', Integer)
-#     phase_1_model = Column('phase_1_model', Boolean)
-#     phase_2_model = Column('phase_2_model', Boolean)
-#     phase_3_model = Column('phase_3_model', Boolean)
-#     price_model_order = Column('price_model_order', Integer)
-
-#     model = relationship("directory_of_model", foreign_keys=[id_model])
-
-
 class directory_of_payment(Base):
     __tablename__ = 'directory_of_payment'
     id_payment = Column('id_payment', Integer, primary_key=True)
@@ -140,9 +115,3 @@ class directory_of_outlay(Base):
     id_outlay_class = Column('id_outlay_class', String)
     money_outlay = Column('money_outlay', Integer)
     comment_outlay = Column('comment_outlay', String)
-
-
-# class directory_of_outlay_class(Base):
-#     __tablename__ = 'directory_of_outlay_class'
-#     id_outlay_class = Column('id_outlay_class', Integer, primary_key=True)
-#     outlay_class = Column('outlay_class', String)
