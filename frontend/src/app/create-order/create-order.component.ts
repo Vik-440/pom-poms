@@ -104,6 +104,12 @@ export class CreateOrderComponent implements OnInit {
         }
     }
 
+    requiredFalse(){
+        return (control) => {
+            return control.value
+          }
+    }
+
     init() {
         this.commentOrder = '';
         this.isSaveClient = false;
@@ -147,7 +153,7 @@ export class CreateOrderComponent implements OnInit {
                 phase_3_default: 0,
                 sum_pars: null,
                 comment_model: null,
-                isNew: true,
+                isNew: [true, this.requiredFalse()],
                 isChange: false,
             }),
         ]);
@@ -316,7 +322,7 @@ export class CreateOrderComponent implements OnInit {
         });
     }
 
-    changeKodModel(value, index) {
+    changeKodModel(value) {
         if (value.length >= 3) {
             this.service.getInfoForOrder({ ur_kod: value }).subscribe((kods: any) => {
                 this.kodItems = kods?.kod_model;
@@ -433,7 +439,7 @@ export class CreateOrderComponent implements OnInit {
                 phase_3_default: 0,
                 sum_pars: null,
                 comment_model: null,
-                isNew: true,
+                isNew: [true, this.requiredFalse()],
                 isChange: false,
             })
         );
@@ -487,7 +493,6 @@ export class CreateOrderComponent implements OnInit {
     changeClientInfo(query, minLength, keySend) {
         if (query.length >= minLength) {
             this.service.getInfoForOrder({ [keySend]: query }).subscribe((data: any) => {
-                console.log(data);
                 if (keySend === 'ur_second_name') {
                     this.clientDataItems = [];
                     data.id_client.forEach((item, i) => {
@@ -499,7 +504,6 @@ export class CreateOrderComponent implements OnInit {
                 } else {
                     this.clientDataItems = [...new Set([...Object.values(data)].flat())];
                 }
-                console.log(this.clientDataItems);
             });
         }
     }
@@ -604,7 +608,7 @@ export class CreateOrderComponent implements OnInit {
                 this.recipientForm.patchValue({
                     id_client: data.id_recipient,
                 });
-                this.isSaveClient = false;
+                // this.isSaveClient = true;
                 this.isShowSpinner = false;
                 this.isSaveRecipient = true;
             },

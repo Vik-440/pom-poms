@@ -23,7 +23,7 @@
     <div class="form__fields">
       <ng-select [clearSearchOnAdd]="false" appearance="outline" [items]="kodItems" type="text" class="form__field"
         [addTag]="true" [hideSelected]="true" placeholder="код" addTagText="+ нова модель" formControlName="kod_model"
-        (search)="changeKodModel($event.term, index)" (change)="chooseKode($event, index)">
+        (search)="changeKodModel($event.term)" (change)="chooseKode($event, index)">
       </ng-select>
       <input type="text" class="form__field" placeholder="колір помпона" formControlName="kolor_model">
     </div>
@@ -224,12 +224,12 @@
       placeholder="коментар до замовлення"></textarea>
     <div class="finished-order--btns">
       <button class="finished-order--btn edit"
-        [disabled]="isNew || !((isSaveClient && isSaveRecipient || !isRecipient) && dataPlaneOrder && clientForm.valid && orderForm.valid)"
+        [disabled]="isNew || ((!isSaveClient || (!isSaveRecipient && isRecipient)) && dataPlaneOrder && clientForm.valid && orderForm.valid)"
         (click)="saveAll('edit')">Редагувати</button>
       <button class="finished-order--btn" [ngClass]="{'done': !fulfilledOrder, 'wave': fulfilledOrder}"
         (click)="makeOrderDone()">Виконано</button>
       <button class="finished-order--btn malachite" *ngIf="!doneOrder" (click)="saveAll()"
-        [disabled]="!isNew || !((isSaveClient && isSaveRecipient || !isRecipient) && dataPlaneOrder && clientForm.valid && orderForm.valid)">Оформити
+        [disabled]="!isNew || ((!isSaveClient || (!isSaveRecipient && isRecipient)) && dataPlaneOrder && clientForm.valid && orderForm.valid && !orderForm.value.isNew)">Оформити
         замовлення</button>
       <button class="finished-order--btn wave" *ngIf="doneOrder">Оформлено</button>
       <button class="finished-order--btn teal-blue" (click)="copyScore()">Виставити рахунок</button>
