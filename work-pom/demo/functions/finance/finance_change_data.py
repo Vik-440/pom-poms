@@ -1,41 +1,45 @@
+"""Module for changing data in payments and outlays - finished!"""
+
+from sqlalchemy import update
 from sqlalchemy.orm import Session
 from db.models import directory_of_payment as db_p
 from db.models import directory_of_outlay as db_ol
 from db.models import engine
 
 
-def return_data_from_payment_change(id, sender):
+def payment_changing(id_payment, data):
+    """module rof changing data in payment"""
     try:
         with Session(engine)as session:
-            id_order = sender['id_order']
-            payment = sender['payment']
-            metod_payment = sender['metod_payment']
-            data_payment = sender['data_payment']
-            session.query(db_p).filter_by(
-                id_payment=id).update(
-                    {'id_order': id_order, 'payment': payment,
-                     'metod_payment': metod_payment,
-                     'data_payment': data_payment})
+            stmt = (
+                update(db_p)
+                .where(db_p.id_payment == id_payment)
+                .values(
+                    id_order=data['id_order'],
+                    payment=data['payment'],
+                    metod_payment=data['metod_payment'],
+                    data_payment=data['data_payment']))
+            session.execute(stmt)
             session.commit()
-        return ({"id_payment": "ok"})
+        return ({"message": "payment_changing excellent"})
     except Exception as e:
-        return f'Error in function finance: {e}', 500
+        return f'Error in function payment_changing: {e}', 500
 
 
-def return_data_from_outlay_change(id, sender):
+def outlay_changing(id_outlay, data):
+    """module rof changing data in outlay"""
     try:
         with Session(engine)as session:
-            data_outlay = sender['data_outlay']
-            id_outlay_class = sender['id_outlay_class']
-            money_outlay = sender['money_outlay']
-            comment_outlay = sender['comment_outlay']
-            session.query(db_ol).filter_by(
-                id_outlay=id).update(
-                    {'data_outlay': data_outlay,
-                     'id_outlay_class': id_outlay_class,
-                     'money_outlay': money_outlay,
-                     'comment_outlay': comment_outlay})
+            stmt = (
+                update(db_ol)
+                .where(db_ol.id_outlay == id_outlay)
+                .values(
+                    data_outlay=data['data_outlay'],
+                    id_outlay_class=data['id_outlay_class'],
+                    money_outlay=data['money_outlay'],
+                    comment_outlay=data['comment_outlay']))
+            session.execute(stmt)
             session.commit()
-        return ({"id_outlay": "ok"})
+        return ({"message": "outlay_changing excellent"})
     except Exception as e:
-        return f'Error in function finance: {e}', 500
+        return f'Error in function outlay_changing: {e}', 500

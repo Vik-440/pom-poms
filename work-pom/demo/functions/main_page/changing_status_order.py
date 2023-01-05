@@ -1,11 +1,7 @@
-# import json
 from datetime import datetime
 from sqlalchemy import select, update
 from sqlalchemy.orm import Session
 from db.models import directory_of_order as db_o
-# from db.models import directory_of_client as db_c
-# from db.models import directory_of_payment as db_p
-# from db.models import directory_of_model as db_m
 from db.models import engine
 
 
