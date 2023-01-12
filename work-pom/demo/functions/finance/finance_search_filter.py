@@ -17,11 +17,11 @@ def payment_searching(data):
             iban = data['iban']
             cash = data['cash']
             select_block = select(
-                    db_p.id_payment,
-                    db_p.id_order,
-                    db_p.payment,
-                    db_p.metod_payment,
-                    db_p.data_payment)
+                db_p.id_payment,
+                db_p.id_order,
+                db_p.payment,
+                db_p.metod_payment,
+                db_p.data_payment)
             if iban and not (cash):
                 stmt = (
                     select_block
@@ -93,11 +93,11 @@ def payment_id_order_searching(data):
         with Session(engine)as session:
             id_order = data['id_order']
             select_block = select(
-                    db_p.id_payment,
-                    db_p.id_order,
-                    db_p.payment,
-                    db_p.metod_payment,
-                    db_p.data_payment)
+                db_p.id_payment,
+                db_p.id_order,
+                db_p.payment,
+                db_p.metod_payment,
+                db_p.data_payment)
             stmt = (
                 select_block
                 .where(db_p.id_order == id_order)

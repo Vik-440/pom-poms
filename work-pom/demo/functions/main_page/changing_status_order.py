@@ -14,8 +14,9 @@ def changing_status_order(id_order: int, data: bool):
                 db_o.id_order == id_order).values(fulfilled_order=False)
         else:
             ds = datetime.today().strftime('%Y-%m-%d')
-            stmt = select(db_o.quantity_pars_model).where(
-                            db_o.id_order == id_order)
+            stmt = (
+                select(db_o.quantity_pars_model)
+                .where(db_o.id_order == id_order))
             pre_data = session.execute(stmt).first()
             phaze_to_ziro = []
             for step in pre_data:
@@ -32,5 +33,5 @@ def changing_status_order(id_order: int, data: bool):
                     data_plane_order=ds))
         session.execute(stmt)
         session.commit()
-        one_block = {"message": "excellent"}
+        one_block = {"message": "changing_status_order_excellent"}
     return one_block
