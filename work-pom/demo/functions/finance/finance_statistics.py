@@ -1,3 +1,4 @@
+"""Module for count and create ctatistic and forecast on future - finished!"""
 import json
 from sqlalchemy import func
 from datetime import datetime, timedelta
@@ -8,12 +9,13 @@ from db.models import engine
 import calendar
 
 
-def return_data_from_payment_stat(search):
+def extracting_payment_statistics():
+    """main block for forecast module"""
     with Session(engine):
-        stat, stat_outlay = [], []
+        stat_payment, stat_outlay = [], []
         sql_sum = db_p.payment
         sql_data = db_p.data_payment
-        stat_payment = return_forecast(stat, sql_sum, sql_data)
+        stat_payment = return_forecast(stat_payment, sql_sum, sql_data)
         sql_sum = db_ol.money_outlay
         sql_data = db_ol.data_outlay
         stat_outlay = return_forecast(stat_outlay, sql_sum, sql_data)
@@ -22,6 +24,7 @@ def return_data_from_payment_stat(search):
 
 
 def return_forecast(stat, sql_sum, sql_data):
+    """module collecting info from db by data_time"""
     ds = datetime.today()
     ds1 = ds.strftime('%Y-%m-%d')
     dsm = ds.strftime('%Y,%m')
@@ -39,22 +42,22 @@ def return_forecast(stat, sql_sum, sql_data):
     data_start_sql = (ds-time_step).strftime('%Y-%m-%d')
     data_end_sql = (ds-time_step).strftime('%Y-%m-%d')
     stat = return_stat(data_start_sql, data_end_sql, stat, sql_sum, sql_data)
-#  this month
+    #  this month
     data_start_sql = datetime.today().replace(day=1).strftime('%Y-%m-%d')
     data_end_sql = datetime.today().replace(day=(
         calendar.monthrange(dsy, dsm)[1])).strftime('%Y-%m-%d')
     stat = return_stat(data_start_sql, data_end_sql, stat, sql_sum, sql_data)
-# privius mohth
+    # privius mohth
     data_start_sql = (((datetime.today()).replace(day=1)-timedelta(
         days=1))).replace(day=1).strftime('%Y-%m-%d')
     data_end_sql = ((datetime.today()).replace(
         day=1)-timedelta(days=1)).strftime('%Y-%m-%d')
     stat = return_stat(data_start_sql, data_end_sql, stat, sql_sum, sql_data)
-# this year
+    # this year
     data_start_sql = ds.replace(month=1, day=1).strftime('%Y-%m-%d')
     data_end_sql = ds.replace(month=12, day=31).strftime('%Y-%m-%d')
     stat = return_stat(data_start_sql, data_end_sql, stat, sql_sum, sql_data)
-# forecast this year
+    # forecast this year
     days_year = (ds-ds.replace(month=1, day=1))
     if stat[0] is None:
         stat[0] = 0
@@ -67,22 +70,26 @@ def return_forecast(stat, sql_sum, sql_data):
 
 
 def return_stat(data_start_sql, data_end_sql, stat, sql_sum, sql_data):
+    """Extracting data frm DB and counting SUM"""
     with Session(engine) as session:
-        payment_1 = session.query(func.sum(sql_sum).label('my_sum')).filter(
-                sql_data >= data_start_sql, sql_data <= data_end_sql).first()
+        payment_1 = (session
+            .query(func.sum(sql_sum).label('my_sum'))
+            .filter(sql_data >= data_start_sql, sql_data <= data_end_sql)
+            .first())
         for row in payment_1:
             payment = payment_1.my_sum
         stat.insert(0, payment)
     return (stat)
 
 
-def return_data_from_payment_balans(sender):
+def extracting_payment_balans(data):
+    """Extracting data for creating balance in finance"""
     with Session(engine)as session:
-        time_period_str = sender['balans']
-        data_start = sender['data_start']
-        data_end = sender['data_end']
-        iban = sender['iban']
-        cash = sender['cash']
+        time_period_str = data['balans']
+        data_start = data['data_start']
+        data_end = data['data_end']
+        iban = data['iban']
+        cash = data['cash']
         full_block, payment, metod_payment = [], [], []
 
         data_start_obj = datetime.strptime(data_start, '%Y-%m-%d')
@@ -121,32 +128,33 @@ def return_data_from_payment_balans(sender):
         while day > 0:
             if iban and not (cash):
                 metod_payment = 'iban'
-                payment_1 = session.query(
-                    func.sum(db_p.payment).label('my_sum'),
-                    func.count(
-                        db_p.payment).label(
-                        'my_count')).filter(
-                    db_p.data_payment >= data_start_sql,
-                    db_p.data_payment <= data_end_sql
-                    ).filter_by(metod_payment="iban").first()
+                payment_1 = (session
+                    .query(
+                        func.sum(db_p.payment).label('my_sum'),
+                        func.count(db_p.payment).label('my_count'))
+                    .filter(
+                        db_p.data_payment >= data_start_sql,
+                        db_p.data_payment <= data_end_sql)
+                    .filter_by(metod_payment="iban")
+                    .first())
             elif cash and not (iban):
                 metod_payment = 'cash'
-                payment_1 = session.query(
-                    func.sum(db_p.payment).label('my_sum'),
-                    func.count(db_p.payment).label('my_count')
-                    ).filter(
-                    db_p.data_payment >= data_start_sql,
-                    db_p.data_payment <= data_end_sql
-                    ).filter_by(metod_payment="cash").first()
+                payment_1 = (session
+                    .query(func.sum(db_p.payment).label('my_sum'),
+                           func.count(db_p.payment).label('my_count'))
+                    .filter(db_p.data_payment >= data_start_sql,
+                            db_p.data_payment <= data_end_sql)
+                    .filter_by(metod_payment="cash")
+                    .first())
             else:
                 metod_payment = 'all'
-                payment_1 = session.query(
-                    func.sum(db_p.payment).label('my_sum'),
-                    func.count(db_p.payment).label('my_count')
-                    ).filter(
-                    db_p.data_payment >= data_start_sql,
-                    db_p.data_payment <= data_end_sql).first()
-            for row in payment_1:
+                payment_1 = (session
+                    .query(func.sum(db_p.payment).label('my_sum'),
+                           func.count(db_p.payment).label('my_count'))
+                    .filter(db_p.data_payment >= data_start_sql,
+                            db_p.data_payment <= data_end_sql)
+                    .first())
+            for _ in payment_1:
                 payment_quantity = payment_1.my_count
                 payment = payment_1.my_sum
             if payment_quantity != 0:

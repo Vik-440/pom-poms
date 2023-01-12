@@ -8,8 +8,8 @@ from functions.finance.finance_change_data import (
     payment_changing,
     outlay_changing)
 from functions.finance.finance_statistics import (
-    return_data_from_payment_stat,
-    return_data_from_payment_balans)
+    extracting_payment_statistics,
+    extracting_payment_balans)
 from functions.finance.finance_search_filter import (
     payment_searching,
     outlay_searching,
@@ -27,7 +27,7 @@ def finance():
         if 'outlay_search' in request.data:
             return (outlay_searching(request.data)), 200
         elif 'stat' in request.data:
-            return (return_data_from_payment_stat(request.data)), 200
+            return (extracting_payment_statistics()), 200
         else:
             return ({"message": "finance POST error"}), 500
     except Exception as e:
@@ -40,7 +40,7 @@ def fin_pay_balans():
     try:
         request.data = request.get_json()
         if 'balans' in request.data:
-            return (return_data_from_payment_balans(request.data)), 200
+            return (extracting_payment_balans(request.data)), 200
         else:
             return ({"message": "payments/statics is error"}), 500
     except Exception as e:
