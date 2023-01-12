@@ -8,30 +8,6 @@ import { DatepickerOptions } from 'ng2-datepicker';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { CreateOrderService } from '../services/create-order.service';
 import { MainPageService } from '../services/main-table.service';
-interface OrderInterface {
-    id_order: number;
-    data_order: string;
-    kolor_model: string[] | string;
-    kod_model: string[] | string;
-    comment_model: string[] | string;
-    kolor_cell_model: string[] | string;
-    quantity_pars_model: number[] | number;
-    kolor_cell_pars: string[] | string;
-    phase_1: number;
-    phase_2: number;
-    phase_3: number;
-    phase_1_model: boolean[] | boolean;
-    phase_2_model: boolean[] | boolean;
-    phase_3_model: boolean[] | boolean;
-    sum_payment: number;
-    real_money: number;
-    left_money: number;
-    telephone: string;
-    sity: string[] | string;
-    data_plane_order: string;
-    fulfilled_order: boolean;
-    comment_order: number[] | number;
-}
 
 @Component({
     selector: 'app-table',

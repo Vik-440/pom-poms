@@ -509,13 +509,17 @@ export class CreateOrderComponent implements OnInit {
     }
 
     selectedItemClient(value, keySend, form = this.clientForm, saveBtn = 'isSaveClient', ignore = true) {
-        if (value && keySend === 'open_id_client') {
+        if (value && keySend === 'open_id_client' && this.clientDataItems.includes(value)) {
             value = value.id;
             this.sendDataClient(value, keySend, form, saveBtn);
         }
         if ((value && this.clientDataItems.includes(value)) || !ignore) {
             this.sendDataClient(value, keySend, form, saveBtn);
         }
+
+        form.patchValue({
+            second_name_client: value.secondName || value
+        });
         this.clientDataItems = [];
     }
 

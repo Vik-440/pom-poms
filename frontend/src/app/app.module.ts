@@ -21,6 +21,7 @@ import { FinancesComponent } from './finances/finances.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { ReserveComponent } from './reserve/reserve.component';
 import { TableComponent } from './table/table.component';
+import { MainTableComponent } from './main-table/main-table.component';
 @NgModule({
     declarations: [
         AppComponent,
@@ -30,6 +31,7 @@ import { TableComponent } from './table/table.component';
         ReserveComponent,
         FinancesComponent,
         AlertComponent,
+        MainTableComponent,
     ],
     imports: [
         NgToggleModule,
