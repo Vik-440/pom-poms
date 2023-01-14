@@ -1,3 +1,4 @@
+"""This page is old and waiting for delete after refactorind Front-end"""
 import json
 from sqlalchemy import func
 from datetime import datetime
