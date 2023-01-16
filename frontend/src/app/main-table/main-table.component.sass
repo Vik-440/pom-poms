@@ -1,12 +1,94 @@
-.main-table
+.main-wrapper
   margin: 20px 50px
+  margin-top: 4rem
   display: flex
   justify-content: center
+  flex-direction: column
+  &--header
+    display: flex
+    justify-content: space-between
+    & .info
+        display: flex
+        align-items: center
+        &--title
+          font-weight: 400
+          font-size: 16px
+          line-height: 12px
+        & .speed
+          width: 75px
+          height: 25px
+          background: #FFFFFF
+          border: 0.5px solid #727272
+          border-radius: 25px
+          margin-left: 5px
+          margin-right: 18px
+          text-align: center
+          -webkit-appearance: none
+          -moz-appearance: none
+          appearance: none
+        & .downloaded
+          display: flex
+          align-items: center
+          & ::ng-deep
+            input
+              border: none
+              margin-left: 5px
+              width: 100px
+  & .btn-filter
+    border: none
+    background: #7d7d7d
+    height: 40px
+    width: 100px
+    border-radius: 10px
+    &.effect 
+      text-align: center
+      display: inline-block
+      position: relative
+      text-decoration: none
+      color: #e7e7e7
+      text-transform: capitalize
+      font:
+        family: 'Roboto', sans-serif
+        size: 18px
+      overflow: hidden
+      &.effect-1 
+        transition: all 0.2s linear 0s
+        &:before
+          content: "\2794"
+          font-family: FontAwesome
+          font-size: 15px
+          position: absolute
+          display: flex
+          align-items: center
+          justify-content: center
+          right: 0
+          top: 0
+          opacity: 0
+          height: 100%
+          width: 40px
+          transition: all 0.2s linear 0s
+        &:hover 
+          text-indent: -20px
+          &:before 
+            opacity: 1
+            text-indent: 0px
+
 
 .table
   margin-top: 20px
   width: 100%
+  border: 0.5px solid #111
+  & th
+    border: none
+    border-right: 1px solid white
+    box-sizing: content-box
+  & td
+    border: 0.5px solid #111
+  & thead
+    // display: block
   & .center-data
+    & th
+      // display: block
     & .number-order
       width: 61px
     & .data-order
@@ -18,20 +100,100 @@
     & .money
       width: 194px
     & .phone
-      width: 133px
+      width: 150px
     & .quantity
       width: 41px
     & .sity
       width: 125px
     & .data_plane
       width: 98px
-    & .downloaded
+    & .done
       width: 41px
+      border-right-color: #111
     & .phase
-      width: 20px
+      width: 45px
+
+.phase-input
+  width: 100%
+  border: none
+  background: transparent
+  opacity: 0.6
+  text-align: center
+  padding: 0
 
 .clickable
   color: #111
   text-decoration: none
   &:hover
     color: #7a7979
+
+.check-btn
+  border: none
+  padding: 0px
+  &:active
+    transform: scale(0.8)
+  & .check-icon
+    height: 15px
+
+.bb_solid
+  border-bottom: 0.5px solid #111 !important
+  box-sizing: content-box
+  &.phases
+    padding-left: 0px
+  &:last-child
+    border-bottom: none !important
+
+
+::ng-deep ngb-offcanvas-panel.offcanvas.offcanvas-end.show
+    position: absolute
+    display: block
+    top: 0px
+    right: 0
+    width: 400px
+    height: 100%
+    background: #c0c0c0
+
+.filters-wrapper
+  height: 100%
+  width: 100%
+  position: absolute
+  right: 0
+  background: #dcdcdc
+  box-shadow: rgba(0, 0, 0, 0.35) -15px -4px 20px 4px
+  z-index: 30
+  &--title
+    padding-left: 40px
+    padding-top: 13px
+    font-size: 22px
+    border-bottom: 3px solid #666
+    color: #666
+    letter-spacing: 3px
+    & .close 
+        position: absolute
+        right: 32px
+        top: 16px
+        width: 32px
+        height: 32px
+        cursor: pointer
+        &:hover 
+          opacity: 1
+        &:before, 
+        &:after 
+          position: absolute
+          left: 15px
+          content: ' '
+          height: 23px
+          width: 2px
+          background-color: #666
+        &:before 
+          transform: rotate(45deg)
+        &:after 
+          transform: rotate(-45deg)
+
+.blur
+  position: absolute
+  width: 100%
+  height: 100%
+  top: 0
+  background: rgba(0, 0, 0, 50%)
+  z-index: 25

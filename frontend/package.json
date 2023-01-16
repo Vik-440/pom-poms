@@ -23,7 +23,7 @@
     "@angular/platform-browser": "^13.0.0 ",
     "@angular/platform-browser-dynamic": "~12.2.16",
     "@angular/router": "~12.2.16",
-    "@ng-bootstrap/ng-bootstrap": "^10.0.0",
+    "@ng-bootstrap/ng-bootstrap": "^12.0.0",
     "@ng-select/ng-select": "^8.1.1",
     "@popperjs/core": "^2.10.2",
     "@teamhive/ngx-tooltip": "^0.3.15",
