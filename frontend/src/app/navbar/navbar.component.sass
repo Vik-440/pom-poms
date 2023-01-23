@@ -26,6 +26,9 @@
   @media (max-width: 992px)
     justify-content: flex-start
     width: 230px
+  &:hover
+    text-decoration: underline
+    opacity: 0.8
 
 .gradient
   &--base-page
@@ -78,4 +81,10 @@
   font-weight: 900
   text-shadow: 1px 1px 0px #5f0370, 1px 1px 0px #9809b1, 2px 2px 0px #d900ff
 
+.blur
+  z-index: 15
 
+
+::ng-deep
+  .navbar-toggler:focus
+    box-shadow: none

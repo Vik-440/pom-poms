@@ -25,13 +25,13 @@
         <th class="code" scope="col" sortable="kod_model">Код</th>
         <th class="quantity" scope="col" sortable="quantity_pars_model">К-сть</th>
         <th scope="col" sortable="phase_1_model" class="phase"><span>1</span>
-          <div>{{ getSumPhases('phase_1') }}</div>
+          <div class="phase-sum">{{ getSumPhases('phase_1') }}</div>
         </th>
         <th scope="col" sortable="phase_2_model" class="phase"><span>2</span>
-          <div>{{ getSumPhases('phase_2') }}</div>
+          <div class="phase-sum">{{ getSumPhases('phase_2') }}</div>
         </th>
         <th scope="col" sortable="phase_3_model" class="phase"><span>3</span>
-          <div>{{ getSumPhases('phase_3') }}</div>
+          <div class="phase-sum">{{ getSumPhases('phase_3') }}</div>
         </th>
         <th scope="col" sortable="money" class="money">Сума, грн</th>
         <th scope="col" sortable="money" class="phone">№ телефону</th>
@@ -74,8 +74,9 @@
                 *ngFor="let item of order.phase_1; let j = index" [class.green]="item === 0">
                 <input (clickOutside)="clickOutsidePhaseMultiply(j, 'phase_1', order, 'phase_1'+ i + j)" type="number"
                   [value]="item" [id]="'phase_1'+ i + j" class="phase-input"
-                  (click)="changePhases('phase_1', $event, item)" (change)="changePhases('phase_1', $event, item)"
-                  (keyup.enter)="sendPhases('phase_1', $event, item)">
+                  (click)="changePhases(order, j, 'phase_1', $event, item)" 
+                  (change)="changePhases(order, j, 'phase_1', $event, item)"
+                  (keyup.enter)="sendPhases(order, j, 'phase_1', $event, item)">
               </div>
             </td>
             <td class="pl0">
@@ -83,8 +84,9 @@
                 *ngFor="let item of order.phase_2; let j = index" [class.green]="item === 0">
                 <input (clickOutside)="clickOutsidePhaseMultiply(j, 'phase_2', order, 'phase_2'+ i + j)" type="number"
                   [value]="item" [id]="'phase_2'+ i + j" class="phase-input"
-                  (click)="changePhases('phase_2', $event, item)" (change)="changePhases('phase_2', $event, item)"
-                  (keyup.enter)="sendPhases('phase_2', $event, item)">
+                  (click)="changePhases(order, j, 'phase_2', $event, item)" 
+                  (change)="changePhases(order, j, 'phase_2', $event, item)"
+                  (keyup.enter)="sendPhases(order, j, 'phase_2', $event, item)">
               </div>
             </td>
             <td class="pl0">
@@ -113,21 +115,21 @@
             <td>
               {{ order.quantity_pars_model }}
             </td>
-            <td>
+            <td [class.green]="order.phase_1 === 0">
               <input (clickOutside)="clickOutsidePhaseSingle(i, 'phase_1', order, phase1)" type="number"
-                [(value)]="order.phase_1" class="phase-input" [class.green]="order.phase_1 === 0" #phase1
+                [(value)]="order.phase_1" class="phase-input"  #phase1
                 (click)="changePhase(order, 'phase_1', $event)" (change)="changePhase(order, 'phase_1', $event)"
                 (keyup.enter)="sendPhase(order, 'phase_1', $event)">
             </td>
-            <td>
+            <td [class.green]="order.phase_2 === 0">
               <input type="number" (clickOutside)="clickOutsidePhaseSingle(i, 'phase_2', order, phase2)"
-                [(value)]="order.phase_2" class="phase-input" [class.green]="order.phase_2 === 0" #phase2
+                [(value)]="order.phase_2" class="phase-input"  #phase2
                 (click)="changePhase(order, 'phase_2', $event)" (change)="changePhase(order, 'phase_2', $event)"
                 (keyup.enter)="sendPhase(order, 'phase_2', $event)">
             </td>
-            <td>
+            <td [class.green]="order.phase_3 === 0">
               <input type="number" (clickOutside)="clickOutsidePhaseSingle(i, 'phase_3', order, phase3)"
-                [(value)]="order.phase_3" class="phase-input" [class.green]="order.phase_3 === 0" #phase3
+                [(value)]="order.phase_3" class="phase-input"  #phase3
                 (click)="changePhase(order, 'phase_3', $event)" (change)="changePhase(order, 'phase_3', $event)"
                 (keyup.enter)="sendPhase(order, 'phase_3', $event)">
             </td>
@@ -165,8 +167,7 @@
 
 <div *ngIf="isShowSpinner" class="d-flex justify-content-center spinner-wrapper">
   <div class="spinner-border spinner-border-sm" role="status" aria-hidden="true">
-    <span class="sr-only">Loading...</span>
-  </div>
+  </div>  
 </div>
 
 <ng-template #content let-offcanvas>
@@ -176,67 +177,131 @@
       <span class="close" (click)="closeFilterMenu()"></span>
     </div>
     <div class="filters-wrapper--body" [formGroup]="filtersForm">
-      <div class="filters-data">
-        <p class="filters-data--title">дата від</p>
-        <input class="filters-data--datapicker" placeholder="yyyy-mm-dd" (click)="calendarDataStart.toggle()"
-          [minDate]="{year: 2016, month: 1, day: 1}"
-          formControlName="dataStart" ngbDatepicker #calendarDataStart="ngbDatepicker">
-        <button class="filters-data--datapicker-remove" (click)="removeData('dataStart')">&#10005;</button>
+      <div class="filters-date">
+        <div class="filters-data">
+          <div class="filters-data--title">дата від</div>
+          <input class="filters-data--datapicker" placeholder="yyyy-mm-dd" (click)="calendarDataStart.toggle()"
+            [minDate]="{year: 2016, month: 1, day: 1}"
+            [maxDate]="filtersForm.value.dataEnd"
+            formControlName="dataStart" ngbDatepicker #calendarDataStart="ngbDatepicker">
+            <button class="filters-data--datapicker-remove" (click)="removeData('dataStart')">&#10005;</button>
+        </div>
+        <div class="filters-data">
+          <div class="filters-data--title">дата до</div>
+          <input class="filters-data--datapicker" placeholder="yyyy-mm-dd" (click)="calendarDataEnd.toggle()"
+            [minDate]="filtersForm.value.dataStart"
+            formControlName="dataEnd" ngbDatepicker #calendarDataEnd="ngbDatepicker">
+            <button class="filters-data--datapicker-remove" (click)="removeData('dataEnd')">&#10005;</button>
+        </div>
       </div>
       <div class="filters-data">
-        <p class="filters-data--title">дата до</p>
-        <input class="filters-data--datapicker" placeholder="yyyy-mm-dd" (click)="calendarDataEnd.toggle()"
-          [minDate]="{year: 2016, month: 1, day: 1}"
-          formControlName="dataEnd" ngbDatepicker #calendarDataEnd="ngbDatepicker">
-        <button class="filters-data--datapicker-remove" (click)="removeData('dataEnd')">&#10005;</button>
-
+        <div class="filters-data--title"> Готовність</div>
+        <ng-select 
+          formControlName="fulfilled"
+          bindLabel="name"
+          class="done" 
+          bindValue="value" 
+          [clearable]="false"
+          [items]="fulfilledOrderItems"></ng-select>
+      </div>
+      <div class="outline"></div>
+      <div class="filters-data" [class.disabled]="filtersForm.value.second_name_client || filtersForm.value.team || filtersForm.value.city || filtersForm.value.coach">
+        <div class="filters-data--title">№ телефону</div>
+        <ng-select 
+          [clearOnBackspace]="false" 
+          notFoundText="No phone founded"
+          (search)="changeFiled($event, 'ur_phone', 4, 'phone_client')" 
+          type="number" 
+          (change)="clearFilterData()"
+          formControlName="phone_client" 
+          [items]="dataFilters" ></ng-select>
+      </div>
+      <div class="filters-data" [class.disabled]="filtersForm.value.phone_client || filtersForm.value.team || filtersForm.value.city || filtersForm.value.coach">
+        <div class="filters-data--title">Прізвище клієнта</div>
+        <ng-select 
+          [clearOnBackspace]="false" 
+          notFoundText="No second name founded"
+          (search)="changeFiled($event, 'ur_second_name', 3)" 
+          type="number" 
+          bindLabel="secondName"
+          bindValue="id"
+          (change)="clearFilterData()"
+          formControlName="second_name_client" 
+          [items]="dataFilters" ></ng-select>
+      </div>
+      <div class="filters-data" [class.disabled]="filtersForm.value.phone_client || filtersForm.value.coach || filtersForm.value.city || filtersForm.value.second_name_client">
+        <div class="filters-data--title">Команда</div>
+        <ng-select 
+          [clearOnBackspace]="false" 
+          notFoundText="No phone founded"
+          (search)="changeFiled($event, 'ur_team', 3, 'name_team')" 
+          type="number" 
+          formControlName="team" 
+          (change)="clearFilterData()"
+          [items]="dataFilters" ></ng-select>
+      </div>
+      <div class="filters-data" [class.disabled]="filtersForm.value.phone_client || filtersForm.value.team || filtersForm.value.coach || filtersForm.value.second_name_client">
+        <div class="filters-data--title">Місто</div>
+        <ng-select 
+          [clearOnBackspace]="false" 
+          notFoundText="No phone founded"
+          (search)="changeFiled($event, 'ur_sity', 3, 'sity')" 
+          type="number" 
+          (change)="clearFilterData()"
+          formControlName="city" 
+          [items]="dataFilters" ></ng-select>
+      </div>
+      <div class="filters-data" [class.disabled]="filtersForm.value.phone_client || filtersForm.value.team || filtersForm.value.city || filtersForm.value.second_name_client">
+        <div class="filters-data--title">Тренер</div>
+        <ng-select 
+          [clearOnBackspace]="false" 
+          notFoundText="No phone founded"
+          (search)="changeFiled($event, 'ur_coach', 3, 'name_coach')" 
+          type="number" 
+          (change)="clearFilterData()"
+          formControlName="coach" 
+          [items]="dataFilters" ></ng-select>
+      </div>
+      <div class="outline"></div>
+      <div class="filters-data" [class.disabled]="filtersForm.value.kod_model_like || filtersForm.value.kolor_model_like">
+        <div class="filters-data--title">Код моделі</div>
+        <ng-select 
+          [clearOnBackspace]="false" 
+          notFoundText="No phone founded"
+          (search)="changeFiled($event, 'ur_kod', 3, 'kod_model')" 
+          type="number" 
+          formControlName="kod_model" 
+          [items]="dataFilters" ></ng-select>
+      </div>
+      <div class="filters-data" [class.disabled]="filtersForm.value.kod_model || filtersForm.value.kolor_model_like">
+        <div class="filters-data--title">Збіг у коді моделі</div>
+        <input 
+          [clearOnBackspace]="false" 
+          notFoundText="No phone founded"
+          (search)="changeFiled($event)" 
+          type="text" 
+          class="filters-data--input"
+          formControlName="kod_model_like" 
+          [items]="dataFilters" >
+      </div>
+      <div class="filters-data" [class.disabled]="filtersForm.value.kod_model || filtersForm.value.kod_model_like">
+        <div class="filters-data--title">Збіг у кольорі</div>
+        <input 
+          [clearOnBackspace]="false" 
+          notFoundText="No phone founded"
+          (search)="changeFiled($event)" 
+          type="text" 
+          class="filters-data--input"
+          formControlName="kolor_model_like" 
+          [items]="dataFilters" >
       </div>
     </div>
-
-    
-<form class="row row-cols-sm-auto">
-	<div class="col-12">
-		<div class="input-group">
-			<input
-				class="form-control"
-				placeholder="yyyy-mm-dd"
-				name="dp"
-				[(ngModel)]="model"
-				ngbDatepicker
-        [ngModelOptions]="{standalone: true}"
-				[dayTemplate]="customDay"
-				[markDisabled]="isDisabled"
-				#d="ngbDatepicker"
-			/>
-			<button class="btn btn-outline-secondary bi bi-calendar3" (click)="d.toggle()" type="button"></button>
-		</div>
-	</div>
-</form>
-
-<ng-template
-	#customDay
-	let-date
-	let-currentMonth="currentMonth"
-	let-selected="selected"
-	let-disabled="disabled"
-	let-focused="focused"
->
-	<span
-		class="custom-day"
-		[class.weekend]="isWeekend(date)"
-		[class.focused]="focused"
-		[class.bg-primary]="selected"
-		[class.hidden]="date.month !== currentMonth"
-		[class.text-muted]="disabled"
-	>
-		{{ date.day }}
-	</span>
-</ng-template>
-
+    <div class="filters-wrapper--footer">
+      <button class="filters-reset" (click)="resetFilters()">Скинути фільтри</button>
+      <button class=" btn-send-filters" (click)="applyFilters()">Застосувати</button>
+    </div>
   </div>
 </ng-template>
-
-<div class="blur" *ngIf="isShowFilter" (click)="closeFilterMenu()"></div>
 
 <app-alert *ngIf="alert.isShow" [type]="alert.type" [message]="alert.message"
   (closed)="alertChange($event)"></app-alert>

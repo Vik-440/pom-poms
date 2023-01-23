@@ -79,7 +79,8 @@ export class TableComponent implements OnInit, OnDestroy {
         private calendar: NgbCalendar,
         public formatter: NgbDateParserFormatter,
         private serviceOrders: CreateOrderService,
-        private spinner: NgxSpinnerService
+        private spinner: NgxSpinnerService,
+        
     ) {}
 
     ngOnInit() {

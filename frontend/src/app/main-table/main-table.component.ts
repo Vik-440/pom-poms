@@ -1,9 +1,10 @@
 import { Component, OnInit, TemplateRef } from '@angular/core';
-import { MainPageService } from '../services/main-table.service';
-import { NgbCalendar, NgbDate, NgbDatepickerModule, NgbDateStruct, NgbOffcanvas } from '@ng-bootstrap/ng-bootstrap';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { NgbCalendar, NgbOffcanvas } from '@ng-bootstrap/ng-bootstrap';
 import * as _ from 'lodash';
 import * as moment from 'moment';
-import { FormBuilder, FormGroup, FormsModule } from '@angular/forms';
+import { CreateOrderService } from '../services/create-order.service';
+import { MainPageService } from '../services/main-table.service';
 
 @Component({
     selector: 'app-main-table',
@@ -13,7 +14,6 @@ import { FormBuilder, FormGroup, FormsModule } from '@angular/forms';
 export class MainTableComponent implements OnInit {
     orders = [];
     isShowSpinner = false;
-    closeResult = '';
     isShowFilter = false;
     alert = {
         type: '',
@@ -25,13 +25,19 @@ export class MainTableComponent implements OnInit {
     speed;
     todayYear = new Date().getFullYear();
     filtersForm: FormGroup;
-    model: NgbDateStruct;
+    fulfilledOrderItems = [
+        { id: 1, value: true, name: 'виконані' },
+        { id: 2, value: false, name: 'всі' },
+        { id: 3, value: 'all', name: 'не виконані' },
+    ];
+    dataFilters = [];
 
     constructor(
         private service: MainPageService,
         private offcanvasService: NgbOffcanvas,
         private fb: FormBuilder,
-        private calendar: NgbCalendar
+        private calendar: NgbCalendar,
+        private serviceOrders: CreateOrderService
     ) {}
 
     ngOnInit(): void {
@@ -39,25 +45,100 @@ export class MainTableComponent implements OnInit {
         this.initForm();
     }
 
-    isDisabled = (date: NgbDate, current: { month: number; year: number }) => date.month !== current.month;
-	isWeekend = (date: NgbDate) => this.calendar.getWeekday(date) >= 6;
-    
     initForm() {
         this.filtersForm = this.fb.group({
-            dataStart: '',
-            dataEnd: '',
-            fulfilled_order: '',
-            phone_client: '',
+            dataStart: null,
+            dataEnd: null,
+            fulfilled: 'all',
+            phone_client: null,
+            second_name_client: null,
+            team: null,
+            city: null,
+            coach: null,
+            kod_model: null,
+            kod_model_like: null,
+            kolor_model_like: null,
         });
     }
+
+    changeFiled(event, fieldSend, minSymbols, response) {
+        if (event.term.length >= minSymbols) {
+            this.serviceOrders.getInfoForOrder({ [fieldSend]: event.term }).subscribe((data: any) => {
+                if (fieldSend === 'ur_second_name') {
+                    this.dataFilters = [];
+                    data.id_client.forEach((item, i) => {
+                        this.dataFilters.push({
+                            id: item,
+                            secondName: data.second_name_client[i],
+                        });
+                    });
+                } else {
+                    this.dataFilters = data[response];
+                }
+            });
+        }
+    }
+
+    clearFilterData() {
+        this.dataFilters = [];
+    }
+
+    resetFilters() {
+        this.filtersForm.reset();
+        this.filtersForm.patchValue({
+            fulfilled: 'all',
+        });
+    }
+
+    applyFilters() {
+        this.isShowSpinner = true;
+        this.service.sendFilters(this.clean(_.cloneDeep(this.filtersForm.value))).subscribe(
+            (data: any) => {
+                this.orders = data;
+                this.isShowSpinner = false;
+                this.closeFilterMenu();
+            }, () => {
+                this.isShowSpinner = false;
+                this.closeFilterMenu();
+            }
+        );
+    }
+
+    clean(obj) {
+        for (var propName in obj) {
+            if (obj[propName] === null || obj[propName] === undefined) {
+                delete obj[propName];
+            } else if (propName === 'dataEnd') {
+                obj.data_end = this.editData(obj[propName]);
+                delete obj[propName];
+            } else if (propName === 'dataStart') {
+                obj.data_start = this.editData(obj[propName]);
+                delete obj[propName];
+            }
+        }
+        return obj;
+    }
+
+    editData(data) {
+        data = Object.values(data);
+        return data
+            .map((item) => {
+                if (item <= 9) {
+                    return '0' + item;
+                }
+                return item;
+            })
+            .join('-');
+    }
+
     openFilterMenu(content: TemplateRef<any>) {
         this.isShowFilter = true;
         this.offcanvasService.open(content, { position: 'end' });
     }
 
     closeFilterMenu() {
-        this.offcanvasService.dismiss();
         this.isShowFilter = false;
+        this.offcanvasService.dismiss();
     }
 
     clickOutsidePhaseSingle(index, phase, order, phaseEl) {
@@ -101,38 +182,60 @@ export class MainTableComponent implements OnInit {
         }
     }
 
+    showAlertsForPhase(isOkay = true) {
+        this.alert = {
+            isShow: true,
+            type: isOkay ? 'success' : 'danger',
+            message: isOkay ? 'Дані змінено' : 'Дані не збігаються',
+        };
+        setTimeout(() => {
+            this.alertChange(false);
+        }, 3000);
+    }
+
+    sendPhases(order, phaseIndex, phase, event, item) {
+        const params = [...order[phase]];
+        params[phaseIndex] = item - event.target.value;
+
+        this.service.sendPhase(order.id_order, { [phase]: params }).subscribe((data: any) => {
+            if (data.check_sum_phase === params.reduce((accumulator, currentValue) => accumulator + currentValue)) {
+                this.showAlertsForPhase();
+                this.orders = this.orders.map((orderItem) => {
+                    if (orderItem.id_order === order.id_order) {
+                        orderItem = {
+                            ...orderItem,
+                            [phase]: [...params],
+                        };
+                    }
+                    return orderItem;
+                });
+            } else {
+                this.showAlertsForPhase(false);
+            }
+            setTimeout(() => {
+                this.alertChange(false);
+            }, 3000);
+        });
+    }
+
     sendPhase(item, phase, e) {
         const params = {
             [phase]: [item[phase] - e.target.value],
         };
 
         this.service.changePhase(item.id_order, params).subscribe((data: any) => {
-            if (data.check_sum_phase === params[phase][0]) {
-                this.alert = {
-                    isShow: true,
-                    type: 'success',
-                    message: 'Дані змінено',
-                };
-                setTimeout(() => {
-                    this.alertChange(false);
-                }, 3000);
-                this.orders = this.orders.map((order) => {
-                    if (order.id_order === item.id_order) {
-                        order = {
-                            ...order,
-                            [phase]: params[phase][0],
-                        };
-                        item[phase] = params[phase][0];
-                    }
-                    return order;
-                });
-            } else {
-                this.alert = {
-                    isShow: true,
-                    type: 'danger',
-                    message: 'Дані не збігаються',
-                };
-            }
+            this.showMessage(data.message);
+            this.orders = this.orders.map((order) => {
+                if (order.id_order === item.id_order) {
+                    order = {
+                        ...order,
+                        [phase]: params[phase][0],
+                    };
+                    item[phase] = params[phase][0];
+                }
+                return order;
+            });
+
             setTimeout(() => {
                 this.alertChange(false);
             }, 3000);
@@ -141,12 +244,10 @@ export class MainTableComponent implements OnInit {
 
     getAllData() {
         this.isShowSpinner = true;
-        this.service.getListMain().subscribe(
-            (data: any) => {
+        this.service.getListMain().subscribe((data: any) => {
                 this.orders = data;
                 this.isShowSpinner = false;
-            },
-            () => {
+            }, () => {
                 this.isShowSpinner = false;
             }
         );
@@ -175,6 +276,7 @@ export class MainTableComponent implements OnInit {
         } else if (interest >= 100) {
             return 'green';
         }
+        return '';
     }
 
     getMoney(sum) {
@@ -232,6 +334,17 @@ export class MainTableComponent implements OnInit {
         return this.queue;
     }
 
+    makeDone(id, fulfilledOrder, i) {
+        this.service.changeFulfilled(id, { status_order: fulfilledOrder }).subscribe((data: any) => {
+            this.orders.forEach((order, index) => {
+                if (i === index) {
+                    order.fulfilled_order = !order.fulfilled_order;
+                }
+            });
+            this.showMessage(data.message);
+        });
+    }
+
     changeSpeed() {
         const days = Math.ceil(this.queue / this.speed);
         this.dateDownloaded = this.addWeekdays(Number.isFinite(days) ? days : 0);
@@ -250,6 +363,17 @@ export class MainTableComponent implements OnInit {
 
     removeData(control) {
         this.filtersForm.get(control).patchValue('');
+    }
+
+    showMessage(message) {
+        this.alert = {
+            isShow: true,
+            type: 'success',
+            message: message,
+        };
+        setTimeout(() => {
+            this.alertChange(false);
+        }, 3000);
     }
 
     alertChange(e) {
