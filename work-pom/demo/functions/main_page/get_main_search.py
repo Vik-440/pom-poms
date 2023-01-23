@@ -30,10 +30,10 @@ def get_main(got_request):
                     .where(db_c.phone_client == phone_client)\
                     .order_by(db_c.id_client)
                 id_client_list.append(session.execute(stmt).scalar())
-            elif 'second_name_client' in got_request:
-                second_name_client = got_request['second_name_client']
+            elif 'id_client' in got_request:
+                id_client = got_request['id_client']
                 stmt = select(db_c.id_client)\
-                    .where(db_c.second_name_client == second_name_client)\
+                    .where(db_c.id_client == id_client)\
                     .order_by(db_c.id_client)
                 id_client_list.append(session.execute(stmt).scalar())
             elif 'team' in got_request:
