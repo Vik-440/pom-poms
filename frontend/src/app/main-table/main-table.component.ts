@@ -1,6 +1,6 @@
 import { Component, OnInit, TemplateRef } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { NgbCalendar, NgbOffcanvas } from '@ng-bootstrap/ng-bootstrap';
+import { NgbOffcanvas } from '@ng-bootstrap/ng-bootstrap';
 import * as _ from 'lodash';
 import * as moment from 'moment';
 import { CreateOrderService } from '../services/create-order.service';
@@ -27,8 +27,8 @@ export class MainTableComponent implements OnInit {
     filtersForm: FormGroup;
     fulfilledOrderItems = [
         { id: 1, value: true, name: 'виконані' },
-        { id: 2, value: false, name: 'всі' },
-        { id: 3, value: 'all', name: 'не виконані' },
+        { id: 2, value: 'all', name: 'всі' },
+        { id: 3, value: false, name: 'не виконані' },
     ];
     dataFilters = [];
 
@@ -36,7 +36,6 @@ export class MainTableComponent implements OnInit {
         private service: MainPageService,
         private offcanvasService: NgbOffcanvas,
         private fb: FormBuilder,
-        private calendar: NgbCalendar,
         private serviceOrders: CreateOrderService
     ) {}
 
@@ -51,7 +50,7 @@ export class MainTableComponent implements OnInit {
             dataEnd: null,
             fulfilled: 'all',
             phone_client: null,
-            second_name_client: null,
+            id_client: null,
             team: null,
             city: null,
             coach: null,

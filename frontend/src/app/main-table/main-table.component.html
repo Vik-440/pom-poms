@@ -205,7 +205,7 @@
           [items]="fulfilledOrderItems"></ng-select>
       </div>
       <div class="outline"></div>
-      <div class="filters-data" [class.disabled]="filtersForm.value.second_name_client || filtersForm.value.team || filtersForm.value.city || filtersForm.value.coach">
+      <div class="filters-data" [class.disabled]="filtersForm.value.id_client || filtersForm.value.team || filtersForm.value.city || filtersForm.value.coach">
         <div class="filters-data--title">№ телефону</div>
         <ng-select 
           [clearOnBackspace]="false" 
@@ -226,10 +226,10 @@
           bindLabel="secondName"
           bindValue="id"
           (change)="clearFilterData()"
-          formControlName="second_name_client" 
+          formControlName="id_client" 
           [items]="dataFilters" ></ng-select>
       </div>
-      <div class="filters-data" [class.disabled]="filtersForm.value.phone_client || filtersForm.value.coach || filtersForm.value.city || filtersForm.value.second_name_client">
+      <div class="filters-data" [class.disabled]="filtersForm.value.phone_client || filtersForm.value.coach || filtersForm.value.city || filtersForm.value.id_client">
         <div class="filters-data--title">Команда</div>
         <ng-select 
           [clearOnBackspace]="false" 
@@ -240,7 +240,7 @@
           (change)="clearFilterData()"
           [items]="dataFilters" ></ng-select>
       </div>
-      <div class="filters-data" [class.disabled]="filtersForm.value.phone_client || filtersForm.value.team || filtersForm.value.coach || filtersForm.value.second_name_client">
+      <div class="filters-data" [class.disabled]="filtersForm.value.phone_client || filtersForm.value.team || filtersForm.value.coach || filtersForm.value.id_client">
         <div class="filters-data--title">Місто</div>
         <ng-select 
           [clearOnBackspace]="false" 
@@ -251,7 +251,7 @@
           formControlName="city" 
           [items]="dataFilters" ></ng-select>
       </div>
-      <div class="filters-data" [class.disabled]="filtersForm.value.phone_client || filtersForm.value.team || filtersForm.value.city || filtersForm.value.second_name_client">
+      <div class="filters-data" [class.disabled]="filtersForm.value.phone_client || filtersForm.value.team || filtersForm.value.city || filtersForm.value.id_client">
         <div class="filters-data--title">Тренер</div>
         <ng-select 
           [clearOnBackspace]="false" 
