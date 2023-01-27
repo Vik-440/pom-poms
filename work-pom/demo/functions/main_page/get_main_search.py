@@ -50,10 +50,10 @@ def get_main(got_request):
                 pre_list = session.execute(stmt).scalars()
                 for row in pre_list:
                     id_client_list.append(row)
-            elif 'sity' in got_request:
-                sity = got_request['sity']
+            elif 'city' in got_request:
+                city = got_request['city']
                 stmt = select(db_c.id_client)\
-                    .where(db_c.sity == sity).order_by(db_c.id_client)
+                    .where(db_c.sity == city).order_by(db_c.id_client)
                 pre_list = session.execute(stmt).scalars()
                 for row in pre_list:
                     id_client_list.append(row)
@@ -225,7 +225,7 @@ def get_main(got_request):
                     id_client=row.id_recipient).all()
                 if (len(str(id_recipient_1))) < 3:
                     return json.dumps({
-                     "Помилка в записі отримувача - id:": row.id_order}), 500
+                        "Помилка в записі отримувача - id:": row.id_order}), 500
                 for row1 in id_recipient_1:
                     m_second_name_client = (row1.second_name_client)
                     m_first_name_client = (row1.first_name_client)
