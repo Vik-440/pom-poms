@@ -2,6 +2,7 @@
 from sqlalchemy import func
 from sqlalchemy.orm import Session
 from db.models import engine
+import re
 from db.models import (
     directory_of_order as db_o,
     directory_of_client as db_c,
@@ -197,23 +198,24 @@ def return_data_from_full_person(data_from_new_page):
             j_second_name_client = row.second_name_client
             tmp_id_client = row.id_client
 
-        second_name_client = data_from_new_page[
-                        'second_name_client'].title()
+        pattern_word = re.compile(r"[']")
+        second_name_client_pre = data_from_new_page[
+                        'second_name_client'].capitalize()
         first_name_client = data_from_new_page[
-                        'first_name_client'].title()
+                        'first_name_client'].capitalize()
         surname_client = data_from_new_page[
                         'surname_client']
         if surname_client:
-            surname_client = surname_client.title()
+            surname_client = surname_client.capitalize()
         sity = data_from_new_page['sity']
         if sity:
-            sity = sity.title()
+            sity = sity.capitalize()
         team = data_from_new_page['name_team']
         if team:
-            team = team.title()
+            team = team.capitalize()
         coach = data_from_new_page['coach']
         if coach:
-            coach = coach.title()
+            coach = coach.capitalize()
 
         if j_second_name_client == 0:
             ins = db_c(
