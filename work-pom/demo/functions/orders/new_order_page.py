@@ -141,18 +141,18 @@ def return_data_from_full_kod(data_from_new_page):
             j_id_model = row.id_model
         if j_id_model == 0:
             ins = db_m(
-                    kod_model=data_from_new_page['kod_model'],    # int for all
-                    id_color_1=int(data_from_new_page['id_color_1']),
-                    id_color_part_1=int(data_from_new_page['id_color_part_1']),
-                    id_color_2=int(data_from_new_page['id_color_2']),
-                    id_color_part_2=int(data_from_new_page['id_color_part_2']),
-                    id_color_3=int(data_from_new_page['id_color_3']),
-                    id_color_part_3=int(data_from_new_page['id_color_part_3']),
-                    id_color_4=int(data_from_new_page['id_color_4']),
-                    id_color_part_4=int(data_from_new_page['id_color_part_4']),
-                    price_model=data_from_new_page['price_model'],
-                    comment_model=data_from_new_page['comment_model'],
-                    kolor_model=data_from_new_page['kolor_model'])
+                kod_model=data_from_new_page['kod_model'],    # int for all
+                id_color_1=int(data_from_new_page['id_color_1']),
+                id_color_part_1=int(data_from_new_page['id_color_part_1']),
+                id_color_2=int(data_from_new_page['id_color_2']),
+                id_color_part_2=int(data_from_new_page['id_color_part_2']),
+                id_color_3=int(data_from_new_page['id_color_3']),
+                id_color_part_3=int(data_from_new_page['id_color_part_3']),
+                id_color_4=int(data_from_new_page['id_color_4']),
+                id_color_part_4=int(data_from_new_page['id_color_part_4']),
+                price_model=data_from_new_page['price_model'],
+                comment_model=data_from_new_page['comment_model'],
+                kolor_model=data_from_new_page['kolor_model'])
             session.add(ins)
             session.commit()
 
@@ -198,37 +198,37 @@ def return_data_from_full_person(data_from_new_page):
             tmp_id_client = row.id_client
 
         second_name_client = data_from_new_page[
-                        'second_name_client'].title()
+            'second_name_client'].capitalize()
         first_name_client = data_from_new_page[
-                        'first_name_client'].title()
+            'first_name_client'].capitalize()
         surname_client = data_from_new_page[
-                        'surname_client']
+            'surname_client']
         if surname_client:
-            surname_client = surname_client.title()
+            surname_client = surname_client.capitalize()
         sity = data_from_new_page['sity']
         if sity:
-            sity = sity.title()
+            sity = sity.capitalize()
         team = data_from_new_page['name_team']
         if team:
-            team = team.title()
+            team = team.capitalize()
         coach = data_from_new_page['coach']
         if coach:
-            coach = coach.title()
+            coach = coach.capitalize()
 
         if j_second_name_client == 0:
             ins = db_c(
-                    phone_client=data_from_new_page['phone_client'],
-                    second_name_client=second_name_client,
-                    first_name_client=first_name_client,
-                    surname_client=surname_client,
-                    sity=sity,
-                    np_number=data_from_new_page['np_number'],
-                    team=team,
-                    coach=coach,
-                    zip_code=data_from_new_page['zip_code'],
-                    street_house_apartment=data_from_new_page[
-                        'street_house_apartment'],
-                    comment_client=data_from_new_page['comment_client'])
+                phone_client=data_from_new_page['phone_client'],
+                second_name_client=second_name_client,
+                first_name_client=first_name_client,
+                surname_client=surname_client,
+                sity=sity,
+                np_number=data_from_new_page['np_number'],
+                team=team,
+                coach=coach,
+                zip_code=data_from_new_page['zip_code'],
+                street_house_apartment=data_from_new_page[
+                    'street_house_apartment'],
+                comment_client=data_from_new_page['comment_client'])
             session.add(ins)
             session.commit()
 
@@ -252,7 +252,7 @@ def return_data_from_full_person(data_from_new_page):
                         'street_house_apartment': data_from_new_page[
                             'street_house_apartment'],
                         'comment_client': data_from_new_page['comment_client']}
-                        )
+            )
             session.commit()
             q1q = ('updated id_client - ' + str(tmp_id_client))
             one_block = {"phone_client": q1q}
@@ -299,7 +299,7 @@ def return_data_from_final_order(data_from_new_page):
                 raise Exception("This order number is real - 1p")
             session.query(db_o).filter(
                 db_o.id_order == id_order).update(
-                   {"id_order": id_order,
+                {"id_order": id_order,
                     "data_order": data_from_new_page['data_order'],
                     "id_client": data_from_new_page['id_client'],
                     "id_recipient": data_from_new_page['id_recipient'],
@@ -387,7 +387,7 @@ def return_data_from_edit_order(data_from_new_page):
             real_money_order_1 = session.query(
                 func.sum(db_p.payment).label(
                     'sum_order')).filter_by(
-                    id_order=id_order).first()
+                id_order=id_order).first()
             for row in real_money_order_1:
                 real_money_order = real_money_order_1.sum_order
 
