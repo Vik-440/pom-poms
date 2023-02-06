@@ -13,6 +13,9 @@
     height: 26px !important
     text-align: center
     line-height: 13px
+    border-style: none
+    border-width: none
+    border-color: none
   .date
     min-width: 100px 
     width: 100px
@@ -104,6 +107,7 @@
   width: 100%
 .finance-page
   display: flex
+  margin-top: 4.5rem
 
 .old 
   background: #ECE9A9
@@ -159,8 +163,14 @@ table
   border-spacing: 0px
 
 ::ng-deep
+  .ngb-dp-day
+    &:hover
+      border-radius: 0.25rem
+      background: #e0e0e0
   .table-bordered th, .table-bordered td 
     border-color: #5d5d5d
+    border-style: solid
+    border-width: 1px
   .ng-select.ng-select-single .ng-select-container .ng-value-container .ng-input
     top: 0
   .ng-select.ng-select-disabled>.ng-select-container 

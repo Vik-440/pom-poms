@@ -26,6 +26,9 @@
   @media (max-width: 992px)
     justify-content: flex-start
     width: 230px
+  &:hover
+    text-decoration: underline
+    opacity: 0.8
 
 .gradient
   &--base-page
@@ -42,8 +45,13 @@
     background: linear-gradient(180deg, #2C204D 12.5%, rgba(76, 49, 244, 0.44) 100%)
 
 .navbar
-  box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset
+  box-shadow: rgba(50, 50, 93, 0.25) 2px 4px 18px 7px inset, rgba(0, 0, 0, 0.3) -1px -20px 20px 20px
   padding: 0px
+  position: absolute
+  top: 0
+  width: 100%
+  z-index: 20
+  background: #e8e8e8
 
 .nav-link
   padding-left: 5px !important
@@ -73,4 +81,10 @@
   font-weight: 900
   text-shadow: 1px 1px 0px #5f0370, 1px 1px 0px #9809b1, 2px 2px 0px #d900ff
 
+.blur
+  z-index: 15
 
+
+::ng-deep
+  .navbar-toggler:focus
+    box-shadow: none
