@@ -92,15 +92,36 @@ def get_main(got_request):
                 for row in pre_list:
                     id_order_list.append(row)
 # ###########################################################################
-            my_alias = aliased(db_c)
-            select_modul = select(
-                db_o.id_order, db_o.comment_order, db_o.data_order,
-                db_o.data_plane_order, db_o.fulfilled_order, db_o.sum_payment,
-                db_o.discont_order, db_o.quantity_pars_model, db_o.phase_1,
-                db_o.phase_2, db_o.phase_3, db_o.id_model,
-                db_o.id_recipient,
-                my_alias.label('phone_client'))
-            j = join(db_o, db_c, db_o.id_client == db_c.id_client)
+            client_alias = aliased(db_c)
+            recipient_alias = aliased(db_c)
+            select_modul = (select(
+                db_o.id_order,
+                db_o.comment_order,
+                db_o.data_order,
+                db_o.data_plane_order,
+                db_o.fulfilled_order,
+                db_o.sum_payment,
+                db_o.discont_order,
+                db_o.quantity_pars_model,
+                db_o.phase_1,
+                db_o.phase_2,
+                db_o.phase_3,
+                db_o.id_model,
+                client_alias.phone_client.label('phone_order'),
+                recipient_alias.second_name_client,
+                recipient_alias.first_name_client,
+                recipient_alias.phone_client,
+                recipient_alias.np_number,
+                recipient_alias.zip_code,
+                recipient_alias.street_house_apartment,
+                recipient_alias.sity,
+                # db_p.my_sum
+                )
+                .join(client_alias, db_o.id_client == client_alias.id_client)
+                .join(recipient_alias, db_o.id_recipient == recipient_alias.id_client)
+                .join(db_p, db_o.id_order == db_p.id_order)
+                .func.sum(db_p.payment).label('my_sum')
+            )
             
             if fulfilled == 'all':
                 if id_client_list and not id_order_list:
@@ -168,11 +189,14 @@ def get_main(got_request):
                             db_o.fulfilled_order == fulfilled)\
                             .order_by(db_o.id_order)
                     else:
-                        stmt = select_modul.select_from(j).where(
-                            db_o.data_order >= data_start_search,
-                            db_o.data_order <= data_finish_search,
-                            db_o.fulfilled_order == fulfilled)\
-                            .order_by(db_o.data_plane_order)
+                        stmt = (select_modul
+                            # .func.sum(db_p.payment).label('my_sum')
+                            .where(
+                                db_o.data_order >= data_start_search,
+                                db_o.data_order <= data_finish_search,
+                                db_o.fulfilled_order == fulfilled)
+                            
+                            .order_by(db_o.data_plane_order))
 
             list_order = session.execute(stmt).all()
 
@@ -195,7 +219,15 @@ def get_main(got_request):
                 m_phase_2 = row.phase_2
                 m_phase_3 = row.phase_3
                 m_id_model = row.id_model
-                m_phone_client = row.phone_client
+                m_phone_client = row.phone_order
+                m_second_name_client = row.second_name_client
+                m_first_name_client = row.first_name_client
+                m_phone_recipient = row.phone_client
+                m_np_number = row.np_number
+                m_zip_code = row.zip_code
+                m_street_house_apartment = row.street_house_apartment
+                m_sity = row.sity
+                m_real_money = row.my_sum
 #
                 m_kolor_model, m_kod_model, m_comment_model, = [], [], []
 
@@ -218,32 +250,10 @@ def get_main(got_request):
                     m_kod_model = m_kod_model[0]
                     m_comment_model = m_comment_model[0]
 #
-#                 id_client_2 = session.query(db_c).filter_by(
-#                     id_client=row.id_client).all()
-#                 if (len(str(id_client_2))) < 3:
-#                     return json.dumps({
-#                         "Помилка в записі клієнта - id:": row.id_order}), 500
-#                 for row1 in id_client_2:
-#                     m_phone_client = (row1.phone_client)
-# #
-                id_recipient_1 = session.query(db_c).filter_by(
-                    id_client=row.id_recipient).all()
-                if (len(str(id_recipient_1))) < 3:
-                    return json.dumps({
-                        "Помилка в записі отримувача - id:": row.id_order}), 500
-                for row1 in id_recipient_1:
-                    m_second_name_client = (row1.second_name_client)
-                    m_first_name_client = (row1.first_name_client)
-                    m_phone_recipient = (row1.phone_client)
-                    m_np_number = (row1.np_number)
-                    m_zip_code = (row1.zip_code)
-                    m_street_house_apartment = (row1.street_house_apartment)
-                    m_sity = (row1.sity)
-#
-                real_money_1 = session.query(func.sum(
-                    db_p.payment).label('my_sum')).filter_by(
-                    id_order=row.id_order).first()
-                m_real_money = (real_money_1.my_sum)
+                # real_money_1 = session.query(func.sum(
+                #     db_p.payment).label('my_sum')).filter_by(
+                #     id_order=row.id_order).first()
+                # m_real_money = (real_money_1.my_sum)
 
                 one_block = {"id_order": m_id_order,
                              "comment_order": m_comment_order,

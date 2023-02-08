@@ -11,8 +11,8 @@ Base = declarative_base()
 
 
 load_dotenv()
-setup_db = "PROD"
-# setup_db = "DEV"
+# setup_db = "PROD"
+setup_db = "DEV"
 try:
     if setup_db == "PROD":
         url = os.getenv("PSQL_URL")
