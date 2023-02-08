@@ -20,12 +20,10 @@ import { CreateOrderComponent } from './create-order/create-order.component';
 import { FinancesComponent } from './finances/finances.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { ReserveComponent } from './reserve/reserve.component';
-import { TableComponent } from './table/table.component';
 import { MainTableComponent } from './main-table/main-table.component';
 @NgModule({
     declarations: [
         AppComponent,
-        TableComponent,
         NavbarComponent,
         CreateOrderComponent,
         ReserveComponent,

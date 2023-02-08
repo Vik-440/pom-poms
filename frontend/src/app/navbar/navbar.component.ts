@@ -9,6 +9,7 @@ import { Location } from '@angular/common';
 })
 export class NavbarComponent {
     [x: string]: any;
+    isShowNavbar = false;
 
     constructor(private _router: Router, public _location: Location) {
         this._router.routeReuseStrategy.shouldReuseRoute = () => false;
