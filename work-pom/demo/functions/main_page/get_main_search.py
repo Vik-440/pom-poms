@@ -157,7 +157,7 @@ def get_main(got_request):
                                 db_o.id_recipient.in_(id_client_list))))\
                         .order_by(db_o.id_order)
                 else:
-                    if fulfilled is 'true':
+                    if fulfilled == 'true':
                         stmt = select_modul.where(
                             db_o.data_order >= data_start_search,
                             db_o.data_order <= data_finish_search,
