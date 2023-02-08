@@ -1,7 +1,7 @@
 import json
 from datetime import datetime
-from sqlalchemy import func, select, or_, and_
-from sqlalchemy.orm import Session
+from sqlalchemy import func, select, or_, and_, join
+from sqlalchemy.orm import Session, aliased
 from db.models import directory_of_order as db_o
 from db.models import directory_of_client as db_c
 from db.models import directory_of_payment as db_p
@@ -92,12 +92,16 @@ def get_main(got_request):
                 for row in pre_list:
                     id_order_list.append(row)
 # ###########################################################################
+            my_alias = aliased(db_c)
             select_modul = select(
                 db_o.id_order, db_o.comment_order, db_o.data_order,
                 db_o.data_plane_order, db_o.fulfilled_order, db_o.sum_payment,
                 db_o.discont_order, db_o.quantity_pars_model, db_o.phase_1,
-                db_o.phase_2, db_o.phase_3, db_o.id_model, db_o.id_client,
-                db_o.id_recipient)
+                db_o.phase_2, db_o.phase_3, db_o.id_model,
+                db_o.id_recipient,
+                my_alias.label('phone_client'))
+            j = join(db_o, db_c, db_o.id_client == db_c.id_client)
+            
             if fulfilled == 'all':
                 if id_client_list and not id_order_list:
                     stmt = select_modul.where(
@@ -164,7 +168,7 @@ def get_main(got_request):
                             db_o.fulfilled_order == fulfilled)\
                             .order_by(db_o.id_order)
                     else:
-                        stmt = select_modul.where(
+                        stmt = select_modul.select_from(j).where(
                             db_o.data_order >= data_start_search,
                             db_o.data_order <= data_finish_search,
                             db_o.fulfilled_order == fulfilled)\
@@ -191,6 +195,7 @@ def get_main(got_request):
                 m_phase_2 = row.phase_2
                 m_phase_3 = row.phase_3
                 m_id_model = row.id_model
+                m_phone_client = row.phone_client
 #
                 m_kolor_model, m_kod_model, m_comment_model, = [], [], []
 
@@ -213,14 +218,14 @@ def get_main(got_request):
                     m_kod_model = m_kod_model[0]
                     m_comment_model = m_comment_model[0]
 #
-                id_client_2 = session.query(db_c).filter_by(
-                    id_client=row.id_client).all()
-                if (len(str(id_client_2))) < 3:
-                    return json.dumps({
-                        "Помилка в записі клієнта - id:": row.id_order}), 500
-                for row1 in id_client_2:
-                    m_phone_client = (row1.phone_client)
-#
+#                 id_client_2 = session.query(db_c).filter_by(
+#                     id_client=row.id_client).all()
+#                 if (len(str(id_client_2))) < 3:
+#                     return json.dumps({
+#                         "Помилка в записі клієнта - id:": row.id_order}), 500
+#                 for row1 in id_client_2:
+#                     m_phone_client = (row1.phone_client)
+# #
                 id_recipient_1 = session.query(db_c).filter_by(
                     id_client=row.id_recipient).all()
                 if (len(str(id_recipient_1))) < 3:
