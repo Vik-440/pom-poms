@@ -1,6 +1,6 @@
 import json
 from datetime import datetime
-from sqlalchemy import func, select, or_, and_, join
+from sqlalchemy import func, select, or_, and_, join, table
 from sqlalchemy.orm import Session, aliased
 from db.models import directory_of_order as db_o
 from db.models import directory_of_client as db_c
@@ -94,7 +94,9 @@ def get_main(got_request):
 # ###########################################################################
             client_alias = aliased(db_c)
             recipient_alias = aliased(db_c)
+               
             select_modul = (select(
+                func.sum(db_p.payment).label('my_sum'),
                 db_o.id_order,
                 db_o.comment_order,
                 db_o.data_order,
@@ -114,13 +116,32 @@ def get_main(got_request):
                 recipient_alias.np_number,
                 recipient_alias.zip_code,
                 recipient_alias.street_house_apartment,
-                recipient_alias.sity,
-                # db_p.my_sum
+                recipient_alias.sity)
+                .group_by(
+                    db_o.id_order,
+                    db_o.comment_order,
+                    db_o.data_order,
+                    db_o.data_plane_order,
+                    db_o.fulfilled_order,
+                    db_o.sum_payment,
+                    db_o.discont_order,
+                    db_o.quantity_pars_model,
+                    db_o.phase_1,
+                    db_o.phase_2,
+                    db_o.phase_3,
+                    db_o.id_model,
+                    client_alias.phone_client.label('phone_order'),
+                    recipient_alias.second_name_client,
+                    recipient_alias.first_name_client,
+                    recipient_alias.phone_client,
+                    recipient_alias.np_number,
+                    recipient_alias.zip_code,
+                    recipient_alias.street_house_apartment,
+                    recipient_alias.sity
                 )
                 .join(client_alias, db_o.id_client == client_alias.id_client)
                 .join(recipient_alias, db_o.id_recipient == recipient_alias.id_client)
                 .join(db_p, db_o.id_order == db_p.id_order)
-                .func.sum(db_p.payment).label('my_sum')
             )
             
             if fulfilled == 'all':
@@ -190,7 +211,6 @@ def get_main(got_request):
                             .order_by(db_o.id_order)
                     else:
                         stmt = (select_modul
-                            # .func.sum(db_p.payment).label('my_sum')
                             .where(
                                 db_o.data_order >= data_start_search,
                                 db_o.data_order <= data_finish_search,
@@ -250,10 +270,6 @@ def get_main(got_request):
                     m_kod_model = m_kod_model[0]
                     m_comment_model = m_comment_model[0]
 #
-                # real_money_1 = session.query(func.sum(
-                #     db_p.payment).label('my_sum')).filter_by(
-                #     id_order=row.id_order).first()
-                # m_real_money = (real_money_1.my_sum)
 
                 one_block = {"id_order": m_id_order,
                              "comment_order": m_comment_order,
