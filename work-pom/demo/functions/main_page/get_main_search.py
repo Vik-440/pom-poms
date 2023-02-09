@@ -143,7 +143,6 @@ def get_main(got_request):
                 .join(recipient_alias, db_o.id_recipient == recipient_alias.id_client)
                 .join(db_p, db_o.id_order == db_p.id_order)
             )
-            
             if fulfilled == 'all':
                 if id_client_list and not id_order_list:
                     stmt = select_modul.where(
@@ -215,7 +214,6 @@ def get_main(got_request):
                                 db_o.data_order >= data_start_search,
                                 db_o.data_order <= data_finish_search,
                                 db_o.fulfilled_order == fulfilled)
-                            
                             .order_by(db_o.data_plane_order))
 
             list_order = session.execute(stmt).all()
@@ -294,6 +292,7 @@ def get_main(got_request):
                              "second_name_client": m_second_name_client,
                              "first_name_client": m_first_name_client}
                 full_block.append(one_block)
+        # print(full_block)
         return json.dumps(full_block)
     except Exception as e:
         return json.dumps(f'Error in function main: {e}')
