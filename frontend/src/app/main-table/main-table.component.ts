@@ -138,6 +138,7 @@ export class MainTableComponent implements OnInit {
     closeFilterMenu() {
         this.isShowFilter = false;
         this.offcanvasService.dismiss();
+        this.resetFilters();
     }
 
     clickOutsidePhaseSingle(index, phase, order, phaseEl) {

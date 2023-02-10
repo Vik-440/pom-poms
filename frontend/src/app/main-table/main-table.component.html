@@ -74,8 +74,8 @@
                 *ngFor="let item of order.phase_1; let j = index" [class.green]="item === 0">
                 <input (clickOutside)="clickOutsidePhaseMultiply(j, 'phase_1', order, 'phase_1'+ i + j)" type="number"
                   [value]="item" [id]="'phase_1'+ i + j" class="phase-input"
-                  (click)="changePhases(order, j, 'phase_1', $event, item)" 
-                  (change)="changePhases(order, j, 'phase_1', $event, item)"
+                  (click)="changePhases('phase_1', $event, item)" 
+                  (change)="changePhases('phase_1', $event, item)"
                   (keyup.enter)="sendPhases(order, j, 'phase_1', $event, item)">
               </div>
             </td>
@@ -84,8 +84,8 @@
                 *ngFor="let item of order.phase_2; let j = index" [class.green]="item === 0">
                 <input (clickOutside)="clickOutsidePhaseMultiply(j, 'phase_2', order, 'phase_2'+ i + j)" type="number"
                   [value]="item" [id]="'phase_2'+ i + j" class="phase-input"
-                  (click)="changePhases(order, j, 'phase_2', $event, item)" 
-                  (change)="changePhases(order, j, 'phase_2', $event, item)"
+                  (click)="changePhases( 'phase_2', $event, item)" 
+                  (change)="changePhases('phase_2', $event, item)"
                   (keyup.enter)="sendPhases(order, j, 'phase_2', $event, item)">
               </div>
             </td>
@@ -94,8 +94,8 @@
                 *ngFor="let item of order.phase_3; let j = index" [class.green]="item === 0">
                 <input (clickOutside)="clickOutsidePhaseMultiply(j, 'phase_3', order, 'phase_3'+ i + j)" type="number"
                   [value]="item" [id]="'phase_3'+ i + j" class="phase-input"
-                  (click)="changePhases(order, j, 'phase_3', $event, item)"
-                  (change)="changePhases(order, j, 'phase_3', $event, item)"
+                  (click)="changePhases('phase_3', $event, item)"
+                  (change)="changePhases('phase_3', $event, item)"
                   (keyup.enter)="sendPhases(order, j, 'phase_3', $event, item)">
               </div>
             </td>
