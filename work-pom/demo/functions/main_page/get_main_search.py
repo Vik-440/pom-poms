@@ -69,16 +69,16 @@ def get_main(got_request):
                 kod_model_like = got_request['kod_model_like']
                 look_for_similar = ('%' + str(kod_model_like) + '%')
                 stmt = select(db_m.id_model)\
-                    .where(db_m.kod_model.like(look_for_similar))\
+                    .where(db_m.kod_model.ilike(look_for_similar))\
                     .order_by(db_m.id_model)
                 pre_list = session.execute(stmt).scalars()
                 for row in pre_list:
                     id_model_list.append(row)
-            elif 'kolor_like' in got_request:
-                kolor_model_like = got_request['kolor_like']
+            elif 'kolor_model_like' in got_request:
+                kolor_model_like = got_request['kolor_model_like']
                 look_for_similar = ('%' + str(kolor_model_like) + '%')
                 stmt = select(db_m.id_model)\
-                    .where(db_m.kolor_model.like(look_for_similar))\
+                    .where(db_m.kolor_model.ilike(look_for_similar))\
                     .order_by(db_m.id_model)
                 pre_list = session.execute(stmt).scalars()
                 for row in pre_list:
@@ -157,7 +157,7 @@ def get_main(got_request):
                                 db_o.id_recipient.in_(id_client_list))))\
                         .order_by(db_o.id_order)
                 else:
-                    if fulfilled is 'true':
+                    if fulfilled == 'true':
                         stmt = select_modul.where(
                             db_o.data_order >= data_start_search,
                             db_o.data_order <= data_finish_search,
