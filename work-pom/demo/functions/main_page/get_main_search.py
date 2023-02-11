@@ -186,8 +186,7 @@ def get_main(got_request):
                             .order_by(db_o.id_order)
                     else:
                         stmt = (select_modul
-                            .where(
-                                db_o.fulfilled_order == fulfilled)
+                            .where(db_o.fulfilled_order == fulfilled)
                             .order_by(db_o.data_plane_order))
 
             list_order = session.execute(stmt).all()
