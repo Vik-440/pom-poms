@@ -118,50 +118,33 @@ def get_main(got_request):
                 recipient_alias.street_house_apartment,
                 recipient_alias.sity)
                 .group_by(
-                    db_o.id_order,
-                    db_o.comment_order,
-                    db_o.data_order,
-                    db_o.data_plane_order,
-                    db_o.fulfilled_order,
-                    db_o.sum_payment,
-                    db_o.discont_order,
-                    db_o.quantity_pars_model,
-                    db_o.phase_1,
-                    db_o.phase_2,
-                    db_o.phase_3,
-                    db_o.id_model,
-                    client_alias.phone_client.label('phone_order'),
-                    recipient_alias.second_name_client,
-                    recipient_alias.first_name_client,
-                    recipient_alias.phone_client,
-                    recipient_alias.np_number,
-                    recipient_alias.zip_code,
-                    recipient_alias.street_house_apartment,
-                    recipient_alias.sity
+                    db_o,
+                    client_alias,
+                    recipient_alias
                 )
                 .join(client_alias, db_o.id_client == client_alias.id_client)
                 .join(recipient_alias, db_o.id_recipient == recipient_alias.id_client)
                 .join(db_p, db_o.id_order == db_p.id_order)
-            )
+                )
+
+            select_modul = select_modul.where(
+                                db_o.data_order >= data_start_search,
+                                db_o.data_order <= data_finish_search
+                )
+
             if fulfilled == 'all':
                 if id_client_list and not id_order_list:
                     stmt = select_modul.where(
-                        db_o.data_order >= data_start_search,
-                        db_o.data_order <= data_finish_search,
                         or_(
                             db_o.id_client.in_(id_client_list),
                             db_o.id_recipient.in_(id_client_list)))\
                         .order_by(db_o.id_order)
                 elif id_order_list and not id_client_list:
                     stmt = select_modul.where(
-                        db_o.data_order >= data_start_search,
-                        db_o.data_order <= data_finish_search,
-                        db_o.id_order.in_(id_order_list))\
+                       db_o.id_order.in_(id_order_list))\
                         .order_by(db_o.id_order)
                 elif id_order_list and id_client_list:
                     stmt = select_modul.where(
-                        db_o.data_order >= data_start_search,
-                        db_o.data_order <= data_finish_search,
                         and_(
                             db_o.id_order.in_(id_order_list),
                             or_(
@@ -169,15 +152,14 @@ def get_main(got_request):
                                 db_o.id_recipient.in_(id_client_list))))\
                         .order_by(db_o.id_order)
                 else:
-                    stmt = select_modul.where(
-                        db_o.data_order >= data_start_search,
-                        db_o.data_order <= data_finish_search)\
-                        .order_by(db_o.id_order)
+                    stmt = select_modul.order_by(db_o.id_order)
+                    # where(
+                        # db_o.data_order >= data_start_search,
+                        # db_o.data_order <= data_finish_search)\
+                        # .order_by(db_o.id_order)
             else:
                 if id_client_list and not id_order_list:
                     stmt = select_modul.where(
-                        db_o.data_order >= data_start_search,
-                        db_o.data_order <= data_finish_search,
                         db_o.fulfilled_order == fulfilled,
                         or_(
                             db_o.id_client.in_(id_client_list),
@@ -185,15 +167,11 @@ def get_main(got_request):
                         .order_by(db_o.id_order)
                 elif id_order_list and not id_client_list:
                     stmt = select_modul.where(
-                        db_o.data_order >= data_start_search,
-                        db_o.data_order <= data_finish_search,
                         db_o.fulfilled_order == fulfilled,
                         db_o.id_order.in_(id_order_list))\
                         .order_by(db_o.id_order)
                 elif id_order_list and id_client_list:
                     stmt = select_modul.where(
-                        db_o.data_order >= data_start_search,
-                        db_o.data_order <= data_finish_search,
                         db_o.fulfilled_order == fulfilled,
                         and_(
                             db_o.id_order.in_(id_order_list),
@@ -204,15 +182,11 @@ def get_main(got_request):
                 else:
                     if fulfilled == 'true':
                         stmt = select_modul.where(
-                            db_o.data_order >= data_start_search,
-                            db_o.data_order <= data_finish_search,
                             db_o.fulfilled_order == fulfilled)\
                             .order_by(db_o.id_order)
                     else:
                         stmt = (select_modul
                             .where(
-                                db_o.data_order >= data_start_search,
-                                db_o.data_order <= data_finish_search,
                                 db_o.fulfilled_order == fulfilled)
                             .order_by(db_o.data_plane_order))
 
