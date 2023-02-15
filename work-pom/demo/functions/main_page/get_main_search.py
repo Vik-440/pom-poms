@@ -97,6 +97,7 @@ def get_main(got_request):
                
             select_modul = (select(
                 func.sum(db_p.payment).label('my_sum'),
+                # func.array_agg(db_m.kod_model).label('cod_model'),
                 db_o.id_order,
                 db_o.comment_order,
                 db_o.data_order,
@@ -125,6 +126,7 @@ def get_main(got_request):
                 .join(client_alias, db_o.id_client == client_alias.id_client)
                 .join(recipient_alias, db_o.id_recipient == recipient_alias.id_client)
                 .join(db_p, db_o.id_order == db_p.id_order)
+                # .join(db_m, db_o.id_model == db_m.id_model)
                 )
 
             select_modul = select_modul.where(
@@ -199,71 +201,74 @@ def get_main(got_request):
 #
             full_block = []
             for row in list_order:
-                m_id_order = row.id_order
-                m_comment_order = row.comment_order
-                m_data_order = (str(row.data_order))
-                m_data_plane_order = (str(row.data_plane_order))
-                m_fulfilled_order = (row.fulfilled_order)
-                m_sum_payment = (row.sum_payment - row.discont_order)
-                m_quantity_pars_model = (row.quantity_pars_model)
-                m_phase_1 = row.phase_1
-                m_phase_2 = row.phase_2
-                m_phase_3 = row.phase_3
-                m_id_model = row.id_model
-                m_phone_client = row.phone_order
-                m_second_name_client = row.second_name_client
-                m_first_name_client = row.first_name_client
-                m_phone_recipient = row.phone_client
-                m_np_number = row.np_number
-                m_zip_code = row.zip_code
-                m_street_house_apartment = row.street_house_apartment
-                m_sity = row.sity
-                m_real_money = row.my_sum
+                id_order = row.id_order
+                comment_order = row.comment_order
+                data_order = (str(row.data_order))
+                data_plane_order = (str(row.data_plane_order))
+                fulfilled_order = (row.fulfilled_order)
+                sum_payment = (row.sum_payment - row.discont_order)
+                quantity_pars_model = (row.quantity_pars_model)
+                phase_1 = row.phase_1
+                phase_2 = row.phase_2
+                phase_3 = row.phase_3
+                id_model = row.id_model
+                phone_client = row.phone_order
+                second_name_client = row.second_name_client
+                first_name_client = row.first_name_client
+                phone_recipient = row.phone_client
+                np_number = row.np_number
+                zip_code = row.zip_code
+                street_house_apartment = row.street_house_apartment
+                sity = row.sity
+                real_money = row.my_sum
 #
-                m_kolor_model, m_kod_model, m_comment_model, = [], [], []
+                kolor_model, kod_model, comment_model, = [], [], []
 
-                for id_model in m_id_model:
+                for id_model in id_model:
                     stmt = select(
                         db_m.kolor_model, db_m.kod_model, db_m.comment_model)\
                         .where(db_m.id_model == id_model)
                     gr_model = session.execute(stmt).all()
                     for row5 in gr_model:
-                        m_kolor_model.append(row5.kolor_model)
-                        m_kod_model.append(row5.kod_model)
-                        m_comment_model.append(row5.comment_model)
+                        kolor_model.append(row5.kolor_model)
+                        kod_model.append(row5.kod_model)
+                        comment_model.append(row5.comment_model)
+                        # print(id_model, row5.kolor_model, row5.kod_model, row5.comment_model)
 
-                if len(list(m_quantity_pars_model)) == 1:
-                    m_quantity_pars_model = m_quantity_pars_model[0]
-                    m_phase_1 = m_phase_1[0]
-                    m_phase_2 = m_phase_2[0]
-                    m_phase_3 = m_phase_3[0]
-                    m_kolor_model = m_kolor_model[0]
-                    m_kod_model = m_kod_model[0]
-                    m_comment_model = m_comment_model[0]
+                if len(list(quantity_pars_model)) == 1:
+                    quantity_pars_model = quantity_pars_model[0]
+                    phase_1 = phase_1[0]
+                    phase_2 = phase_2[0]
+                    phase_3 = phase_3[0]
+                    kolor_model = kolor_model[0]
+                    kod_model = kod_model[0]
+                    comment_model = comment_model[0]
 #
 
-                one_block = {"id_order": m_id_order,
-                             "comment_order": m_comment_order,
-                             "data_order": m_data_order,
-                             "kolor_model": m_kolor_model,
-                             "kod_model": m_kod_model,
-                             "comment_model": m_comment_model,
-                             "quantity_pars_model": m_quantity_pars_model,
-                             "phase_1": m_phase_1,
-                             "phase_2": m_phase_2,
-                             "phase_3": m_phase_3,
-                             "sum_payment": m_sum_payment,
-                             "real_money": m_real_money,
-                             "phone_client": m_phone_client,
-                             "phone_recipient": m_phone_recipient,
-                             "sity": m_sity,
-                             "data_plane_order": m_data_plane_order,
-                             "fulfilled_order": m_fulfilled_order,
-                             "np_number": m_np_number,
-                             "zip_code": m_zip_code,
-                             "street_house_apartment": m_street_house_apartment,  # noqa: E501
-                             "second_name_client": m_second_name_client,
-                             "first_name_client": m_first_name_client}
+                one_block = {
+                    "id_order": id_order,
+                    "comment_order": comment_order,
+                    "data_order": data_order,
+                    "kolor_model": kolor_model,
+                    "kod_model": kod_model,
+                    "comment_model": comment_model,
+                    "quantity_pars_model": quantity_pars_model,
+                    "phase_1": phase_1,
+                    "phase_2": phase_2,
+                    "phase_3": phase_3,
+                    "sum_payment": sum_payment,
+                    "real_money": real_money,
+                    "phone_client": phone_client,
+                    "phone_recipient": phone_recipient,
+                    "sity": sity,
+                    "data_plane_order": data_plane_order,
+                    "fulfilled_order": fulfilled_order,
+                    "np_number": np_number,
+                    "zip_code": zip_code,
+                    "street_house_apartment": street_house_apartment,
+                    "second_name_client": second_name_client,
+                    "first_name_client": first_name_client
+                    }
                 full_block.append(one_block)
         # print(full_block)
         return json.dumps(full_block)
