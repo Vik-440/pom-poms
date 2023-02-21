@@ -1,4 +1,4 @@
-<div class="page pl61 pr50 create-order__page">
+<div class="page create-order__page">
   <div class="create-order__title">
     <h3 class="create-order__title--number title-text">Замовлення № <input type="text" [(ngModel)]="idOrder"
         (keyup.enter)="getOrder()"></h3>
@@ -72,7 +72,7 @@
       <button class="save-btn forms" (click)="saveOrder(index, order)" *ngIf="order.value.isNew">
         Зберегти
       </button>
-      <button class="ok-btn forms" *ngIf="!order.value.isNew">
+      <button class="ok-btn" *ngIf="!order.value.isNew">
         <img class="next-icon icon" src="./assets/img/icons/ok-btn.svg" />
       </button>
     </div>
@@ -84,7 +84,7 @@
         <input type="text" class="phase" disabled formControlName="phase_2">
         <input type="text" class="phase" disabled formControlName="phase_3">
       </div>
-      <input type="text" class="form__field--ml" placeholder="сума" formControlName="sum_pars">
+      <input type="text" class="form__field--ml sum" placeholder="сума" formControlName="sum_pars">
     </div>
 
     <div class="form__fields">
@@ -100,11 +100,11 @@
 
   </div>
   <div class="sum-up">
-    <div class="sum-up--sale">
+    <div class="sum-up--item sum-up--sale">
       <span class="title-text">Знижка </span> <input [(ngModel)]="discount" type="text" class="form__field"
         placeholder="грн">
     </div>
-    <div class="sum-up--all">
+    <div class="sum-up--item sum-up--all">
       <span class="title-text">Всього </span>
       <input type="text" [value]="sumAll()" class="form__field" placeholder="___ / ___ / ___">
     </div>
@@ -222,6 +222,7 @@
   <div class="finished-order">
     <textarea name="" class="finished-order--comment" [(ngModel)]="commentOrder"
       placeholder="коментар до замовлення"></textarea>
+    </div>
     <div class="finished-order--btns">
       <button class="finished-order--btn edit"
         [disabled]="isNew || ((!isSaveClient || (!isSaveRecipient && isRecipient)) && dataPlaneOrder && clientForm.valid && orderForm.valid)"
@@ -234,7 +235,6 @@
       <button class="finished-order--btn wave" *ngIf="doneOrder">Оформлено</button>
       <button class="finished-order--btn teal-blue" (click)="copyScore()">Виставити рахунок</button>
     </div>
-  </div>
 </div>
 
 <div *ngIf="isShowSpinner" class="d-flex justify-content-center spinner-wrapper">

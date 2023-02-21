@@ -191,9 +191,11 @@ export class CreateOrderComponent implements OnInit {
 
     sumAll(isCountDiscount = true) {
         const sumAllItems = [];
+        
         this.priceAll.patchValue({
             sum_payment: 0,
         });
+        console.log(this.priceAll, this.orderForm);
         this.orderForm.controls.map((order) => {
             this.priceAll.patchValue({
                 sum_payment: this.priceAll.value.sum_payment + order.value.sum_pars,
