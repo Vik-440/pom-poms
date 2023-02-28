@@ -104,10 +104,10 @@ export class CreateOrderComponent implements OnInit {
         }
     }
 
-    requiredFalse(){
+    requiredFalse() {
         return (control) => {
-            return control.value
-          }
+            return control.value;
+        };
     }
 
     init() {
@@ -151,6 +151,7 @@ export class CreateOrderComponent implements OnInit {
                 phase_1_default: 0,
                 phase_2_default: 0,
                 phase_3_default: 0,
+                quantity_pars_model_default: null,
                 sum_pars: null,
                 comment_model: null,
                 isNew: [true, this.requiredFalse()],
@@ -191,11 +192,10 @@ export class CreateOrderComponent implements OnInit {
 
     sumAll(isCountDiscount = true) {
         const sumAllItems = [];
-        
+
         this.priceAll.patchValue({
             sum_payment: 0,
         });
-        console.log(this.priceAll, this.orderForm);
         this.orderForm.controls.map((order) => {
             this.priceAll.patchValue({
                 sum_payment: this.priceAll.value.sum_payment + order.value.sum_pars,
@@ -228,6 +228,15 @@ export class CreateOrderComponent implements OnInit {
                             modelsData[order.value.kod_model?.substring(0, 2)] ||
                             '';
 
+                        if (data <= order.value.quantity_pars_model_default) {
+                            order.patchValue({
+                                sum_pars: data * order.value.price_model,
+                                phase_1: order.value.phase_1_default,
+                                phase_2: order.value.phase_2_default,
+                                phase_3: order.value.phase_3_default,
+                            });
+                            return;
+                        }
                         order.patchValue({
                             sum_pars: data * order.value.price_model,
                             phase_1: order.value.phase_1_default + (type.includes('брелок') ? +data : +(data * 2)),
@@ -439,6 +448,7 @@ export class CreateOrderComponent implements OnInit {
                 phase_1_default: 0,
                 phase_2_default: 0,
                 phase_3_default: 0,
+                quantity_pars_model_default: null,
                 sum_pars: null,
                 comment_model: null,
                 isNew: [true, this.requiredFalse()],
@@ -520,7 +530,7 @@ export class CreateOrderComponent implements OnInit {
         }
 
         form.patchValue({
-            second_name_client: value.secondName || value
+            second_name_client: value.secondName || value,
         });
         this.clientDataItems = [];
     }
@@ -804,6 +814,7 @@ export class CreateOrderComponent implements OnInit {
                         phase_3_default: data.phase_3[index],
                         comment_model: dataModel.comment_model,
                         quantity_pars_model: [data.quantity_pars_model[index], Validators.required],
+                        quantity_pars_model_default: data.quantity_pars_model[index],
                         sum_pars: data.quantity_pars_model[index] * data.price_model_order[index],
                         isNew: false,
                         isChange: false,

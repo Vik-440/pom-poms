@@ -135,7 +135,7 @@
         padding-left: 16px
         &.name-color
           border: none
-          width: 187px
+          width: 185px
           background: #E5E9F2
           margin: 0
           padding: 0
@@ -153,13 +153,15 @@
         padding: 0
         padding-left: 4px
         margin: 0
+        box-sizing: content-box
         &:focus
           outline: none
           border-bottom: 0.5px solid #203B4A
       &-note
         background: #E5E9F2
         border-top: 3px solid #203B4A
-        height: 280px
+        height: auto
+        min-height: 30px
         &-inp
           border: none
           width: 100%
@@ -167,6 +169,7 @@
           margin: 0
           padding: 0
           padding: 4px
+          padding-bottom: 0
           background: #E5E9F2
           &:focus
             outline: none
