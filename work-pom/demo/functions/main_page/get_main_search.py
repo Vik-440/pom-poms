@@ -132,7 +132,7 @@ def get_main(got_request):
                 )
                 .join(client_alias, db_order.id_client == client_alias.id_client)
                 .join(recipient_alias, db_order.id_recipient == recipient_alias.id_client)
-                .join(db_payment, db_order.id_order == db_payment.id_order)
+                .outerjoin(db_payment, db_order.id_order == db_payment.id_order)
                 )
 
             select_modul = select_modul.where(
@@ -194,6 +194,7 @@ def get_main(got_request):
                             .order_by(db_order.data_plane_order))
 
             list_order = session.execute(stmt).all()
+            # print(list_order)
 
             if not list_order:
                 stmt = select(func.max(db_order.id_order))
@@ -204,6 +205,7 @@ def get_main(got_request):
             full_block = []
             for row in list_order:
                 id_order = row.id_order
+                # print(id_order)
                 comment_order = row.comment_order
                 data_order = (str(row.data_order))
                 data_plane_order = (str(row.data_plane_order))
