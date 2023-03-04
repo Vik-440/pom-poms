@@ -1,32 +1,35 @@
+from flask import Flask
+from sqlalchemy import create_engine
+from dotenv import load_dotenv
+import psycopg2
 import os
 
-from flask import Flask
+from app.config import config
+from app.base_model import Base
+
+load_dotenv()
 
 
-def create_app(test_config=None):
-    # create and configure the app
-    app = Flask(__name__, instance_relative_config=True)
-    # app.config.from_mapping(
-    #     SECRET_KEY='dev',
-    #     DATABASE=os.path.join(app.instance_path, 'flaskr.sqlite'),
-    # )
+def create_app(config_name='development'):
+    app = Flask(__name__)
+    app.config.from_object(config[config_name])
 
-    # if test_config is None:
-    #     # load the instance config, if it exists, when not testing
-    #     app.config.from_pyfile('config.py', silent=True)
-    # else:
-    #     # load the test config if passed in
-    #     app.config.from_mapping(test_config)
-    #
-    # # ensure the instance folder exists
-    # try:
-    #     os.makedirs(app.instance_path)
-    # except OSError:
-    #     pass
+    try:
+        if config_name == 'testing':
+            db = psycopg2.connect(':memory:')
+        elif config_name == 'development':
+            db = os.getenv("PSQL_URL_TEST")
+        else:
+            raise (Exception('Please insert correct setup config_name!'))
+    except Exception as e:
+        pass
+        # logger.error(f'Error in function return_engine: {e}')
 
-    # a simple page that says hello
-    @app.route('/hello')
-    def hello():
-        return 'Hello, World!'
+    engine = create_engine(db, future=True)
+    Base.metadata.create_all(engine)
+
+    from app.api import api
+
+    app.register_blueprint(api)
 
     return app
