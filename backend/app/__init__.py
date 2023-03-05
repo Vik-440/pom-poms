@@ -6,30 +6,34 @@ import os
 
 from app.config import config
 from app.base_model import Base
-
-load_dotenv()
+from log.logger import logger
 
 
 def create_app(config_name='development'):
     app = Flask(__name__)
-    app.config.from_object(config[config_name])
 
-    try:
-        if config_name == 'testing':
-            db = psycopg2.connect(':memory:')
-        elif config_name == 'development':
-            db = os.getenv("PSQL_URL_TEST")
-        else:
-            raise (Exception('Please insert correct setup config_name!'))
-    except Exception as e:
-        pass
-        # logger.error(f'Error in function return_engine: {e}')
-
-    engine = create_engine(db, future=True)
-    Base.metadata.create_all(engine)
-
+    # app.config.from_object('config.Config')
+    # app.config.from_object(config[config_name])
+    
     from app.api import api
 
     app.register_blueprint(api)
 
     return app
+
+
+load_dotenv()
+config_name = 'development'
+
+try:
+    if config_name == 'testing':
+        db_uri = psycopg2.connect(':memory:')
+    elif config_name == 'development':
+        db_uri = os.getenv("PSQL_URL_TEST")
+    else:
+        raise (Exception('Please insert correct setup config_name!'))
+except Exception as e:
+    logger.error(f'Error in function return_engine: {e}')
+
+engine = create_engine(db_uri, future=True)
+Base.metadata.create_all(engine)
