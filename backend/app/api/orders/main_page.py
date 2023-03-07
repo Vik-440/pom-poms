@@ -3,6 +3,7 @@ from datetime import datetime
 from flask import request, jsonify
 from sqlalchemy import func, select, or_, and_#, join, table
 from sqlalchemy.orm import Session, aliased
+from collections import namedtuple
 
 from app.orders.models import DB_orders
 from app.clients.models import DB_client
@@ -14,6 +15,69 @@ from .. import api
 from log.logger import logger
 
 
+def getting_args(args: dict) -> tuple:
+    data_today = datetime.today().strftime('%Y-%m-%d')
+    data_start_search = args.get('start_date', '2016-01-01')
+    data_finish_search = args.get('data_finish', data_today)
+    status_order = args.get('fulfilled', 'False')
+    return data_start_search, data_finish_search, status_order
+
+
+def getting_filter_clients(args: dict) -> list:
+    client_alias = aliased(DB_client)
+    recipient_alias = aliased(DB_client)
+    filters_clients = {
+                'phone_client': DB_client.phone,
+                'id_client': DB_client.id_client,
+                'team': DB_client.team,
+                'coach': DB_client.coach,
+                'sity': DB_client.city}
+    id_client_list = []
+    for key, value in filters_clients.items():
+        if key in args:
+            stmt = (
+                select(DB_orders.id_order)
+                .join(client_alias, DB_orders.id_client == client_alias.id_client)
+                .join(recipient_alias, DB_orders.id_recipient == recipient_alias.id_client)
+                .join(DB_client, DB_orders.id_client == DB_client.id_client)
+                .where(value == args[key])
+                .order_by(DB_client.id_client))
+            with Session(engine) as session:
+                pre_list = session.execute(stmt).scalars()
+                for row in pre_list:
+                    id_client_list.append(row)
+    return id_client_list
+
+
+def getting_filter_products(args: dict) -> list:
+    fillters_products = {
+                'kod_model': DB_product.article,
+                'kod_model_like': DB_product.article,
+                'kolor_model_like': DB_product.colors}            
+    id_products_list = []
+    for key, value in fillters_products.items():
+        if key in args:
+            if key == 'kod_model':
+                stmt = (
+                    select(DB_product.id_product)
+                    .where(value == args[key])
+                    .order_by(DB_product.id_product))
+            else:
+                value = ('%' + str(args.get(key)) + '%')
+                stmt = (
+                    select(DB_product.id_product)
+                    .where(fillters_products[key].ilike(value))
+                    .order_by(DB_product.id_product))
+            with Session(engine) as session:
+                pre_list = session.execute(stmt).scalars()
+                for row in pre_list:
+                    id_products_list.append(row)
+    # print(id_products_list)
+    return id_products_list
+
+
+
+
 @api.route('/main', methods=['GET'])
 def main_page():
     """Preparing main page with or without same requests"""
@@ -22,96 +86,27 @@ def main_page():
 
     try:
         with Session(engine) as session:
-            data_finish_search = datetime.today().strftime('%Y-%m-%d')
-            data_start_search = '2016-01-01'
-            status_order = str('False')
-            if 'data_start' in args:
-                data_start_search = args['data_start']
-            if 'data_finish' in args:
-                data_finish_search = args['data_finish']
-            if 'fulfilled' in args:
-                status_order = args['fulfilled']
-#
-            id_client_list, id_model_list = [], []
-            if 'phone_client' in args:
-                phone_client = args['phone_client']
-                stmt = (
-                    select(DB_client.id_client)
-                    .where(DB_client.phone == phone_client)
-                    .order_by(DB_client.id_client))
-                id_client_list.append(session.execute(stmt).scalar())
-            elif 'id_client' in args:
-                id_client = args['id_client']
-                stmt = (
-                    select(DB_client.id_client)
-                    .where(DB_client.id_client == id_client)
-                    .order_by(DB_client.id_client))
-                id_client_list.append(session.execute(stmt).scalar())
-            elif 'team' in args:
-                team = args['team']
-                stmt = (
-                    select(DB_client.id_client)
-                    .where(DB_client.team == team)
-                    .order_by(DB_client.id_client))
-                pre_list = session.execute(stmt).scalars()
-                for row in pre_list:
-                    id_client_list.append(row)
-            elif 'coach' in args:
-                coach = args['coach']
-                stmt = (
-                    select(DB_client.id_client)
-                    .where(DB_client.coach == coach)
-                    .order_by(DB_client.id_client))
-                pre_list = session.execute(stmt).scalars()
-                for row in pre_list:
-                    id_client_list.append(row)
-            elif 'city' in args:
-                city = args['city']
-                stmt = (
-                    select(DB_client.id_client)
-                    .where(DB_client.city == city)
-                    .order_by(DB_client.id_client))
-                pre_list = session.execute(stmt).scalars()
-                for row in pre_list:
-                    id_client_list.append(row)
-#
-            if 'kod_model' in args:
-                kod_model = args['kod_model']
-                stmt = (select(DB_product.id_product)
-                    .where(DB_product.article == kod_model)
-                    .order_by(DB_product.id_product))
-                pre_list = session.execute(stmt).scalars()
-                for row in pre_list:
-                    id_model_list.append(row)
-            elif 'kod_model_like' in args:
-                kod_model_like = args['kod_model_like']
-                look_for_similar = ('%' + str(kod_model_like) + '%')
-                stmt = (
-                    select(DB_product.id_product)
-                    .where(DB_product.article.ilike(look_for_similar))
-                    .order_by(DB_product.id_product))
-                pre_list = session.execute(stmt).scalars()
-                for row in pre_list:
-                    id_model_list.append(row)
-            elif 'kolor_model_like' in args:
-                kolor_model_like = args['kolor_model_like']
-                look_for_similar = ('%' + str(kolor_model_like) + '%')
-                stmt = (
-                    select(DB_product.id_product)
-                    .where(DB_product.colors.ilike(look_for_similar))
-                    .order_by(DB_product.id_product))
-                pre_list = session.execute(stmt).scalars()
-                for row in pre_list:
-                    id_model_list.append(row)
-# ###########################################################################
-            id_order_list = []
-            for id_model_cucle in id_model_list:
+            data_start_search, data_finish_search, status_order = getting_args(args)
+
+            id_client_list = getting_filter_clients(args)
+            id_products_list = getting_filter_products(args)
+
+
+            id_orders = []
+            for id_model_cucle in id_products_list:
                 stmt = (
                     select(DB_orders.id_order)
                     .where(DB_orders.id_models.any(id_model_cucle)))
                 pre_list = session.execute(stmt).scalars()
                 for row in pre_list:
-                    id_order_list.append(row)
+                    id_orders.append(row)
+            # print(id_client_list)
+            # print(id_products_list)
+            # print(id_orders)
+            if id_client_list and id_orders:
+                orders = [x for x in id_client_list if x in id_orders]
+            else:
+                orders = id_client_list + id_orders
 # ###########################################################################
             stmt = (
                 select(
@@ -164,61 +159,76 @@ def main_page():
                                 DB_orders.data_create >= data_start_search,
                                 DB_orders.data_create <= data_finish_search)
 
+            print(orders)
             if status_order == 'all':
-                if id_client_list and not id_order_list:
-                    stmt = select_modul.where(
-                        or_(
-                            DB_orders.id_client.in_(id_client_list),
-                            DB_orders.id_recipient.in_(id_client_list)))\
-                        .order_by(DB_orders.id_order)
-                elif id_order_list and not id_client_list:
-                    stmt = select_modul.where(
-                       DB_orders.id_order.in_(id_order_list))\
-                        .order_by(DB_orders.id_order)
-                elif id_order_list and id_client_list:
-                    stmt = select_modul.where(
-                        and_(
-                            DB_orders.id_order.in_(id_order_list),
-                            or_(
-                                DB_orders.id_client.in_(id_client_list),
-                                DB_orders.id_recipient.in_(id_client_list))))\
-                        .order_by(DB_orders.id_order)
-                else:
-                    stmt = select_modul.order_by(DB_orders.id_order)
+                stmt = (
+                    select_modul
+                    .where(DB_orders.id_order.in_(orders))
+                    .order_by(DB_orders.id_order))
+                # if id_client_list and not id_orders:
+                #     stmt = select_modul.where(
+                #         or_(
+                #             DB_orders.id_client.in_(id_client_list),
+                #             DB_orders.id_recipient.in_(id_client_list)))\
+                #         .order_by(DB_orders.id_order)
+                # elif id_orders and not id_client_list:
+                #     stmt = select_modul.where(
+                #        DB_orders.id_order.in_(id_orders))\
+                #         .order_by(DB_orders.id_order)
+                # elif id_orders and id_client_list:
+                #     stmt = select_modul.where(
+                #         and_(
+                #             DB_orders.id_order.in_(id_orders),
+                #             or_(
+                #                 DB_orders.id_client.in_(id_client_list),
+                #                 DB_orders.id_recipient.in_(id_client_list))))\
+                #         .order_by(DB_orders.id_order)
+                # else:
+                #     stmt = select_modul.order_by(DB_orders.id_order)
+            elif status_order == 'true':
+                stmt = (
+                    select_modul
+                    .where(DB_orders.id_order.in_(orders))
+                    .where(DB_orders.status_order == status_order)
+                    .order_by(DB_orders.id_order))
             else:
-                if id_client_list and not id_order_list:
-                    stmt = select_modul.where(
-                        DB_orders.status_order == status_order,
-                        or_(
-                            DB_orders.id_client.in_(id_client_list),
-                            DB_orders.id_recipient.in_(id_client_list)))\
-                        .order_by(DB_orders.id_order)
-                elif id_order_list and not id_client_list:
-                    stmt = select_modul.where(
-                        DB_orders.status_order == status_order,
-                        DB_orders.id_order.in_(id_order_list))\
-                        .order_by(DB_orders.id_order)
-                elif id_order_list and id_client_list:
-                    stmt = select_modul.where(
-                        DB_orders.status_order == status_order,
-                        and_(
-                            DB_orders.id_order.in_(id_order_list),
-                            or_(
-                                DB_orders.id_client.in_(id_client_list),
-                                DB_orders.id_recipient.in_(id_client_list))))\
-                        .order_by(DB_orders.id_order)
-                else:
-                    if status_order == 'true':
-                        stmt = select_modul.where(
-                            DB_orders.status_order == status_order)\
-                            .order_by(DB_orders.id_order)
-                    else:
-                        stmt = (select_modul
-                            .where(DB_orders.status_order == status_order)
-                            .order_by(DB_orders.data_plane_send))
+                stmt = (
+                    select_modul
+                    # .where(DB_orders.id_order.in_(orders))
+                    .where(DB_orders.status_order == status_order)
+                    .order_by(DB_orders.data_plane_send))
+                # if id_client_list and not id_orders:
+                #     stmt = select_modul.where(
+                #         DB_orders.status_order == status_order,
+                #         or_(
+                #             DB_orders.id_client.in_(id_client_list),
+                #             DB_orders.id_recipient.in_(id_client_list)))\
+                #         .order_by(DB_orders.id_order)
+                # elif id_orders and not id_client_list:
+                #     stmt = select_modul.where(
+                #         DB_orders.status_order == status_order,
+                #         DB_orders.id_order.in_(id_orders))\
+                #         .order_by(DB_orders.id_order)
+                # elif id_orders and id_client_list:
+                #     stmt = select_modul.where(
+                #         DB_orders.status_order == status_order,
+                #         and_(
+                #             DB_orders.id_order.in_(id_orders),
+                #             or_(
+                #                 DB_orders.id_client.in_(id_client_list),
+                #                 DB_orders.id_recipient.in_(id_client_list))))\
+                #         .order_by(DB_orders.id_order)
+                # else:
+                #     if status_order == 'true':
+                #         stmt = select_modul.where(
+                #             DB_orders.status_order == status_order)\
+                #             .order_by(DB_orders.id_order)
+                #     else:
+                #         stmt = (select_modul
+                #             .where(DB_orders.status_order == status_order)
+                #             .order_by(DB_orders.data_plane_send))
 
             list_order = session.execute(stmt).all()
-
             if not list_order:
                 stmt = select(func.max(DB_orders.id_order))
                 last_order = session.execute(stmt).scalar_one()
@@ -289,6 +299,7 @@ def main_page():
                     "first_name_client": first_name
                     }
                 full_block.append(one_block)
+        print(full_block)
         return jsonify(full_block), 200
     except Exception as e:
         return jsonify(f'Error in function main_page: {e}')

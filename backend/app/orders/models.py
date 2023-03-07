@@ -1,4 +1,4 @@
-from sqlalchemy import Date, Column, Integer, String, Boolean
+from sqlalchemy import Date, Column, Integer, String, Boolean, ForeignKey
 from sqlalchemy.dialects import postgresql
 from app.base_model import Base
 
@@ -8,8 +8,10 @@ class DB_orders(Base):
     id_order = Column('id_order', Integer, primary_key=True)
     data_create = Column('data_order', Date)
     data_plane_send = Column('data_plane_order', Date)
-    id_client = Column('id_client', Integer)
-    id_recipient = Column('id_recipient', Integer)
+    id_client = Column('id_client', Integer, ForeignKey(
+        'directory_of_client.id_client'))
+    id_recipient = Column('id_recipient', Integer, ForeignKey(
+        'directory_of_client.id_client'))
     status_order = Column('fulfilled_order', Boolean)
     sum_payment = Column('sum_payment', Integer)
     discont = Column('discont_order', Integer)
