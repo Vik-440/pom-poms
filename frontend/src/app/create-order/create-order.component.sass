@@ -1,3 +1,5 @@
+@import '../../variables'
+
 ::ng-deep .create-order__form
   .ngb-dp-day
     &:hover
@@ -36,7 +38,7 @@
         width: 86px
         height: 32px
         background: none
-        border: 0.5px solid #203B4A
+        border: $border-main
         box-sizing: border-box
         color: #000
         font-weight: 600
@@ -89,7 +91,7 @@
     width: 32px
     height: 26px
     background: #FFFFFF
-    border: 0.5px solid #203B4A
+    border: $border-main
     box-sizing: border-box
     text-align: center
 
@@ -111,7 +113,7 @@
     width: 205px
     height: 26px
     background: #FFFFFF
-    border: 0.5px solid #203B4A
+    border: $border-main
     box-sizing: border-box
     padding-left: 6px
     &-material
@@ -120,7 +122,7 @@
       width: 170px
       height: 26px
       background: #FFFFFF
-      border: 0.5px solid #203B4A
+      border: $border-main
       box-sizing: border-box
       &.sum
         text-align: center
@@ -133,7 +135,7 @@
       width: 79px
       height: 26px
       background: #FFFFFF
-      border: 0.5px solid #203B4A
+      border: $border-main
       box-sizing: border-box
       text-align: center
       margin-bottom: 7px
@@ -142,7 +144,7 @@
       height: 26px
       text-align: center
       background: #FFFFFF
-      border: 0.5px solid #203B4A
+      border: $border-main
       box-sizing: border-box
     &:first-child
       margin-bottom: 7px
@@ -150,7 +152,7 @@
       width: 260px
       height: 59px
       background: #FFFFFF
-      border: 0.5px solid #203B4A
+      border: $border-main
       box-sizing: border-box
       text-align: start
       resize: none
@@ -169,7 +171,7 @@
       width: 85px
       height: 26px
       background: #FFFFFF
-      border: 0.5px solid #203B4A
+      border: $border-main
       box-sizing: border-box
       text-align: center
       padding-left: 0
@@ -180,7 +182,7 @@
       padding-left: 0
       text-align: center
       background: #FFFFFF
-      border: 0.5px solid #203B4A
+      border: $border-main
       box-sizing: border-box
 
 .customer
@@ -311,16 +313,16 @@
   margin-top: 2px
 
 input
-  border: 0.5px solid #203B4A
+  border: $border-main
   &:focus
     box-shadow: 4px 5px 8px #888888
     outline: none
     border: none
-    border: 0.5px solid #203B4A
+    border: $border-main
   &:active
     outline: none
     border: none
-    border: 0.5px solid #203B4A
+    border: $border-main
 
 .date-order
   position: absolute
@@ -360,4 +362,4 @@ button.calendar
       padding-left: 2px !important
     .ng-select-container.ng-appearance-outline
         border-radius: 0px
-        border: 0.5px solid #203B4A
+        border: $border-main

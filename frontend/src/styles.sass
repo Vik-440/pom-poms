@@ -7,13 +7,15 @@
 
 @import "~bootstrap-icons/font/bootstrap-icons.css"
 
+@import './variables'
+
 ::ng-deep
   .table th
     padding: 0px !important
 
 .save-btn
   border: none
-  background: #32FA00
+  background: $btn-save
   border-radius: 25px
   font-weight: 700
   font-size: 13px
@@ -91,7 +93,7 @@ body
     border-bottom: 0.5px solid #111 !important
     padding: 0px
     font-size: 16px
-    background: #203B4A
+    background: $bg-table
     color: #fff
     vertical-align: middle !important
   & td
@@ -148,7 +150,7 @@ button[disabled]
   justify-content: center
 
 p
-  margin: 0 !important
+  margin: 0
 
 input[type="text"]
   padding: 0

@@ -30,6 +30,12 @@ export class FinancesComponent implements OnInit {
         day: new Date().getDay(),
         month: new Date().getMonth(),
     };
+
+    datePreviousOutlay: any = {
+        year: new Date().getFullYear(),
+        day: +String(new Date().getDate()).padStart(2, '0'),
+        month: +String(new Date().getMonth() + 1).padStart(2, '0'),
+    };
     todayYear = new Date().getFullYear();
     alert = {
         type: '',
@@ -62,7 +68,7 @@ export class FinancesComponent implements OnInit {
 
         this.dataItems = this.fb.array([
             this.fb.group({
-                data_payment: [null, Validators.required],
+                data_payment: [this.datePrevious, Validators.required],
                 metod_payment: ['iban', Validators.required],
                 id_order: [null, Validators.required],
                 id_payment: null,
@@ -136,7 +142,7 @@ export class FinancesComponent implements OnInit {
 
         this.outlayData.push(
             this.fb.group({
-                data_outlay: [null, Validators.required],
+                data_outlay: [this.datePreviousOutlay, Validators.required],
                 id_outlay: null,
                 id_outlay_class: [null, Validators.required],
                 money_outlay: [null, Validators.required],
@@ -150,7 +156,6 @@ export class FinancesComponent implements OnInit {
         this.dataItems.clear();
         data.forEach((item, i) => {
             const dataArray = item.data_payment.split('-');
-
             this.dataItems.push(
                 this.fb.group({
                     data_payment: [
@@ -165,7 +170,11 @@ export class FinancesComponent implements OnInit {
                 })
             );
         });
-        this.datePrevious = JSON.parse(localStorage.getItem('date_payment')) || null;
+        this.datePrevious = JSON.parse(localStorage.getItem('date_payment')) || {
+            year: new Date().getFullYear(),
+            day: +String(new Date().getDate()).padStart(2, '0'),
+            month: +String(new Date().getMonth() + 1).padStart(2, '0'),
+        };
         this.dataItems.push(
             this.fb.group({
                 data_payment: [this.datePrevious, Validators.required],
@@ -385,6 +394,8 @@ export class FinancesComponent implements OnInit {
             money_outlay: +outlayForSave.money_outlay,
             comment_outlay: outlayForSave.comment_outlay,
         };
+
+        this.datePreviousOutlay = outlayForSave.data_outlay;
         this.isShowSpinner = true;
         this.service.saveOutlay(params).subscribe(() => {
             this.isShowSpinner = false;
@@ -393,7 +404,7 @@ export class FinancesComponent implements OnInit {
             });
             this.outlayData.push(
                 this.fb.group({
-                    data_outlay: [null, Validators.required],
+                    data_outlay: [this.datePreviousOutlay, Validators.required],
                     id_outlay: null,
                     id_outlay_class: [null, Validators.required],
                     money_outlay: [null, Validators.required],

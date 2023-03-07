@@ -95,6 +95,7 @@
       </button>
     </div>
 
+    <div class="divided"></div>
     <div class="spending" [formGroup]="spendingForm">
       <div class="money-header">Витрати</div>
       <div class="money-selects">
@@ -195,9 +196,9 @@
           <ng-container *ngFor="let item of statisticsPeriods; let i = index">
             <tr>
               <td>{{ item }}</td>
-              <td>{{ statisticsData.stat_payment[i] }}</td>
-              <td>{{ statisticsData.stat_outlay[i] }}</td>
-              <td>{{ statisticsData.stat_payment[i] - statisticsData.stat_outlay[i] }}</td>
+              <td>{{ statisticsData.stat_payment[i] || '-' }}</td>
+              <td>{{ statisticsData.stat_outlay[i] || '-' }}</td>
+              <td>{{ (statisticsData.stat_payment[i] - statisticsData.stat_outlay[i]) || '-'}}</td>
             </tr>
           </ng-container>
         </tbody>

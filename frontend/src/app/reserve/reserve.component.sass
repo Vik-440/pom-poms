@@ -1,3 +1,5 @@
+@import '../../variables'
+
 .page
   position: relative
   
@@ -66,7 +68,7 @@
   &-apply
     width: 185px
     height: 25px
-    background: #32FA00
+    background: $btn-save
     border-radius: 25px
     border: none
     font-weight: 700
@@ -98,7 +100,7 @@
   flex-direction: column
   align-items: flex-end
   position: fixed
-  left: 1049px
+  left: 1040px
   top: 200px
   & .edit-header
     display: flex
@@ -120,7 +122,7 @@
       text-transform: uppercase
       margin-top: 7px
 .edit-table
-    width: 280px
+    width: 100%
     border: 3px solid #203B4A
     margin-top: 2px
     &--field
@@ -130,33 +132,30 @@
         width: 186px
         height: 26px
         background: #E5E9F2
-        border-bottom: 0.5px solid #203B4A
-        border-right: 0.5px solid #203B4A
+        border-bottom: $border-main
+        border-right: $border-main
         padding-left: 16px
+        box-sizing: content-box
         &.name-color
           border: none
-          width: 185px
-          background: #E5E9F2
-          margin: 0
-          padding: 0
-          padding-left: 16px
-          border-bottom: 0.5px solid #203B4A
-          border-right: 0.5px solid #203B4A
+          border-bottom: $border-main
+          border-right: $border-main
+          max-width: 142px
           &:focus
             outline: none
-            border-bottom: 0.5px solid #203B4A
+            border-bottom: $border-main
       &-inp
         width: 87px
         border: none
         background: #E5E9F2
-        border-bottom: 0.5px solid #203B4A
+        border-bottom: $border-main
         padding: 0
         padding-left: 4px
         margin: 0
         box-sizing: content-box
         &:focus
           outline: none
-          border-bottom: 0.5px solid #203B4A
+          border-bottom: $border-main
       &-note
         background: #E5E9F2
         border-top: 3px solid #203B4A
@@ -177,7 +176,7 @@
           
 .save-btn
   border: none
-  background: #32FA00
+  background: $btn-save
   border-radius: 25px
   font-weight: 700
   font-size: 13px
