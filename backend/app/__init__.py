@@ -1,6 +1,7 @@
 from flask import Flask
 from sqlalchemy import create_engine
 from dotenv import load_dotenv
+from flask_cors import CORS
 import psycopg2
 import os
 
@@ -11,7 +12,7 @@ from log.logger import logger
 
 def create_app(config_name='development'):
     app = Flask(__name__)
-
+    CORS(app)
     # app.config.from_object('config.Config')
     # app.config.from_object(config[config_name])
     

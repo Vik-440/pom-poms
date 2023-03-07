@@ -160,7 +160,15 @@ def main_page():
                                 DB_orders.data_create <= data_finish_search)
 
             print(orders)
-            if status_order == 'all':
+            print(status_order)
+            if not orders and status_order == 'false':
+                stmt = (
+                    select_modul
+                    # .where(DB_orders.id_order.in_(orders))
+                    .where(DB_orders.status_order == status_order)
+                    .order_by(DB_orders.data_plane_send))
+
+            elif status_order == 'all':
                 stmt = (
                     select_modul
                     .where(DB_orders.id_order.in_(orders))
@@ -185,18 +193,19 @@ def main_page():
                 #         .order_by(DB_orders.id_order)
                 # else:
                 #     stmt = select_modul.order_by(DB_orders.id_order)
-            elif status_order == 'true':
+            # elif status_order == 'true':
+            else:
                 stmt = (
                     select_modul
                     .where(DB_orders.id_order.in_(orders))
                     .where(DB_orders.status_order == status_order)
                     .order_by(DB_orders.id_order))
-            else:
-                stmt = (
-                    select_modul
-                    # .where(DB_orders.id_order.in_(orders))
-                    .where(DB_orders.status_order == status_order)
-                    .order_by(DB_orders.data_plane_send))
+            # else:
+            #     stmt = (
+            #         select_modul
+            #         # .where(DB_orders.id_order.in_(orders))
+            #         .where(DB_orders.status_order == status_order)
+            #         .order_by(DB_orders.data_plane_send))
                 # if id_client_list and not id_orders:
                 #     stmt = select_modul.where(
                 #         DB_orders.status_order == status_order,
@@ -299,7 +308,7 @@ def main_page():
                     "first_name_client": first_name
                     }
                 full_block.append(one_block)
-        print(full_block)
-        return jsonify(full_block), 200
+        # print(full_block)
+        return jsonify(full_block)
     except Exception as e:
         return jsonify(f'Error in function main_page: {e}')
