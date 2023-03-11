@@ -15,6 +15,8 @@ def create_app(config_name='development'):
     CORS(app)
     # app.config.from_object('config.Config')
     # app.config.from_object(config[config_name])
+
+    app.config['WTF_CSRF_ENABLED'] = False
     
     from app.api import api
 

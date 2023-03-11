@@ -143,7 +143,6 @@ def create_select_modul():
     return select_modul
 
 
-
 @api.route('/main', methods=['GET'])
 def main_page():
     """Preparing main page with or without same requests"""

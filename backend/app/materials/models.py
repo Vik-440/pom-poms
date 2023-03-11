@@ -32,3 +32,4 @@ class DB_materials(Base):
             'weight_10m': self.weight_10m,
             'comment': self.comment}
         return material
+
