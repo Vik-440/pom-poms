@@ -1,4 +1,5 @@
-"""Module for extract id_material about materials"""
+"""Module for extract id_material about materials \
+ This file wait refactoring in next stage"""
 
 from datetime import datetime
 from flask import request, jsonify
@@ -131,37 +132,27 @@ def changing_material_one(data):
     return jsonify({"color_change": "ok"})
 
 
-# def changing_material_full(search):
-#     """Module for full changing one material"""
-#     with Session(engine) as session:
-#         tmp_id_color = search['color_change_full']
-#         name_color = search['name_color'],
-#         width_color = search['width_color'],
-#         bab_quantity_color = search['bab_quantity_color'],
-#         weight_color = search['weight_color'],
-#         comment_color = search['comment_color'],
-#         thickness_color = search['thickness_color'],
-#         bab_weight_color = search['bab_weight_color'],
-#         manufacturer_color = search['manufacturer_color'],
-#         reserve_color = search['reserve_color'],
-#         weight_10m_color = search['weight_10m_color']
-
-#         session.query(db_o).filter_by(
-#             id_color=tmp_id_color).update(
-#                 {'name_color': name_color,
-#                  'width_color': width_color,
-#                  'bab_quantity_color': bab_quantity_color,
-#                  'weight_color': weight_color,
-#                  'comment_color': comment_color,
-#                  'thickness_color': thickness_color,
-#                  'bab_weight_color': bab_weight_color,
-#                  'manufacturer_color': manufacturer_color,
-#                  'reserve_color': reserve_color,
-#                  'weight_10m_color': weight_10m_color})
-#         session.commit()
-
-#         one_block = {"color_change": "ok"}
-#     return one_block
+def changing_material_full(data):
+    """Module for full changing one material"""
+    with Session(engine) as session:
+        id_material = data['color_change_full']
+        stmt = (
+            update(DB_materials)
+            .where(DB_materials.id_material == id_material)
+            .values(
+                name = data['name_color'],
+                width = data['width_color'],
+                spool_qty = data['bab_quantity_color'],
+                weight = data['weight_color'],
+                comment = data['comment_color'],
+                thickness = data['thickness_color'],
+                spool_weight = data['bab_weight_color'],
+                manufacturer = data['manufacturer_color'],
+                reserve = data['reserve_color'],
+                weight_10m = data['weight_10m_color']))
+        session.execute(stmt)
+        session.commit()
+    return jsonify({'message': "data_change ok"})
 
 
 
@@ -188,8 +179,8 @@ def material_post():
             data = creating_new_material(request.data)
         elif 'color_change' in request.data:
             data = changing_material_one(request.data)
-        # elif 'color_change_full' in request.data:
-        #     data = changing_material_full(request.data)
+        elif 'color_change_full' in request.data:
+            data = changing_material_full(request.data)
         else:
             data = {"message": "request is not correct"}
         return data, 200
@@ -197,39 +188,3 @@ def material_post():
         logger.error(f'Error in function material POST: {e}')
         return f'Error in function material POST: {e}', 500
     
-
-
-
-#     def validate_input(color_new):
-#     # перевіряємо, що словник містить всі необхідні поля
-#     required_fields = ['name_color', 'width_color', 'bab_quantity_color', 'weight_color', 'thickness_color',
-#                        'bab_weight_color', 'manufacturer_color', 'reserve_color', 'weight_10m_color']
-#     if not all(field in color_new for field in required_fields):
-#         raise ValueError("Missing required fields in input data")
-#     # перевіряємо, що всі поля мають відповідний тип даних
-#     field_types = {'name_color': str, 'width_color': float, 'bab_quantity_color': int, 'weight_color': float,
-#                    'thickness_color': float, 'bab_weight_color': float, 'manufacturer_color': str,
-#                    'reserve_color': str, 'weight_10m_color': float}
-#     for field, field_type in field_types.items():
-#         if not isinstance(color_new.get(field), field_type):
-#             raise ValueError(f"Field '{field}' has incorrect data type")
-
-# def create_new_material(color_new):
-#     validate_input(color_new)
-#     with Session(engine) as session:
-#         ins = DB_materials(
-#             name_color=color_new['name_color'],
-#             width_color=color_new['width_color'],
-#             bab_quantity_color=color_new['bab_quantity_color'],
-#             weight_color=color_new['weight_color'],
-#             comment_color=color_new['comment_color'],
-#             thickness_color=color_new['thickness_color'],
-#             bab_weight_color=color_new['bab_weight_color'],
-#             manufacturer_color=color_new['manufacturer_color'],
-#             reserve_color=color_new['reserve_color'],
-#             weight_10m_color=color_new['weight_10m_color'])
-#         session.add(ins)
-#         session.commit()
-#         session.refresh(ins)
-#         id_new_color = ins.id_color
-#     return jsonify({"id_color": id_new_color})
