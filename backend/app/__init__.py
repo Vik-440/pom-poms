@@ -27,12 +27,15 @@ def create_app(config_name='development'):
 
 load_dotenv()
 config_name = 'development'
+# config_name = 'product'
 
 try:
     if config_name == 'testing':
         db_uri = psycopg2.connect(':memory:')
     elif config_name == 'development':
         db_uri = os.getenv("PSQL_URL_TEST")
+    elif config_name == 'product':
+        db_uri = os.getenv("PSQL_URL")
     else:
         raise (Exception('Please insert correct setup config_name!'))
 except Exception as e:

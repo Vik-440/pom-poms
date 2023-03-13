@@ -381,6 +381,7 @@ def return_data_from_final_order(data_from_new_page):
     with Session(engine) as session:
         e = "Error in real recipient number"
         id_client = data_from_new_page['id_client']
+        print(data_from_new_page)
         if id_client is None:
             return f'Error in client number: {e}', 500
         check_client = session.query(DB_client).filter_by(
@@ -397,7 +398,7 @@ def return_data_from_final_order(data_from_new_page):
         if data_from_new_page['quantity_pars_model'] is None:
             raise Exception("Error: quantity_pars is empty")
         id_order = int(data_from_new_page['id_order'])
-        check_order = session.query(DB_client).filter_by(
+        check_order = session.query(DB_orders).filter_by(
             id_order=id_order).scalar()
 
         # s2s = len((data_from_new_page['id_model']))
@@ -409,7 +410,6 @@ def return_data_from_final_order(data_from_new_page):
         for y in data_from_new_page['quantity_pars_model']:
             phase_int.append(y * 2)
             phase_int3.append(y)
-
         if 'edit_real_order' in data_from_new_page:
             # print("problems")
             x1x = int(data_from_new_page['edit_real_order'])
@@ -440,7 +440,6 @@ def return_data_from_final_order(data_from_new_page):
             session.commit()
             one_block = {"edit_real_order": x1x}
             return one_block
-
         if check_order is not None and id_order != 0:
             raise Exception("This order number is real - 2p")
         if id_order == 0:
