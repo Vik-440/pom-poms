@@ -17,7 +17,7 @@ def extracting_payment_statistics():
     """main block for forecast module"""
     with Session(engine):
         stat_payment, stat_outlay = [], []
-        sql_sum = DB_payment.id_payment
+        sql_sum = DB_payment.payment
         sql_data = DB_payment.data_payment
         stat_payment = return_forecast(stat_payment, sql_sum, sql_data)
         sql_sum = DB_outlay.money_outlay

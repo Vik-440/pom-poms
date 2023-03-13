@@ -26,8 +26,8 @@ def create_app(config_name='development'):
 
 
 load_dotenv()
-config_name = 'development'
-# config_name = 'product'
+# config_name = 'development'
+config_name = 'product'
 
 try:
     if config_name == 'testing':
