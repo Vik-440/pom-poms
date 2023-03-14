@@ -27,14 +27,14 @@ export class FinancesComponent implements OnInit {
     itemEdit;
     datePrevious = {
         year: new Date().getFullYear(),
-        day: new Date().getDay(),
         month: new Date().getMonth(),
+        day: new Date().getDay(),
     };
 
     datePreviousOutlay: any = {
         year: new Date().getFullYear(),
-        day: +String(new Date().getDate()).padStart(2, '0'),
         month: +String(new Date().getMonth() + 1).padStart(2, '0'),
+        day: +String(new Date().getDate()).padStart(2, '0'),
     };
     todayYear = new Date().getFullYear();
     alert = {
@@ -172,8 +172,8 @@ export class FinancesComponent implements OnInit {
         });
         this.datePrevious = JSON.parse(localStorage.getItem('date_payment')) || {
             year: new Date().getFullYear(),
-            day: +String(new Date().getDate()).padStart(2, '0'),
             month: +String(new Date().getMonth() + 1).padStart(2, '0'),
+            day: +String(new Date().getDate()).padStart(2, '0'),
         };
         this.dataItems.push(
             this.fb.group({
