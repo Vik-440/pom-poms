@@ -1,32 +1,45 @@
+from flask import Flask
+from sqlalchemy import create_engine
+from dotenv import load_dotenv
+from flask_cors import CORS
+import psycopg2
 import os
 
-from flask import Flask
+from app.config import config
+from app.base_model import Base
+from log.logger import logger
 
 
-def create_app(test_config=None):
-    # create and configure the app
-    app = Flask(__name__, instance_relative_config=True)
-    # app.config.from_mapping(
-    #     SECRET_KEY='dev',
-    #     DATABASE=os.path.join(app.instance_path, 'flaskr.sqlite'),
-    # )
+def create_app(config_name='development'):
+    app = Flask(__name__)
+    CORS(app)
+    # app.config.from_object('config.Config')
+    # app.config.from_object(config[config_name])
 
-    # if test_config is None:
-    #     # load the instance config, if it exists, when not testing
-    #     app.config.from_pyfile('config.py', silent=True)
-    # else:
-    #     # load the test config if passed in
-    #     app.config.from_mapping(test_config)
-    #
-    # # ensure the instance folder exists
-    # try:
-    #     os.makedirs(app.instance_path)
-    # except OSError:
-    #     pass
+    app.config['WTF_CSRF_ENABLED'] = False
+    
+    from app.api import api
 
-    # a simple page that says hello
-    @app.route('/hello')
-    def hello():
-        return 'Hello, World!'
+    app.register_blueprint(api)
 
     return app
+
+
+load_dotenv()
+# config_name = 'development'
+config_name = 'product'
+
+try:
+    if config_name == 'testing':
+        db_uri = psycopg2.connect(':memory:')
+    elif config_name == 'development':
+        db_uri = os.getenv("PSQL_URL_TEST")
+    elif config_name == 'product':
+        db_uri = os.getenv("PSQL_URL")
+    else:
+        raise (Exception('Please insert correct setup config_name!'))
+except Exception as e:
+    logger.error(f'Error in function return_engine: {e}')
+
+engine = create_engine(db_uri, future=True)
+Base.metadata.create_all(engine)
