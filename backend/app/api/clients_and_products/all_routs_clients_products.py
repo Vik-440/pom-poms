@@ -414,6 +414,7 @@ def return_data_from_final_order(data_from_new_page):
             x1x = int(data_from_new_page['edit_real_order'])
             if x1x != id_order:
                 raise Exception("This order number is real - 1p")
+            # print(data_from_new_page)
             session.query(DB_orders).filter(
                 DB_orders.id_order == id_order).update(
                 {"id_order": id_order,
@@ -431,7 +432,7 @@ def return_data_from_final_order(data_from_new_page):
                     "phase_2": data_from_new_page['phase_2'],
                     "phase_3": data_from_new_page['phase_3'],
                     # test changing finish
-                    "id_product": data_from_new_page['id_model'],
+                    "id_models": data_from_new_page['id_model'],
                     "qty_pars": data_from_new_page[
                         'quantity_pars_model'],
                     "price_model_sell": data_from_new_page[
