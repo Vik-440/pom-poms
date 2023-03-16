@@ -1,0 +1,24 @@
+Update status order
+# ---
+parameters:
+  - name: id_order
+    in: path
+    type: integer
+    description: ID order
+    required: true
+  - name: status_order
+    in: body
+    description: status order
+    required: true
+    example: '{"status_order": false}'
+    content:
+      application/json:
+          schema:
+            type: object
+            properties:
+              status_order:
+                type: str
+responses:
+  200:
+    description: '{"message": "excellent"}'
+

@@ -12,14 +12,14 @@ from flasgger import Swagger, swag_from
 
 
 @api.route('/main/status/<int:id_order>', methods=['PUT'])
-# @swag_from('docs/main_status_order.yml')
+@swag_from('/docs/put_main_status.yml')
 def main_status_order(id_order):
     """Module for changing status in produce process"""
-    # id_order = id
+    # {'status_order': False}
     if not 'status_order' in request.get_json():
         return {"message": "misstake in data status"}, 400
     status_order = request.get_json()['status_order']
-
+    print(request.get_json())
     with Session(engine) as session:
         if not status_order:
             stmt = update(DB_orders).where(

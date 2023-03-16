@@ -31,11 +31,11 @@ def create_app(config_name='development'):
 
 
 load_dotenv()
-# config_name = 'development'
-# config_name = 'product'
+# config_name = 'PSQL_URL_PROD'
+# config_name = 'PSQL_URL_TEST'
 
 try:
-    db_uri = os.getenv("PSQL_URL_PROD")
+    db_uri = os.getenv("PSQL_URL_TEST")
     # if config_name == 'testing':
     #     db_uri = psycopg2.connect(':memory:')
     # elif config_name == 'development':
