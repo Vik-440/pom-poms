@@ -13,14 +13,15 @@ from app import engine
 from .. import api
 
 from log.logger import logger
+from flasgger import Swagger, swag_from
 
 
 def getting_args_general(args: dict) -> tuple:
     """"Set general filters into request"""
     data_today = datetime.today().strftime('%Y-%m-%d')
-    data_start_search = args.get('start_date', '2016-01-01')
-    data_finish_search = args.get('data_finish', data_today)
-    status_order = args.get('fulfilled', 'False')
+    data_start_search = args.get('data_start', '2016-01-01')
+    data_finish_search = args.get('data_end', data_today)
+    status_order = args.get('fulfilled', 'false')
     return data_start_search, data_finish_search, status_order
 
 
@@ -56,7 +57,7 @@ def getting_filter_products(args: dict) -> list:
     fillters_products = {
                 'kod_model': DB_product.article,
                 'kod_model_like': DB_product.article,
-                'kolor_model_like': DB_product.colors}            
+                'kolor_like': DB_product.colors}            
     id_products_list = []
     with Session(engine) as session:
         for key, value in fillters_products.items():
@@ -144,6 +145,7 @@ def create_select_modul():
 
 
 @api.route('/main', methods=['GET'])
+@swag_from('/docs/get_main.yml')
 def main_page():
     """Preparing main page with or without same requests"""
     args = request.args
@@ -156,38 +158,49 @@ def main_page():
             id_orders_client = getting_filter_clients(args)
             id_orders_products = getting_filter_products(args)
             products = getting_products()
-            select_modul = create_select_modul()
-            select_modul = select_modul.where(
+            select_modul_without_date = create_select_modul()
+            select_modul = select_modul_without_date.where(
                         DB_orders.data_create >= data_start_search,
                         DB_orders.data_create <= data_finish_search)
-            
             if id_orders_client and id_orders_products:
                 orders = list(set(id_orders_client) & set(id_orders_products))
                 # orders = [x for x in id_orders_client if x in id_orders_products]
             else:
                 orders = id_orders_client + id_orders_products
             
-            if not orders and status_order == 'False':
+            if not orders and status_order == 'false':
                 stmt = (
                     select_modul
                     .where(DB_orders.status_order == status_order)
                     .order_by(DB_orders.data_plane_send))
             elif status_order == 'all':
-                stmt = (
-                    select_modul
-                    .where(DB_orders.id_order.in_(orders))
-                    .order_by(DB_orders.id_order))
+                if not orders:
+                    stmt = (
+                        select_modul
+                        .order_by(DB_orders.id_order))
+                else:
+                    stmt = (
+                        select_modul
+                        .where(DB_orders.id_order.in_(orders))
+                        .order_by(DB_orders.id_order))
             else:
-                stmt = (
-                    select_modul
-                    .where(DB_orders.id_order.in_(orders))
-                    .where(DB_orders.status_order == status_order)
-                    .order_by(DB_orders.id_order))
+                if not orders:
+                    stmt = (
+                        select_modul
+                        # .where(DB_orders.id_order.in_(orders))
+                        .where(DB_orders.status_order == status_order)
+                        .order_by(DB_orders.id_order))
+                else:
+                    stmt = (
+                        select_modul
+                        .where(DB_orders.id_order.in_(orders))
+                        .where(DB_orders.status_order == status_order)
+                        .order_by(DB_orders.id_order))
             list_order = session.execute(stmt).all()
 
             if not list_order:
                 subq = select(func.max(DB_orders.id_order)).scalar_subquery()
-                stmt = select_modul.where(DB_orders.id_order == subq)
+                stmt = select_modul_without_date.where(DB_orders.id_order == subq)
                 list_order = session.execute(stmt).all()
 
             full_block = []

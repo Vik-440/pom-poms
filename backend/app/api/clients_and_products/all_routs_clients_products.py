@@ -281,7 +281,7 @@ def return_data_from_full_kod(data_from_new_page):
             one_block = {"id_model": j_id_model}
         else:
             ins = session.query(DB_product).filter(
-                DB_product.id_product == j_id_model).update(
+                DB_product.article == j_id_model).update(
                     {'article': data_from_new_page['kod_model'],
                         'id_color_1': int(data_from_new_page['id_color_1']),
                         'id_part_1': int(
@@ -381,7 +381,6 @@ def return_data_from_final_order(data_from_new_page):
     with Session(engine) as session:
         e = "Error in real recipient number"
         id_client = data_from_new_page['id_client']
-        print(data_from_new_page)
         if id_client is None:
             return f'Error in client number: {e}', 500
         check_client = session.query(DB_client).filter_by(
@@ -432,7 +431,7 @@ def return_data_from_final_order(data_from_new_page):
                     "phase_2": data_from_new_page['phase_2'],
                     "phase_3": data_from_new_page['phase_3'],
                     # test changing finish
-                    "id_models": data_from_new_page['id_model'],
+                    "id_product": data_from_new_page['id_model'],
                     "qty_pars": data_from_new_page[
                         'quantity_pars_model'],
                     "price_model_sell": data_from_new_page[

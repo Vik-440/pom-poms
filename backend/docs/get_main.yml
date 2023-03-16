@@ -1,0 +1,329 @@
+Endpoin for main page where are orders by default or by additional args
+---
+parameters:
+  - name: data_start
+    in: query
+    type: string
+    format: date-time
+    description: date for start search orders, example 2022-01-01
+    required: false
+    example: '2022-01-01'
+  - name: data_end
+    in: query
+    type: string
+    format: date-time
+    description: date for finish search orders, example 2022-01-01
+    required: false
+    example: yyyy-mm-dd
+  - name: fulfilled
+    in: query
+    type: string
+    description: status of orders
+    enum: ['true', 'false', 'all']
+    required: false
+    example: 'false'
+  - name: phone_client
+    in: query
+    type: integer
+    format: int16
+    description: phone number client - 380935358656
+    num: null
+    example: '380935358656'
+    required: false
+  - name: id_client
+    in: query
+    type: integer
+    format: int16
+    description: ID of client
+    enum: [10, 100, 110, 111, 201, 250]
+    required: false
+  - name: team
+    in: query
+    type: string
+    description: name of team
+    enum: ['Джуніор', 'Торнадо', 'РедФокс', 'Peregrine (Перегрін)', 'Атлантида']
+    required: false
+  - name: coach
+    in: query
+    type: string
+    description: second name of coach
+    enum: ['Клименко', 'Гнатуш', 'Куманова', 'Гаврушко', 'Пугачова', 'Хейлик']
+    required: false
+
+  - name: sity
+    in: query
+    type: string
+    description: city
+    enum: ['Тернопіль', 'Львів', 'Суми', 'Бар', 'Харків']
+    required: false
+
+  - name: kod_model
+    in: query
+    type: string
+    description: article of product
+    enum: ['190-77', '170-73', '230-80', '402-70']
+    required: false
+
+  - name: kod_model_like
+    in: query
+    type: string
+    description: part from article of product, (190-77, 170-73, 230-80, 402-70)
+    required: false
+
+  - name: kolor_like
+    in: query
+    type: string
+    description: part from colors of product, (червоний, синій, білий)
+    required: false
+
+definitions:
+  Orders:
+    type: object
+    properties:
+      anwer:
+        type: array
+        items:
+          $ref: '#/definitions/Order'
+        examples:
+          orders: ['order 1', 'order 2', 'order 3']
+  Order:
+    type: object
+    properties:
+      comment_model:
+        type: string
+        description: comment about product property
+        example: handle is 11 cm
+      comment_order:
+        type: string
+        description: comment about order property
+        example: put bill to box
+      data_order:
+        type: string
+        format: date-time
+        description: data create order
+        example: yyyy-mm-dd
+      data_plane_order:
+        type: string
+        format: date-time
+        description: data send order
+        example: yyyy-mm-dd
+      first_name_client:
+        type: string
+        description: Name of client
+        example: Olha
+      fulfilled_order:
+        type: boolean
+        description: status of order
+        example: True
+        enum:
+          - True
+          - False
+      id_order:
+        type: integer
+        format: int32
+        description: number of orders
+        example: 1234
+      kod_model:
+        type: string
+        description: article of product
+        example: 262-1221-80/20
+      kolor_model:
+        type: string
+        description: colors of product
+        example: red + white
+      np_number:
+        type: integer
+        format: int32
+        description: number of branch Nova Poshta
+        example: 159
+      phase_1:
+        type: array
+        items:
+          type: integer
+          format: int32
+        description: qty products remaining to produced
+        example: [2, 4, 8]
+      phase_2:
+        type: array
+        items:
+          type: integer
+          format: int32
+        description: qty products remaining to correcting
+        example: [2, 4, 8]
+      phase_3:
+        type: array
+        items:
+          type: integer
+          format: int32
+        description: qty products remaining to sent
+        example: [2, 4, 8]
+      phone_client:
+        type: integer
+        format: int32
+        description: phone number client
+        example: 380501234567
+      phone_recipient:
+        type: integer
+        format: int32
+        description: phone number recipient
+        example: 380501234567
+      quantity_pars_model:
+        type: array
+        items:
+          type: integer
+          format: int32
+        description: qty products in order
+        example: [2, 4, 8]
+      real_money:
+        type: integer
+        format: int32
+        description: money which is paid in this order
+        example: 150
+      second_name_client:
+        type: string
+        description: Second Name of client
+        example: Petrova
+      sity:
+        type: string
+        description: City
+        example: Poltava
+      street_house_apartment:
+        type: string
+        description: Additional information about address or None
+        example: school N 45
+      sum_payment:
+        type: integer
+        format: int32
+        description: price this order
+        example: 150
+      zip_code:
+        type: integer
+        format: int32
+        description: ZIP code or None
+        example: 02152
+responses:
+  200:
+    description: examle of a order, which will be more in list structure
+    schema:
+      $ref: '#/definitions/Orders'
+    # examples:
+    #   schema:
+    #     $ref: '#/components/schemas/Responses_orders_page'
+
+# components:
+#   schemas:
+#     Responses_orders_page:
+#       type: object
+#       properties:
+#         comment_model:
+#           type: string
+#           description: comment about product property
+#           example: handle is 11 cm
+#         comment_order:
+#           type: string
+#           description: comment about order property
+#           example: put bill to box
+#         data_order:
+#           type: string
+#           format: date-time
+#           description: data create order
+#           example: yyyy-mm-dd
+#         data_plane_order:
+#           type: string
+#           format: date-time
+#           description: data send order
+#           example: yyyy-mm-dd
+#         first_name_client:
+#           type: string
+#           description: Name of client
+#           example: Olha
+#         fulfilled_order:
+#           type: boolean
+#           description: status of order
+#           example: True
+#           enum:
+#             - True
+#             - False
+#         id_order:
+#           type: integer
+#           format: int32
+#           description: number of orders
+#           example: 1234
+#         kod_model:
+#           type: string
+#           description: article of product
+#           example: 262-1221-80/20
+#         kolor_model:
+#           type: string
+#           description: colors of product
+#           example: red + white
+#         np_number:
+#           type: integer
+#           format: int32
+#           description: number of branch Nova Poshta
+#           example: 159
+#         phase_1:
+#           type: array
+#           items:
+#             type: integer
+#             format: int32
+#           description: qty products remaining to produced
+#           example: [2, 4, 8]
+#         phase_2:
+#           type: array
+#           items:
+#             type: integer
+#             format: int32
+#           description: qty products remaining to correcting
+#           example: [2, 4, 8]
+#         phase_3:
+#           type: array
+#           items:
+#             type: integer
+#             format: int32
+#           description: qty products remaining to sent
+#           example: [2, 4, 8]
+#         phone_client:
+#           type: integer
+#           format: int32
+#           description: phone number client
+#           example: 380501234567
+#         phone_recipient:
+#           type: integer
+#           format: int32
+#           description: phone number recipient
+#           example: 380501234567
+#         quantity_pars_model:
+#           type: array
+#           items:
+#             type: integer
+#             format: int32
+#           description: qty products in order
+#           example: [2, 4, 8]
+#         real_money:
+#           type: integer
+#           format: int32
+#           description: money which is paid in this order
+#           example: 150
+#         second_name_client:
+#           type: string
+#           description: Second Name of client
+#           example: Petrova
+#         sity:
+#           type: string
+#           description: City
+#           example: Poltava
+#         street_house_apartment:
+#           type: string
+#           description: Additional information about address or None
+#           example: school N 45
+#         sum_payment:
+#           type: integer
+#           format: int32
+#           description: price this order
+#           example: 150
+#         zip_code:
+#           type: integer
+#           format: int32
+#           description: ZIP code or None
+#           example: 02152

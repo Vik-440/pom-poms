@@ -8,8 +8,11 @@ from app.orders.models import DB_orders
 from app import engine
 from .. import api
 
+from flasgger import Swagger, swag_from
+
 
 @api.route('/main/status/<int:id_order>', methods=['PUT'])
+# @swag_from('docs/main_status_order.yml')
 def main_status_order(id_order):
     """Module for changing status in produce process"""
     # id_order = id

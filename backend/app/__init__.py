@@ -1,4 +1,7 @@
-from flask import Flask
+from flask import Flask, jsonify, request
+from flask_restful import Api, Resource
+# from flask_swagger import swagger
+from flasgger import Swagger
 from sqlalchemy import create_engine
 from dotenv import load_dotenv
 from flask_cors import CORS
@@ -12,6 +15,8 @@ from log.logger import logger
 
 def create_app(config_name='development'):
     app = Flask(__name__)
+    api = Api(app)
+    swagger = Swagger(app)
     CORS(app)
     # app.config.from_object('config.Config')
     # app.config.from_object(config[config_name])

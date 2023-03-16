@@ -1,0 +1,268 @@
+paths:
+  /main:
+    get:
+      summary: colect data for main orders page
+      parameters:
+        - name: data_start
+          in: query
+          description: start data for search orders
+          required: false
+          schema:
+            $ref: '#/components/schemas/data_start'
+        - name: data_finish
+          in: query
+          description: end data for search orders
+          required: false
+          schema:
+            $ref: '#/components/schemas/data_finish'
+        - name: fulfilled
+          in: query
+          description: status of orders
+          required: false
+          schema:
+            $ref: '#/components/schemas/fulfilled'
+        - name: phone_client
+          in: query
+          description: phone number of client
+          required: false
+          schema:
+            $ref: '#/components/schemas/phone_client'
+        - name: id_client
+          in: query
+          description: ID of client
+          required: false
+          schema:
+            $ref: '#/components/schemas/id_client'
+        - name: team
+          in: query
+          description: name of team
+          required: false
+          schema:
+            $ref: '#/components/schemas/team'
+        - name: coach
+          in: query
+          description: second name of coach
+          required: false
+          schema:
+            $ref: '#/components/schemas/coach'
+        - name: sity
+          in: query
+          description: city
+          required: false
+          schema:
+            $ref: '#/components/schemas/sity'
+        - name: kod_model
+          in: query
+          description: article of product
+          required: false
+          schema:
+            $ref: '#/components/schemas/kod_model'
+        - name: kod_model_like
+          in: query
+          description: part from article of product
+          required: false
+          schema:
+            $ref: '#/components/schemas/kod_model_like'
+        - name: kolor_like
+          in: query
+          description: part from colors of product
+          required: false
+          schema:
+            $ref: '#/components/schemas/kolor_like'
+      # content:
+      #   application/json:
+      # schema:
+            # $ref: '#/components/schemas/phone_client'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Responses_orders_page' 
+components:
+  schemas:
+    # Request_orders_page:
+    #   # required:
+    #   #   - name
+    #   #   - photoUrls
+    #   type: object
+    #   properties:
+    data_start:
+      type: string
+      format: date-time
+      description: date start search order
+      example: yyyy-mm-dd
+    data_finish:
+      type: string
+      format: date-time
+      description: date end search order
+      example: yyyy-mm-dd
+    fulfilled:
+      type: boolean
+      description: status of order
+      example: True
+    phone_client:
+      type: integer
+      format: int16
+      description: phone number client
+      example: 380501234567
+    id_client:
+      type: integer
+      format: int16
+      description: ID client
+      example: 123
+    team:
+      type: string
+      description: Name of team
+      example: Junior
+    coach:
+      type: string
+      description: Name of coach
+      example: Petrova
+    sity:
+      type: string
+      description: Name of city
+      example: Poltava
+    kod_model:
+      type: string
+      description: Article of product
+      example: 170-77
+    kod_model_like:
+      type: string
+      description: Same part from article of product
+      example: 0-77
+    kolor_like:
+      type: string
+      description: Same part from colors of product
+      example: whit
+        
+
+    # Responses_orders_page:
+    #   type: array
+    #   # properties:
+    #   order_1:
+    #     type: object
+    #     schema:
+    #       $ref: '#/components/schemas/Responses_order'
+    #   order_2:
+    #     type: object
+    #     schema:
+    #       $ref: '#/components/schemas/Responses_order'
+        
+    
+    Responses_orders_page:
+      type: object
+      properties:
+        comment_model:
+          type: string
+          description: comment about product property
+          example: handle is 11 cm
+        comment_order:
+          type: string
+          description: comment about order property
+          example: put bill to box
+        data_order:
+          type: string
+          format: date-time
+          description: data create order
+          example: yyyy-mm-dd
+        data_plane_order:
+          type: string
+          format: date-time
+          description: data send order
+          example: yyyy-mm-dd
+        first_name_client:
+          type: string
+          description: Name of client
+          example: Olha
+        fulfilled_order:
+          type: boolean
+          description: status of order
+          example: True
+          enum:
+            - True
+            - False
+        id_order:
+          type: integer
+          format: int16
+          description: number of orders
+          example: 1234
+        kod_model:
+          type: string
+          description: article of product
+          example: 262-1221-80/20
+        kolor_model:
+          type: string
+          description: colors of product
+          example: red + white
+        np_number:
+          type: integer
+          format: int16
+          description: number of branch Nova Poshta
+          example: 159
+        phase_1:
+          type: array
+          items:
+            type: integer
+            format: int16
+          description: qty products remaining to produced
+          example: [2, 4, 8]
+        phase_2:
+          type: array
+          items:
+            type: integer
+            format: int16
+          description: qty products remaining to correcting
+          example: [2, 4, 8]
+        phase_3:
+          type: array
+          items:
+            type: integer
+            format: int16
+          description: qty products remaining to sent
+          example: [2, 4, 8]
+        phone_client:
+          type: integer
+          format: int16
+          description: phone number client
+          example: 380501234567
+        phone_recipient:
+          type: integer
+          format: int16
+          description: phone number recipient
+          example: 380501234567
+        quantity_pars_model:
+          type: array
+          items:
+            type: integer
+            format: int16
+          description: qty products in order
+          example: [2, 4, 8]
+        real_money:
+          type: integer
+          format: int16
+          description: money which is paid in this order
+          example: 150
+        second_name_client:
+          type: string
+          description: Second Name of client
+          example: Petrova
+        sity:
+          type: string
+          description: City
+          example: Poltava
+        street_house_apartment:
+          type: string
+          description: Additional information about address or None
+          example: school N 45
+        sum_payment:
+          type: integer
+          format: int16
+          description: price this order
+          example: 150
+        zip_code:
+          type: integer
+          format: int16
+          description: ZIP code or None
+          example: 02152
