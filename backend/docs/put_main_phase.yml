@@ -1,4 +1,4 @@
-Update status order
+Changing phase of producing order
 # ---
 parameters:
   - name: id_order
@@ -6,11 +6,11 @@ parameters:
     type: integer
     description: ID order
     required: true
-  - name: status_order
+  - name: Phases
     in: body
-    description: status order
+    description: Phases of order in this moment
     required: true
-    example: '{"status_order": false}'
+    example: '{"phase_1": [20], "phase_2": [20], "phase_3": [10]}'
     content:
       application/json:
           schema:
@@ -22,5 +22,5 @@ responses:
   '200':
     description: '{"message": "excellent"}'
   '400':
-    description: '{"message": "misstake in data status"}'
+    description: '{"message": "misstake in data"}'
 
