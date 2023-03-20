@@ -1,3 +1,4 @@
+from builtins import Exception
 from flask import Flask, jsonify, request
 from flask_restful import Api, Resource
 # from flask_swagger import swagger
@@ -31,19 +32,19 @@ def create_app(config_name='development'):
 
 
 load_dotenv()
-# config_name = 'PSQL_URL_PROD'
-# config_name = 'PSQL_URL_TEST'
 
 try:
-    db_uri = os.getenv("PSQL_URL_TEST")
-    # if config_name == 'testing':
-    #     db_uri = psycopg2.connect(':memory:')
-    # elif config_name == 'development':
-    #     db_uri = os.getenv("PSQL_URL_TEST")
-    # elif config_name == 'product':
-    #     db_uri = os.getenv("PSQL_URL")
-    # else:
-    raise (Exception('Please insert correct setup config_name!'))
+    config_name_psql = os.getenv("CONFIG_NAME_PSQL")
+    print(config_name_psql)
+    # db_uri = os.getenv("PSQL_URL_TEST")
+    if config_name_psql == 'testing':
+        db_uri = psycopg2.connect(':memory:')
+    elif config_name_psql == 'development':
+        db_uri = os.getenv("PSQL_URL_TEST")
+    elif config_name_psql == 'product':
+        db_uri = os.getenv("PSQL_URL_PROD")
+    else:
+        raise (Exception('Please insert correct setup config_name!'))
 except Exception as e:
     logger.error(f'Error in function return_engine: {e}')
 

@@ -202,7 +202,7 @@ definitions:
         description: ZIP code or None
         example: 02152
 responses:
-  200:
+  '200':
     description: examle of a order, which will be more in list structure
     schema:
-      $ref: '#/definitions/Orders'
+      $ref: '#/definitions/Order'

@@ -13,16 +13,16 @@ from app import engine
 from .. import api
 
 from log.logger import logger
-from flasgger import Swagger, swag_from
+from flasgger import swag_from
 
 
 def getting_args_general(args: dict) -> tuple:
     """"Set general filters into request"""
-    data_today = datetime.today().strftime('%Y-%m-%d')
-    data_start_search = args.get('data_start', '2016-01-01')
-    data_finish_search = args.get('data_end', data_today)
+    date_today = datetime.today().strftime('%Y-%m-%d')
+    date_start_search = args.get('data_start', '2016-01-01')
+    date_finish_search = args.get('data_end', date_today)
     status_order = args.get('fulfilled', 'false')
-    return data_start_search, data_finish_search, status_order
+    return date_start_search, date_finish_search, status_order
 
 
 def getting_filter_clients(args: dict) -> list:
@@ -114,11 +114,11 @@ def create_select_modul():
         func.sum(DB_payment.payment).label('my_sum'),
         DB_orders.id_order,
         DB_orders.comment,
-        DB_orders.data_create,
-        DB_orders.data_plane_send,
+        DB_orders.date_create,
+        DB_orders.date_plane_send,
         DB_orders.status_order,
         DB_orders.sum_payment,
-        DB_orders.discont,
+        DB_orders.discount,
         DB_orders.qty_pars,
         DB_orders.phase_1,
         DB_orders.phase_2,
@@ -153,15 +153,15 @@ def main_page():
 
     try:
         with Session(engine) as session:
-            data_start_search, data_finish_search, status_order = getting_args_general(args)
+            date_start_search, date_finish_search, status_order = getting_args_general(args)
 
             id_orders_client = getting_filter_clients(args)
             id_orders_products = getting_filter_products(args)
             products = getting_products()
             select_modul_without_date = create_select_modul()
             select_modul = select_modul_without_date.where(
-                        DB_orders.data_create >= data_start_search,
-                        DB_orders.data_create <= data_finish_search)
+                        DB_orders.date_create >= date_start_search,
+                        DB_orders.date_create <= date_finish_search)
             if id_orders_client and id_orders_products:
                 orders = list(set(id_orders_client) & set(id_orders_products))
                 # orders = [x for x in id_orders_client if x in id_orders_products]
@@ -172,7 +172,7 @@ def main_page():
                 stmt = (
                     select_modul
                     .where(DB_orders.status_order == status_order)
-                    .order_by(DB_orders.data_plane_send))
+                    .order_by(DB_orders.date_plane_send, DB_orders.id_order))
             elif status_order == 'all':
                 if not orders:
                     stmt = (
@@ -224,7 +224,7 @@ def main_page():
                 full_block.append({
                     "id_order": row.id_order,
                     "comment_order": row.comment,
-                    "data_order": (str(row.data_create)),
+                    "data_order": (str(row.date_create)),
                     "kolor_model": colors,
                     "kod_model": article,
                     "comment_model": comment_product,
@@ -232,12 +232,12 @@ def main_page():
                     "phase_1": phase_1,
                     "phase_2": phase_2,
                     "phase_3": phase_3,
-                    "sum_payment": (row.sum_payment - row.discont),
+                    "sum_payment": (row.sum_payment - row.discount),
                     "real_money": row.my_sum,
                     "phone_client": row.phone_order,
                     "phone_recipient": row.phone,
                     "sity": row.city,
-                    "data_plane_order": (str(row.data_plane_send)),
+                    "data_plane_order": (str(row.date_plane_send)),
                     "fulfilled_order": row.status_order,
                     "np_number": row.np_number,
                     "zip_code": row.zip_code,

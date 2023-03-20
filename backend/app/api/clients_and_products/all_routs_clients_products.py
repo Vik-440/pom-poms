@@ -418,12 +418,12 @@ def return_data_from_final_order(data_from_new_page):
             session.query(DB_orders).filter(
                 DB_orders.id_order == id_order).update(
                 {"id_order": id_order,
-                    "data_create": data_from_new_page['data_order'],
+                    "date_create": data_from_new_page['data_order'],
                     "id_client": data_from_new_page['id_client'],
                     "id_recipient": data_from_new_page['id_recipient'],
-                    "data_plane_send": data_from_new_page['data_plane_order'],
+                    "date_plane_send": data_from_new_page['data_plane_order'],
                     # "data_send_order": data_from_new_page['data_send_order'],
-                    "discont": data_from_new_page['discont_order'],
+                    "discount": data_from_new_page['discont_order'],
                     "sum_payment": data_from_new_page['sum_payment'],
                     "status_order": data_from_new_page['fulfilled_order'],
                     "comment": data_from_new_page['comment_order'],
@@ -440,6 +440,11 @@ def return_data_from_final_order(data_from_new_page):
             session.commit()
             one_block = {"edit_real_order": x1x}
             return one_block
+        
+
+
+
+        print(data_from_new_page)
         if check_order is not None and id_order != 0:
             raise Exception("This order number is real - 2p")
         if id_order == 0:
@@ -449,12 +454,12 @@ def return_data_from_final_order(data_from_new_page):
 
         ins = DB_orders(
             id_order=id_order,
-            data_create=data_from_new_page['data_order'],
+            date_create=data_from_new_page['data_order'],
             id_client=data_from_new_page['id_client'],
             id_recipient=data_from_new_page['id_recipient'],
-            data_plane_send=data_from_new_page['data_plane_order'],
+            date_plane_send=data_from_new_page['data_plane_order'],
             # data_send_order=data_from_new_page['data_send_order'],
-            discont=data_from_new_page['discont_order'],
+            discount=data_from_new_page['discont_order'],
             sum_payment=data_from_new_page['sum_payment'],
             status_order=data_from_new_page['fulfilled_order'],
             comment=data_from_new_page['comment_order'],
@@ -485,12 +490,12 @@ def return_data_from_edit_order(data_from_new_page):
             id_order=edit_order).all()
         for row in id_order_1:
             id_order = row.id_order
-            data_order = str(row.data_create)
+            data_order = str(row.date_create)
             id_client = row.id_client
             id_recipient = row.id_recipient
-            data_plane_order = str(row.data_plane_send)
+            data_plane_order = str(row.date_plane_send)
             # data_send_order = str(row.data_plane_order)
-            discont_order = row.discont
+            discont_order = row.discount
             sum_payment = row.sum_payment
             fulfilled_order = row.status_order
             comment_order = row.comment

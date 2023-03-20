@@ -22,5 +22,5 @@ responses:
   '200':
     description: '{"message": "excellent"}'
   '400':
-    description: '{"message": "misstake in data"}'
+    description: '{"error": "misstake in data"}'
 

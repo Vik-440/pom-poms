@@ -16,7 +16,7 @@ from flasgger import Swagger, swag_from
 def main_status_order(id_order):
     """Module for changing status in produce process"""
     if not 'status_order' in request.get_json():
-        return {"message": "misstake in data status"}, 400
+        return {"error": "misstake in data status"}, 400
     status_order = request.get_json()['status_order']
     with Session(engine) as session:
         if not status_order:
@@ -40,7 +40,7 @@ def main_status_order(id_order):
                     phase_1=phaze_to_ziro,
                     phase_2=phaze_to_ziro,
                     phase_3=phaze_to_ziro,
-                    data_plane_send=today))
+                    date_plane_send=today))
         session.execute(stmt)
         session.commit()
-    return {"message": "excellent"}, 200
+    return jsonify({"message": "excellent"}), 200

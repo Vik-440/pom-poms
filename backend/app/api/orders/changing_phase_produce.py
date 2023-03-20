@@ -19,13 +19,13 @@ def validate_qty_phases(id_order: int, data: dict):
         message = None
         if 'phase_1' in data:
             if len(data['phase_1']) != qty_products_order:
-                message = {"message": "misstake in qty phases in data"}
+                message = {"error": "misstake in qty phases in data"}
         if 'phase_2' in data:
             if len(data['phase_2']) != qty_products_order:
-                message = {"message": "misstake in qty phases in data"}
+                message = {"error": "misstake in qty phases in data"}
         if 'phase_3' in data:
             if len(data['phase_3']) != qty_products_order:
-                message = {"message": "misstake in qty phases in data"}
+                message = {"error": "misstake in qty phases in data"}
     return message
 
 
@@ -36,7 +36,7 @@ def main_phase_get(id_order):
     with Session(engine) as session:
         data = request.get_json()
         if not data:
-            return jsonify({"message": "misstake in data"}), 400
+            return jsonify({"error": "misstake in data"}), 400
         message = validate_qty_phases(id_order, data)
         if message:
             return jsonify(message), 400
@@ -51,4 +51,4 @@ def main_phase_get(id_order):
                 session.execute(stmt)
         session.commit()
         
-    return {"message": "excellent"}, 200
+    return jsonify({"message": "excellent"}), 200

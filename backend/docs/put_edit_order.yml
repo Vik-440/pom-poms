@@ -1,0 +1,110 @@
+Edit order
+# ---
+parameters:
+  - name: id_order
+    in: path
+    type: integer
+    description: ID order
+    required: true
+  - name: edit order
+    in: body
+    description: Edit order
+    required: true
+    example: '{"data_order": "2023-3-17", "id_client": 103, "id_recipient": 103, "id_model": [377], "price_model_order": [245], "quantity_pars_model": [1], "phase_1": [2], "phase_2": [2], "phase_3": [1], "data_plane_order": "2023-3-27", "discont_order": 0, "sum_payment": 245, "fulfilled_order": False, "comment_order": ""}'
+    schema:
+      $ref: '#/definitions/Edit_order'
+    content:
+      application/json:
+          schema:
+            type: object
+             
+            properties:
+              status_order:
+                type: str
+              
+responses:
+  '200':
+    description: '{"id_order": "id_order"}'
+  '400':
+    description: '{"error": "misstake in data"}'
+definitions:
+  Edit_order:
+    type: object
+    properties:
+      date_create:
+        type: string
+        format: date-time
+        description: (old name - "data_order") data create order
+        example: '2023-03-01'
+      id_client:
+        type: integer
+        format: int32
+        description: ID client, must be real
+        example: 111
+      id_recipient:
+        type: integer
+        format: int32
+        description: ID recipient, must be real, in general = ID client
+        example: 111
+      id_models:
+        type: array
+        description: (old name - "id_models") list of ID products in this order, if last is one - in list too
+        items:
+          type: integer
+        example: [12, 123]
+      price_model_sell:
+        type: array
+        description: (old name - "price_model_order") sell price this product in this order. qty items = qty in id_models!
+        items:
+          type: integer
+        example: [300, 400]
+      qty_pars:
+        type: array
+        description: (old name - "quantity_pars_model") amount pars every products qty items = qty in id_models!
+        items:
+          type: integer
+        example: [2, 3]
+      phase_1:
+        type: array
+        description:  qty items = qty in id_models!
+        items:
+          type: integer
+        example: [4, 6]
+      phase_2:
+        type: array
+        description: qty items = qty in id_models!
+        items:
+          type: integer
+        example: [4, 6]
+      phase_3:
+        type: array
+        description: qty items = qty in id_models!
+        items:
+          type: integer
+        example: [2, 3]
+      date_plane_send:
+        type: string
+        format: date-time
+        description: (old name - "data_plane_order") data send order
+        example: '2023-03-10'
+      discount:
+        type: integer
+        format: int32
+        description: (old name - "discont_order") discount for this order
+        example: 0
+      sum_payment:
+        type: integer
+        format: int32
+        description: amount money for this order
+        example: 1000
+      status_order: 
+        type: boolean
+        description: (old name - "fulfilled_order") status of order
+        example: false
+        enum:
+        - true
+        - false
+      comment:
+        type: string
+        description: (old name - "comment_order") comment to order
+        example: put bill to box
