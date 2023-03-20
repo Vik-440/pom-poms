@@ -1,15 +1,11 @@
-"""Module for creating new order"""
+"""Module for edit order"""
 
-from datetime import datetime
 from flask import request, jsonify
-from sqlalchemy import update, select #func, or_, and_, join, table
+from sqlalchemy import update
 from sqlalchemy.orm import Session, aliased
 from sqlalchemy.sql.expression import func
 
 from app.orders.models import DB_orders
-from app.clients.models import DB_client
-from app.products.models import DB_product
-from app.payments.models import DB_payment
 
 from app.orders.validator import validate_create_order, validate_id_order
 
@@ -32,12 +28,12 @@ def edit_order(id_order):
     logger.info(f'Data for create new order: {id_order, data}')
     validate_id_order_number = validate_id_order(id_order)
     if validate_id_order_number:
-        logger.error(f'error: {validate_id_order_number}')
+        logger.error(f'{validate_id_order_number}')
         return jsonify(validate_id_order_number), 400
 
     validate_data = validate_create_order(data)
     if validate_data:
-        logger.error(f'error: {validate_data}')
+        logger.error(f'{validate_data}')
         return jsonify(validate_data), 400
     try:
         with Session(engine) as session:

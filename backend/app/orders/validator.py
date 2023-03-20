@@ -1,8 +1,6 @@
-# import re
 from datetime import datetime
-from sqlalchemy import func, select#, or_, and_, join, table
-from sqlalchemy.orm import Session, aliased
-# from flask import request, jsonify
+from sqlalchemy import select
+from sqlalchemy.orm import Session
 
 from app.clients.models import DB_client
 from app.products.models import DB_product
@@ -27,10 +25,9 @@ def validate_id_order(id_order: int):
 
 
 def validate_create_order(data: dict):
-    """Validator for create and edit order"""
+    """Validator for create order"""
     qty_product_in_order = None
     date_today = datetime.today().strftime('%Y-%m-%d')
-    # pattern_date = "^[2][0][0-9][0-9]-[0-1][0-9]-[0-3][0-9]$"
     with Session(engine) as session:
 
         if not 'comment' in data:

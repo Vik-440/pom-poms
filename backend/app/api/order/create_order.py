@@ -32,7 +32,7 @@ def create_order():
     logger.info(f'Data for create new order: {data}')
     errors_validate = validate_create_order(data)
     if errors_validate:
-        logger.error(f'error: {errors_validate}')
+        logger.error(f'{errors_validate}')
         return jsonify(errors_validate), 400
 
     with Session(engine) as session:

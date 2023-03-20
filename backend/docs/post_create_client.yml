@@ -1,0 +1,68 @@
+Creating new client
+# ---
+parameters:
+  - name: new client
+    in: body
+    description: Creating new client
+    required: true
+    schema:
+      $ref: '#/definitions/Create_client'
+    content:
+      application/json:
+          schema:
+            type: object
+responses:
+  '200':
+    description: '{"id_client": "id_client"}'
+  '400':
+    description: '{"error": "misstake in data"}'
+definitions:
+  Create_client:
+    type: object
+    properties:
+      phone:
+        type: string
+        description: (old name - "phone_client") mobile number
+        example: "380501234567"
+      second_name:
+        type: string
+        description: (old name - "second_name_client") second name of client
+        example: Clinton
+      first_name:
+        type: string
+        description: (old name - "first_name_client") first name of client
+        example: Bill
+      surname:
+        type: string
+        description: (old name - "surname_client") surname of client
+        example: Petrovich
+      city:
+        type: string
+        description: (old name - "sity") city of client
+        example: Kyiv
+      np_number:
+        type: integer
+        format: int32
+        description: number of branch Nova Poshta
+        example: 159
+      team:
+        type: string
+        description: (old name - "name_team") team of client
+        example: Junior
+      coach:
+        type: string
+        description: coach of client, client can be a coach too and put own second_name
+        example: Korobenko
+      zip_code:
+        type: integer
+        format: int32
+        description: (old name - "zip_code") ZIP, 5 numbers
+        example: 02152
+      address:
+        type: string
+        description: (old name - "street_house_apartment") all information about address
+        example: Own build
+      comment: 
+        type: string
+        description: (old name - "comment_client") all information about client
+        example: foolish person!

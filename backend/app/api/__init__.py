@@ -11,6 +11,10 @@ from app.api.order import(
     create_order,
     edit_order)
 
+from app.api.client import(
+    create_client,
+    edit_client)
+
 from app.api.materials import extract_materials_data
 
 from app.api.payments import (

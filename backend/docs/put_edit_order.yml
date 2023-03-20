@@ -24,9 +24,9 @@ parameters:
               
 responses:
   '200':
-    description: '{"id_order": "id_order"}'
+    description: '{"edit_order": "id_order"}'
   '400':
-    description: '{"error": "misstake in data"}'
+    description: '{"edit_order": "misstake in data"}'
 definitions:
   Edit_order:
     type: object
