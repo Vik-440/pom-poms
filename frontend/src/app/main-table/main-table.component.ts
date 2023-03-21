@@ -96,7 +96,8 @@ export class MainTableComponent implements OnInit {
                 this.orders = data;
                 this.isShowSpinner = false;
                 this.closeFilterMenu();
-            }, () => {
+            },
+            () => {
                 this.isShowSpinner = false;
                 this.closeFilterMenu();
             }
@@ -198,20 +199,17 @@ export class MainTableComponent implements OnInit {
         params[phaseIndex] = item - event.target.value;
 
         this.service.sendPhase(order.id_order, { [phase]: params }).subscribe((data: any) => {
-            if (data.check_sum_phase === params.reduce((accumulator, currentValue) => accumulator + currentValue)) {
-                this.showAlertsForPhase();
-                this.orders = this.orders.map((orderItem) => {
-                    if (orderItem.id_order === order.id_order) {
-                        orderItem = {
-                            ...orderItem,
-                            [phase]: [...params],
-                        };
-                    }
-                    return orderItem;
-                });
-            } else {
-                this.showAlertsForPhase(false);
-            }
+            this.showMessage(data.message);
+            this.orders = this.orders.map((orderItem) => {
+                if (orderItem.id_order === order.id_order) {
+                    orderItem = {
+                        ...orderItem,
+                        [phase]: [...params],
+                    };
+                }
+                return orderItem;
+            });
+
             setTimeout(() => {
                 this.alertChange(false);
             }, 3000);
@@ -244,10 +242,12 @@ export class MainTableComponent implements OnInit {
 
     getAllData() {
         this.isShowSpinner = true;
-        this.service.getListMain().subscribe((data: any) => {
+        this.service.getListMain().subscribe(
+            (data: any) => {
                 this.orders = data;
                 this.isShowSpinner = false;
-            }, () => {
+            },
+            () => {
                 this.isShowSpinner = false;
             }
         );
