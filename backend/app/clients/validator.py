@@ -1,6 +1,6 @@
 from sqlalchemy import select
 from sqlalchemy.orm import Session
-import string
+import string, re
 
 from app.clients.models import DB_client
 from app import engine
@@ -80,6 +80,7 @@ def validate_client(data: dict):
             return {'phone': 'miss in data'}
         if not isinstance(data['phone'], str):
             return {'phone': 'is not int type'}
+        data['phone'] = re.sub(r'\D', '', data['phone'])
         stmt = (
             select(DB_client.id_client)
             .where(DB_client.phone == data['phone']))

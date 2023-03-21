@@ -256,7 +256,7 @@ def return_data_from_full_kod(data_from_new_page):
         id_model_1 = session.query(DB_product).filter_by(
             article=search_data).all()
         for row in id_model_1:
-            j_id_model = row.article
+            j_id_model = row.id_product
         if j_id_model == 0:
             ins = DB_product(
                 article=data_from_new_page['kod_model'],    # int for all
@@ -281,7 +281,7 @@ def return_data_from_full_kod(data_from_new_page):
             one_block = {"id_model": j_id_model}
         else:
             ins = session.query(DB_product).filter(
-                DB_product.article == j_id_model).update(
+                DB_product.id_product == j_id_model).update(
                     {'article': data_from_new_page['kod_model'],
                         'id_color_1': int(data_from_new_page['id_color_1']),
                         'id_part_1': int(
