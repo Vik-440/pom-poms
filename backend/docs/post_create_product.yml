@@ -1,0 +1,79 @@
+Creating new product
+# ---
+parameters:
+  - name: new product
+    in: body
+    description: Creating new product
+    required: true
+    schema:
+      $ref: '#/definitions/Create_product'
+    content:
+      application/json:
+          schema:
+            type: object
+responses:
+  '200':
+    description: '{"id_product": "id_product"}'
+  '400':
+    description: '{"error": "misstake in data"}'
+definitions:
+  Create_product:
+    type: object
+    properties:
+      article:
+        type: string
+        description: (old name - "kod_model") cod of product
+        example: "190-1122"
+      colors:
+        type: string
+        description: (old name - "kolor_model") colors in product
+        example: "Red + Blue"
+      price:
+        type: integer
+        format: int32
+        description: (old name - "price_model") price for this product
+        example: 390
+      id_color_1:
+        type: integer
+        format: int32
+        description: ID material
+        example: 11
+      id_part_1:
+        type: integer
+        format: int32
+        description: (old name - "id_color_part_1") percentage in product
+        example: 50
+      id_color_2:
+        type: integer
+        format: int32
+        description: ID material
+        example: 22
+      id_part_2:
+        type: integer
+        format: int32
+        description: (old name - "id_color_part_2") percentage in product
+        example: 50
+      id_color_3:
+        type: integer
+        format: int32
+        description: ID material
+        example: Null
+      id_part_3:
+        type: integer
+        format: int32
+        description: (old name - "id_color_part_3") percentage in product
+        example: Null
+      id_color_4:
+        type: integer
+        format: int32
+        description: ID material
+        example: Null
+      id_part_4:
+        type: integer
+        format: int32
+        description: (old name - "id_color_part_4") percentage in product
+        example: Null
+      comment:
+        type: string
+        description: (old name - "comment_model") all information about product
+        example: so nice!

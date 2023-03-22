@@ -1,16 +1,9 @@
 """Module for creating client"""
 
-# from datetime import datetime
 from flask import request, jsonify
-# from sqlalchemy import select #func, or_, and_, join, table
-from sqlalchemy.orm import Session #, aliased
-from sqlalchemy.sql.expression import func
+from sqlalchemy.orm import Session
 
-from app.orders.models import DB_orders
 from app.clients.models import DB_client
-# from app.products.models import DB_product
-# from app.payments.models import DB_payment
-
 from app.clients.validator import validate_client
 
 from app import engine

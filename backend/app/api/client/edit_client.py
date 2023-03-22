@@ -16,7 +16,7 @@ from log.logger import logger
 from flasgger import swag_from
 
 
-@api.route('/edit_client//<int:id_client>', methods=['PUT'])
+@api.route('/edit_client/<int:id_client>', methods=['PUT'])
 @swag_from('/docs/put_edit_client.yml')
 def edit_client(id_client: int):
     """Edit client"""
@@ -54,7 +54,7 @@ def edit_client(id_client: int):
                     address=data['address']))
             session.execute(stmt)
             session.commit()
-        return jsonify({"id_client": id_client}), 200
+        return jsonify({"edit_client": id_client}), 200
     except:
         logger.error('id_client: error in save order to DB')
         return  jsonify({"id_client": 'error in save order to DB'}), 400

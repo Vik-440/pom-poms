@@ -15,6 +15,10 @@ from app.api.client import(
     create_client,
     edit_client)
 
+from app.api.product import(
+    create_product,
+    edit_product)
+
 from app.api.materials import extract_materials_data
 
 from app.api.payments import (
