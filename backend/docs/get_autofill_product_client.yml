@@ -1,0 +1,65 @@
+Endpoint for autofill data by args
+---
+parameters:
+  - name: phone
+    in: query
+    type: string
+    description: number phone client, 4 and more symbols
+    required: false
+    example: 1234
+  - name: second_name
+    in: query
+    type: string
+    description: second_name client, 3 and more symbols
+    required: false
+    example: Кор
+  - name: city
+    in: query
+    type: string
+    description: city, 3 and more symbols
+    required: false
+    enum: ['Джу', 'Тор', 'Ред', 'Per', 'Атла']
+    # example: Тер
+  - name: team
+    in: query
+    type: string
+    description: team, 3 and more symbols
+    required: false
+    example: Jun
+  - name: coach
+    in: query
+    type: string
+    description: coach, 3 and more symbols
+    required: false
+    example: Кор
+  - name: article
+    in: query
+    type: string
+    description: article, 3 and more symbols
+    required: false
+    example: 7879
+  - name: name_material
+    in: query
+    type: string
+    description: name_material, 3 and more symbols
+    required: false
+    example: В21
+
+definitions:
+  Autofill:
+    type: object
+    properties:
+      # comment_model:
+      #   type: string
+      #   description: comment about product property
+      #   example: handle is 11 cm
+      # comment_order:
+      #   type: string
+      #   description: comment about order property
+      #   example: put bill to box
+
+responses:
+  '200':
+    description: list answers
+    schema:
+      $ref: '#/definitions/Autofill'

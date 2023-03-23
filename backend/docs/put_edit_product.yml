@@ -1,5 +1,7 @@
 Edit product
 # ---
+tags:
+  - Product
 parameters:
   - name: id_product
     in: path

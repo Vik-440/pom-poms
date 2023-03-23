@@ -1,5 +1,7 @@
 Creating new product
 # ---
+tags:
+  - Product
 parameters:
   - name: new product
     in: body

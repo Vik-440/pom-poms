@@ -1,5 +1,7 @@
 Edit order
 # ---
+tags:
+  - Order
 parameters:
   - name: id_order
     in: path
@@ -106,5 +108,5 @@ definitions:
         - false
       comment:
         type: string
-        description: (old name - "comment_order") comment to order
+        description: (old name - "comment_order") comment to order, can be empty
         example: put bill to box

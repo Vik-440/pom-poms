@@ -1,5 +1,7 @@
-Endpoin for main page where are orders by default or by additional args
+Endpoint for main page where are orders by default or by additional args
 ---
+tags:
+  - Orders
 parameters:
   - name: data_start
     in: query

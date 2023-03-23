@@ -1,5 +1,7 @@
 Changing phase of producing order
 # ---
+tags:
+  - Orders
 parameters:
   - name: id_order
     in: path

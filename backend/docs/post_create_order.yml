@@ -1,5 +1,7 @@
 Creating new order
 # ---
+tags:
+  - Order
 parameters:
   - name: new order
     in: body
@@ -96,5 +98,5 @@ definitions:
         - false
       comment:
         type: string
-        description: (old name - "comment_order") comment to order
+        description: (old name - "comment_order") comment to order, can be empty
         example: put bill to box
