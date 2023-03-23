@@ -33,6 +33,7 @@ export class CreateOrderComponent implements OnInit {
     showWeekNumbers = false;
     outsideDays = 'visible';
 
+    isEditClient = false;
     orderForm: FormArray;
     clientForm: FormGroup;
     isGetPostR: Boolean = false;
@@ -161,17 +162,17 @@ export class CreateOrderComponent implements OnInit {
 
         this.clientForm = this.fb.group({
             id_client: null,
-            phone_client: [null, Validators.required],
+            phone: [null, Validators.required],
             second_name_client: [null, Validators.required],
             first_name_client: [null, Validators.required],
-            surname_client: null,
-            sity: [null, Validators.required],
+            surname: null,
+            city: [null, Validators.required],
             np_number: [null, Validators.required],
-            name_team: null,
+            team: null,
             coach: null,
             zip_code: null,
-            street_house_apartment: null,
-            comment_client: null,
+            address: null,
+            comment: null,
         });
 
         this.recipientForm = this.fb.group({
@@ -181,11 +182,11 @@ export class CreateOrderComponent implements OnInit {
             second_name_client: [null, Validators.required],
             first_name_client: [null, Validators.required],
             surname_client: null,
-            sity: [null, Validators.required],
+            city: [null, Validators.required],
             np_number: [null, Validators.required],
             name_team: null,
             zip_code: null,
-            street_house_apartment: null,
+            address: null,
             comment_client: null,
         });
     }
@@ -328,6 +329,7 @@ export class CreateOrderComponent implements OnInit {
 
         this.clientForm.valueChanges.subscribe(() => {
             if (this.isSaveClient) {
+                this.isEditClient = true;
                 this.isSaveClient = false;
             }
         });
@@ -530,7 +532,7 @@ export class CreateOrderComponent implements OnInit {
         }
 
         form.patchValue({
-            second_name_client: value.secondName || value,
+            second_name_client: value?.secondName || value,
         });
         this.clientDataItems = [];
     }
@@ -543,15 +545,18 @@ export class CreateOrderComponent implements OnInit {
                 form.setValue(
                     {
                         coach: dataClient?.coach,
-                        comment_client: dataClient.comment_client,
+                        // comment: dataClient.comment,
+                        comment: dataClient.comment_client,
                         first_name_client: dataClient.first_name_client,
                         id_client: dataClient.id_client,
-                        name_team: dataClient.name_team,
-                        phone_client: dataClient.phone_client,
+                        team: dataClient.name_team,
+                        phone: dataClient.phone_client,
                         second_name_client: dataClient.second_name_client,
-                        sity: dataClient.sity,
-                        street_house_apartment: dataClient.street_house_apartment,
-                        surname_client: dataClient.surname_client,
+                        city: dataClient.sity,
+                        // city: dataClient.city,
+                        // address: dataClient.address,
+                        address: dataClient.street_house_apartment,
+                        surname: dataClient.surname_client,
                         zip_code: dataClient.zip_code,
                         np_number: dataClient.np_number,
                     },
@@ -564,23 +569,25 @@ export class CreateOrderComponent implements OnInit {
         this.clientDataItems = [];
     }
 
-    saveClient() {
-        const params = {
-            sl_id_recipient: null,
-            phone_client: this.clientForm.value.phone_client,
-            second_name_client: this.clientForm.value.second_name_client,
-            first_name_client: this.clientForm.value.first_name_client,
-            surname_client: this.clientForm.value.surname_client,
+    getParamsClient() {
+        return {
+            phone: this.clientForm.value.phone,
+            second_name: this.clientForm.value.second_name_client,
+            first_name: this.clientForm.value.first_name_client,
+            surname: this.clientForm.value.surname,
             np_number: this.clientForm.value.np_number,
-            name_team: this.clientForm.value.name_team,
+            team: this.clientForm.value.team,
             coach: this.clientForm.value.coach,
-            zip_code: this.clientForm.value.zip_code,
-            street_house_apartment: this.clientForm.value.street_house_apartment,
-            comment_client: this.clientForm.value.comment_client,
-            sity: this.clientForm.value.sity,
+            zip_code: +this.clientForm.value.zip_code,
+            address: this.clientForm.value.address,
+            comment: this.clientForm.value.comment,
+            city: this.clientForm.value.city,
         };
+    }
+    saveClient() {
+        const params = this.getParamsClient();
         this.isShowSpinner = true;
-        this.service.getInfoForOrder(params).subscribe(
+        this.service.saveClient(params).subscribe(
             (data: any) => {
                 this.isShowSpinner = false;
                 this.clientForm.patchValue({
@@ -588,7 +595,39 @@ export class CreateOrderComponent implements OnInit {
                 });
                 this.isSaveClient = true;
             },
-            () => {
+            (error) => {
+                const key = Object.keys(error.error);
+                this.clientForm.controls[key[0]].setErrors({
+                    message: Object.values(error.error)[0]
+                })
+                this.isShowSpinner = false;
+                this.alert = {
+                    isShow: true,
+                    type: 'danger',
+                    message: 'Уппс, щось пішло не так',
+                };
+                setTimeout(() => {
+                    this.alertChange(false);
+                }, 3000);
+            }
+        );
+    }
+
+    editClient() {
+        const params = this.getParamsClient();
+        this.service.editClient(params, this.clientForm.value.id_client).subscribe(
+            (data: any) => {
+                this.isShowSpinner = false;
+                this.clientForm.patchValue({
+                    id_client: data.id_recipient || this.clientForm.value.id_client,
+                });
+                this.isSaveClient = true;
+            },
+            (error) => {
+                const key = Object.keys(error.error);
+                this.clientForm.controls[key[0]].setErrors({
+                    message: Object.values(error.error)[0]
+                })
                 this.isShowSpinner = false;
                 this.alert = {
                     isShow: true,
@@ -614,9 +653,9 @@ export class CreateOrderComponent implements OnInit {
             coach: this.clientForm.value.coach,
             name_team: this.clientForm.value.name_team,
             zip_code: this.recipientForm.value.zip_code,
-            street_house_apartment: this.recipientForm.value.street_house_apartment,
+            address: this.recipientForm.value.address,
             comment_client: this.recipientForm.value.comment_client,
-            sity: this.recipientForm.value.sity,
+            city: this.recipientForm.value.city,
         };
         this.isShowSpinner = true;
         this.service.getInfoForOrder(params).subscribe(
@@ -690,20 +729,21 @@ export class CreateOrderComponent implements OnInit {
         this.clientForm.setValue(
             {
                 coach: dataClient?.coach,
-                comment_client: dataClient.comment_client,
+                comment: dataClient.comment,
                 first_name_client: dataClient.first_name_client,
                 id_client: dataClient.id_client,
-                name_team: dataClient.name_team,
-                phone_client: dataClient.phone_client,
+                team: dataClient.name_team,
+                phone: dataClient.phone_client,
                 second_name_client: dataClient.second_name_client,
-                sity: dataClient.sity,
-                street_house_apartment: dataClient.street_house_apartment,
-                surname_client: dataClient.surname_client,
+                city: dataClient.city,
+                address: dataClient.address,
+                surname: dataClient.surname,
                 zip_code: dataClient.zip_code,
                 np_number: dataClient.np_number,
             },
             { emitEvent: false }
         );
+        
         this.isSaveClient = true;
         this.viewChanges();
     }
@@ -718,9 +758,9 @@ export class CreateOrderComponent implements OnInit {
                 name_team: dataRecipient.name_team,
                 phone_client: dataRecipient.phone_client,
                 second_name_client: dataRecipient.second_name_client,
-                sity: dataRecipient.sity,
-                street_house_apartment: dataRecipient.street_house_apartment,
-                surname_client: dataRecipient.surname_client,
+                city: dataRecipient.city,
+                address: dataRecipient.address,
+                surname: dataRecipient.surname_client,
                 zip_code: dataRecipient.zip_code,
                 np_number: dataRecipient.np_number,
             },

@@ -294,7 +294,7 @@ export class MainTableComponent implements OnInit {
             order.first_name_client + ' ' + order.second_name_client,
             order.phone_recipient.replace(regexPhone, '$1-' + '$2-' + '$3-' + '$4-' + '$5'),
             order.zip_code,
-            order.street_house_apartment,
+            order.address,
         ];
         return tooltip.filter((data) => data).join('\n');
     }
