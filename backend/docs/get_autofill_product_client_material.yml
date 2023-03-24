@@ -1,5 +1,7 @@
 Endpoint for autofill data by args
 ---
+tags:
+  - General
 parameters:
   - name: phone
     in: query
@@ -18,8 +20,8 @@ parameters:
     type: string
     description: city, 3 and more symbols
     required: false
-    enum: ['Джу', 'Тор', 'Ред', 'Per', 'Атла']
-    # example: Тер
+    # enum: ['Джу', 'Тор', 'Ред', 'Per', 'Атла']
+    example: Тер
   - name: team
     in: query
     type: string
@@ -41,25 +43,26 @@ parameters:
   - name: name_material
     in: query
     type: string
-    description: name_material, 3 and more symbols
+    description: name_material, 2 and more symbols
     required: false
     example: В21
 
 definitions:
   Autofill:
-    type: object
-    properties:
-      # comment_model:
-      #   type: string
-      #   description: comment about product property
-      #   example: handle is 11 cm
-      # comment_order:
-      #   type: string
-      #   description: comment about order property
-      #   example: put bill to box
-
+    type: array
+    items: 
+      type: object
+      properties:
+        id_client: 
+          type: integer
+          description: The ID of the client.
+        phone_client: 
+          type: string
+          description: "The phone number of the client."
 responses:
   '200':
     description: list answers
     schema:
       $ref: '#/definitions/Autofill'
+  '400':
+    description: '{"error": "misstake in data"}'

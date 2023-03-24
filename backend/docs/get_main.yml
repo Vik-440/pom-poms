@@ -208,3 +208,5 @@ responses:
     description: examle of a order, which will be more in list structure
     schema:
       $ref: '#/definitions/Order'
+  '400':
+    description: '{"error": "misstake in data"}'

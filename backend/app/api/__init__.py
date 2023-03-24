@@ -38,3 +38,6 @@ from app.api.outlays import (
 
 from app.api.clients_and_products import (
     all_routs_clients_products)
+
+from app.api.ganeral import (
+    autofill)
