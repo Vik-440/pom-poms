@@ -1,5 +1,7 @@
-Endpoin for main page where are orders by default or by additional args
+Endpoint for main page where are orders by default or by additional args
 ---
+tags:
+  - Orders
 parameters:
   - name: data_start
     in: query
@@ -206,3 +208,5 @@ responses:
     description: examle of a order, which will be more in list structure
     schema:
       $ref: '#/definitions/Order'
+  '400':
+    description: '{"error": "misstake in data"}'

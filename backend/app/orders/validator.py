@@ -30,7 +30,7 @@ def validate_create_order(data: dict):
     date_today = datetime.today().strftime('%Y-%m-%d')
     with Session(engine) as session:
 
-        if not 'comment' in data:
+        if not 'comment' in data and not data['comment'] is None:
             return {"comment":  "miss in data"}
         if not isinstance(data['comment'], str):
             return {'comment': 'is not str type'}

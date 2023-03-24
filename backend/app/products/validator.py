@@ -21,12 +21,6 @@ def validate_id_product(id_product: int):
             return {'id_product': f'ID product {id_product} is invalid'}
     return
 
-# 'article': '190-1122', 
-# 'colors': 'Red + Blue', 
-# 'comment': 'so nice!', 
-# 'id_color_1': 11, 'id_color_2': 22, 'id_color_3': None, 'id_color_4': None, 
-# 'id_part_1': 50, 'id_part_2': 50, 'id_part_3': None, 'id_part_4': None, 
-# 'price': 390}
 
 def validate_product(data: dict):
     """Validator for create product"""
@@ -51,7 +45,7 @@ def validate_product(data: dict):
         if not isinstance(data['colors'], str):
             return {'colors': 'is not str type'}
 
-        if not 'comment' in data:
+        if not 'comment' in data and not data['comment'] is None:
             return {"comment":  "miss in data"}
         if not isinstance(data['comment'], str):
             return {'comment': 'is not str type'}

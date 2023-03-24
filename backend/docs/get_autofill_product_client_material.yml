@@ -1,0 +1,68 @@
+Endpoint for autofill data by args
+---
+tags:
+  - General
+parameters:
+  - name: phone
+    in: query
+    type: string
+    description: number phone client, 4 and more symbols
+    required: false
+    example: 1234
+  - name: second_name
+    in: query
+    type: string
+    description: second_name client, 3 and more symbols
+    required: false
+    example: Кор
+  - name: city
+    in: query
+    type: string
+    description: city, 3 and more symbols
+    required: false
+    # enum: ['Джу', 'Тор', 'Ред', 'Per', 'Атла']
+    example: Тер
+  - name: team
+    in: query
+    type: string
+    description: team, 3 and more symbols
+    required: false
+    example: Jun
+  - name: coach
+    in: query
+    type: string
+    description: coach, 3 and more symbols
+    required: false
+    example: Кор
+  - name: article
+    in: query
+    type: string
+    description: article, 3 and more symbols
+    required: false
+    example: 7879
+  - name: name_material
+    in: query
+    type: string
+    description: name_material, 2 and more symbols
+    required: false
+    example: В21
+
+definitions:
+  Autofill:
+    type: array
+    items: 
+      type: object
+      properties:
+        id_client: 
+          type: integer
+          description: The ID of the client.
+        phone_client: 
+          type: string
+          description: "The phone number of the client."
+responses:
+  '200':
+    description: list answers
+    schema:
+      $ref: '#/definitions/Autofill'
+  '400':
+    description: '{"error": "misstake in data"}'

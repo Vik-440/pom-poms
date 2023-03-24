@@ -1,5 +1,7 @@
 Edit client
 # ---
+tags:
+  - Client
 parameters:
   - name: id_client
     in: path
@@ -39,7 +41,7 @@ definitions:
         example: Bill
       surname:
         type: string
-        description: (old name - "surname_client") surname of client
+        description: (old name - "surname_client") surname of client, can be empty
         example: Petrovich
       city:
         type: string
@@ -52,22 +54,22 @@ definitions:
         example: 159
       team:
         type: string
-        description: (old name - "name_team") team of client
+        description: (old name - "name_team") team of client, can be empty
         example: Junior
       coach:
         type: string
-        description: coach of client, client can be a coach too and put own second_name
+        description: coach of client, client can be a coach too and put own second_name, can be empty
         example: Korobenko
       zip_code:
         type: integer
         format: int32
-        description: (old name - "zip_code") ZIP, 5 numbers
+        description: (old name - "zip_code") ZIP, 5 numbers, can be empty
         example: 02152
       address:
         type: string
-        description: (old name - "street_house_apartment") all information about address
+        description: (old name - "street_house_apartment") all information about address, can be empty
         example: Own build
       comment: 
         type: string
-        description: (old name - "comment_client") all information about client
+        description: (old name - "comment_client") all information about client, can be empty
         example: foolish person!

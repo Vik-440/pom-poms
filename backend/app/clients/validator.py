@@ -25,7 +25,7 @@ def validate_client(data: dict):
     """Validator for create client"""
     with Session(engine) as session:
 
-        if not 'address' in data:
+        if not 'address' in data and not data['address'] is None:
             return {"address":  "miss in data"}
         if not isinstance(data['address'], str):
             return {'address': 'is not str type'}
@@ -36,7 +36,7 @@ def validate_client(data: dict):
             return {'city': 'is not str type'}
         data['city'] = string.capwords(data['city'])
 
-        if not 'coach' in data:
+        if not 'coach' in data and not data['coach'] is None:
             return {"coach":  "miss in data"}
         if not isinstance(data['coach'], str):
             return {'coach': 'is not str type'}
@@ -44,7 +44,7 @@ def validate_client(data: dict):
 
         if not 'comment' in data:
             return {"comment":  "miss in data"}
-        if not isinstance(data['comment'], str):
+        if not isinstance(data['comment'], str) and not data['comment'] is None:
             return {'comment': 'is not str type'}
         
         if not 'first_name' in data:
@@ -59,13 +59,13 @@ def validate_client(data: dict):
             return {'second_name': 'is not str type'}
         data['second_name'] = data['second_name'].capitalize()
 
-        if not 'surname' in data:
+        if not 'surname' in data and not data['surname'] is None:
             return {"surname":  "miss in data"}
         if not isinstance(data['surname'], str):
             return {'surname': 'is not str type'}
         data['surname'] = data['surname'].capitalize()
 
-        if not 'team' in data:
+        if not 'team' in data and not data['team'] is None:
             return {"team":  "miss in data"}
         if not isinstance(data['team'], str):
             return {'team': 'is not str type'}
@@ -87,7 +87,7 @@ def validate_client(data: dict):
         if session.execute(stmt).first():
             return {'phone': f'mobile number {data["phone"]} already exists'}
         
-        if not 'zip_code' in data:
+        if not 'zip_code' in data and not data['zip_code'] is None:
             return {'zip_code': 'miss in data'}
         if not isinstance(data['zip_code'], int):
             return {'zip_code': 'is not int type'}
