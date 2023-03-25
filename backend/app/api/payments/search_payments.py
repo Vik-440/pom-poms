@@ -107,5 +107,5 @@ def searching_payments():
         return jsonify(full_block)
     except Exception as e:
         logger.error(f'Error in finance_payments_search POST: {e}')
-        return f'Error in finance_payments POST: {e}', 500
+        return f'Error in finance_payments POST: {e}', 400
     

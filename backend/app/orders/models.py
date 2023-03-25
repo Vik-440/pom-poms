@@ -32,7 +32,7 @@ class DB_orders(Base):
             'id_recipient': self.id_recipient,
             'status_order': self.status_order,
             'sum_payment': self.sum_payment,
-            'discont': self.discont,
+            'discont': self.discount,
             'comment': self.comment,
             'id_models': self.id_models,
             'qty_pars': self.qty_pars,

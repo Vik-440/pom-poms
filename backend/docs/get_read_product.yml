@@ -1,5 +1,5 @@
-# Edit product
-# ---
+# Read product
+#---
 tags:
   - Product
 parameters:
@@ -8,25 +8,22 @@ parameters:
     type: integer
     description: ID product
     required: true
-  - name: edit product
-    in: body
-    description: Edit product
-    required: true
-    schema:
-      $ref: '#/definitions/Edit_product'
-    content:
-      application/json:
-          schema:
-            type: object
 responses:
-  '200':
-    description: '{"edit_product": "id_product"}'
-  '400':
-    description: '{"error": "misstake in data"}'
+  "200":
+    description: '{"read_product": "id_product"}'
+    schema:
+      $ref: "#/definitions/Product"
+  "400":
+    description: '{"read_product": "misstake in data"}'
 definitions:
-  Edit_product:
+  Product:
     type: object
     properties:
+      id_product:
+        type: integer
+        format: int32
+        description: id_product
+        example: 111
       article:
         type: string
         description: (old name - "kod_model") cod of product

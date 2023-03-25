@@ -37,5 +37,5 @@ def opening_last_outlays():
         return jsonify(full_block)
     except Exception as e:
         logger.error(f'Error in finance_outlays GET: {e}')
-        return f'Error in finance_outlays GET: {e}', 500
+        return f'Error in finance_outlays GET: {e}', 400
     

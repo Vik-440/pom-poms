@@ -162,7 +162,7 @@ def material():
         return (extracting_material_all(0)), 200
     except Exception as e:
         logger.error(f'Error in function material GET: {e}')
-        return jsonify(f'Error in function material GET: {e}'), 500
+        return jsonify(f'Error in function material GET: {e}'), 400
     
 
 @api.route('/material', methods=['POST'])
@@ -186,5 +186,5 @@ def material_post():
         return data, 200
     except Exception as e:
         logger.error(f'Error in function material POST: {e}')
-        return f'Error in function material POST: {e}', 500
+        return f'Error in function material POST: {e}', 400
     

@@ -15,7 +15,6 @@ def payment_changing(id_payment):
     """module rof changing data in payment"""
     try:
         data = request.get_json()
-        print(data)
         with Session(engine)as session:
             stmt = (
                 update(DB_payment)
@@ -29,5 +28,5 @@ def payment_changing(id_payment):
         return jsonify({"message": "payment_changing excellent"}), 200
     except Exception as e:
         logger.error(f'Error in function finance: {e}')
-        return f'Error in function finance: {e}', 500
+        return f'Error in function finance: {e}', 400
     

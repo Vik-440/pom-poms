@@ -37,5 +37,5 @@ def last_payments():
         return jsonify(full_block), 200
     except Exception as e:
         logger.error(f'Error in finance_payments GET: {e}')
-        return jsonify(f'Error in finance_payments GET: {e}'), 500
+        return jsonify(f'Error in finance_payments GET: {e}'), 400
     

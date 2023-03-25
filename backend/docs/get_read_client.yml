@@ -1,27 +1,29 @@
-# Creating new client
-# ---
+# Read client
+#---
 tags:
   - Client
 parameters:
-  - name: new client
-    in: body
-    description: Creating new client
+  - name: id_client
+    in: path
+    type: integer
+    description: ID client
     required: true
-    schema:
-      $ref: '#/definitions/Create_client'
-    content:
-      application/json:
-          schema:
-            type: object
 responses:
-  '200':
-    description: '{"id_client": "id_client"}'
-  '400':
-    description: '{"error": "misstake in data"}'
+  "200":
+    description: '{"read_client": "id_client"}'
+    schema:
+      $ref: "#/definitions/Client"
+  "400":
+    description: '{"read_client": "misstake in data"}'
 definitions:
-  Create_client:
+  Client:
     type: object
     properties:
+      id_client:
+        type: integer
+        format: int32
+        description: id_client
+        example: 111
       phone:
         type: string
         description: (old name - "phone_client") mobile number
@@ -64,7 +66,7 @@ definitions:
         type: string
         description: (old name - "street_house_apartment") all information about address, can be empty
         example: Own build
-      comment: 
+      comment:
         type: string
         description: (old name - "comment_client") all information about client, can be empty
         example: foolish person!

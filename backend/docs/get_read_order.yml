@@ -1,5 +1,5 @@
-# Edit order
-# ---
+# Read order
+#---
 tags:
   - Order
 parameters:
@@ -8,31 +8,22 @@ parameters:
     type: integer
     description: ID order
     required: true
-  - name: edit order
-    in: body
-    description: Edit order
-    required: true
-    example: '{"data_order": "2023-3-17", "id_client": 103, "id_recipient": 103, "id_model": [377], "price_model_order": [245], "quantity_pars_model": [1], "phase_1": [2], "phase_2": [2], "phase_3": [1], "data_plane_order": "2023-3-27", "discont_order": 0, "sum_payment": 245, "fulfilled_order": False, "comment_order": ""}'
-    schema:
-      $ref: '#/definitions/Edit_order'
-    content:
-      application/json:
-          schema:
-            type: object
-             
-            properties:
-              status_order:
-                type: str
-              
 responses:
-  '200':
-    description: '{"edit_order": "id_order"}'
-  '400':
-    description: '{"edit_order": "misstake in data"}'
+  "200":
+    description: read_order id
+    schema:
+      $ref: "#/definitions/Order"
+  "400":
+    description: '{"read_order": "misstake in data"}'
 definitions:
-  Edit_order:
+  Order:
     type: object
     properties:
+      id_order:
+        type: integer
+        format: int32
+        description: id_order
+        example: 111
       date_create:
         type: string
         format: date-time

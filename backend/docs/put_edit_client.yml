@@ -1,5 +1,5 @@
-Edit client
-# ---
+# Edit client
+#---
 tags:
   - Client
 parameters:
@@ -63,7 +63,7 @@ definitions:
       zip_code:
         type: integer
         format: int32
-        description: (old name - "zip_code") ZIP, 5 numbers, can be empty
+        description: (old name - "zip_code") ZIP, 5 numbers, can be empty 
         example: 02152
       address:
         type: string

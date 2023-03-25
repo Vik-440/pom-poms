@@ -114,7 +114,7 @@ def outlay_searching(data):
                 full_block.append(one_block)
         return full_block
     except Exception as e:
-        return f'Error in function outlay_searching: {e}', 500
+        return f'Error in function outlay_searching: {e}', 400
 
 
 @api.route('/finance', methods=['POST'])
@@ -126,8 +126,8 @@ def finance():
         elif 'stat' in data:
             return jsonify(extracting_payment_statistics()), 200
         else:
-            return ({"message": "finance POST error"}), 500
+            return ({"message": "finance POST error"}), 400
     except Exception as e:
         logger.error(f'Error in function finance: {e}')
-        return f'Error in function finance: {e}', 500
+        return f'Error in function finance: {e}', 400
     
