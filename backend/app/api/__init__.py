@@ -9,15 +9,18 @@ from app.api.orders import (
 
 from app.api.order import(
     create_order,
-    edit_order)
+    edit_order,
+    read_order)
 
 from app.api.client import(
     create_client,
-    edit_client)
+    edit_client,
+    read_client)
 
 from app.api.product import(
     create_product,
-    edit_product)
+    edit_product,
+    read_product)
 
 from app.api.materials import extract_materials_data
 

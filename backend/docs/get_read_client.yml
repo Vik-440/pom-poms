@@ -1,4 +1,4 @@
-# Edit client
+# Read client
 tags:
   - Client
 parameters:
@@ -7,25 +7,22 @@ parameters:
     type: integer
     description: ID client
     required: true
-  - name: edit client
-    in: body
-    description: Edit client
-    required: true
-    schema:
-      $ref: '#/definitions/Edit_client'
-    content:
-      application/json:
-          schema:
-            type: object
 responses:
-  '200':
-    description: '{"edit_client": "id_client"}'
-  '400':
-    description: '{"edit_client": "misstake in data"}'
+  "200":
+    description: '{"read_client": "id_client"}'
+    schema:
+      $ref: "#/definitions/Client"
+  "400":
+    description: '{"read_client": "misstake in data"}'
 definitions:
-  Edit_client:
+  Client:
     type: object
     properties:
+      id_client:
+        type: integer
+        format: int32
+        description: id_client
+        example: 111
       phone:
         type: string
         description: (old name - "phone_client") mobile number
@@ -68,7 +65,7 @@ definitions:
         type: string
         description: (old name - "street_house_apartment") all information about address, can be empty
         example: Own build
-      comment: 
+      comment:
         type: string
         description: (old name - "comment_client") all information about client, can be empty
         example: foolish person!
