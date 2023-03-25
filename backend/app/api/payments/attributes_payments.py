@@ -13,4 +13,4 @@ def attributes_payments():
                 "інстр.", "опл. роб.", "реклама", "інше"],
         "filter_class": [
                 "day", "week", "month", "quarter", "year"]}
-    return jsonify(full_block)
+    return jsonify(full_block), 200

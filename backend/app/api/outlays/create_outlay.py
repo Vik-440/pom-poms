@@ -26,5 +26,5 @@ def creating_outlay():
         return jsonify({"message": "creating_outlay is excellent"}), 200
     except Exception as e:
         logger.error(f'Error in function finance: {e}')
-        return f'Error in function finance: {e}', 500
+        return f'Error in function finance: {e}', 400
     

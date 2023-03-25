@@ -28,5 +28,5 @@ def edit_outlay(id_outlay):
         return jsonify({"message": "outlay_changing excellent"}), 200
     except Exception as e:
         logger.error(f'Error in function finance: {e}')
-        return f'Error in function finance: {e}', 500
+        return f'Error in function finance: {e}', 400
     

@@ -41,5 +41,5 @@ def payment_id_order_searching():
             return jsonify(full_block)
     except Exception as e:
         logger.error(f'Error in finance_payments_order POST: {e}')
-        return f'Error in order_payments POST: {e}', 500
+        return f'Error in order_payments POST: {e}', 400
     

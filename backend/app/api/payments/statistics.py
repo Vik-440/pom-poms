@@ -109,5 +109,5 @@ def count_balans():
             return (extracting_payment_balans(data)), 200
     except Exception as e:
         logger.error(f'Error in finance payments balans POST: {e}')
-        return jsonify(f'Error in finance payments statics balans: {e}'), 500
+        return jsonify(f'Error in finance payments statics balans: {e}'), 400
     
