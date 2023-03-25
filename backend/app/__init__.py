@@ -9,6 +9,7 @@ import psycopg2
 import os
 
 from app.config import config
+from app.swagger_config import get_swagger_config
 from app.base_model import Base
 from log.logger import logger
 
@@ -16,7 +17,7 @@ from log.logger import logger
 def create_app(config_name='development'):
     app = Flask(__name__)
     api = Api(app)
-    swagger = Swagger(app)
+    swagger = Swagger(app, config=get_swagger_config())
     CORS(app)
     # app.config.from_object('config.Config')
     # app.config.from_object(config[config_name])
@@ -46,5 +47,3 @@ try:
     Base.metadata.create_all(engine)
 except Exception as e:
     logger.error(f'Error in function return_engine: {e}')
-
-
