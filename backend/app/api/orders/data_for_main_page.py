@@ -187,7 +187,6 @@ def main_page():
                 if not orders:
                     stmt = (
                         select_modul
-                        # .where(DB_orders.id_order.in_(orders))
                         .where(DB_orders.status_order == status_order)
                         .order_by(DB_orders.id_order))
                 else:
@@ -245,6 +244,7 @@ def main_page():
                     "second_name_client": row.second_name,
                     "first_name_client": row.first_name})
 
-        return jsonify(full_block)
+        return jsonify(full_block), 200
     except Exception as e:
-        return jsonify(f'Error in function main_page: {e}')
+        logger.exception(e)
+        return jsonify(f'Error in function main_page: {e}'), 400
