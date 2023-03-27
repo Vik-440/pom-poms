@@ -19,7 +19,7 @@ from log.logger import logger
 db = SQLAlchemy()
 engine = None
 
-@pytest.fixture
+# @pytest.fixture
 def create_app(config_name="development"):
     print(config_name)
     global engine
