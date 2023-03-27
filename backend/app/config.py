@@ -1,27 +1,29 @@
+from dotenv import load_dotenv
+from flask_cors import CORS
+import psycopg2
 import os
 
+basedir = os.path.abspath(os.path.dirname(__file__))
+load_dotenv(os.path.join(basedir, '../.env'))
 
 class Config:
-    SECRET_KEY = os.getenv('SECRET_KEY', os.urandom(32))
-    # DB_NAME = os.getenv('DATABASE', 'test.db')
+    DEBUG = False
+    TESTING = False
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
 
-    @staticmethod
-    def init_app(app):
-        pass
-
+class ProductionConfig(Config):
+    SQLALCHEMY_DATABASE_URI = os.getenv("PSQL_URL_PROD")
 
 class DevelopmentConfig(Config):
     DEBUG = True
-
+    SQLALCHEMY_DATABASE_URI = os.getenv("PSQL_URL_TEST")
 
 class TestingConfig(Config):
     TESTING = True
-
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///:memory:'
 
 config = {
+    'production': ProductionConfig,
     'development': DevelopmentConfig,
-    'testing': TestingConfig,
-    'default': DevelopmentConfig
+    'testing': TestingConfig
 }
-
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://user:password@localhost/dbname'
