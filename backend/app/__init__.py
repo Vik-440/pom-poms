@@ -6,6 +6,7 @@ from flasgger import Swagger
 from sqlalchemy import create_engine
 from dotenv import load_dotenv
 from flask_cors import CORS
+import pytest_postgresql
 import json
 import psycopg2
 import os
@@ -34,8 +35,6 @@ def create_app(config_name="development"):
     engine = create_engine(app.config['SQLALCHEMY_DATABASE_URI'], future=True)
     Base.metadata.create_all(engine)
 
-    # app.engine = engine
-    # db.engine = engine
 
     from app.api import api
 
@@ -45,20 +44,3 @@ def create_app(config_name="development"):
     return app
 
 
-# load_dotenv()
-
-    # try:
-    #     config_name_psql = os.getenv("CONFIG_NAME_PSQL")
-    #     print(config_name_psql)
-    #     if config_name_psql == 'testing':
-    #         db_url = 'sqlite:///:memory:'
-    #     elif config_name_psql == 'development':
-    #         db_url = os.getenv("PSQL_URL_TEST")
-    #     elif config_name_psql == 'product':
-    #         db_url = os.getenv("PSQL_URL_PROD")
-    #     else:
-    #         raise (Exception('Please insert correct setup config_name!'))
-    #     engine = create_engine(db_url, future=True)
-    #     Base.metadata.create_all(engine)
-    # except Exception as e:
-    #     logger.error(f'Error in function return_engine: {e}')
