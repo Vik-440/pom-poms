@@ -22,4 +22,12 @@ def test_get_main(app_fixture):
     assert response.status_code == 200
 
 
+def test_get_order(app_fixture):
+    client = app_fixture.test_client()
+    response = client.get('/read_order/11')
+    print(response.json)
+    assert response.status_code == 200
 
+
+# session.execute(DB_client.__table__.delete())
+# session.commit()

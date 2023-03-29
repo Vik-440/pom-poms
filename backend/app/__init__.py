@@ -17,7 +17,7 @@ from app.swagger_config import get_swagger_config
 from app.base_model import Base
 from log.logger import logger
 
-db = SQLAlchemy()
+# db = SQLAlchemy()
 engine = None
 
 # @pytest.fixture
@@ -30,7 +30,7 @@ def create_app(config_name="development"):
     CORS(app)
     app.config.from_object(config[config_name])
 
-    db.init_app(app)
+    # db.init_app(app)
     
     engine = create_engine(app.config['SQLALCHEMY_DATABASE_URI'], future=True)
     Base.metadata.create_all(engine)
