@@ -21,6 +21,17 @@ def validate_id_client(id_client: int):
     return
 
 
+def validate_number(data: dict):
+    """Validator number client"""
+    with Session(engine) as session:
+        stmt = (
+            select(DB_client.id_client)
+            .where(DB_client.phone == data['phone']))
+        if session.execute(stmt).first():
+            return {'phone': f'mobile number {data["phone"]} already exists'}
+    return
+
+
 def validate_client(data: dict):
     """Validator for create client"""
     with Session(engine) as session:

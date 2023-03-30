@@ -29,6 +29,7 @@ def create_app(config_name="development"):
     swagger = Swagger(app, config=get_swagger_config())
     CORS(app)
     app.config.from_object(config[config_name])
+    db = SQLAlchemy()
 
     # db.init_app(app)
     

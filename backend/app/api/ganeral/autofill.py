@@ -32,7 +32,7 @@ def search_by_phone(args):
         for client in _:
             clients.append({
                 'id_client': client.id_client,
-                'phone': client.phone})
+                'value': client.phone})
     return clients
 
 
@@ -54,7 +54,7 @@ def search_by_second_name(args):
         for client in _:
             clients.append({
                 'id_client': client.id_client,
-                'second_first_name': f'{client.second_name} {client.first_name}'})
+                'value': f'{client.second_name} {client.first_name}'})
     return clients
 
 
@@ -72,7 +72,7 @@ def search_by_city(args):
         _ = session.execute(stmt).all()
         for city in _:
             unique_cities.add(city.city)
-        cities = [{'city': city} for city in unique_cities]
+        cities = [{'value': city} for city in unique_cities]
     return cities
 
 
@@ -90,7 +90,7 @@ def search_by_team(args):
         _ = session.execute(stmt).all()
         for team in _:
             unique_teams.add(team.team)
-        teams = [{'team': team} for team in unique_teams]
+        teams = [{'value': team} for team in unique_teams]
     return teams
 
 
@@ -108,7 +108,7 @@ def search_by_coach(args):
         _ = session.execute(stmt).all()
         for coach in _:
             unique_coach.add(coach.coach)
-        coachs = [{'coach': coach} for coach in unique_coach]
+        coachs = [{'value': coach} for coach in unique_coach]
     return coachs
 
 
@@ -135,7 +135,7 @@ def search_by_article(args):
         for product in _:
             products.append({
                 'id_product': product.id_product,
-                'article': product.article})
+                'value': product.article})
     return products
 
 
@@ -161,7 +161,7 @@ def search_by_name_material(args):
         for name_material in _:
             name_materials.append({
                 'id_material': name_material.id_material,
-                'name_material': name_material.name})
+                'value': name_material.name})
     return name_materials
 
 
@@ -192,10 +192,9 @@ def autofill_fields():
             search_by_coach,
             search_by_article,
             search_by_name_material]
-        
         for search_func in search_functions:
             result = search_func(args)
-            if result:
+            if result is not None:
                 return jsonify(result)
 
         return jsonify({'autofill': 'request does not have searching keys'}), 400

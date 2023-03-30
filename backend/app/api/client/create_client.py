@@ -4,7 +4,7 @@ from flask import request, jsonify
 from sqlalchemy.orm import Session
 
 from app.clients.models import DB_client
-from app.clients.validator import validate_client
+from app.clients.validator import validate_client, validate_number
 
 from app import engine
 from .. import api
@@ -23,10 +23,17 @@ def create_client():
         logger.error('format json is not correct')
         return jsonify({'json': 'format is not correct'}), 400
     logger.info(f'Data for create new client: {data}')
-    error = validate_client(data)
-    if error:
-        logger.error(f'{error}')
-        return jsonify(error), 400
+
+    error_data = validate_client(data)
+    if error_data:
+        logger.error(f'{error_data}')
+        return jsonify(error_data), 400
+    
+    error_number = validate_number(data)
+    if error_number:
+        logger.error(f'{error_number}')
+        return jsonify(error_number), 400
+
 
     with Session(engine) as session:
         stmt = DB_client(
