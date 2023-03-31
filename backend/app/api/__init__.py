@@ -43,4 +43,5 @@ from app.api.clients_and_products import (
     all_routs_clients_products)
 
 from app.api.ganeral import (
-    autofill)
+    autofill,
+    pin_pong)

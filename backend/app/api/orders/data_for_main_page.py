@@ -149,7 +149,7 @@ def create_select_modul():
 def main_page():
     """Preparing main page with or without same requests"""
     args = request.args
-    logger.info(f'Get main works in API with args: {args}')
+    # logger.info(f'Get main works in API with args: {args}')
 
     try:
         with Session(engine) as session:

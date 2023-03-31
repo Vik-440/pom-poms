@@ -14,7 +14,7 @@ from log.logger import logger
 from flasgger import swag_from
 
 
-@api.route('/create_product/', methods=['POST'])
+@api.route('/create_product', methods=['POST'])
 @swag_from('/docs/post_create_product.yml')
 def create_product():
     """Creating new product"""
@@ -23,8 +23,6 @@ def create_product():
     except ValueError:
         logger.error('format json is not correct')
         return jsonify({'json': 'format is not correct'}), 400
-    logger.info(f'Data for create new product: {data}')
-    # print(data)
     error = validate_product(data)
     if error:
         logger.error(f'{error}')
