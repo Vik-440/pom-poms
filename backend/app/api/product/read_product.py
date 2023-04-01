@@ -18,7 +18,9 @@ from flasgger import swag_from
 def read_product(id_product):
     """Read product"""
 
-    logger.info(f'Read product: {id_product}')
+    # id_product = request.args.get('id_product')
+    if id_product is None:
+        return jsonify({'read_product': 'id_product is missing'}), 400
 
     with Session(engine) as session:
         stmt = (

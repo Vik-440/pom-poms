@@ -22,10 +22,20 @@ def validate_id_product(id_product: int):
     return
 
 
+def validate_article_product(data: dict):
+    """Validator for article product"""
+    with Session(engine) as session:
+        stmt = (
+            select(DB_product.article)
+            .where(DB_product.article == data['article']))
+        if session.execute(stmt).first():
+            return {'article': f'article {data["article"]} already exists'}
+    return
+
+
 def validate_product(data: dict):
     """Validator for create product"""
     with Session(engine) as session:
-
         if not 'article' in data:
             return {"article":  "miss in data"}
         if not isinstance(data['article'], str):
@@ -34,20 +44,15 @@ def validate_product(data: dict):
         data['article'] = re.sub(r'A', 'А', data['article'])
         data['article'] = re.sub(r'B', 'В', data['article'])
         data['article'] = re.sub(r'C', 'С', data['article'])
-        stmt = (
-            select(DB_product.article)
-            .where(DB_product.article == data['article']))
-        if session.execute(stmt).first():
-            return {'article': f'article {data["article"]} already exists'}
 
         if not 'colors' in data:
             return {"colors":  "miss in data"}
         if not isinstance(data['colors'], str):
             return {'colors': 'is not str type'}
 
-        if not 'comment' in data and not data['comment'] is None:
-            return {"comment":  "miss in data"}
-        if not isinstance(data['comment'], str):
+        if not 'comment' in data:
+            return {'comment':  "miss in data"}
+        if not isinstance(data['comment'], str) and not data['comment'] is None:
             return {'comment': 'is not str type'}
         
         if not 'price' in data:

@@ -6,7 +6,10 @@ from sqlalchemy.orm import Session
 
 from app.products.models import DB_product
 
-from app.products.validator import validate_product, validate_id_product
+from app.products.validator import (
+    validate_product,
+    validate_id_product,
+    validate_article_product)
 
 from app import engine
 from .. import api
@@ -24,15 +27,15 @@ def edit_product(id_product):
     except ValueError:
         logger.error('format json is not correct')
         return jsonify({'json': 'format is not correct'}), 400
-    logger.info(f'Data for create new product: {data}')
-    error = validate_id_product(id_product)
-    if error:
-        logger.error(f'{error}')
-        return jsonify(error), 400
-    error = validate_product(data)
-    if error:
-        logger.error(f'{error}')
-        return jsonify(error), 400
+    # logger.info(f'Data for create new product: {data}')
+    error_id = validate_id_product(id_product)
+    if error_id:
+        logger.error(f'{error_id}')
+        return jsonify(error_id), 400
+    error_product = validate_product(data)
+    if error_product:
+        logger.error(f'{error_product}')
+        return jsonify(error_product), 400
 
     try:
         with Session(engine) as session:

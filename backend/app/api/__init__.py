@@ -45,3 +45,5 @@ from app.api.clients_and_products import (
 from app.api.ganeral import (
     autofill,
     pin_pong)
+
+from app.api import errors

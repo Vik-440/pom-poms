@@ -5,7 +5,9 @@ from sqlalchemy.orm import Session
 
 from app.products.models import DB_product
 
-from app.products.validator import validate_product
+from app.products.validator import (
+    validate_product,
+    validate_article_product)
 
 from app import engine
 from .. import api
@@ -23,10 +25,14 @@ def create_product():
     except ValueError:
         logger.error('format json is not correct')
         return jsonify({'json': 'format is not correct'}), 400
-    error = validate_product(data)
-    if error:
-        logger.error(f'{error}')
-        return jsonify(error), 400
+    error_article = validate_article_product(data)
+    if error_article:
+        logger.error(f'{error_article}')
+        return jsonify(error_article), 400
+    error_product = validate_product(data)
+    if error_product:
+        logger.error(f'{error_product}')
+        return jsonify(error_product), 400
 
     # print(data)
     with Session(engine) as session:
