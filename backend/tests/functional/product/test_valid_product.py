@@ -19,7 +19,7 @@ def test_create_product_1(app_fixture):
     "comment": 'some informations',
     "colors": "Червоний + Золотий"}
     headers = {'Content-Type': 'application/json'}
-    response = client.post('/create_product', data=json.dumps(data), headers=headers)
+    response = client.post('/product', data=json.dumps(data), headers=headers)
     assert response.status_code == 200
     expected_data = {'id_product': 1}
     assert response.json == expected_data
@@ -42,7 +42,7 @@ def test_create_product_2(app_fixture):
     "comment": None,
     "colors": "Білий + Золотий"}
     headers = {'Content-Type': 'application/json'}
-    response = client.post('/create_product', data=json.dumps(data), headers=headers)
+    response = client.post('/product', data=json.dumps(data), headers=headers)
     assert response.status_code == 200
     expected_data = {'id_product': 2}
     assert response.json == expected_data
@@ -65,7 +65,7 @@ def test_create_product_3(app_fixture):
     "comment": None,
     "colors": "Білий + Червони + Золотий"}
     headers = {'Content-Type': 'application/json'}
-    response = client.post('/create_product', data=json.dumps(data), headers=headers)
+    response = client.post('/product', data=json.dumps(data), headers=headers)
     assert response.status_code == 200
     expected_data = {'id_product': 3}
     assert response.json == expected_data
@@ -75,7 +75,7 @@ def test_create_product_3(app_fixture):
 def test_read_product_1(app_fixture):
     client = app_fixture.test_client()
     headers = {'Content-Type': 'application/json'}
-    response = client.get('/read_product/3', headers=headers)
+    response = client.get('/product/3', headers=headers)
     assert response.status_code == 200
     expected_data = {
         'id_product': 3,
@@ -112,7 +112,7 @@ def test_edit_product(app_fixture):
     "comment": None,
     "colors": "Білий + Червони + Золотий"}
     headers = {'Content-Type': 'application/json'}
-    response = client.put('/edit_product/3', data=json.dumps(data), headers=headers)
+    response = client.put('/product/3', data=json.dumps(data), headers=headers)
     assert response.status_code == 200
     expected_data = {'edit_product': 3}
     assert response.json == expected_data
@@ -122,7 +122,7 @@ def test_edit_product(app_fixture):
 def test_read_product_2(app_fixture):
     client = app_fixture.test_client()
     headers = {'Content-Type': 'application/json'}
-    response = client.get('/read_product/3', headers=headers)
+    response = client.get('/product/3', headers=headers)
     assert response.status_code == 200
     expected_data = {
         'id_product': 3,

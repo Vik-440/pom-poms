@@ -10,11 +10,11 @@ class DB_outlay(Base):
     money_outlay = Column('money_outlay', Integer)
     comment = Column('comment_outlay', String)
 
-    def to_json(self):
-        outlay = {
-            'id_outlay': self.id_outlay,
-            'data_outlay': self.data_outlay,
-            'id_outlay_class': self.id_outlay_class,
-            'money_outlay': self.money_outlay,
-            'comment': self.comment}
-        return outlay
+    # def to_json(self):
+    #     outlay = {
+    #         'id_outlay': self.id_outlay,
+    #         'data_outlay': self.data_outlay,
+    #         'id_outlay_class': self.id_outlay_class,
+    #         'money_outlay': self.money_outlay,
+    #         'comment': self.comment}
+    #     return outlay

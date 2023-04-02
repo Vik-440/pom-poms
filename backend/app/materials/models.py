@@ -17,19 +17,19 @@ class DB_materials(Base):
     weight_10m = Column('weight_10m_color', Integer)
     comment = Column('comment_color', String)
 
-    def to_json(self):
-        material = {
-            'id_material': self.id_material,
-            'name': self.name,
-            'article': self.article,
-            'width': self.width,
-            'thickness': self.thickness,
-            'spool_qty': self.spool_qty,
-            'spool_weight': self.spool_weight,
-            'weight': self.weight,
-            'manufacturer': self.manufacturer,
-            'reserve': self.reserve,
-            'weight_10m': self.weight_10m,
-            'comment': self.comment}
-        return material
+    # def to_json(self):
+    #     material = {
+    #         'id_material': self.id_material,
+    #         'name': self.name,
+    #         'article': self.article,
+    #         'width': self.width,
+    #         'thickness': self.thickness,
+    #         'spool_qty': self.spool_qty,
+    #         'spool_weight': self.spool_weight,
+    #         'weight': self.weight,
+    #         'manufacturer': self.manufacturer,
+    #         'reserve': self.reserve,
+    #         'weight_10m': self.weight_10m,
+    #         'comment': self.comment}
+    #     return material
 
