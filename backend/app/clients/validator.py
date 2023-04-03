@@ -21,6 +21,17 @@ def validate_id_client(id_client: int):
     return
 
 
+def validate_number(data: dict):
+    """Validator number client"""
+    with Session(engine) as session:
+        stmt = (
+            select(DB_client.id_client)
+            .where(DB_client.phone == data['phone']))
+        if session.execute(stmt).first():
+            return {'phone': f'mobile number {data["phone"]} already exists'}
+    return
+
+
 def validate_client(data: dict):
     """Validator for create client"""
     with Session(engine) as session:
@@ -81,11 +92,11 @@ def validate_client(data: dict):
         if not isinstance(data['phone'], str):
             return {'phone': 'is not int type'}
         data['phone'] = re.sub(r'\D', '', data['phone'])
-        stmt = (
-            select(DB_client.id_client)
-            .where(DB_client.phone == data['phone']))
-        if session.execute(stmt).first():
-            return {'phone': f'mobile number {data["phone"]} already exists'}
+        # stmt = (
+        #     select(DB_client.id_client)
+        #     .where(DB_client.phone == data['phone']))
+        # if session.execute(stmt).first():
+        #     return {'phone': f'mobile number {data["phone"]} already exists'}
         
         if not 'zip_code' in data and not data['zip_code'] is None:
             return {'zip_code': 'miss in data'}

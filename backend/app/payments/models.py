@@ -11,11 +11,11 @@ class DB_payment(Base):
     method_payment = Column('metod_payment', String)
     data_payment = Column('data_payment', Date)
 
-    def to_json(self):
-        payment = {
-            'id_payment': self.id_payment,
-            'id_order': self.id_order,
-            'payment': self.payment,
-            'method_payment': self.method_payment,
-            'data_payment': self.data_payment}
-        return payment
+    # def to_json(self):
+    #     payment = {
+    #         'id_payment': self.id_payment,
+    #         'id_order': self.id_order,
+    #         'payment': self.payment,
+    #         'method_payment': self.method_payment,
+    #         'data_payment': self.data_payment}
+    #     return payment

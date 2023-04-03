@@ -7,20 +7,11 @@ from app.api.orders import (
     changing_status_order,
     changing_phase_produce)
 
-from app.api.order import(
-    create_order,
-    edit_order,
-    read_order)
+from app.api.order import order
 
-from app.api.client import(
-    create_client,
-    edit_client,
-    read_client)
+from app.api.client import client
 
-from app.api.product import(
-    create_product,
-    edit_product,
-    read_product)
+from app.api.product import product
 
 from app.api.materials import extract_materials_data
 
@@ -42,5 +33,8 @@ from app.api.outlays import (
 from app.api.clients_and_products import (
     all_routs_clients_products)
 
-from app.api.ganeral import (
-    autofill)
+from app.api.general import (
+    autofill,
+    pin_pong)
+
+from app.api import errors

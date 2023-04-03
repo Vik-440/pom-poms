@@ -10,10 +10,6 @@ from app import engine
 def validate_id_product(id_product: int):
     """Validator for ID product number"""
     with Session(engine) as session:
-        if not id_product:
-            return {'id_product': 'miss in data'}
-        if not isinstance(id_product, int):
-            return {'id_product': 'is not int type'}
         stmt = (
             select(DB_product.id_product)
             .where(DB_product.id_product == id_product))
@@ -22,10 +18,20 @@ def validate_id_product(id_product: int):
     return
 
 
+def validate_article_product(data: dict):
+    """Validator for article product"""
+    with Session(engine) as session:
+        stmt = (
+            select(DB_product.article)
+            .where(DB_product.article == data['article']))
+        if session.execute(stmt).first():
+            return {'article': f'article {data["article"]} already exists'}
+    return
+
+
 def validate_product(data: dict):
     """Validator for create product"""
     with Session(engine) as session:
-
         if not 'article' in data:
             return {"article":  "miss in data"}
         if not isinstance(data['article'], str):
@@ -34,20 +40,15 @@ def validate_product(data: dict):
         data['article'] = re.sub(r'A', 'А', data['article'])
         data['article'] = re.sub(r'B', 'В', data['article'])
         data['article'] = re.sub(r'C', 'С', data['article'])
-        stmt = (
-            select(DB_product.article)
-            .where(DB_product.article == data['article']))
-        if session.execute(stmt).first():
-            return {'article': f'article {data["article"]} already exists'}
 
         if not 'colors' in data:
             return {"colors":  "miss in data"}
         if not isinstance(data['colors'], str):
             return {'colors': 'is not str type'}
 
-        if not 'comment' in data and not data['comment'] is None:
-            return {"comment":  "miss in data"}
-        if not isinstance(data['comment'], str):
+        if not 'comment' in data:
+            return {'comment':  "miss in data"}
+        if not isinstance(data['comment'], str) and not data['comment'] is None:
             return {'comment': 'is not str type'}
         
         if not 'price' in data:
@@ -72,9 +73,11 @@ def validate_product(data: dict):
         if data['id_part_1'] > 100:
             data['id_part_1'] = 100
 
-        if 'id_color_2' in data and not data['id_color_2'] is None:
-            if not isinstance(data['id_color_2'], int):
-                return {'id_color_2': 'is not int type'}
+        if not 'id_color_2' in data:
+            return {'id_color_2': 'miss in data'}
+        if not isinstance(data['id_color_2'], int) and not data['id_color_2'] is None:
+            return {'id_color_2': 'is not int type'}
+        if not data['id_color_2'] is None:
             stmt = (
                 select(DB_materials.id_material)
                 .where(DB_materials.id_material == data['id_color_2']))
@@ -88,16 +91,17 @@ def validate_product(data: dict):
             if data['id_part_2'] > 100:
                 data['id_part_2'] = 100
         else:
-            data['id_color_2'] = None
             data['id_part_2'] = None
             data['id_color_3'] = None
             data['id_part_3'] = None
             data['id_color_4'] = None
             data['id_part_4'] = None
 
-        if 'id_color_3' in data and not data['id_color_3'] is None:
-            if not isinstance(data['id_color_3'], int):
-                return {'id_color_3': 'is not int type'}
+        if not 'id_color_3' in data:
+            return {'id_color_3': 'miss in data'}
+        if not isinstance(data['id_color_3'], int) and not data['id_color_3'] is None:
+            return {'id_color_3': 'is not int type'}
+        if not data['id_color_3'] is None:
             stmt = (
                 select(DB_materials.id_material)
                 .where(DB_materials.id_material == data['id_color_3']))
@@ -111,14 +115,15 @@ def validate_product(data: dict):
             if data['id_part_3'] > 100:
                 data['id_part_3'] = 100
         else:
-            data['id_color_3'] = None
             data['id_part_3'] = None
             data['id_color_4'] = None
             data['id_part_4'] = None
             
-        if 'id_color_4' in data and not data['id_color_4'] is None:
-            if not isinstance(data['id_color_4'], int):
-                return {'id_color_4': 'is not int type'}
+        if not 'id_color_4' in data:
+            return {'id_color_4': 'miss in data'}
+        if not isinstance(data['id_color_4'], int) and not data['id_color_4'] is None:
+            return {'id_color_4': 'is not int type'}
+        if not data['id_color_4'] is None:
             stmt = (
                 select(DB_materials.id_material)
                 .where(DB_materials.id_material == data['id_color_4']))
@@ -132,7 +137,6 @@ def validate_product(data: dict):
             if data['id_part_4'] > 100:
                 data['id_part_4'] = 100
         else:
-            data['id_color_4'] = None
             data['id_part_4'] = None
 
     return 

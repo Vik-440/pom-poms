@@ -25,3 +25,7 @@ def forbidden(message):
 @api.errorhandler(ValidationError)
 def validation_error(error):
     return bad_request(error.args[0])
+
+
+class DatabaseError(Exception):
+    pass

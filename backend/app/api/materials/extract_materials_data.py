@@ -1,13 +1,13 @@
 """Module for extract id_material about materials \
  This file wait refactoring in next stage"""
 
-from datetime import datetime
+# from datetime import datetime
 from flask import request, jsonify
-from sqlalchemy import func, select, update#, or_, and_, join, table
-from sqlalchemy.orm import Session, aliased
+from sqlalchemy import select, update#, func, or_, and_, join, table
+from sqlalchemy.orm import Session#, aliased
 
 from app.materials.models import DB_materials
-from app.materials.forms import MaterialForm
+# from app.materials.forms import MaterialForm
 from app import engine
 from .. import api
 from log.logger import logger

@@ -23,22 +23,22 @@ class DB_orders(Base):
     phase_2 = Column('phase_2', postgresql.ARRAY(Integer))
     phase_3 = Column('phase_3', postgresql.ARRAY(Integer))
 
-    def to_json(self):
-        order = {
-            'id_order': self.id_order,
-            'date_create': self.date_create,
-            'date_plane_send': self.date_plane_send,
-            'id_client': self.id_client,
-            'id_recipient': self.id_recipient,
-            'status_order': self.status_order,
-            'sum_payment': self.sum_payment,
-            'discont': self.discount,
-            'comment': self.comment,
-            'id_models': self.id_models,
-            'qty_pars': self.qty_pars,
-            'price_model_sell': self.price_model_sell,
-            'phase_1': self.phase_1,
-            'phase_2': self.phase_2,
-            'phase_3': self.phase_3}
-        return order
+    # def to_json(self):
+    #     order = {
+    #         'id_order': self.id_order,
+    #         'date_create': self.date_create,
+    #         'date_plane_send': self.date_plane_send,
+    #         'id_client': self.id_client,
+    #         'id_recipient': self.id_recipient,
+    #         'status_order': self.status_order,
+    #         'sum_payment': self.sum_payment,
+    #         'discont': self.discount,
+    #         'comment': self.comment,
+    #         'id_models': self.id_models,
+    #         'qty_pars': self.qty_pars,
+    #         'price_model_sell': self.price_model_sell,
+    #         'phase_1': self.phase_1,
+    #         'phase_2': self.phase_2,
+    #         'phase_3': self.phase_3}
+    #     return order
     
