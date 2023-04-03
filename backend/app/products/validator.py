@@ -10,10 +10,6 @@ from app import engine
 def validate_id_product(id_product: int):
     """Validator for ID product number"""
     with Session(engine) as session:
-        if not id_product:
-            return {'id_product': 'miss in data'} # need testing
-        if not isinstance(id_product, int):
-            return {'id_product': 'is not int type'} # need testing
         stmt = (
             select(DB_product.id_product)
             .where(DB_product.id_product == id_product))

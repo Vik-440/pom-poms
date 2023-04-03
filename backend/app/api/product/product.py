@@ -3,8 +3,10 @@
 from flask import request, jsonify
 from sqlalchemy.orm import Session
 from sqlalchemy import update, select
+from werkzeug.exceptions import BadRequest
 
 from app.products.models import DB_product
+from app.api.errors import DatabaseError
 
 from app.products.validator import (
     validate_product,
@@ -22,11 +24,11 @@ from flasgger import swag_from
 @swag_from('/docs/post_product.yml')
 def create_product():
     """Creating new product"""
-    # try:
-    data = request.get_json()
-    # except ValueError:
-    #     logger.error('format json is not correct')
-    #     return jsonify({'json': 'format is not correct'}), 400
+    try:
+        data = request.get_json(force=True)
+    except BadRequest:
+        logger.error('/product(POST) - format json is not correct')
+        return jsonify({'json': 'format is not correct'}), 400
     error_article = validate_article_product(data)
     if error_article:
         logger.error(f'{error_article}')
@@ -36,37 +38,39 @@ def create_product():
         logger.error(f'{error_product}')
         return jsonify(error_product), 400
 
-    # print(data)
-    with Session(engine) as session:
-        stmt = DB_product(
-            article=data['article'],
-            colors=data['colors'],
-            price=data['price'],
-            id_color_1=data['id_color_1'],
-            id_part_1=data['id_part_1'],
-            id_color_2=data['id_color_2'],
-            id_part_2=data['id_part_2'],
-            id_color_3=data['id_color_3'],
-            id_part_3=data['id_part_3'],
-            id_color_4=data['id_color_4'],
-            id_part_4=data['id_part_4'],
-            comment=data['comment'])
-        session.add(stmt)
-        session.commit()
-        session.refresh(stmt)
-        # try:
-        id_product = stmt.id_product
-        return jsonify({"id_product": id_product}), 200
-        # except:
-        #     logger.error('id_product: error in save order to DB')
-        #     return  jsonify({"id_product": 'error in save order to DB'}), 400
+    try:
+        with Session(engine) as session:
+            stmt = DB_product(
+                article=data['article'],
+                colors=data['colors'],
+                price=data['price'],
+                id_color_1=data['id_color_1'],
+                id_part_1=data['id_part_1'],
+                id_color_2=data['id_color_2'],
+                id_part_2=data['id_part_2'],
+                id_color_3=data['id_color_3'],
+                id_part_3=data['id_part_3'],
+                id_color_4=data['id_color_4'],
+                id_part_4=data['id_part_4'],
+                comment=data['comment'])
+            session.add(stmt)
+            session.commit()
+            session.refresh(stmt)
+            id_product = stmt.id_product
+            return jsonify({"id_product": id_product}), 200
+    except DatabaseError:
+        logger.error('id_product: error in save order to DB')
+        return  jsonify({"id_product": 'error in save order to DB'}), 400
 
 
 @api.route('/product/<int:id_product>', methods=['GET'])
 @swag_from('/docs/get_product.yml')
 def read_product(id_product):
     """Read product"""
-
+    error_id = validate_id_product(id_product)
+    if error_id:
+        logger.error(f'{error_id}')
+        return jsonify(error_id), 400
     # if id_product is None:
     #     return jsonify({'read_product': 'id_product is missing'}), 400
     with Session(engine) as session:
@@ -110,12 +114,11 @@ def read_product(id_product):
 @swag_from('/docs/put_product.yml')
 def edit_product(id_product):
     """Edit product"""
-    # try:
-    data = request.get_json()
-    # except ValueError:
-    #     logger.error('format json is not correct')
-    #     return jsonify({'json': 'format is not correct'}), 400
-    # logger.info(f'Data for create new product: {data}')
+    try:
+        data = request.get_json(force=True)
+    except BadRequest:
+        logger.error('/product(PUT) - format json is not correct')
+        return jsonify({'json': 'format is not correct'}), 400
     error_id = validate_id_product(id_product)
     if error_id:
         logger.error(f'{error_id}')

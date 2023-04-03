@@ -34,7 +34,7 @@ def getting_filter_clients(args: dict) -> list:
                 'id_client': DB_client.id_client,
                 'team': DB_client.team,
                 'coach': DB_client.coach,
-                'sity': DB_client.city}
+                'city': DB_client.city}
     id_orders_client = []
     with Session(engine) as session:
         for key, value in filters_clients.items():
