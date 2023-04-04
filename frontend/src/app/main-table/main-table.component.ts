@@ -136,7 +136,7 @@ export class MainTableComponent implements OnInit {
 
   openFilterMenu(content: TemplateRef<any>) {
     this.isShowFilter = true;
-    this.offcanvasService.open(content, { position: 'end' });
+    this.offcanvasService.open(content, { position: 'top' });
   }
 
   closeFilterMenu() {
