@@ -2,7 +2,6 @@ import pytest
 from flask import json
 
 
-
 @pytest.mark.run(order=220010)
 def test_read_product_withot_id_product(app_fixture):
     client = app_fixture.test_client()
@@ -30,7 +29,6 @@ def test_read_unrial_id_product(app_fixture):
     response = client.get('/product/5', headers=headers)
     assert response.status_code == 400
     expected_data = {'id_product': 'ID product 5 is invalid'}
-    # {'read_product': 'ID product is not exist'}
     assert response.json == expected_data
 
 
@@ -1075,40 +1073,3 @@ def test_create_product_only_3_mateials(app_fixture):
     "colors": 'Золотий'}
     assert response.json == expected_data
 
-
-
-
-# from sqlalchemy.orm import Session
-# import sqlalchemy
-# from app.products.models import DB_product
-# from app.api.errors import DatabaseError
-# from contextlib import contextmanager
-# from app import engine
-# from unittest import mock
-
-# class FailingSession(Session):
-#     def commit(self):
-#         raise sqlalchemy.exc.OperationalError("Database connection error")
-
-
-# @pytest.mark.run(order=220430)
-# def test_bad_connect_to_DB(app_fixture, mocker):
-#     client = app_fixture.test_client()
-#     data = {
-#     "article": '190-03026',
-#     "id_color_1": 3,
-#     "id_part_1": 100,
-#     "id_color_2": None,
-#     "id_part_2": None,
-#     "id_color_3": None,
-#     "id_part_3": None,
-#     "id_color_4": None,
-#     "id_part_4": None,
-#     "price": 400,
-#     "comment": None,
-#     "colors": 'Золотий'}
-#     headers = {'Content-Type': 'application/json'}
-#     response = client.post('/product', data=json.dumps(data), headers=headers)
-#     assert response.status_code == 400
-#     expected_data = {"id_product": 'error in save order to DB'}
-#     assert response.json == expected_data

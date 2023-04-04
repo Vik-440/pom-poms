@@ -92,7 +92,6 @@ def test_read_product_1(app_fixture):
         'id_part_4': None,
         'price': 400}
     assert response.json == expected_data
-    # print(response.json)
 
 
 @pytest.mark.run(order=200050)
@@ -117,11 +116,6 @@ def test_edit_product(app_fixture):
     expected_data = {'edit_product': 3}
     assert response.json == expected_data
 
-
-@pytest.mark.run(order=200060)
-def test_read_product_2(app_fixture):
-    client = app_fixture.test_client()
-    headers = {'Content-Type': 'application/json'}
     response = client.get('/product/3', headers=headers)
     assert response.status_code == 200
     expected_data = {

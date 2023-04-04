@@ -59,6 +59,7 @@ def create_product():
             id_product = stmt.id_product
             return jsonify({"id_product": id_product}), 200
     except DatabaseError:
+        print('error')
         logger.error('id_product: error in save order to DB')
         return  jsonify({"id_product": 'error in save order to DB'}), 400
 
