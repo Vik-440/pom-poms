@@ -1,0 +1,100 @@
+<div class="data-customer" [formGroup]="clientForm">
+  <div class="datacustomer--select data-customer-item data-customer--phone">
+    <ng-select [clearSearchOnAdd]="false" appearance="outline" [items]="clientDataItems" type="text" [addTag]="true"
+      [hideSelected]="true" placeholder="телефон*" addTagText="+ новий номер телефону" formControlName="phone"
+      bindLabel="phone"
+
+      (search)="changeClientInfo($event.term, 'phone')" (change)="selectItem($event)">
+    </ng-select>
+    <i *ngIf="clientForm.controls.phone.errors?.message" [ngbTooltip]="clientForm.controls.phone.errors.message"
+      class="invalid bi bi-exclamation-circle"></i>
+  </div>
+
+  <div class="data-customer-item datacustomer--select data-customer--lastname">
+    <ng-select [clearSearchOnAdd]="false" appearance="outline" [items]="clientDataItems" [addTag]="true"
+      [hideSelected]="true" bindLabel="secondName" placeholder="прізвище*" addTagText="+ прізвище"
+      formControlName="second_name" (search)="changeClientInfo($event.term, 'second_name')"
+      (change)="selectItem($event)">
+    </ng-select>
+    <i *ngIf="clientForm.controls.second_name.errors?.message"
+      [ngbTooltip]="clientForm.controls.second_name.errors.message" class="invalid bi bi-exclamation-circle"></i>
+  </div>
+
+  <div class="data-customer-item data-customer--firstname">
+    <input class="data-customer-item data-customer--firstname" type="text" placeholder="ім'я*"
+      formControlName="first_name">
+    <i *ngIf="clientForm.controls.first_name.errors?.message"
+      [ngbTooltip]="clientForm.controls.first_name.errors.message" class="invalid bi bi-exclamation-circle"></i>
+  </div>
+
+  <div class="data-customer-item datacustomer--select data-customer--city">
+    <ng-select [clearSearchOnAdd]="false" appearance="outline" [items]="clientDataItems" type="text" [addTag]="true"
+      [hideSelected]="true" placeholder="місто*" addTagText="+ місто" formControlName="city"
+      (search)="changeClientInfo($event.term, 'city')" (change)="clearDataClient()">
+    </ng-select>
+    <i *ngIf="clientForm.controls.city.errors?.message" [ngbTooltip]="clientForm.controls.city.errors.message"
+      class="invalid bi bi-exclamation-circle">
+    </i>
+  </div>
+
+  <div class="data-customer-item data-customer--post">
+    <input type="number" placeholder="№ НП*" formControlName="np_number">
+    <i *ngIf="clientForm.controls.np_number.errors?.message" [ngbTooltip]="clientForm.controls.np_number.errors.message"
+      class="invalid bi bi-exclamation-circle">
+    </i>
+  </div>
+
+  <div class="data-customer-item data-customer--surname">
+    <input class="data-customer-item data-customer--surname" type="text" placeholder="по-батькові"
+      formControlName="surname">
+    <i *ngIf="clientForm.controls.surname.errors?.message" [ngbTooltip]="clientForm.controls.surname.errors.message"
+      class="invalid bi bi-exclamation-circle">
+    </i>
+  </div>
+
+  <div class="data-customer-item data-customer--index">
+    <input type="number" placeholder="індекс" formControlName="zip_code">
+    <i *ngIf="clientForm.controls.zip_code.errors?.message" [ngbTooltip]="clientForm.controls.zip_code.errors.message"
+      class="invalid bi bi-exclamation-circle">
+    </i>
+  </div>
+
+  <div class="data-customer-item data-customer--address">
+    <input type="text" placeholder="адреса" formControlName="address">
+    <i *ngIf="clientForm.controls.address.errors?.message" [ngbTooltip]="clientForm.controls.address.errors.message"
+      class="invalid bi bi-exclamation-circle">
+    </i>
+  </div>
+
+  <div class="data-customer-item datacustomer--select data-customer--team">
+    <ng-select [clearSearchOnAdd]="false" appearance="outline" [items]="clientDataItems" type="text" [addTag]="true"
+      [hideSelected]="true" placeholder="команда" addTagText="+ команда" formControlName="team"
+      (search)="changeClientInfo($event.term,'team')" (change)="clearDataClient()">
+    </ng-select>
+    <i *ngIf="clientForm.controls.team.errors?.message" [ngbTooltip]="clientForm.controls.team.errors.message"
+      class="invalid bi bi-exclamation-circle">
+    </i>
+  </div>
+
+  <div *ngIf="isClient" class="data-customer-item datacustomer--select data-customer--coach">
+    <ng-select [clearSearchOnAdd]="false" appearance="outline" [items]="clientDataItems" type="text" [addTag]="true"
+      [hideSelected]="true" placeholder="тренер" addTagText="+ тренер" formControlName="coach"
+      (search)="changeClientInfo($event.term, 'coach')" (change)="clearDataClient()">
+    </ng-select>
+    {{clientForm.controls.coach.errors}}
+    <i *ngIf="clientForm.controls.coach.errors?.message" [ngbTooltip]="clientForm.controls.coach.errors.message"
+      class="invalid bi bi-exclamation-circle">
+    </i>
+  </div>
+  <div class="data-customer-item data-customer--comment-client">
+    <input type="text" formControlName="comment" placeholder="коментар до клієнта">
+    <i *ngIf="clientForm.controls.comment.errors?.message" [ngbTooltip]="clientForm.controls.comment.errors.message"
+      class="invalid bi bi-exclamation-circle">
+    </i>
+  </div>
+  <button *ngIf="isNewForm && !isShowOk" [disabled]="clientForm.invalid" class="data-customer-item data-customer--btn action-btn" (click)="saveForm(true)">Зберегти</button>
+  <button *ngIf="!isNewForm && !isShowOk" [disabled]="clientForm.invalid" class="data-customer-item data-customer--btn action-btn edit-btn" (click)="saveForm(false)">Редагувати</button>
+  <button class="data-customer-item data-customer--btn action-btn ok" *ngIf="isShowOk">
+    <img class="next-icon icon" src="./assets/img/icons/ok-btn.svg" />
+  </button>
+</div>

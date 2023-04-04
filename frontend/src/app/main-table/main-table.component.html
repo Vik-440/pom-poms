@@ -6,6 +6,10 @@
         <p class="info--title">Черга: {{ getFulfilledOrder() }}</p>
       </div>
       <div>
+        <input type="number" class="speed" placeholder="additional" max="10" min="1" [(ngModel)]="additionalNumber"
+          (ngModelChange)="changeSpeed()">
+      </div>
+      <div>
         <input type="number" class="speed" placeholder="speed" max="10" min="1" [(ngModel)]="speed"
           (ngModelChange)="changeSpeed()">
       </div>
@@ -35,7 +39,7 @@
         </th>
         <th scope="col" sortable="money" class="money">Сума, грн</th>
         <th scope="col" sortable="money" class="phone">№ телефону</th>
-        <th class="sity" scope="col" sortable="sity">Місто</th>
+        <th class="city" scope="col" sortable="sity">Місто</th>
         <th scope="col" sortable="data_plane_order" class="data_plane">Дата прогноз</th>
         <th scope="col" sortable="fulfilled_order" class="done">OK</th>
       </tr>
@@ -74,8 +78,7 @@
                 *ngFor="let item of order.phase_1; let j = index" [class.green]="item === 0">
                 <input (clickOutside)="clickOutsidePhaseMultiply(j, 'phase_1', order, 'phase_1'+ i + j)" type="number"
                   [value]="item" [id]="'phase_1'+ i + j" class="phase-input"
-                  (click)="changePhases('phase_1', $event, item)" 
-                  (change)="changePhases('phase_1', $event, item)"
+                  (click)="changePhases('phase_1', $event, item)" (change)="changePhases('phase_1', $event, item)"
                   (keyup.enter)="sendPhases(order, j, 'phase_1', $event, item)">
               </div>
             </td>
@@ -84,8 +87,7 @@
                 *ngFor="let item of order.phase_2; let j = index" [class.green]="item === 0">
                 <input (clickOutside)="clickOutsidePhaseMultiply(j, 'phase_2', order, 'phase_2'+ i + j)" type="number"
                   [value]="item" [id]="'phase_2'+ i + j" class="phase-input"
-                  (click)="changePhases( 'phase_2', $event, item)" 
-                  (change)="changePhases('phase_2', $event, item)"
+                  (click)="changePhases( 'phase_2', $event, item)" (change)="changePhases('phase_2', $event, item)"
                   (keyup.enter)="sendPhases(order, j, 'phase_2', $event, item)">
               </div>
             </td>
@@ -94,8 +96,7 @@
                 *ngFor="let item of order.phase_3; let j = index" [class.green]="item === 0">
                 <input (clickOutside)="clickOutsidePhaseMultiply(j, 'phase_3', order, 'phase_3'+ i + j)" type="number"
                   [value]="item" [id]="'phase_3'+ i + j" class="phase-input"
-                  (click)="changePhases('phase_3', $event, item)"
-                  (change)="changePhases('phase_3', $event, item)"
+                  (click)="changePhases('phase_3', $event, item)" (change)="changePhases('phase_3', $event, item)"
                   (keyup.enter)="sendPhases(order, j, 'phase_3', $event, item)">
               </div>
             </td>
@@ -117,21 +118,18 @@
             </td>
             <td [class.green]="order.phase_1 === 0">
               <input (clickOutside)="clickOutsidePhaseSingle(i, 'phase_1', order, phase1)" type="number"
-                [(value)]="order.phase_1" class="phase-input"  #phase1
-                (click)="changePhase(order, 'phase_1', $event)" (change)="changePhase(order, 'phase_1', $event)"
-                (keyup.enter)="sendPhase(order, 'phase_1', $event)">
+                [(value)]="order.phase_1" class="phase-input" #phase1 (click)="changePhase(order, 'phase_1', $event)"
+                (change)="changePhase(order, 'phase_1', $event)" (keyup.enter)="sendPhase(order, 'phase_1', $event)">
             </td>
             <td [class.green]="order.phase_2 === 0">
               <input type="number" (clickOutside)="clickOutsidePhaseSingle(i, 'phase_2', order, phase2)"
-                [(value)]="order.phase_2" class="phase-input"  #phase2
-                (click)="changePhase(order, 'phase_2', $event)" (change)="changePhase(order, 'phase_2', $event)"
-                (keyup.enter)="sendPhase(order, 'phase_2', $event)">
+                [(value)]="order.phase_2" class="phase-input" #phase2 (click)="changePhase(order, 'phase_2', $event)"
+                (change)="changePhase(order, 'phase_2', $event)" (keyup.enter)="sendPhase(order, 'phase_2', $event)">
             </td>
             <td [class.green]="order.phase_3 === 0">
               <input type="number" (clickOutside)="clickOutsidePhaseSingle(i, 'phase_3', order, phase3)"
-                [(value)]="order.phase_3" class="phase-input"  #phase3
-                (click)="changePhase(order, 'phase_3', $event)" (change)="changePhase(order, 'phase_3', $event)"
-                (keyup.enter)="sendPhase(order, 'phase_3', $event)">
+                [(value)]="order.phase_3" class="phase-input" #phase3 (click)="changePhase(order, 'phase_3', $event)"
+                (change)="changePhase(order, 'phase_3', $event)" (keyup.enter)="sendPhase(order, 'phase_3', $event)">
             </td>
           </ng-template>
 
@@ -167,7 +165,7 @@
 
 <div *ngIf="isShowSpinner" class="d-flex justify-content-center spinner-wrapper">
   <div class="spinner-border spinner-border-sm" role="status" aria-hidden="true">
-  </div>  
+  </div>
 </div>
 
 <ng-template #content let-offcanvas>
@@ -181,119 +179,76 @@
         <div class="filters-data">
           <div class="filters-data--title">дата від</div>
           <input class="filters-data--datapicker" placeholder="yyyy-mm-dd" (click)="calendarDataStart.toggle()"
-            [minDate]="{year: 2016, month: 1, day: 1}"
-            [maxDate]="filtersForm.value.dataEnd"
-            formControlName="dataStart" ngbDatepicker #calendarDataStart="ngbDatepicker">
-            <button class="filters-data--datapicker-remove" (click)="removeData('dataStart')">&#10005;</button>
+            [minDate]="{year: 2016, month: 1, day: 1}" [maxDate]="filtersForm.value.dataEnd" formControlName="dataStart"
+            ngbDatepicker #calendarDataStart="ngbDatepicker">
+          <button class="filters-data--datapicker-remove" (click)="removeData('dataStart')">&#10005;</button>
         </div>
         <div class="filters-data">
           <div class="filters-data--title">дата до</div>
           <input class="filters-data--datapicker" placeholder="yyyy-mm-dd" (click)="calendarDataEnd.toggle()"
-            [minDate]="filtersForm.value.dataStart"
-            formControlName="dataEnd" ngbDatepicker #calendarDataEnd="ngbDatepicker">
-            <button class="filters-data--datapicker-remove" (click)="removeData('dataEnd')">&#10005;</button>
+            [minDate]="filtersForm.value.dataStart" formControlName="dataEnd" ngbDatepicker
+            #calendarDataEnd="ngbDatepicker">
+          <button class="filters-data--datapicker-remove" (click)="removeData('dataEnd')">&#10005;</button>
         </div>
       </div>
       <div class="filters-data">
         <div class="filters-data--title"> Готовність</div>
-        <ng-select 
-          formControlName="fulfilled"
-          bindLabel="name"
-          class="done" 
-          bindValue="value" 
-          [clearable]="false"
+        <ng-select formControlName="fulfilled" bindLabel="name" class="done" bindValue="value" [clearable]="false"
           [items]="fulfilledOrderItems"></ng-select>
       </div>
       <div class="outline"></div>
-      <div class="filters-data" [class.disabled]="filtersForm.value.id_client || filtersForm.value.team || filtersForm.value.city || filtersForm.value.coach">
+      <div class="filters-data"
+        [class.disabled]="filtersForm.value.id_client || filtersForm.value.team || filtersForm.value.city || filtersForm.value.coach">
         <div class="filters-data--title">№ телефону</div>
-        <ng-select 
-          [clearOnBackspace]="false" 
-          notFoundText="No phone founded"
-          (search)="changeFiled($event, 'ur_phone', 4, 'phone_client')" 
-          type="number" 
-          (change)="clearFilterData()"
-          formControlName="phone_client" 
-          [items]="dataFilters" ></ng-select>
+        <ng-select [clearOnBackspace]="false" notFoundText="No phone founded"
+          (search)="changeFiled($event, 'ur_phone', 4, 'phone_client')" type="number" (change)="clearFilterData()"
+          formControlName="phone_client" [items]="dataFilters"></ng-select>
       </div>
-      <div class="filters-data" [class.disabled]="filtersForm.value.phone_client || filtersForm.value.team || filtersForm.value.city || filtersForm.value.coach">
+      <div class="filters-data"
+        [class.disabled]="filtersForm.value.phone_client || filtersForm.value.team || filtersForm.value.city || filtersForm.value.coach">
         <div class="filters-data--title">Прізвище клієнта</div>
-        <ng-select 
-          [clearOnBackspace]="false" 
-          notFoundText="No second name founded"
-          (search)="changeFiled($event, 'ur_second_name', 3)" 
-          type="number" 
-          bindLabel="secondName"
-          bindValue="id"
-          (change)="clearFilterData()"
-          formControlName="id_client" 
-          [items]="dataFilters" ></ng-select>
+        <ng-select [clearOnBackspace]="false" notFoundText="No second name founded"
+          (search)="changeFiled($event, 'ur_second_name', 3)" type="number" bindLabel="secondName" bindValue="id"
+          (change)="clearFilterData()" formControlName="id_client" [items]="dataFilters"></ng-select>
       </div>
-      <div class="filters-data" [class.disabled]="filtersForm.value.phone_client || filtersForm.value.coach || filtersForm.value.city || filtersForm.value.id_client">
+      <div class="filters-data"
+        [class.disabled]="filtersForm.value.phone_client || filtersForm.value.coach || filtersForm.value.city || filtersForm.value.id_client">
         <div class="filters-data--title">Команда</div>
-        <ng-select 
-          [clearOnBackspace]="false" 
-          notFoundText="No phone founded"
-          (search)="changeFiled($event, 'ur_team', 3, 'name_team')" 
-          type="number" 
-          formControlName="team" 
-          (change)="clearFilterData()"
-          [items]="dataFilters" ></ng-select>
+        <ng-select [clearOnBackspace]="false" notFoundText="No phone founded"
+          (search)="changeFiled($event, 'ur_team', 3, 'name_team')" type="number" formControlName="team"
+          (change)="clearFilterData()" [items]="dataFilters"></ng-select>
       </div>
-      <div class="filters-data" [class.disabled]="filtersForm.value.phone_client || filtersForm.value.team || filtersForm.value.coach || filtersForm.value.id_client">
+      <div class="filters-data"
+        [class.disabled]="filtersForm.value.phone_client || filtersForm.value.team || filtersForm.value.coach || filtersForm.value.id_client">
         <div class="filters-data--title">Місто</div>
-        <ng-select 
-          [clearOnBackspace]="false" 
-          notFoundText="No phone founded"
-          (search)="changeFiled($event, 'ur_sity', 3, 'sity')" 
-          type="number" 
-          (change)="clearFilterData()"
-          formControlName="city" 
-          [items]="dataFilters" ></ng-select>
+        <ng-select [clearOnBackspace]="false" notFoundText="No phone founded"
+          (search)="changeFiled($event, 'ur_sity', 3, 'sity')" type="number" (change)="clearFilterData()"
+          formControlName="city" [items]="dataFilters"></ng-select>
       </div>
-      <div class="filters-data" [class.disabled]="filtersForm.value.phone_client || filtersForm.value.team || filtersForm.value.city || filtersForm.value.id_client">
+      <div class="filters-data"
+        [class.disabled]="filtersForm.value.phone_client || filtersForm.value.team || filtersForm.value.city || filtersForm.value.id_client">
         <div class="filters-data--title">Тренер</div>
-        <ng-select 
-          [clearOnBackspace]="false" 
-          notFoundText="No phone founded"
-          (search)="changeFiled($event, 'ur_coach', 3, 'name_coach')" 
-          type="number" 
-          (change)="clearFilterData()"
-          formControlName="coach" 
-          [items]="dataFilters" ></ng-select>
+        <ng-select [clearOnBackspace]="false" notFoundText="No phone founded"
+          (search)="changeFiled($event, 'ur_coach', 3, 'name_coach')" type="number" (change)="clearFilterData()"
+          formControlName="coach" [items]="dataFilters"></ng-select>
       </div>
       <div class="outline"></div>
-      <div class="filters-data" [class.disabled]="filtersForm.value.kod_model_like || filtersForm.value.kolor_model_like">
+      <div class="filters-data"
+        [class.disabled]="filtersForm.value.kod_model_like || filtersForm.value.kolor_model_like">
         <div class="filters-data--title">Код моделі</div>
-        <ng-select 
-          [clearOnBackspace]="false" 
-          notFoundText="No phone founded"
-          (search)="changeFiled($event, 'ur_kod', 3, 'kod_model')" 
-          type="number" 
-          formControlName="kod_model" 
-          [items]="dataFilters" ></ng-select>
+        <ng-select [clearOnBackspace]="false" notFoundText="No phone founded"
+          (search)="changeFiled($event, 'ur_kod', 3, 'kod_model')" type="number" formControlName="kod_model"
+          [items]="dataFilters"></ng-select>
       </div>
       <div class="filters-data" [class.disabled]="filtersForm.value.kod_model || filtersForm.value.kolor_model_like">
         <div class="filters-data--title">Збіг у коді моделі</div>
-        <input 
-          [clearOnBackspace]="false" 
-          notFoundText="No phone founded"
-          (search)="changeFiled($event)" 
-          type="text" 
-          class="filters-data--input"
-          formControlName="kod_model_like" 
-          [items]="dataFilters" >
+        <input [clearOnBackspace]="false" notFoundText="No phone founded" (search)="changeFiled($event)" type="text"
+          class="filters-data--input" formControlName="kod_model_like" [items]="dataFilters">
       </div>
       <div class="filters-data" [class.disabled]="filtersForm.value.kod_model || filtersForm.value.kod_model_like">
         <div class="filters-data--title">Збіг у кольорі</div>
-        <input 
-          [clearOnBackspace]="false" 
-          notFoundText="No phone founded"
-          (search)="changeFiled($event)" 
-          type="text" 
-          class="filters-data--input"
-          formControlName="kolor_model_like" 
-          [items]="dataFilters" >
+        <input [clearOnBackspace]="false" notFoundText="No phone founded" (search)="changeFiled($event)" type="text"
+          class="filters-data--input" formControlName="kolor_model_like" [items]="dataFilters">
       </div>
     </div>
     <div class="filters-wrapper--footer">

@@ -16,6 +16,13 @@ export class CreateOrderService {
         return this.http.post(`http://127.0.0.1:5000/new_order`, params);
     }
 
+    getAutofill(params) {
+        return this.http.get(`http://127.0.0.1:5000/autofill`, {params});
+    }
+
+
+ 
+
     saveClient(params) {
         return this.http.post('http://127.0.0.1:5000/create_client/', params)
     }
