@@ -3,7 +3,7 @@ from flask import json
 
 
 @pytest.mark.run(order=320010)
-def test_read_klient_withot_id_product(app_fixture):
+def test_read_client_withot_id_product(app_fixture):
     client = app_fixture.test_client()
     headers = {'Content-Type': 'application/json'}
     response = client.get('/client', headers=headers)

@@ -11,15 +11,11 @@ from app import engine
 def validate_id_order(id_order: int):
     """Validator for ID order number"""
     with Session(engine) as session:
-        if not id_order:
-            return {'id_order': 'miss in data'}
-        if not isinstance(id_order, int):
-            return {'id_order': 'is not int type'}
         stmt = (
             select(DB_orders.id_order)
             .where(DB_orders.id_order == id_order))
         if not session.execute(stmt).first():
-            return {'id_order': f'ID order {id_order} is invalid'}
+            return {'id_order': f'ID order {id_order} is not exist'}
     return
 
 
@@ -30,34 +26,28 @@ def validate_create_order(data: dict):
     date_today = datetime.today().strftime('%Y-%m-%d')
     with Session(engine) as session:
 
-        if not 'comment' in data and not data['comment'] is None:
-            return {"comment":  "miss in data"}
-        if not isinstance(data['comment'], str):
-            return {'comment': 'is not str type'}
-
         if not 'date_create' in data:
             return {"date_create": 'miss in data'}
+        if not isinstance(data['date_create'], str):
+            return {'date_create': 'is not str type'}
         date_str = data['date_create']
         try:
             datetime.strptime(date_str, '%Y-%m-%d')
         except ValueError:
             return {"date_create": 'is not in format like: yyyy-mm-dd'}
         if data['date_create'] > date_today:
-            return {"date_create": 'is from future -> misstake'}
+            return {"date_create": 'date future -> misstake'}
 
         if not 'date_plane_send' in data:
             return {"date_plane_send": 'miss in data'}
+        if not isinstance(data['date_plane_send'], str):
+            return {'date_plane_send': 'is not str type'}
         date_str = data['date_plane_send']
         try:
             datetime.strptime(date_str, '%Y-%m-%d')
         except ValueError:
             return {"date_plane_send": 'is not in format like: yyyy-mm-dd'}
-
-        if not 'discount' in data:
-            return {'discount': 'miss in data'}
-        if not isinstance(data['discount'], int):
-            return {'discount': 'is not int type'}
-
+        
         if not 'id_client' in data:
             return {'id_client': 'miss in data'}
         if not isinstance(data['id_client'], int):
@@ -78,6 +68,26 @@ def validate_create_order(data: dict):
         if not session.execute(stmt).first():
             return {'id_recipient': 'ID is not real'}
 
+        if not 'status_order' in data:
+            return {'status_order': 'miss in data'}
+        if not isinstance(data['status_order'], bool):
+            return {'status_order': 'is not bool type'}
+
+        if not 'sum_payment' in data:
+            return {'sum_payment': 'miss in data'}
+        if not isinstance(data['sum_payment'], int):
+            return {'sum_payment': 'is not int type'}
+
+        if not 'discount' in data:
+            return {'discount': 'miss in data'}
+        if not isinstance(data['discount'], int):
+            return {'discount': 'is not int type'}
+
+        if not 'comment' in data:
+            return {"comment":  "miss in data"}
+        if not isinstance(data['comment'], str) and not data['comment'] is None:
+            return {'comment': 'is not str or None type'}
+        
         if not 'id_models' in data:
             return {'id_models': 'miss in data'}
         if not isinstance(data['id_models'], list):
@@ -149,15 +159,5 @@ def validate_create_order(data: dict):
         for price_model_sell_item in data['price_model_sell']:
             if not isinstance(price_model_sell_item, int):
                 return {'price_model_sell': f'{price_model_sell_item} in price_model_sell is not int type'}
-
-        if not 'status_order' in data:
-            return {'status_order': 'miss in data'}
-        if not isinstance(data['status_order'], bool):
-            return {'status_order': 'is not bool type'}
-
-        if not 'sum_payment':
-            return {'sum_payment': 'miss in data'}
-        if not isinstance(data['sum_payment'], int):
-            return {'sum_payment': 'is not int type'}
 
     return 
