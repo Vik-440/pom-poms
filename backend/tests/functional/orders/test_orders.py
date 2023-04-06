@@ -1,7 +1,7 @@
 import pytest
 
 
-@pytest.mark.run(order=800010)
+@pytest.mark.run(order=700010)
 def test_get_main(app_fixture):
     client = app_fixture.test_client()
     response = client.get('/main')

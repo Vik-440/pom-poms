@@ -133,3 +133,336 @@ def test_edit_product(app_fixture):
         'id_part_4': None,
         'price': 430}
     assert response.json == expected_data
+
+
+@pytest.mark.run(order=200060)
+def test_create_product_not_correct_article(app_fixture):
+    client = app_fixture.test_client()
+    data = {
+    "article": "190-abc01",
+    "id_color_1": 1,
+    "id_part_1": 100,
+    "id_color_2": None,
+    "id_part_2": None,
+    "id_color_3": None,
+    "id_part_3": None,
+    "id_color_4": None,
+    "id_part_4": None,
+    "price": 400,
+    "comment": None,
+    "colors": "Білий"}
+    headers = {'Content-Type': 'application/json'}
+    response = client.post('/product', data=json.dumps(data), headers=headers)
+    assert response.status_code == 200
+    expected_data = {'id_product': 4}
+    assert response.json == expected_data
+
+    response = client.get('/product/4', headers=headers)
+    assert response.status_code == 200
+    expected_data = {
+        'id_product': 4,
+        'article': '190-АВС01',
+        'colors': 'Білий',
+        'comment': None,
+        'id_color_1': 1,
+        'id_color_2': None,
+        'id_color_3': None,
+        'id_color_4': None,
+        'id_part_1': 100,
+        'id_part_2': None,
+        'id_part_3': None,
+        'id_part_4': None,
+        'price': 400}
+    assert response.json == expected_data
+
+
+@pytest.mark.run(order=200070)
+def test_create_product_not_real_procent_id_part_1(app_fixture):
+    client = app_fixture.test_client()
+    data = {
+    "article": '190-03',
+    "id_color_1": 3,
+    "id_part_1": 333,
+    "id_color_2": None,
+    "id_part_2": None,
+    "id_color_3": None,
+    "id_part_3": None,
+    "id_color_4": None,
+    "id_part_4": None,
+    "price": 400,
+    "comment": None,
+    "colors": 'Золотий'}
+    headers = {'Content-Type': 'application/json'}
+    response = client.post('/product', data=json.dumps(data), headers=headers)
+    assert response.status_code == 200
+    expected_data = {'id_product': 5}
+    assert response.json == expected_data
+
+    response = client.get('/product/5', headers=headers)
+    assert response.status_code == 200
+    expected_data = {
+    'id_product': 5,
+    "article": '190-03',
+    "id_color_1": 3,
+    "id_part_1": 100,
+    "id_color_2": None,
+    "id_part_2": None,
+    "id_color_3": None,
+    "id_part_3": None,
+    "id_color_4": None,
+    "id_part_4": None,
+    "price": 400,
+    "comment": None,
+    "colors": 'Золотий'}
+    assert response.json == expected_data
+
+
+@pytest.mark.run(order=200080)
+def test_create_product_not_real_procent_id_part_2(app_fixture):
+    client = app_fixture.test_client()
+    data = {
+    "article": '190-03020',
+    "id_color_1": 3,
+    "id_part_1": 100,
+    "id_color_2": 2,
+    "id_part_2": 222,
+    "id_color_3": None,
+    "id_part_3": None,
+    "id_color_4": None,
+    "id_part_4": None,
+    "price": 400,
+    "comment": None,
+    "colors": 'Золотий'}
+    headers = {'Content-Type': 'application/json'}
+    response = client.post('/product', data=json.dumps(data), headers=headers)
+    assert response.status_code == 200
+    expected_data = {'id_product': 6}
+    assert response.json == expected_data
+
+    response = client.get('/product/6', headers=headers)
+    assert response.status_code == 200
+    expected_data = {
+    'id_product': 6,
+    "article": '190-03020',
+    "id_color_1": 3,
+    "id_part_1": 100,
+    "id_color_2": 2,
+    "id_part_2": 100,
+    "id_color_3": None,
+    "id_part_3": None,
+    "id_color_4": None,
+    "id_part_4": None,
+    "price": 400,
+    "comment": None,
+    "colors": 'Золотий'}
+    assert response.json == expected_data
+
+
+
+@pytest.mark.run(order=200090)
+def test_create_product_only_1_mateial(app_fixture):
+    client = app_fixture.test_client()
+    data = {
+    "article": '190-03021',
+    "id_color_1": 3,
+    "id_part_1": 100,
+    "id_color_2": None,
+    "id_part_2": 222,
+    "id_color_3": 222,
+    "id_part_3": 222,
+    "id_color_4": 222,
+    "id_part_4": 222,
+    "price": 400,
+    "comment": None,
+    "colors": 'Золотий'}
+    headers = {'Content-Type': 'application/json'}
+    response = client.post('/product', data=json.dumps(data), headers=headers)
+    assert response.status_code == 200
+    expected_data = {'id_product': 7}
+    assert response.json == expected_data
+
+    response = client.get('/product/7', headers=headers)
+    assert response.status_code == 200
+    expected_data = {
+    'id_product': 7,
+    "article": '190-03021',
+    "id_color_1": 3,
+    "id_part_1": 100,
+    "id_color_2": None,
+    "id_part_2": None,
+    "id_color_3": None,
+    "id_part_3": None,
+    "id_color_4": None,
+    "id_part_4": None,
+    "price": 400,
+    "comment": None,
+    "colors": 'Золотий'}
+    assert response.json == expected_data
+
+
+
+@pytest.mark.run(order=200100)
+def test_create_product_not_real_procent_id_part_3(app_fixture):
+    client = app_fixture.test_client()
+    data = {
+    "article": '190-03022',
+    "id_color_1": 3,
+    "id_part_1": 100,
+    "id_color_2": 2,
+    "id_part_2": 100,
+    "id_color_3": 1,
+    "id_part_3": 111,
+    "id_color_4": None,
+    "id_part_4": None,
+    "price": 400,
+    "comment": None,
+    "colors": 'Золотий'}
+    headers = {'Content-Type': 'application/json'}
+    response = client.post('/product', data=json.dumps(data), headers=headers)
+    assert response.status_code == 200
+    expected_data = {'id_product': 8}
+    assert response.json == expected_data
+
+    response = client.get('/product/8', headers=headers)
+    assert response.status_code == 200
+    expected_data = {
+    'id_product': 8,
+    "article": '190-03022',
+    "id_color_1": 3,
+    "id_part_1": 100,
+    "id_color_2": 2,
+    "id_part_2": 100,
+    "id_color_3": 1,
+    "id_part_3": 100,
+    "id_color_4": None,
+    "id_part_4": None,
+    "price": 400,
+    "comment": None,
+    "colors": 'Золотий'}
+    assert response.json == expected_data
+
+
+@pytest.mark.run(order=200110)
+def test_create_product_only_2_mateials(app_fixture):
+    client = app_fixture.test_client()
+    data = {
+    "article": '190-03023',
+    "id_color_1": 3,
+    "id_part_1": 100,
+    "id_color_2": 2,
+    "id_part_2": 100,
+    "id_color_3": None,
+    "id_part_3": 222,
+    "id_color_4": 222,
+    "id_part_4": 222,
+    "price": 400,
+    "comment": None,
+    "colors": 'Золотий'}
+    headers = {'Content-Type': 'application/json'}
+    response = client.post('/product', data=json.dumps(data), headers=headers)
+    assert response.status_code == 200
+    expected_data = {'id_product': 9}
+    assert response.json == expected_data
+
+    response = client.get('/product/9', headers=headers)
+    assert response.status_code == 200
+    expected_data = {
+    'id_product': 9,
+    "article": '190-03023',
+    "id_color_1": 3,
+    "id_part_1": 100,
+    "id_color_2": 2,
+    "id_part_2": 100,
+    "id_color_3": None,
+    "id_part_3": None,
+    "id_color_4": None,
+    "id_part_4": None,
+    "price": 400,
+    "comment": None,
+    "colors": 'Золотий'}
+    assert response.json == expected_data
+
+
+
+@pytest.mark.run(order=200120)
+def test_create_product_not_real_procent_id_part_4(app_fixture):
+    client = app_fixture.test_client()
+    data = {
+    "article": '190-03024',
+    "id_color_1": 3,
+    "id_part_1": 100,
+    "id_color_2": 2,
+    "id_part_2": 100,
+    "id_color_3": 1,
+    "id_part_3": 100,
+    "id_color_4": 1,
+    "id_part_4": 444,
+    "price": 400,
+    "comment": None,
+    "colors": 'Золотий'}
+    headers = {'Content-Type': 'application/json'}
+    response = client.post('/product', data=json.dumps(data), headers=headers)
+    assert response.status_code == 200
+    expected_data = {'id_product': 10}
+    assert response.json == expected_data
+
+    response = client.get('/product/10', headers=headers)
+    assert response.status_code == 200
+    expected_data = {
+    'id_product': 10,
+    "article": '190-03024',
+    "id_color_1": 3,
+    "id_part_1": 100,
+    "id_color_2": 2,
+    "id_part_2": 100,
+    "id_color_3": 1,
+    "id_part_3": 100,
+    "id_color_4": 1,
+    "id_part_4": 100,
+    "price": 400,
+    "comment": None,
+    "colors": 'Золотий'}
+    assert response.json == expected_data
+
+
+
+@pytest.mark.run(order=200130)
+def test_create_product_only_3_mateials(app_fixture):
+    client = app_fixture.test_client()
+    data = {
+    "article": '190-03025',
+    "id_color_1": 3,
+    "id_part_1": 100,
+    "id_color_2": 2,
+    "id_part_2": 100,
+    "id_color_3": 1,
+    "id_part_3": 100,
+    "id_color_4": None,
+    "id_part_4": 222,
+    "price": 400,
+    "comment": None,
+    "colors": 'Золотий'}
+    headers = {'Content-Type': 'application/json'}
+    response = client.post('/product', data=json.dumps(data), headers=headers)
+    assert response.status_code == 200
+    expected_data = {'id_product': 11}
+    assert response.json == expected_data
+
+    response = client.get('/product/11', headers=headers)
+    assert response.status_code == 200
+    expected_data = {
+    'id_product': 11,
+    "article": '190-03025',
+    "id_color_1": 3,
+    "id_part_1": 100,
+    "id_color_2": 2,
+    "id_part_2": 100,
+    "id_color_3": 1,
+    "id_part_3": 100,
+    "id_color_4": None,
+    "id_part_4": None,
+    "price": 400,
+    "comment": None,
+    "colors": 'Золотий'}
+    assert response.json == expected_data
+

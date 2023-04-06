@@ -36,6 +36,9 @@ def validate_product(data: dict):
             return {"article":  "miss in data"}
         if not isinstance(data['article'], str):
             return {'article': 'is not str type'}
+        pattern = r'^\d{3}-'
+        if not (re.match(pattern, data['article'])):
+            return {'article': 'is not correct'}
         data['article'] = data['article'].upper()
         data['article'] = re.sub(r'A', 'А', data['article'])
         data['article'] = re.sub(r'B', 'В', data['article'])
@@ -45,6 +48,8 @@ def validate_product(data: dict):
             return {"colors":  "miss in data"}
         if not isinstance(data['colors'], str):
             return {'colors': 'is not str type'}
+        if len(data['colors']) < 5:
+            return {'colors': "can't be less than 5 characters"}
 
         if not 'comment' in data:
             return {'comment':  "miss in data"}

@@ -170,7 +170,6 @@ def search_by_name_material(args):
 def autofill_fields():
     """Autofill fields"""
     args = request.args
-    logger.info(f'Get main works in API with args: {args}')
     keys = [
         'phone',
         'second_name',
