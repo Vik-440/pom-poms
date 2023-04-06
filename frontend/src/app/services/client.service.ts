@@ -9,6 +9,10 @@ export class ClientService {
   constructor(private http: HttpClient,) {}
 
   getClient(id: string) {
-    return this.http.get(`${this.url}/read_client/${id}`)
+    return this.http.get(`${this.url}/client/${id}`)
   }
+
+  editClient(params, id) {
+    return this.http.put(`${this.url}/client/${id}`, params)
+}
 }

@@ -9,15 +9,15 @@ export class CreateOrderService {
     constructor(private http: HttpClient, @Inject('API_URL') private apiUrl: string) {}
 
     getListMaterial() {
-        return this.http.get(`http://127.0.0.1:5000/new_order`);
+        return this.http.get('http://127.0.0.1:5000/new_order');
     }
 
     getInfoForOrder(params) {
-        return this.http.post(`http://127.0.0.1:5000/new_order`, params);
+        return this.http.post('http://127.0.0.1:5000/new_order', params);
     }
 
     getAutofill(params) {
-        return this.http.get(`http://127.0.0.1:5000/autofill`, {params});
+        return this.http.get('http://127.0.0.1:5000/autofill', {params});
     }
 
 
@@ -27,11 +27,9 @@ export class CreateOrderService {
         return this.http.post('http://127.0.0.1:5000/create_client/', params)
     }
 
-    editClient(params, id) {
-        return this.http.put(`http://127.0.0.1:5000/edit_client/${id}`, params)
-    }
+
 
     saveOrder(params) {
-        return this.http.post(`http://127.0.0.1:5000/new_order`, params);
+        return this.http.post('http://127.0.0.1:5000/new_order', params);
     }
 }

@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
-import locale from "date-fns/locale/en-US";
+import locale from 'date-fns/locale/en-US';
 import * as moment from 'moment';
 import { DatepickerOptions } from 'ng2-datepicker';
 import { filter, tap } from 'rxjs';
@@ -10,6 +10,7 @@ import { modelsData } from 'src/assets/models-data/modelsData';
 import { formatNumber } from 'src/common/common';
 import { CreateOrderService } from '../services/create-order.service';
 import { MainPageService } from '../services/main-table.service';
+import { ClientService } from '../services/client.service';
 @Component({
   selector: 'app-create-order',
   templateUrl: './create-order.component.html',
@@ -20,9 +21,10 @@ export class CreateOrderComponent implements OnInit {
     private fb: FormBuilder,
     private service: CreateOrderService,
     private route: ActivatedRoute,
-    private serviceMain: MainPageService
+    private serviceMain: MainPageService,
+    private clientService: ClientService
   ) {}
-//  selector: 'app-create-order', selector: 'app-create-order', selector: 'app-create-order', selector: 'app-create-order', selector: 'app-create-order', selector: 'app-create-order', selector: 'app-create-order', selector: 'app-create-order', selector: 'app-create-order', selector: 'app-create-order', selector: 'app-create-order', selector: 'app-create-order', selector: 'app-create-order', selector: 'app-create-order', selector: 'app-create-order', selector: 'app-create-order', selector: 'app-create-order', selector: 'app-create-order', selector: 'app-create-order', selector: 'app-create-order', selector: 'app-create-order', selector: 'app-create-order', selector: 'app-create-order', selector: 'app-create-order', selector: 'app-create-order', selector: 'app-create-order', selector: 'app-create-order', selector: 'app-create-order', selector: 'app-create-order', selector: 'app-create-order',vvvvvvvvvvvvv
+
   @Input() isNew: Boolean = true;
   displayMonths = 2;
   isShowSpinner = false;
@@ -563,11 +565,14 @@ export class CreateOrderComponent implements OnInit {
       },
       (error) => {
         const key = Object.keys(error.error);
+        console.log(form.controls[key[0]], key[0]);
         if (key[0] === 'coach') {
           this.clientForm.controls.coach.setErrors({
             message: Object.values(error.error)[0],
           });
         } else {
+       
+          
           form.controls[key[0]].setErrors({
             message: Object.values(error.error)[0],
           });
@@ -620,7 +625,7 @@ export class CreateOrderComponent implements OnInit {
   }
 
   editClient(form, params) {
-    this.service.editClient(params, form.value.id_client).subscribe(
+    this.clientService.editClient(params, form.value.id_client).subscribe(
       (data: any) => {
         this.isShowSpinner = false;
         form.patchValue({
@@ -630,6 +635,7 @@ export class CreateOrderComponent implements OnInit {
       },
       (error) => {
         const key = Object.keys(error.error);
+        console.log(form.controls[key[0]], key[0]);
         form.controls[key[0]].setErrors({
           message: Object.values(error.error)[0],
         });
@@ -782,6 +788,14 @@ export class CreateOrderComponent implements OnInit {
           this.isNew = true;
           this.dataPlaneOrder = null;
           this.isShowSpinner = false;
+          this.alert = {
+            isShow: true,
+            type: 'warning',
+            message: 'Користувача не знайдено',
+          };
+          setTimeout(() => {
+            this.alertChange(false);
+          }, 3000);
         }
       });
   }
@@ -856,7 +870,7 @@ export class CreateOrderComponent implements OnInit {
       `**Обов'язково вказуйте призначення платежу: "Рахунок П-${this.idOrder}"**, а після оплати проінформуйте нас про транзакцію.\n\n`
     );
     copyText.push(
-      `**Якщо Вам потрібно рахунок і накладна у паперовому вигляді, попередьте нас і ми покладемо їх до замовлення.** \n`
+      '**Якщо Вам потрібно рахунок і накладна у паперовому вигляді, попередьте нас і ми покладемо їх до замовлення.** \n'
     );
     navigator.clipboard.writeText(copyText.join(''));
     this.isShowSpinner = false;

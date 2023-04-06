@@ -22,6 +22,7 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { ReserveComponent } from './reserve/reserve.component';
 import { MainTableComponent } from './main-table/main-table.component';
 import { ClientFormComponent } from './client-form/client-form.component';
+import { CustomFieldDirective } from './custom-field.directive';
 @NgModule({
     declarations: [
         AppComponent,
@@ -32,6 +33,7 @@ import { ClientFormComponent } from './client-form/client-form.component';
         AlertComponent,
         MainTableComponent,
         ClientFormComponent,
+        CustomFieldDirective,
     ],
     imports: [
         NgToggleModule,

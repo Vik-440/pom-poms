@@ -8,6 +8,7 @@
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
+    "lint:fix": "ng lint --fix",
     "e2e": "ng e2e",
     "deploy-page": "ng deploy --base-href=/best-pompons/"
   },
@@ -52,8 +53,8 @@
     "@angular/compiler-cli": "~13.3.12",
     "@types/jasmine": "~3.6.0",
     "@types/node": "^12.20.55",
-    "@typescript-eslint/eslint-plugin": "4.28.2",
-    "@typescript-eslint/parser": "4.28.2",
+    "@typescript-eslint/eslint-plugin": "^5.0.0",
+    "@typescript-eslint/parser": "^5.57.1",
     "angular-cli-ghpages": "^1.0.0",
     "codelyzer": "^6.0.0",
     "eslint": "^7.26.0",
@@ -68,6 +69,6 @@
     "protractor": "~7.0.0",
     "ts-node": "~8.3.0",
     "tslint": "~6.1.0",
-    "typescript": "~4.6.4"
+    "typescript": "^4.6.4"
   }
 }
