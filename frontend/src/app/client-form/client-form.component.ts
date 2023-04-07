@@ -1,8 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { filter } from 'rxjs';
 import { ClientService } from '../services/client.service';
-import { CreateOrderService } from '../services/create-order.service';
+import { UsefulService } from '../services/useful.service';
 import { DataAutofill } from './autofill';
 
 @Component({
@@ -20,7 +19,7 @@ export class ClientFormComponent implements OnInit {
   isNewForm: boolean = true;
   callAfterViewChecked = true;
 
-  constructor(private service: CreateOrderService, private clientService: ClientService) {}
+  constructor(private clientService: ClientService, private usefulService: UsefulService) {}
 
   ngOnInit() {
     this.clientForm.valueChanges.subscribe(() => {
@@ -33,7 +32,7 @@ export class ClientFormComponent implements OnInit {
 
   changeClientInfo(query, keySend) {
     if (query.length >= DataAutofill[keySend]) {
-      this.service.getAutofill({ [keySend]: query }).subscribe((data: any) => {
+      this.usefulService.getAutofill({ [keySend]: query }).subscribe((data: any) => {
         this.clientDataItems = [...data];
       });
     }

@@ -12,11 +12,6 @@ export class MainPageService {
         return this.http.get('http://127.0.0.1:5000/main');
     }
 
-
-    makeDoneOrder(params) {
-        return this.http.post('http://127.0.0.1:5000/main_page', params);
-    }
-
     changeFulfilled(id, params) {
         return this.http.put(`http://127.0.0.1:5000/main/status/${id}`, params);
     }

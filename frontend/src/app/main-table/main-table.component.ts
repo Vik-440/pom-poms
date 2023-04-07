@@ -3,8 +3,8 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { NgbOffcanvas } from '@ng-bootstrap/ng-bootstrap';
 import * as _ from 'lodash';
 import * as moment from 'moment';
-import { CreateOrderService } from '../services/create-order.service';
 import { MainPageService } from '../services/main-table.service';
+import { CreateOrderService } from '../services/orders.service';
 
 @Component({
   selector: 'app-main-table',
@@ -97,6 +97,8 @@ export class MainTableComponent implements OnInit {
     this.service.sendFilters(this.clean(_.cloneDeep(this.filtersForm.value))).subscribe(
       (data: any) => {
         this.orders = data;
+        
+        
         this.isShowSpinner = false;
         this.closeFilterMenu();
       },
@@ -224,7 +226,7 @@ export class MainTableComponent implements OnInit {
       [phase]: [item[phase] - e.target.value],
     };
 
-    this.service.changePhase(item.id_order, params).subscribe((data: any) => {
+    this.service.sendPhase(item.id_order, params).subscribe((data: any) => {
       this.showMessage(data.message);
       this.orders = this.orders.map((order) => {
         if (order.id_order === item.id_order) {
@@ -248,6 +250,7 @@ export class MainTableComponent implements OnInit {
     this.service.getListMain().subscribe(
       (data: any) => {
         this.orders = data;
+        console.log(this.orders);
         this.isShowSpinner = false;
       },
       () => {
@@ -310,6 +313,8 @@ export class MainTableComponent implements OnInit {
     if (commentModel) {
       return 'yellow';
     }
+    console.log(kodModel);
+    
     const letterModel = kodModel.split('');
     if (+letterModel[2] !== 0) {
       return 'light-pink';

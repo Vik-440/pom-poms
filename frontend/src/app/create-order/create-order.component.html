@@ -22,10 +22,10 @@
 
     <div class="form__fields">
       <ng-select [clearSearchOnAdd]="false" appearance="outline" [items]="kodItems" type="text" class="form__field"
-        [addTag]="true" [hideSelected]="true" placeholder="код" addTagText="+ нова модель" formControlName="kod_model"
-        (search)="changeKodModel($event.term)" (change)="chooseKode($event, index)">
+        [addTag]="true" [hideSelected]="true" placeholder="код" addTagText="+ нова модель" formControlName="article"
+        (search)="changeMaterial($event.term, 'article', true)" (change)="chooseKode($event, index)" bindLabel="value">
       </ng-select>
-      <input type="text" class="form__field" placeholder="колір помпона" formControlName="kolor_model">
+      <input type="text" class="form__field" placeholder="колір помпона" formControlName="colors">
     </div>
 
     <div class="form__fields">
@@ -33,10 +33,11 @@
         <ng-select [clearSearchOnAdd]="false" appearance="outline" [items]="materialsItems" bindLabel="name_color"
           type="text" class="form__field form__field-material" [addTag]="true" [hideSelected]="true"
           placeholder="матеріал 1" addTagText="+ новий матеріал" formControlName="name_color_1"
+          bindLabel="value"
           (search)="changeMaterial($event.term, index)" (change)="changeIdColor(order, 'id_color_1', $event)">
         </ng-select>
         <!-- <input type="text" class="form__field form__field-material" placeholder="матеріал 1" formControlName="name_color_1"> -->
-        <input type="text" class="form__field--sm" placeholder="%" formControlName="id_color_part_1">
+        <input type="text" class="form__field--sm" placeholder="%" formControlName="id_part_1">
       </div>
       <div class="flex">
         <ng-select [clearSearchOnAdd]="false" appearance="outline" [items]="materialsItems" type="text"
@@ -44,7 +45,7 @@
           placeholder="матеріал 3" addTagText="+ новий матеріал" formControlName="name_color_3"
           (search)="changeMaterial($event.term, index)" (change)="changeIdColor(order, 'id_color_3', $event)">
         </ng-select>
-        <input type="text" class="form__field--sm" placeholder="%" formControlName="id_color_part_3">
+        <input type="text" class="form__field--sm" placeholder="%" formControlName="id_part_3">
       </div>
     </div>
 
@@ -55,7 +56,7 @@
           placeholder="матеріал 2" addTagText="+ новий матеріал" formControlName="name_color_2"
           (search)="changeMaterial($event.term, index)" (change)="changeIdColor(order, 'id_color_2', $event)">
         </ng-select>
-        <input type="text" class="form__field--sm" placeholder="%" formControlName="id_color_part_2">
+        <input type="text" class="form__field--sm" placeholder="%" formControlName="id_part_2">
       </div>
       <div class="flex">
         <ng-select [clearSearchOnAdd]="false" appearance="outline" [items]="materialsItems" bindLabel="name_color"
@@ -63,23 +64,27 @@
           placeholder="матеріал 4" addTagText="+ новий матеріал" formControlName="name_color_4"
           (search)="changeMaterial($event.term, index)" (change)="changeIdColor(order, 'id_color_4', $event)">
         </ng-select>
-        <input type="text" class="form__field--sm" placeholder="%" formControlName="id_color_part_4">
+        <input type="text" class="form__field--sm" placeholder="%" formControlName="id_part_4">
       </div>
     </div>
 
     <div class="form__fields">
-      <input class="form__field--md" type="text" placeholder="ціна" formControlName="price_model">
-      <button class="action-btn forms" (click)="saveOrder(index, order)" *ngIf="order.value.isNew">
+      <input class="form__field--md" type="text" placeholder="ціна" formControlName="price">
+      <button class="action-btn forms" (click)="saveProduct(index, order)" *ngIf="order.value.isNew">
         Зберегти
       </button>
-      <button class="ok-btn" *ngIf="!order.value.isNew">
+
+      <button class="action-btn forms edit-btn" (click)="editProduct(index, order)" *ngIf="!order.value.isNew && order.value.isChange">
+        Редагувати
+      </button>
+      <button class="ok-btn" *ngIf="!order.value.isNew && !order.value.isChange">
         <img class="next-icon icon" src="./assets/img/icons/ok-btn.svg" />
       </button>
     </div>
 
     <div class="form__fields">
       <div class="form__fields--phashes">
-        <input type="text" class="form__field--ml pars" placeholder="к-сть пар" formControlName="quantity_pars_model">
+        <input type="text" class="form__field--ml pars" placeholder="к-сть пар" formControlName="qty_pars">
         <input type="text" class="phase" disabled formControlName="phase_1">
         <input type="text" class="phase" disabled formControlName="phase_2">
         <input type="text" class="phase" disabled formControlName="phase_3">
@@ -89,7 +94,7 @@
 
     <div class="form__fields">
       <textarea type="text" class="form__field--textarea" placeholder="примітка"
-        formControlName="comment_model"></textarea>
+        formControlName="comment"></textarea>
     </div>
 
     <div class="form__fields">
