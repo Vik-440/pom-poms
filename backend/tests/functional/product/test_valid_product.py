@@ -231,7 +231,7 @@ def test_create_product_not_real_procent_part_1(app_fixture):
     "comment": None,
     "colors": 'Золотий'}
     assert response.json == expected_data
-
+ 
 
 @pytest.mark.run(order=200080)
 def test_create_product_not_real_procent_id_part_2(app_fixture):
