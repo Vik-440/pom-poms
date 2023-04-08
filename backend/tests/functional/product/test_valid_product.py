@@ -268,6 +268,10 @@ def test_create_product_not_real_procent_id_part_2(app_fixture):
     "part_3": None,
     "id_color_4": None,
     "part_4": None,
+    'color_name_1': '75/23 Золотий',
+    'color_name_2': '70/23 Червоний',
+    'color_name_3': None,
+    'color_name_4': None,
     "price": 400,
     "comment": None,
     "colors": 'Золотий'}
