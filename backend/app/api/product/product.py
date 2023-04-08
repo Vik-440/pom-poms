@@ -107,7 +107,7 @@ def read_product(id_product):
             .join(color_name_4, DB_product.id_color_4 == color_name_4.id_material, isouter=True)
             .where(DB_product.id_product == id_product))
         product = session.execute(stmt).first()
-        print(product)
+        # print(product)
         if product:
             return jsonify({
                 'id_product': product.id_product,
