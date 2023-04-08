@@ -34,7 +34,7 @@
           type="text" class="form__field form__field-material" [addTag]="true" [hideSelected]="true"
           placeholder="матеріал 1" addTagText="+ новий матеріал" formControlName="name_color_1"
           bindLabel="value"
-          (search)="changeMaterial($event.term, index)" (change)="changeIdColor(order, 'id_color_1', $event)">
+          (search)="changeMaterial($event.term)" (change)="changeIdColor(order, 'id_color_1', $event)">
         </ng-select>
         <!-- <input type="text" class="form__field form__field-material" placeholder="матеріал 1" formControlName="name_color_1"> -->
         <input type="text" class="form__field--sm" placeholder="%" formControlName="id_part_1">
@@ -43,7 +43,7 @@
         <ng-select [clearSearchOnAdd]="false" appearance="outline" [items]="materialsItems" type="text"
           class="form__field form__field-material" [addTag]="true" bindLabel="name_color" [hideSelected]="true"
           placeholder="матеріал 3" addTagText="+ новий матеріал" formControlName="name_color_3"
-          (search)="changeMaterial($event.term, index)" (change)="changeIdColor(order, 'id_color_3', $event)">
+          (search)="changeMaterial($event.term)" (change)="changeIdColor(order, 'id_color_3', $event)">
         </ng-select>
         <input type="text" class="form__field--sm" placeholder="%" formControlName="id_part_3">
       </div>
@@ -54,7 +54,7 @@
         <ng-select [clearSearchOnAdd]="false" appearance="outline" [items]="materialsItems" bindLabel="name_color"
           type="text" class="form__field form__field-material" [addTag]="true" [hideSelected]="true"
           placeholder="матеріал 2" addTagText="+ новий матеріал" formControlName="name_color_2"
-          (search)="changeMaterial($event.term, index)" (change)="changeIdColor(order, 'id_color_2', $event)">
+          (search)="changeMaterial($event.term)" (change)="changeIdColor(order, 'id_color_2', $event)">
         </ng-select>
         <input type="text" class="form__field--sm" placeholder="%" formControlName="id_part_2">
       </div>
@@ -62,7 +62,7 @@
         <ng-select [clearSearchOnAdd]="false" appearance="outline" [items]="materialsItems" bindLabel="name_color"
           type="text" class="form__field form__field-material" [addTag]="true" [hideSelected]="true"
           placeholder="матеріал 4" addTagText="+ новий матеріал" formControlName="name_color_4"
-          (search)="changeMaterial($event.term, index)" (change)="changeIdColor(order, 'id_color_4', $event)">
+          (search)="changeMaterial($event.term)" (change)="changeIdColor(order, 'id_color_4', $event)">
         </ng-select>
         <input type="text" class="form__field--sm" placeholder="%" formControlName="id_part_4">
       </div>

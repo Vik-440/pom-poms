@@ -317,8 +317,6 @@ export class CreateOrderComponent implements OnInit {
   }
 
   changeStatusProduct(product) {
-    console.log(product.value);
-    
     if(product.value.isNew) {
       product.patchValue({
         isNew: true,
@@ -333,7 +331,9 @@ export class CreateOrderComponent implements OnInit {
   }
 
 
-  changeMaterial(value, field, isKode = false) {
+  changeMaterial(value, field = 'name_material', isKode = false) {
+    console.log(value, DataAutofill[field], field);
+    
     if (value.length >= DataAutofill[field]) {
       this.usefulService.getAutofill({ [field]: value }).subscribe((data: any) => {
         !isKode ? this.materialsItems = data : this.kodItems = data;
@@ -343,10 +343,14 @@ export class CreateOrderComponent implements OnInit {
 
   chooseKode(value, index, ignore = true) {
     if (!this.kodItems) {
+      console.log(23232323);
+      
       this.orderForm.controls.map((order, ind) => {
         if (ind === index && value) {
+          console.log(value);
+          
           order.patchValue({
-            article: value,
+            article: value.value,
           });
         } else if (!value) {
           order.patchValue({
@@ -394,10 +398,13 @@ export class CreateOrderComponent implements OnInit {
   }
 
   changeIdColor(order, field, value) {
-    if(value.hasOwnProperty('id_material')) {
+    if(value && value.hasOwnProperty('id_material')) {
       order.patchValue({
         [field]: value.id_material,
       });
+    } else {
+      console.log('else', value)
+      // order.
     }
 
     this.resetMaterialsItems();
