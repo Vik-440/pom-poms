@@ -201,35 +201,35 @@
         [class.disabled]="filtersForm.value.id_client || filtersForm.value.team || filtersForm.value.city || filtersForm.value.coach">
         <div class="filters-data--title">№ телефону</div>
         <ng-select [clearOnBackspace]="false" notFoundText="No phone founded"
-          (search)="changeFiled($event, 'ur_phone', 4, 'phone_client')" type="number" (change)="clearFilterData()"
+          (search)="changeFiled($event, 'phone', 4, 'phone_client')" type="number" (change)="clearFilterData()"
           formControlName="phone_client" [items]="dataFilters"></ng-select>
       </div>
       <div class="filters-data"
         [class.disabled]="filtersForm.value.phone_client || filtersForm.value.team || filtersForm.value.city || filtersForm.value.coach">
         <div class="filters-data--title">Прізвище клієнта</div>
         <ng-select [clearOnBackspace]="false" notFoundText="No second name founded"
-          (search)="changeFiled($event, 'ur_second_name', 3)" type="number" bindLabel="secondName" bindValue="id"
+          (search)="changeFiled($event, 'second_name', 3)" type="number" bindLabel="secondName" bindValue="id"
           (change)="clearFilterData()" formControlName="id_client" [items]="dataFilters"></ng-select>
       </div>
       <div class="filters-data"
         [class.disabled]="filtersForm.value.phone_client || filtersForm.value.coach || filtersForm.value.city || filtersForm.value.id_client">
         <div class="filters-data--title">Команда</div>
         <ng-select [clearOnBackspace]="false" notFoundText="No phone founded"
-          (search)="changeFiled($event, 'ur_team', 3, 'name_team')" type="number" formControlName="team"
+          (search)="changeFiled($event, 'team', 3, 'name_team')" type="number" formControlName="team"
           (change)="clearFilterData()" [items]="dataFilters"></ng-select>
       </div>
       <div class="filters-data"
         [class.disabled]="filtersForm.value.phone_client || filtersForm.value.team || filtersForm.value.coach || filtersForm.value.id_client">
         <div class="filters-data--title">Місто</div>
         <ng-select [clearOnBackspace]="false" notFoundText="No phone founded"
-          (search)="changeFiled($event, 'ur_sity', 3, 'sity')" type="number" (change)="clearFilterData()"
+          (search)="changeFiled($event, 'city', 3, 'sity')" type="number" (change)="clearFilterData()"
           formControlName="city" [items]="dataFilters"></ng-select>
       </div>
       <div class="filters-data"
         [class.disabled]="filtersForm.value.phone_client || filtersForm.value.team || filtersForm.value.city || filtersForm.value.id_client">
         <div class="filters-data--title">Тренер</div>
         <ng-select [clearOnBackspace]="false" notFoundText="No phone founded"
-          (search)="changeFiled($event, 'ur_coach', 3, 'name_coach')" type="number" (change)="clearFilterData()"
+          (search)="changeFiled($event, 'coach', 3, 'name_coach')" type="number" (change)="clearFilterData()"
           formControlName="coach" [items]="dataFilters"></ng-select>
       </div>
       <div class="outline"></div>
@@ -237,7 +237,7 @@
         [class.disabled]="filtersForm.value.kod_model_like || filtersForm.value.kolor_model_like">
         <div class="filters-data--title">Код моделі</div>
         <ng-select [clearOnBackspace]="false" notFoundText="No phone founded"
-          (search)="changeFiled($event, 'ur_kod', 3, 'kod_model')" type="number" formControlName="kod_model"
+          (search)="changeFiled($event, 'article', 3, 'kod_model')" type="number" formControlName="kod_model"
           [items]="dataFilters"></ng-select>
       </div>
       <div class="filters-data" [class.disabled]="filtersForm.value.kod_model || filtersForm.value.kolor_model_like">

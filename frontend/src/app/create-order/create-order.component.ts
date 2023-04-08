@@ -709,7 +709,7 @@ export class CreateOrderComponent implements OnInit {
       date_create: [this.dateToday.year, this.dateToday.month, this.dateToday.day].join('-'),
       id_client: this.clientForm.value.id_client,
       id_recipient: !this.isRecipient ? this.clientForm.value.id_client : this.recipientForm.value.id_client, // (2 або ід_клієнт)
-      id_product: this.makeArrayDataOrder('id_product'),
+      id_models: this.makeArrayDataOrder('id_product'),
       price_model_sell: this.makeArrayDataOrder('price'),
       qty_pars: this.makeArrayDataOrder('qty_pars'),
       phase_1: this.makeArrayDataOrder('phase_1'),
@@ -720,7 +720,7 @@ export class CreateOrderComponent implements OnInit {
         : null, // - прогнозована
       discount: this.discount,
       sum_payment: +this.sumAll(false).split('/')[0].trim(),
-      fulfilled_order: false,
+      status_order: false,
       comment: this.commentOrder,
       edit_real_order: this.idOrder,
     };
@@ -809,7 +809,7 @@ export class CreateOrderComponent implements OnInit {
           this.dateToday = { year: +arrDataOrder[0], month: +arrDataOrder[1], day: +arrDataOrder[2] };
           this.dataPlaneOrder = { year: +arrDataPlane[0], month: +arrDataPlane[1], day: +arrDataPlane[2] };
           this.discount = data.discount;
-          this.fulfilledOrder = data.fulfilled_order;
+          this.fulfilledOrder = data.status_order;
           this.clientService.getClient(data.id_client).subscribe((dataClient: any) => {
             this.isShowSpinner = false;
             this.setClientData(dataClient);

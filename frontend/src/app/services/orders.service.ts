@@ -17,7 +17,7 @@ export class CreateOrderService {
     }
 
     saveOrder(params) {
-        return this.http.post(`${this.url}/`, params);
+        return this.http.post(`${this.url}`, params);
     }
 
 }

@@ -5,6 +5,8 @@ import * as _ from 'lodash';
 import * as moment from 'moment';
 import { MainPageService } from '../services/main-table.service';
 import { CreateOrderService } from '../services/orders.service';
+import { UsefulService } from '../services/useful.service';
+import { DataAutofill } from '../client-form/autofill';
 
 @Component({
   selector: 'app-main-table',
@@ -37,7 +39,8 @@ export class MainTableComponent implements OnInit {
     private service: MainPageService,
     private offcanvasService: NgbOffcanvas,
     private fb: FormBuilder,
-    private serviceOrders: CreateOrderService
+    private serviceOrders: CreateOrderService,
+    private generalService: UsefulService,
   ) {}
 
   ngOnInit(): void {
@@ -63,8 +66,8 @@ export class MainTableComponent implements OnInit {
   }
 
   changeFiled(event, fieldSend, minSymbols, response) {
-    if (event.term.length >= minSymbols) {
-      this.serviceOrders.getInfoForOrder({ [fieldSend]: event.term }).subscribe((data: any) => {
+    if (event.term.length >= DataAutofill[fieldSend]) {
+      this.generalService.getAutofill({ [fieldSend]: event.term }).subscribe((data: any) => {
         if (fieldSend === 'ur_second_name') {
           this.clearFilterData();
           data.id_client.forEach((item, i) => {
