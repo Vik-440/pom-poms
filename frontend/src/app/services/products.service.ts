@@ -17,8 +17,6 @@ export class ProductsService {
     }
 
     editProduct(id, params) {
-      console.log(id);
-      
       return this.http.put(`${this.url}/${id}`, params);
     }
 }

@@ -42,11 +42,10 @@ export class MainTableComponent implements OnInit {
 
   ngOnInit(): void {
     this.getAllData();
-    this.initForm(...[4, 5]);
+    this.initForm();
   }
 
-  initForm(a: any = 4) {
-    console.log(arguments, a, ...[4, 5]);
+  initForm() {
     
     this.filtersForm = this.fb.group({
       dataStart: null,
@@ -250,7 +249,6 @@ export class MainTableComponent implements OnInit {
     this.service.getListMain().subscribe(
       (data: any) => {
         this.orders = data;
-        console.log(this.orders);
         this.isShowSpinner = false;
       },
       () => {
@@ -313,7 +311,6 @@ export class MainTableComponent implements OnInit {
     if (commentModel) {
       return 'yellow';
     }
-    console.log(kodModel);
     
     const letterModel = kodModel.split('');
     if (+letterModel[2] !== 0) {

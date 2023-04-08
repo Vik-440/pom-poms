@@ -31,40 +31,39 @@
     <div class="form__fields">
       <div class="flex">
         <ng-select [clearSearchOnAdd]="false" appearance="outline" [items]="materialsItems" bindLabel="name_color"
-          type="text" class="form__field form__field-material" [addTag]="true" [hideSelected]="true"
-          placeholder="матеріал 1" addTagText="+ новий матеріал" formControlName="name_color_1"
+          type="text" class="form__field form__field-material" [addTag]="false" [hideSelected]="true"
+          placeholder="матеріал 1" formControlName="color_name_1"
           bindLabel="value"
           (search)="changeMaterial($event.term)" (change)="changeIdColor(order, 'id_color_1', $event)">
         </ng-select>
-        <!-- <input type="text" class="form__field form__field-material" placeholder="матеріал 1" formControlName="name_color_1"> -->
-        <input type="text" class="form__field--sm" placeholder="%" formControlName="id_part_1">
+        <input type="text" class="form__field--sm" placeholder="%" formControlName="part_1">
       </div>
       <div class="flex">
         <ng-select [clearSearchOnAdd]="false" appearance="outline" [items]="materialsItems" type="text"
-          class="form__field form__field-material" [addTag]="true" bindLabel="name_color" [hideSelected]="true"
-          placeholder="матеріал 3" addTagText="+ новий матеріал" formControlName="name_color_3"
+          class="form__field form__field-material" [addTag]="false" bindLabel="name_color" [hideSelected]="true"
+          placeholder="матеріал 3" formControlName="color_name_3"
           (search)="changeMaterial($event.term)" (change)="changeIdColor(order, 'id_color_3', $event)">
         </ng-select>
-        <input type="text" class="form__field--sm" placeholder="%" formControlName="id_part_3">
+        <input type="text" class="form__field--sm" placeholder="%" formControlName="part_3">
       </div>
     </div>
 
     <div class="form__fields">
       <div class="flex">
         <ng-select [clearSearchOnAdd]="false" appearance="outline" [items]="materialsItems" bindLabel="name_color"
-          type="text" class="form__field form__field-material" [addTag]="true" [hideSelected]="true"
-          placeholder="матеріал 2" addTagText="+ новий матеріал" formControlName="name_color_2"
+          type="text" class="form__field form__field-material" [addTag]="false" [hideSelected]="true"
+          placeholder="матеріал 2" formControlName="color_name_2"
           (search)="changeMaterial($event.term)" (change)="changeIdColor(order, 'id_color_2', $event)">
         </ng-select>
-        <input type="text" class="form__field--sm" placeholder="%" formControlName="id_part_2">
+        <input type="text" class="form__field--sm" placeholder="%" formControlName="part_2">
       </div>
       <div class="flex">
         <ng-select [clearSearchOnAdd]="false" appearance="outline" [items]="materialsItems" bindLabel="name_color"
-          type="text" class="form__field form__field-material" [addTag]="true" [hideSelected]="true"
-          placeholder="матеріал 4" addTagText="+ новий матеріал" formControlName="name_color_4"
+          type="text" class="form__field form__field-material" [addTag]="false" [hideSelected]="true"
+          placeholder="матеріал 4" formControlName="color_name_4"
           (search)="changeMaterial($event.term)" (change)="changeIdColor(order, 'id_color_4', $event)">
         </ng-select>
-        <input type="text" class="form__field--sm" placeholder="%" formControlName="id_part_4">
+        <input type="text" class="form__field--sm" placeholder="%" formControlName="part_4">
       </div>
     </div>
 

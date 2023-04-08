@@ -138,17 +138,17 @@ export class CreateOrderComponent implements OnInit {
         id_product: null,
         colors: null,
         id_color_1: null,
-        name_color_1: null,
-        id_part_1: null,
+        color_name_1: null,
+        part_1: null,
         id_color_2: null,
-        name_color_2: null,
-        id_part_2: null,
+        color_name_2: null,
+        part_2: null,
         id_color_3: null,
-        name_color_3: null,
-        id_part_3: null,
+        color_name_3: null,
+        part_3: null,
         id_color_4: null,
-        name_color_4: null,
-        id_part_4: null,
+        color_name_4: null,
+        part_4: null,
         price: null,
         qty_pars: [null, Validators.required],
         phase_1: 0,
@@ -292,19 +292,19 @@ export class CreateOrderComponent implements OnInit {
         this.changeStatusProduct(order);
       });
 
-      order.get('id_part_1').valueChanges.subscribe(() => {
+      order.get('part_1').valueChanges.subscribe(() => {
         this.changeStatusProduct(order);
       });
 
-      order.get('id_part_2').valueChanges.subscribe(() => {
+      order.get('part_2').valueChanges.subscribe(() => {
         this.changeStatusProduct(order);
       });
 
-      order.get('id_part_3').valueChanges.subscribe(() => {
+      order.get('part_3').valueChanges.subscribe(() => {
         this.changeStatusProduct(order);
       });
 
-      order.get('id_part_4').valueChanges.subscribe(() => {
+      order.get('part_4').valueChanges.subscribe(() => {
         this.changeStatusProduct(order);
       });
     });
@@ -332,23 +332,20 @@ export class CreateOrderComponent implements OnInit {
 
 
   changeMaterial(value, field = 'name_material', isKode = false) {
-    console.log(value, DataAutofill[field], field);
-    
     if (value.length >= DataAutofill[field]) {
       this.usefulService.getAutofill({ [field]: value }).subscribe((data: any) => {
         !isKode ? this.materialsItems = data : this.kodItems = data;
       });
+    } else {
+      this.materialsItems = [];
+      this.kodItems = [];
     }
   }
 
   chooseKode(value, index, ignore = true) {
-    if (!this.kodItems) {
-      console.log(23232323);
-      
+    if (!this.kodItems.length) {
       this.orderForm.controls.map((order, ind) => {
         if (ind === index && value) {
-          console.log(value);
-          
           order.patchValue({
             article: value.value,
           });
@@ -361,8 +358,6 @@ export class CreateOrderComponent implements OnInit {
       });
     }
     if (this.kodItems?.includes(value) || !ignore) {
-      console.log(value);
-      
       this.orderForm.controls.map((order, ind) => {
         this.productService.getProduct(value.id_product).subscribe((data: any) => {
           if (index === ind && Object.keys(data).length) {
@@ -371,18 +366,18 @@ export class CreateOrderComponent implements OnInit {
                 id_product: data.id_product,
                 article: data.article,
                 colors: data.colors,
-                name_color_1: data.name_color_1 || null,
-                id_part_1: data.id_part_1,
+                color_name_1: data.color_name_1 || null,
+                part_1: data.part_1,
                 id_color_1: data.id_color_1,
                 id_color_2: data.id_color_2,
                 id_color_3: data.id_color_3,
                 id_color_4: data.id_color_4,
-                name_color_2: data.name_color_2 || null,
-                id_part_2: data.id_part_2,
-                name_color_3: data.name_color_3 || null,
-                id_part_3: data.id_part_3,
-                name_color_4: data.name_color_4 || null,
-                id_part_4: data.id_part_4,
+                color_name_2: data.color_name_2 || null,
+                part_2: data.part_2,
+                color_name_3: data.color_name_3 || null,
+                part_3: data.part_3,
+                color_name_4: data.color_name_4 || null,
+                part_4: data.part_4,
                 price: data.price,
                 comment: data.comment,
                 isNew: false,
@@ -402,11 +397,7 @@ export class CreateOrderComponent implements OnInit {
       order.patchValue({
         [field]: value.id_material,
       });
-    } else {
-      console.log('else', value)
-      // order.
     }
-
     this.resetMaterialsItems();
   }
 
@@ -433,17 +424,17 @@ export class CreateOrderComponent implements OnInit {
         id_product: null,
         colors: null,
         id_color_1: null,
-        name_color_1: null,
-        name_color_2: null,
-        name_color_3: null,
-        name_color_4: null,
-        id_part_1: null,
+        color_name_1: null,
+        color_name_2: null,
+        color_name_3: null,
+        color_name_4: null,
+        part_1: null,
         id_color_2: null,
-        id_part_2: null,
+        part_2: null,
         id_color_3: null,
-        id_part_3: null,
+        part_3: null,
         id_color_4: null,
-        id_part_4: null,
+        part_4: null,
         price: null,
         qty_pars: [null, Validators.required],
         phase_1: 0,
@@ -471,19 +462,18 @@ export class CreateOrderComponent implements OnInit {
     const params = {
       article: order.value.article || 0,
       id_color_1: order.value.id_color_1 || null,
-      id_part_1: +order.value.id_part_1 || null,
+      part_1: +order.value.part_1 || null,
       id_color_2: +order.value.id_color_2 || null,
-      id_part_2: +order.value.id_part_2 || null,
+      part_2: +order.value.part_2 || null,
       id_color_3: +order.value.id_color_3 || null,
-      id_part_3: +order.value.id_part_3 || null,
+      part_3: +order.value.part_3 || null,
       id_color_4: +order.value.id_color_4 || null,
-      id_part_4: +order.value.id_part_4 || null,
+      part_4: +order.value.part_4 || null,
       price: order.value.price || 0,
       comment: order.value.comment,
       colors: order.value.colors || null,
     };
     this.isShowSpinner = true;
-    console.log(111111111111);
     
     this.productService.saveProduct(params).subscribe(
       (data: any) => {
@@ -494,7 +484,6 @@ export class CreateOrderComponent implements OnInit {
         this.isShowSpinner = false;
       },
       (err) => {
-        console.log(err)
         this.isShowSpinner = false;
         this.alert = {
           isShow: true,
@@ -512,19 +501,18 @@ export class CreateOrderComponent implements OnInit {
     const params = {
       article: order.value.article || 0,
       id_color_1: order.value.id_color_1 || null,
-      id_part_1: +order.value.id_part_1 || null,
+      part_1: +order.value.part_1 || null,
       id_color_2: +order.value.id_color_2 || null,
-      id_part_2: +order.value.id_part_2 || null,
+      part_2: +order.value.part_2 || null,
       id_color_3: +order.value.id_color_3 || null,
-      id_part_3: +order.value.id_part_3 || null,
+      part_3: +order.value.part_3 || null,
       id_color_4: +order.value.id_color_4 || null,
-      id_part_4: +order.value.id_part_4 || null,
+      part_4: +order.value.part_4 || null,
       price: +order.value.price || 0,
       comment: order.value.comment,
       colors: order.value.colors || 0,
     };
     this.isShowSpinner = true;
-    console.log(order.value);
     
     this.productService.editProduct(order.value.id_product, params).subscribe(
       (data: any) => {
@@ -536,7 +524,6 @@ export class CreateOrderComponent implements OnInit {
         this.isShowSpinner = false;
       },
       (err) => {
-        console.log(err)
         this.isShowSpinner = false;
         this.alert = {
           isShow: true,
@@ -621,7 +608,6 @@ export class CreateOrderComponent implements OnInit {
       },
       (error) => {
         const key = Object.keys(error.error);
-        console.log(form.controls[key[0]], key[0]);
         if (key[0] === 'coach') {
           this.clientForm.controls.coach.setErrors({
             message: Object.values(error.error)[0],
@@ -691,7 +677,6 @@ export class CreateOrderComponent implements OnInit {
       },
       (error) => {
         const key = Object.keys(error.error);
-        console.log(form.controls[key[0]], key[0]);
         form.controls[key[0]].setErrors({
           message: Object.values(error.error)[0],
         });
@@ -859,7 +844,6 @@ export class CreateOrderComponent implements OnInit {
       });
   }
   getModels(data) {
-    console.log(data);
     
     data.id_models.forEach((idModel, index) => {
       if (index === 0) {
@@ -867,25 +851,24 @@ export class CreateOrderComponent implements OnInit {
       }
 
       this.productService.getProduct(idModel).subscribe((dataModel: any) => {
-        console.log(dataModel);
         
         this.orderForm.push(
           this.fb.group({
             id_product: dataModel.id_product,
             article: dataModel.article,
             colors: dataModel.colors,
-            name_color_1: dataModel.name_color_1 || null,
-            id_part_1: dataModel.id_part_1,
+            color_name_1: dataModel.color_name_1 || null,
+            part_1: dataModel.part_1,
             id_color_1: dataModel.id_color_1,
             id_color_2: dataModel.id_color_2,
             id_color_3: dataModel.id_color_3,
             id_color_4: dataModel.id_color_4,
-            name_color_2: dataModel.name_color_2 || null,
-            id_part_2: dataModel.id_part_2,
-            name_color_3: dataModel.name_color_3 || null,
-            id_part_3: dataModel.id_part_3,
-            name_color_4: dataModel.name_color_4 || null,
-            id_part_4: dataModel.id_part_4,
+            color_name_2: dataModel.color_name_2 || null,
+            part_2: dataModel.part_2,
+            color_name_3: dataModel.color_name_3 || null,
+            part_3: dataModel.part_3,
+            color_name_4: dataModel.color_name_4 || null,
+            part_4: dataModel.part_4,
             price: data.price_model_sell[index],
             phase_1: data.phase_1[index],
             phase_2: data.phase_2[index],
