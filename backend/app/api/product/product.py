@@ -1,11 +1,12 @@
 """Module for creating product"""
 
 from flask import request, jsonify
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, aliased
 from sqlalchemy import update, select
 from werkzeug.exceptions import BadRequest
 
 from app.products.models import DB_product
+from app.materials.models import DB_materials
 from app.api.errors import DatabaseError
 
 from app.products.validator import (
@@ -45,13 +46,13 @@ def create_product():
                 colors=data['colors'],
                 price=data['price'],
                 id_color_1=data['id_color_1'],
-                id_part_1=data['id_part_1'],
+                part_1=data['id_part_1'],
                 id_color_2=data['id_color_2'],
-                id_part_2=data['id_part_2'],
+                part_2=data['id_part_2'],
                 id_color_3=data['id_color_3'],
-                id_part_3=data['id_part_3'],
+                part_3=data['id_part_3'],
                 id_color_4=data['id_color_4'],
-                id_part_4=data['id_part_4'],
+                part_4=data['id_part_4'],
                 comment=data['comment'])
             session.add(stmt)
             session.commit()
@@ -75,6 +76,10 @@ def read_product(id_product):
     # if id_product is None:
     #     return jsonify({'read_product': 'id_product is missing'}), 400
     with Session(engine) as session:
+        color_name_1 = aliased(DB_materials)
+        color_name_2 = aliased(DB_materials)
+        color_name_3 = aliased(DB_materials)
+        color_name_4 = aliased(DB_materials)
         stmt = (
             select(
                 DB_product.id_product,
@@ -86,12 +91,23 @@ def read_product(id_product):
                 DB_product.id_color_2,
                 DB_product.id_color_3,
                 DB_product.id_color_4,
-                DB_product.id_part_1,
-                DB_product.id_part_2,
-                DB_product.id_part_3,
-                DB_product.id_part_4)
+                DB_product.part_1,
+                DB_product.part_2,
+                DB_product.part_3,
+                DB_product.part_4,
+                color_name_1.name.label('color_name_1'),
+                color_name_2.name.label('color_name_2'),
+                color_name_3.name.label('color_name_3'),
+                color_name_4.name.label('color_name_4')
+                )
+            .group_by(DB_product, color_name_1, color_name_2, color_name_3, color_name_4)
+            .join(color_name_1, DB_product.id_color_1 == color_name_1.id_material)
+            .join(color_name_2, DB_product.id_color_2 == color_name_2.id_material, isouter=True)
+            .join(color_name_3, DB_product.id_color_3 == color_name_3.id_material, isouter=True)
+            .join(color_name_4, DB_product.id_color_4 == color_name_4.id_material, isouter=True)
             .where(DB_product.id_product == id_product))
         product = session.execute(stmt).first()
+        print(product)
         if product:
             return jsonify({
                 'id_product': product.id_product,
@@ -99,14 +115,18 @@ def read_product(id_product):
                 'colors': product.colors,
                 'price': product.price,
                 'id_color_1': product.id_color_1,
-                'id_part_1': product.id_part_1,
+                'part_1': product.id_part_1,
                 'id_color_2': product.id_color_2,
-                'id_part_2': product.id_part_2,
+                'part_2': product.id_part_2,
                 'id_color_3': product.id_color_3,
-                'id_part_3': product.id_part_3,
+                'part_3': product.id_part_3,
                 'id_color_4': product.id_color_4,
-                'id_part_4': product.id_part_4,
-                'comment': product.comment
+                'part_4': product.id_part_4,
+                'comment': product.comment,
+                'color_name_1': product.color_name_1,
+                'color_name_2': product.color_name_2,
+                'color_name_3': product.color_name_3,
+                'color_name_4': product.color_name_4
             }), 200
         return jsonify({"read_product": 'ID product is not exist'}), 400
 
@@ -139,13 +159,13 @@ def edit_product(id_product):
                     colors=data['colors'],
                     price=data['price'],
                     id_color_1=data['id_color_1'],
-                    id_part_1=data['id_part_1'],
+                    part_1=data['part_1'],
                     id_color_2=data['id_color_2'],
-                    id_part_2=data['id_part_2'],
+                    part_2=data['part_2'],
                     id_color_3=data['id_color_3'],
-                    id_part_3=data['id_part_3'],
+                    part_3=data['part_3'],
                     id_color_4=data['id_color_4'],
-                    id_part_4=data['id_part_4'],
+                    part_4=data['part_4'],
                     comment=data['comment']))
             session.execute(stmt)
             session.commit()

@@ -9,13 +9,13 @@ class DB_product(Base):
     colors = Column('kolor_model', String)
     price = Column('price_model', Integer)
     id_color_1 = Column('id_color_1', Integer)
-    id_part_1 = Column('id_color_part_1', Integer)
+    part_1 = Column('id_color_part_1', Integer)
     id_color_2 = Column('id_color_2', Integer)
-    id_part_2 = Column('id_color_part_2', Integer)
+    part_2 = Column('id_color_part_2', Integer)
     id_color_3 = Column('id_color_3', Integer)
-    id_part_3 = Column('id_color_part_3', Integer)
+    part_3 = Column('id_color_part_3', Integer)
     id_color_4 = Column('id_color_4', Integer)
-    id_part_4 = Column('id_color_part_4', Integer)
+    part_4 = Column('id_color_part_4', Integer)
     comment = Column('comment_model', String)
         
     # def to_json(self):
