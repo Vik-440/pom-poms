@@ -157,7 +157,7 @@
     <button class="finished-order--btn" [ngClass]="{'done': !fulfilledOrder, 'wave': fulfilledOrder}"
       (click)="makeOrderDone()">Виконано</button>
     <button class="finished-order--btn malachite" *ngIf="!doneOrder" (click)="saveAll()"
-      [disabled]="!isNew || ((!isSaveClient || (!isSaveRecipient && isRecipient)) && dataPlaneOrder && clientForm.valid && orderForm.valid && !orderForm.value.isNew)">Оформити
+      [disabled]="!(!isNew ||  isNew && dataPlaneOrder && clientForm.valid && orderForm.valid && (!isSaveRecipient || isSaveRecipient && recipientForm.valid))">Оформити
       замовлення</button>
     <button class="finished-order--btn wave" *ngIf="doneOrder">Оформлено</button>
     <button class="finished-order--btn teal-blue" (click)="copyScore()">Виставити рахунок</button>

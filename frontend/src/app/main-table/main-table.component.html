@@ -201,7 +201,7 @@
         [class.disabled]="filtersForm.value.id_client || filtersForm.value.team || filtersForm.value.city || filtersForm.value.coach">
         <div class="filters-data--title">№ телефону</div>
         <ng-select [clearOnBackspace]="false" notFoundText="No phone founded"
-          (search)="changeFiled($event, 'phone', 4, 'phone_client')" type="number" (change)="clearFilterData()"
+          (search)="changeFiled($event, 'phone', 4, 'phone_client')" type="number" bindLabel="value" (change)="clearFilterData()"
           formControlName="phone_client" [items]="dataFilters"></ng-select>
       </div>
       <div class="filters-data"
@@ -242,12 +242,12 @@
       </div>
       <div class="filters-data" [class.disabled]="filtersForm.value.kod_model || filtersForm.value.kolor_model_like">
         <div class="filters-data--title">Збіг у коді моделі</div>
-        <input [clearOnBackspace]="false" notFoundText="No phone founded" (search)="changeFiled($event)" type="text"
+        <input [clearOnBackspace]="false" notFoundText="No phone founded" type="text"
           class="filters-data--input" formControlName="kod_model_like" [items]="dataFilters">
       </div>
       <div class="filters-data" [class.disabled]="filtersForm.value.kod_model || filtersForm.value.kod_model_like">
         <div class="filters-data--title">Збіг у кольорі</div>
-        <input [clearOnBackspace]="false" notFoundText="No phone founded" (search)="changeFiled($event)" type="text"
+        <input [clearOnBackspace]="false" notFoundText="No phone founded" type="text"
           class="filters-data--input" formControlName="kolor_model_like" [items]="dataFilters">
       </div>
     </div>
