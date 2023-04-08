@@ -71,12 +71,12 @@ def validate_product(data: dict):
         if not session.execute(stmt).first():
             return {'id_color_1': f'id_color_1 {data["id_color_1"]} is missing'}
         
-        if not 'id_part_1' in data:
-            return {'id_part_1': 'miss in data'}
-        if not isinstance(data['id_part_1'], int):
-            return {'id_part_1': 'is not int type'}
-        if data['id_part_1'] > 100:
-            data['id_part_1'] = 100
+        if not 'part_1' in data:
+            return {'part_1': 'miss in data'}
+        if not isinstance(data['part_1'], int):
+            return {'part_1': 'is not int type'}
+        if data['part_1'] > 100:
+            data['part_1'] = 100
 
         if not 'id_color_2' in data:
             return {'id_color_2': 'miss in data'}
@@ -89,18 +89,18 @@ def validate_product(data: dict):
             if not session.execute(stmt).first():
                 return {'id_color_2': f'id_color_2 {data["id_color_2"]} is missing'}
         
-            if not 'id_part_2' in data:
-                return {'id_part_2': 'miss in data'}
-            if not isinstance(data['id_part_2'], int):
-                return {'id_part_2': 'is not int type'}
-            if data['id_part_2'] > 100:
-                data['id_part_2'] = 100
+            if not 'part_2' in data:
+                return {'part_2': 'miss in data'}
+            if not isinstance(data['part_2'], int):
+                return {'part_2': 'is not int type'}
+            if data['part_2'] > 100:
+                data['part_2'] = 100
         else:
-            data['id_part_2'] = None
+            data['part_2'] = None
             data['id_color_3'] = None
-            data['id_part_3'] = None
+            data['part_3'] = None
             data['id_color_4'] = None
-            data['id_part_4'] = None
+            data['part_4'] = None
 
         if not 'id_color_3' in data:
             return {'id_color_3': 'miss in data'}
@@ -113,16 +113,16 @@ def validate_product(data: dict):
             if not session.execute(stmt).first():
                 return {'id_color_3': f'id_color_3 {data["id_color_3"]} is missing'}
         
-            if not 'id_part_3' in data:
-                return {'id_part_3': 'miss in data'}
-            if not isinstance(data['id_part_3'], int):
-                return {'id_part_3': 'is not int type'}
-            if data['id_part_3'] > 100:
-                data['id_part_3'] = 100
+            if not 'part_3' in data:
+                return {'part_3': 'miss in data'}
+            if not isinstance(data['part_3'], int):
+                return {'part_3': 'is not int type'}
+            if data['part_3'] > 100:
+                data['part_3'] = 100
         else:
-            data['id_part_3'] = None
+            data['part_3'] = None
             data['id_color_4'] = None
-            data['id_part_4'] = None
+            data['part_4'] = None
             
         if not 'id_color_4' in data:
             return {'id_color_4': 'miss in data'}
@@ -135,13 +135,13 @@ def validate_product(data: dict):
             if not session.execute(stmt).first():
                 return {'id_color_4': f'id_color_4 {data["id_color_4"]} is missing'}
         
-            if not 'id_part_4' in data:
-                return {'id_part_4': 'miss in data'}
-            if not isinstance(data['id_part_4'], int):
-                return {'id_part_4': 'is not int type'}
-            if data['id_part_4'] > 100:
-                data['id_part_4'] = 100
+            if not 'part_4' in data:
+                return {'part_4': 'miss in data'}
+            if not isinstance(data['part_4'], int):
+                return {'part_4': 'is not int type'}
+            if data['part_4'] > 100:
+                data['part_4'] = 100
         else:
-            data['id_part_4'] = None
+            data['part_4'] = None
 
     return 
