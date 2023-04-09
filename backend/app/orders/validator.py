@@ -23,6 +23,7 @@ def validate_id_order(id_order: int):
 def validate_create_order(data: dict):
     """Validator for create order"""
     qty_product_in_order = None
+    # formats_date = ['%Y-%m-%d', '%Y-%-m-%-d']
     date_today = datetime.today().strftime('%Y-%m-%d')
     with Session(engine) as session:
 
@@ -35,8 +36,10 @@ def validate_create_order(data: dict):
             datetime.strptime(date_str, '%Y-%m-%d')
         except ValueError:
             return {"date_create": 'is not in format like: yyyy-mm-dd'}
-        if data['date_create'] > date_today:
+        if date_str > date_today:
             return {"date_create": 'date future -> misstake'}
+        else:
+            data['date_create'] = date_str
 
         if not 'date_plane_send' in data:
             return {"date_plane_send": 'miss in data'}
@@ -47,6 +50,7 @@ def validate_create_order(data: dict):
             datetime.strptime(date_str, '%Y-%m-%d')
         except ValueError:
             return {"date_plane_send": 'is not in format like: yyyy-mm-dd'}
+        data['date_plane_send'] = date_str
         
         if not 'id_client' in data:
             return {'id_client': 'miss in data'}
