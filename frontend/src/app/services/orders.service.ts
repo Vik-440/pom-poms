@@ -20,4 +20,8 @@ export class CreateOrderService {
         return this.http.post(`${this.url}`, params);
     }
 
+    editOrder(params, id) {
+        return this.http.put(`${this.url}/${id}`, params);
+    }
+
 }

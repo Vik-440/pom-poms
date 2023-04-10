@@ -72,7 +72,7 @@ export class CreateOrderComponent implements OnInit {
   clientDataItems = [];
   coachDataItems;
   infoForSave: any;
-  commentOrder = '';
+  commentOrder = null;
   discount = 0;
   doneOrder: Boolean = false;
   alert = {
@@ -117,7 +117,7 @@ export class CreateOrderComponent implements OnInit {
   }
 
   init() {
-    this.commentOrder = '';
+    this.commentOrder = null;
     this.isSaveClient = false;
     this.isSaveRecipient = false;
     this.dateForms = this.fb.group({
@@ -343,21 +343,7 @@ export class CreateOrderComponent implements OnInit {
   }
 
   chooseKode(value, index, ignore = true) {
-    if (!this.kodItems.length) {
-      this.orderForm.controls.map((order, ind) => {
-        if (ind === index && value) {
-          order.patchValue({
-            article: value.value,
-          });
-        } else if (!value) {
-          order.patchValue({
-            article: null,
-          });
-        }
-        return;
-      });
-    }
-    if (this.kodItems?.includes(value) || !ignore) {
+    if(value && value.hasOwnProperty('id_product')) {
       this.orderForm.controls.map((order, ind) => {
         this.productService.getProduct(value.id_product).subscribe((data: any) => {
           if (index === ind && Object.keys(data).length) {
@@ -388,7 +374,66 @@ export class CreateOrderComponent implements OnInit {
           }
         });
       });
+    } else {
+      console.log('else', value, index);
+      this.orderForm.controls.map((order, ind) => {
+        order.patchValue({
+          article: value.value
+        })
+      });
     }
+    // console.log(1, !this.kodItems.length, this.kodItems);
+    // if (!this.kodItems.length) {
+    //   console.log(1);
+      
+    //   this.orderForm.controls.map((order, ind) => {
+    //     if (ind === index && value) {
+    //       console.log(1);
+    //       order.patchValue({
+    //         article: value.value,
+    //       });
+    //     } else if (!value) {
+    //       console.log(1);
+    //       order.patchValue({
+    //         article: null,
+    //       });
+    //     }
+    //     return;
+    //   });
+    // }
+    // if (this.kodItems?.includes(value) || !ignore) {
+    //   console.log(1);
+    //   this.orderForm.controls.map((order, ind) => {
+    //     this.productService.getProduct(value.id_product).subscribe((data: any) => {
+    //       if (index === ind && Object.keys(data).length) {
+    //         order.patchValue(
+    //           {
+    //             id_product: data.id_product,
+    //             article: data.article,
+    //             colors: data.colors,
+    //             color_name_1: data.color_name_1 || null,
+    //             part_1: data.part_1,
+    //             id_color_1: data.id_color_1,
+    //             id_color_2: data.id_color_2,
+    //             id_color_3: data.id_color_3,
+    //             id_color_4: data.id_color_4,
+    //             color_name_2: data.color_name_2 || null,
+    //             part_2: data.part_2,
+    //             color_name_3: data.color_name_3 || null,
+    //             part_3: data.part_3,
+    //             color_name_4: data.color_name_4 || null,
+    //             part_4: data.part_4,
+    //             price: data.price,
+    //             comment: data.comment,
+    //             isNew: false,
+    //             isChange: false,
+    //           },
+    //           { emitEvent: false }
+    //         );
+    //       }
+    //     });
+    //   });
+    // }
     this.kodItems = [];
   }
 
@@ -602,7 +647,7 @@ export class CreateOrderComponent implements OnInit {
       (data: any) => {
         this.isShowSpinner = false;
         form.patchValue({
-          id_client: data.id_recipient || this.clientForm.value.id_client,
+          id_client: data.id_client,
         });
         this.isSaveClient = true;
       },
@@ -716,8 +761,9 @@ export class CreateOrderComponent implements OnInit {
   }
  
   saveAll(mode = 'create') {
+    console.log(this.clientForm.value);
+    
     const params = {
-      id_order: +this.idOrder,
       date_create: this.rewriteData(this.dateToday),
       id_client: this.clientForm.value.id_client,
       id_recipient: !this.isRecipient ? this.clientForm.value.id_client : this.recipientForm.value.id_client, // (2 або ід_клієнт)
@@ -732,27 +778,41 @@ export class CreateOrderComponent implements OnInit {
       sum_payment: +this.sumAll(false).split('/')[0].trim(),
       status_order: false,
       comment: this.commentOrder,
-      edit_real_order: this.idOrder,
     };
 
-    if (mode === 'create') {
-      delete params.edit_real_order;
+    if(mode === 'edit') {
+      this.service.editOrder(params, +this.idOrder).subscribe((data: any) => {
+        this.idOrder = +data.id_order || this.idOrder;
+        // this.doneOrder = true;
+        localStorage.setItem('date_plane_send', JSON.stringify(this.dataPlaneOrder));
+        localStorage.setItem('dateToday', JSON.stringify(this.dateToday));
+        this.alert = {
+          isShow: true,
+          type: 'success',
+          message: 'Дані збережено',
+        };
+        setTimeout(() => {
+          this.alertChange(false);
+        }, 3000);
+      });
+    } else {
+      this.service.saveOrder(params).subscribe((data: any) => {
+        this.idOrder = +data.id_order || this.idOrder;
+        this.doneOrder = true;
+        this.isNew = false;
+        localStorage.setItem('date_plane_send', JSON.stringify(this.dataPlaneOrder));
+        localStorage.setItem('dateToday', JSON.stringify(this.dateToday));
+        this.alert = {
+          isShow: true,
+          type: 'success',
+          message: 'Дані збережено',
+        };
+        setTimeout(() => {
+          this.alertChange(false);
+        }, 3000);
+      });
     }
-
-    this.service.saveOrder(params).subscribe((data: any) => {
-      this.idOrder = +data.id_order || this.idOrder;
-      this.doneOrder = true;
-      localStorage.setItem('date_plane_send', JSON.stringify(this.dataPlaneOrder));
-      localStorage.setItem('dateToday', JSON.stringify(this.dateToday));
-      this.alert = {
-        isShow: true,
-        type: 'success',
-        message: 'Дані збережено',
-      };
-      setTimeout(() => {
-        this.alertChange(false);
-      }, 3000);
-    });
+   
   }
 
   setClientData(dataClient) {
