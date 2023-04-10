@@ -41,7 +41,7 @@
       <div class="flex">
         <ng-select [clearSearchOnAdd]="false" appearance="outline" [items]="materialsItems" type="text"
           class="form__field form__field-material" [addTag]="false" bindLabel="name_color" [hideSelected]="true"
-          placeholder="матеріал 3" formControlName="color_name_3"
+          placeholder="матеріал 3" formControlName="color_name_3"  bindLabel="value"
           (search)="changeMaterial($event.term)" (change)="changeIdColor(order, 'id_color_3', $event)">
         </ng-select>
         <input type="text" class="form__field--sm" placeholder="%" formControlName="part_3">
@@ -52,7 +52,7 @@
       <div class="flex">
         <ng-select [clearSearchOnAdd]="false" appearance="outline" [items]="materialsItems" bindLabel="name_color"
           type="text" class="form__field form__field-material" [addTag]="false" [hideSelected]="true"
-          placeholder="матеріал 2" formControlName="color_name_2"
+          placeholder="матеріал 2" formControlName="color_name_2"  bindLabel="value"
           (search)="changeMaterial($event.term)" (change)="changeIdColor(order, 'id_color_2', $event)">
         </ng-select>
         <input type="text" class="form__field--sm" placeholder="%" formControlName="part_2">
@@ -60,7 +60,7 @@
       <div class="flex">
         <ng-select [clearSearchOnAdd]="false" appearance="outline" [items]="materialsItems" bindLabel="name_color"
           type="text" class="form__field form__field-material" [addTag]="false" [hideSelected]="true"
-          placeholder="матеріал 4" formControlName="color_name_4"
+          placeholder="матеріал 4" formControlName="color_name_4"  bindLabel="value"
           (search)="changeMaterial($event.term)" (change)="changeIdColor(order, 'id_color_4', $event)">
         </ng-select>
         <input type="text" class="form__field--sm" placeholder="%" formControlName="part_4">
@@ -68,7 +68,7 @@
     </div>
 
     <div class="form__fields">
-      <input class="form__field--md" type="text" placeholder="ціна" formControlName="price">
+      <input class="form__field--md" type="number" placeholder="ціна" formControlName="price">
       <button class="action-btn forms" (click)="saveProduct(index, order)" *ngIf="order.value.isNew">
         Зберегти
       </button>
@@ -83,10 +83,10 @@
 
     <div class="form__fields">
       <div class="form__fields--phashes">
-        <input type="text" class="form__field--ml pars" placeholder="к-сть пар" formControlName="qty_pars">
-        <input type="text" class="phase" disabled formControlName="phase_1">
-        <input type="text" class="phase" disabled formControlName="phase_2">
-        <input type="text" class="phase" disabled formControlName="phase_3">
+        <input type="number" class="form__field--ml pars" placeholder="к-сть пар" formControlName="qty_pars">
+        <input type="number" class="phase" disabled formControlName="phase_1">
+        <input type="number" class="phase" disabled formControlName="phase_2">
+        <input type="number" class="phase" disabled formControlName="phase_3">
       </div>
       <input type="text" class="form__field--ml sum" placeholder="сума" formControlName="sum_pars">
     </div>
@@ -119,11 +119,10 @@
       <div class="calendar-block">
         <input class="form-control" placeholder="yyyy-mm-dd" [minDate]="{year: 2016, month: 1, day: 1}"
           [maxDate]="{year: +todayYear, month: 12, day: 31}" [(ngModel)]="dataPlaneOrder" ngbDatepicker
-          #d="ngbDatepicker">
+          #d="ngbDatepicker" (ngModelChange)="changedate()">
         <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"><i
             class="bi bi-calendar"></i></button>
       </div>
-
     </div>
   </div>
   <div class="customer">
@@ -152,12 +151,12 @@
   </div>
   <div class="finished-order--btns">
     <button class="finished-order--btn edit"
-      [disabled]="isNew || ((!isSaveClient || (!isSaveRecipient && isRecipient)) && dataPlaneOrder && clientForm.valid && orderForm.valid)"
+      [disabled]="isDisabledBtn('edit')"
       (click)="saveAll('edit')">Редагувати</button>
     <button class="finished-order--btn" [ngClass]="{'done': !fulfilledOrder, 'wave': fulfilledOrder}"
       (click)="makeOrderDone()">Виконано</button>
     <button class="finished-order--btn malachite" *ngIf="!doneOrder" (click)="saveAll()"
-      [disabled]="!(!isNew ||  isNew && dataPlaneOrder && clientForm.valid && orderForm.valid && (!isSaveRecipient || isSaveRecipient && recipientForm.valid))">Оформити
+      [disabled]="isDisabledBtn('new')">Оформити
       замовлення</button>
     <button class="finished-order--btn wave" *ngIf="doneOrder">Оформлено</button>
     <button class="finished-order--btn teal-blue" (click)="copyScore()">Виставити рахунок</button>

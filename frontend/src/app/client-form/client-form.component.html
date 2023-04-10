@@ -3,8 +3,8 @@
     <ng-select [clearSearchOnAdd]="false" appearance="outline" [items]="clientDataItems" type="text" [addTag]="true"
       [hideSelected]="true" placeholder="телефон*" addTagText="+ новий номер телефону" formControlName="phone"
       bindLabel="value"
-
-      (search)="changeClientInfo($event.term, 'phone')" (change)="selectItem($event)">
+      [editableSearchTerm]="true"
+      (search)="changeClientInfo($event.term, 'phone')" (change)="selectItem($event, 'phone')">
     </ng-select>
     <i *ngIf="clientForm.controls.phone.errors?.message" [ngbTooltip]="clientForm.controls.phone.errors.message"
       class="invalid bi bi-exclamation-circle"></i>
@@ -15,7 +15,8 @@
       [hideSelected]="true" bindLabel="secondName" placeholder="прізвище*" addTagText="+ прізвище"
       formControlName="second_name" (search)="changeClientInfo($event.term, 'second_name')"
       bindLabel="value"
-      (change)="selectItem($event)">
+      [editableSearchTerm]="true"
+      (change)="selectItem($event, 'second_name')">
     </ng-select>
     <i *ngIf="clientForm.controls.second_name.errors?.message"
       [ngbTooltip]="clientForm.controls.second_name.errors.message" class="invalid bi bi-exclamation-circle"></i>
@@ -32,7 +33,8 @@
     <ng-select [clearSearchOnAdd]="false" appearance="outline" [items]="clientDataItems" type="text" [addTag]="true"
       [hideSelected]="true" placeholder="місто*" addTagText="+ місто" formControlName="city"
       bindLabel="value"
-      (search)="changeClientInfo($event.term, 'city')" (change)="clearDataClient()">
+      [editableSearchTerm]="true"
+      (search)="changeClientInfo($event.term, 'city')" (change)="selectItem($event, 'city')">
     </ng-select>
     <i *ngIf="clientForm.controls.city.errors?.message" [ngbTooltip]="clientForm.controls.city.errors.message"
       class="invalid bi bi-exclamation-circle">
@@ -72,7 +74,8 @@
     <ng-select [clearSearchOnAdd]="false" appearance="outline" [items]="clientDataItems" type="text" [addTag]="true"
       [hideSelected]="true" placeholder="команда" addTagText="+ команда" formControlName="team"
       bindLabel="value"
-      (search)="changeClientInfo($event.term,'team')" (change)="clearDataClient()">
+      [editableSearchTerm]="true"
+      (search)="changeClientInfo($event.term,'team')" (change)="selectItem($event, 'team')">
     </ng-select>
     <i *ngIf="clientForm.controls.team.errors?.message" [ngbTooltip]="clientForm.controls.team.errors.message"
       class="invalid bi bi-exclamation-circle">
@@ -83,7 +86,8 @@
     <ng-select [clearSearchOnAdd]="false" appearance="outline" [items]="clientDataItems" type="text" [addTag]="true"
       [hideSelected]="true" placeholder="тренер" addTagText="+ тренер" formControlName="coach"
       bindLabel="value"
-      (search)="changeClientInfo($event.term, 'coach')" (change)="clearDataClient()">
+      [editableSearchTerm]="true" q
+      (search)="changeClientInfo($event.term, 'coach')" (change)="selectItem($event, 'coach')">
     </ng-select>
     {{clientForm.controls.coach.errors}}
     <i *ngIf="clientForm.controls.coach.errors?.message" [ngbTooltip]="clientForm.controls.coach.errors.message"

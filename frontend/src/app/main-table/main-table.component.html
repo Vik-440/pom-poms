@@ -258,6 +258,6 @@
   </div>
 </ng-template>
 
-<div class="blur" *ngIf="isShowFilter"></div>
+<div class="blur" *ngIf="isShowFilter" (click)="closeFilterMenu()"></div>
 <app-alert *ngIf="alert.isShow" [type]="alert.type" [message]="alert.message"
   (closed)="alertChange($event)"></app-alert>

@@ -38,13 +38,17 @@ export class ClientFormComponent implements OnInit {
     }
   }
 
-  selectItem(value) {
+  selectItem(value, field: string) {
     if(value && value.hasOwnProperty('id_client')) {
       this.clientService.getClient(value.id_client).subscribe((data) => {
         this.isNewForm = false;
         this.isShowOk = true;
         this.setValueForm(data);
       });
+    } else if(value) {
+      this.clientForm.patchValue({
+        [field]: value.value
+      })
     }
     this.clearDataClient();
   }

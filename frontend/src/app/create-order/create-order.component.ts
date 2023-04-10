@@ -157,7 +157,7 @@ export class CreateOrderComponent implements OnInit {
         phase_1_default: 0,
         phase_2_default: 0,
         phase_3_default: 0,
-        quantity_pars_model_default: null,
+        qty_pars_default: null,
         sum_pars: null,
         comment: null,
         isNew: [true, this.requiredFalse()],
@@ -229,7 +229,7 @@ export class CreateOrderComponent implements OnInit {
               modelsData[order.value.article?.substring(0, 2)] ||
               '';
 
-            if (data <= order.value.quantity_pars_model_default) {
+            if (data <= order.value.qty_pars_default) {
               order.patchValue({
                 sum_pars: data * order.value.price,
                 phase_1: order.value.phase_1_default,
@@ -443,7 +443,7 @@ export class CreateOrderComponent implements OnInit {
         phase_1_default: 0,
         phase_2_default: 0,
         phase_3_default: 0,
-        quantity_pars_model_default: null,
+        qty_pars_default: null,
         sum_pars: null,
         comment: null,
         isNew: [true, this.requiredFalse()],
@@ -469,7 +469,7 @@ export class CreateOrderComponent implements OnInit {
       part_3: +order.value.part_3 || null,
       id_color_4: +order.value.id_color_4 || null,
       part_4: +order.value.part_4 || null,
-      price: order.value.price || 0,
+      price: +order.value.price || 0,
       comment: order.value.comment,
       colors: order.value.colors || null,
     };
@@ -703,10 +703,22 @@ export class CreateOrderComponent implements OnInit {
     return result;
   }
 
+  rewriteData(data) {
+    if(this.isEmptyObject(data)) {
+      return null;
+    }
+    const month = +data.month < 10 ? '0' + data.month : data.month;
+    const day = +data.day < 10 ? '0' + data.day : data.day;
+    
+    return data
+    ? [data.year, month, day].join('-')
+    : null;
+  }
+ 
   saveAll(mode = 'create') {
     const params = {
       id_order: +this.idOrder,
-      date_create: [this.dateToday.year, this.dateToday.month, this.dateToday.day].join('-'),
+      date_create: this.rewriteData(this.dateToday),
       id_client: this.clientForm.value.id_client,
       id_recipient: !this.isRecipient ? this.clientForm.value.id_client : this.recipientForm.value.id_client, // (2 або ід_клієнт)
       id_models: this.makeArrayDataOrder('id_product'),
@@ -715,9 +727,7 @@ export class CreateOrderComponent implements OnInit {
       phase_1: this.makeArrayDataOrder('phase_1'),
       phase_2: this.makeArrayDataOrder('phase_2'),
       phase_3: this.makeArrayDataOrder('phase_3'),
-      date_plane_send: this.dataPlaneOrder
-        ? [this.dataPlaneOrder.year, this.dataPlaneOrder.month, this.dataPlaneOrder.day].join('-')
-        : null, // - прогнозована
+      date_plane_send: this.rewriteData(this.dataPlaneOrder), // - прогнозована
       discount: this.discount,
       sum_payment: +this.sumAll(false).split('/')[0].trim(),
       status_order: false,
@@ -878,7 +888,7 @@ export class CreateOrderComponent implements OnInit {
             phase_3_default: data.phase_3[index],
             comment: dataModel.comment,
             qty_pars: [data.qty_pars[index], Validators.required],
-            quantity_pars_model_default: data.qty_pars[index],
+            qty_pars_default: data.qty_pars[index],
             sum_pars: data.qty_pars[index] * data.price_model_sell[index],
             isNew: false,
             isChange: false,
@@ -944,4 +954,25 @@ export class CreateOrderComponent implements OnInit {
   alertChange(e) {
     this.alert.isShow = e;
   }
+
+  changedate() {
+    console.log(this.dataPlaneOrder);
+    
+  }
+  isEmptyObject(obj) {
+    if(obj === null) {
+      return true;
+    }
+    return (obj && (Object.keys(obj).length === 0));
+ }
+
+ isDisabledBtn(mode: string) {
+  const isClientsFormValid = this.isRecipient ? this.clientForm.valid && this.recipientForm.valid : this.clientForm.valid;
+  const isOrderValid = this.orderForm.valid;
+  // console.log(this.isNew ? (this.isNew && isClientsFormValid && isOrderValid) : true);
+  // console.log(this.isNew, isClientsFormValid, isOrderValid, this.dataPlaneOrder, this.isEmptyObject(this.dataPlaneOrder));
+  
+  return mode === 'new' ? (this.isNew ? !(this.isNew && isClientsFormValid && isOrderValid && !this.isEmptyObject(this.dataPlaneOrder)) : true) :
+  (!this.isNew ? !(!this.isNew && isClientsFormValid && isOrderValid && !this.isEmptyObject(this.dataPlaneOrder)) : true);
+ }
 }
