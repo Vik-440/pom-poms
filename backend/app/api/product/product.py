@@ -60,7 +60,6 @@ def create_product():
             id_product = stmt.id_product
             return jsonify({"id_product": id_product}), 200
     except DatabaseError:
-        print('error')
         logger.error('id_product: error in save order to DB')
         return  jsonify({"id_product": 'error in save order to DB'}), 400
 
@@ -73,8 +72,6 @@ def read_product(id_product):
     if error_id:
         logger.error(f'{error_id}')
         return jsonify(error_id), 400
-    # if id_product is None:
-    #     return jsonify({'read_product': 'id_product is missing'}), 400
     with Session(engine) as session:
         color_name_1 = aliased(DB_materials)
         color_name_2 = aliased(DB_materials)
@@ -107,7 +104,6 @@ def read_product(id_product):
             .join(color_name_4, DB_product.id_color_4 == color_name_4.id_material, isouter=True)
             .where(DB_product.id_product == id_product))
         product = session.execute(stmt).first()
-        # print(product)
         if product:
             return jsonify({
                 'id_product': product.id_product,

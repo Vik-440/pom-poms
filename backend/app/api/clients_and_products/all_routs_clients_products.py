@@ -191,13 +191,13 @@ def return_data_from_kod(sl_kod, open_id_model):
             j_id_model = row.id_product
             j_kod_model = row.article
             j_id_color_1 = row.id_color_1
-            j_id_color_part_1 = row.id_part_1
+            j_id_color_part_1 = row.part_1
             j_id_color_2 = row.id_color_2
-            j_id_color_part_2 = row.id_part_2
+            j_id_color_part_2 = row.part_2
             j_id_color_3 = row.id_color_3
-            j_id_color_part_3 = row.id_part_3
+            j_id_color_part_3 = row.part_3
             j_id_color_4 = row.id_color_4
-            j_id_color_part_4 = row.id_part_4
+            j_id_color_part_4 = row.part_4
             j_price_model = row.price
             j_comment_model = row.comment
             j_kolor_model = row.colors
@@ -261,13 +261,13 @@ def return_data_from_full_kod(data_from_new_page):
             ins = DB_product(
                 article=data_from_new_page['kod_model'],    # int for all
                 id_color_1=int(data_from_new_page['id_color_1']),
-                id_part_1=int(data_from_new_page['id_color_part_1']),
+                part_1=int(data_from_new_page['id_color_part_1']),
                 id_color_2=int(data_from_new_page['id_color_2']),
-                id_part_2=int(data_from_new_page['id_color_part_2']),
+                part_2=int(data_from_new_page['id_color_part_2']),
                 id_color_3=int(data_from_new_page['id_color_3']),
-                id_part_3=int(data_from_new_page['id_color_part_3']),
+                part_3=int(data_from_new_page['id_color_part_3']),
                 id_color_4=int(data_from_new_page['id_color_4']),
-                id_part_4=int(data_from_new_page['id_color_part_4']),
+                part_4=int(data_from_new_page['id_color_part_4']),
                 price=data_from_new_page['price_model'],
                 comment=data_from_new_page['comment_model'],
                 colors=data_from_new_page['kolor_model'])
@@ -284,16 +284,16 @@ def return_data_from_full_kod(data_from_new_page):
                 DB_product.id_product == j_id_model).update(
                     {'article': data_from_new_page['kod_model'],
                         'id_color_1': int(data_from_new_page['id_color_1']),
-                        'id_part_1': int(
+                        'part_1': int(
                         data_from_new_page['id_color_part_1']),
                         'id_color_2': int(data_from_new_page['id_color_2']),
-                        'id_part_2': int(
+                        'part_2': int(
                             data_from_new_page['id_color_part_2']),
                         'id_color_3': int(data_from_new_page['id_color_3']),
-                        'id_part_3': int(
+                        'part_3': int(
                             data_from_new_page['id_color_part_3']),
                         'id_color_4': int(data_from_new_page['id_color_4']),
-                        'id_part_4': int(
+                        'part_4': int(
                             data_from_new_page['id_color_part_4']),
                         'price': data_from_new_page['price_model'],
                         'comment': data_from_new_page['comment_model'],
@@ -444,7 +444,7 @@ def return_data_from_final_order(data_from_new_page):
 
 
 
-        print(data_from_new_page)
+        # print(data_from_new_page)
         if check_order is not None and id_order != 0:
             raise Exception("This order number is real - 2p")
         if id_order == 0:
