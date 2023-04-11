@@ -110,6 +110,7 @@ def read_order(id_order):
                     'phase_1': order.phase_1,
                     'phase_2': order.phase_2,
                     'phase_3': order.phase_3
+                    # 'real_money': 0
                 }), 200
     except:
         return jsonify({"order": 'error in DB'}), 400

@@ -17,10 +17,6 @@ from app.api.materials import extract_materials_data
 
 from app.api.payments import (
     last_payments,
-    attributes_payments,
-    statistics,
-    search_payments,
-    search_id_payment,
     create_payment,
     edit_payment)
 
@@ -30,8 +26,14 @@ from app.api.outlays import (
     create_outlay,
     search_outlay)
 
-from app.api.clients_and_products import (
-    all_routs_clients_products)
+from app.api.financial import (
+    attributes_payments,
+    statistics,
+    search_payments,
+    search_id_payment)
+
+# from app.api.clients_and_products import (
+#     all_routs_clients_products)
 
 from app.api.general import (
     autofill,
