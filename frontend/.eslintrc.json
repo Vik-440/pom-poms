@@ -35,7 +35,10 @@
             "prefix": "app",
             "style": "kebab-case"
           }
-        ]
+        ],
+        "max-len": ["error", {"code": 140}],
+        "no-empty": 2,
+        "quotes": ["error", "single"]
       }
     },
     {

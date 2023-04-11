@@ -22,74 +22,78 @@
 
     <div class="form__fields">
       <ng-select [clearSearchOnAdd]="false" appearance="outline" [items]="kodItems" type="text" class="form__field"
-        [addTag]="true" [hideSelected]="true" placeholder="код" addTagText="+ нова модель" formControlName="kod_model"
-        (search)="changeKodModel($event.term)" (change)="chooseKode($event, index)">
+        [addTag]="true" [hideSelected]="true" placeholder="код" addTagText="+ нова модель" formControlName="article"
+        (search)="changeMaterial($event.term, 'article', true)" (change)="chooseKode($event, index)" bindLabel="value">
       </ng-select>
-      <input type="text" class="form__field" placeholder="колір помпона" formControlName="kolor_model">
+      <input type="text" class="form__field" placeholder="колір помпона" formControlName="colors">
     </div>
 
     <div class="form__fields">
       <div class="flex">
         <ng-select [clearSearchOnAdd]="false" appearance="outline" [items]="materialsItems" bindLabel="name_color"
-          type="text" class="form__field form__field-material" [addTag]="true" [hideSelected]="true"
-          placeholder="матеріал 1" addTagText="+ новий матеріал" formControlName="name_color_1"
-          (search)="changeMaterial($event.term, index)" (change)="changeIdColor(order, 'id_color_1', $event)">
+          type="text" class="form__field form__field-material" [addTag]="false" [hideSelected]="true"
+          placeholder="матеріал 1" formControlName="color_name_1"
+          bindLabel="value"
+          (search)="changeMaterial($event.term)" (change)="changeIdColor(order, 'id_color_1', $event)">
         </ng-select>
-        <!-- <input type="text" class="form__field form__field-material" placeholder="матеріал 1" formControlName="name_color_1"> -->
-        <input type="text" class="form__field--sm" placeholder="%" formControlName="id_color_part_1">
+        <input type="text" class="form__field--sm" placeholder="%" formControlName="part_1">
       </div>
       <div class="flex">
         <ng-select [clearSearchOnAdd]="false" appearance="outline" [items]="materialsItems" type="text"
-          class="form__field form__field-material" [addTag]="true" bindLabel="name_color" [hideSelected]="true"
-          placeholder="матеріал 3" addTagText="+ новий матеріал" formControlName="name_color_3"
-          (search)="changeMaterial($event.term, index)" (change)="changeIdColor(order, 'id_color_3', $event)">
+          class="form__field form__field-material" [addTag]="false" bindLabel="name_color" [hideSelected]="true"
+          placeholder="матеріал 3" formControlName="color_name_3"  bindLabel="value"
+          (search)="changeMaterial($event.term)" (change)="changeIdColor(order, 'id_color_3', $event)">
         </ng-select>
-        <input type="text" class="form__field--sm" placeholder="%" formControlName="id_color_part_3">
+        <input type="text" class="form__field--sm" placeholder="%" formControlName="part_3">
       </div>
     </div>
 
     <div class="form__fields">
       <div class="flex">
         <ng-select [clearSearchOnAdd]="false" appearance="outline" [items]="materialsItems" bindLabel="name_color"
-          type="text" class="form__field form__field-material" [addTag]="true" [hideSelected]="true"
-          placeholder="матеріал 2" addTagText="+ новий матеріал" formControlName="name_color_2"
-          (search)="changeMaterial($event.term, index)" (change)="changeIdColor(order, 'id_color_2', $event)">
+          type="text" class="form__field form__field-material" [addTag]="false" [hideSelected]="true"
+          placeholder="матеріал 2" formControlName="color_name_2"  bindLabel="value"
+          (search)="changeMaterial($event.term)" (change)="changeIdColor(order, 'id_color_2', $event)">
         </ng-select>
-        <input type="text" class="form__field--sm" placeholder="%" formControlName="id_color_part_2">
+        <input type="text" class="form__field--sm" placeholder="%" formControlName="part_2">
       </div>
       <div class="flex">
         <ng-select [clearSearchOnAdd]="false" appearance="outline" [items]="materialsItems" bindLabel="name_color"
-          type="text" class="form__field form__field-material" [addTag]="true" [hideSelected]="true"
-          placeholder="матеріал 4" addTagText="+ новий матеріал" formControlName="name_color_4"
-          (search)="changeMaterial($event.term, index)" (change)="changeIdColor(order, 'id_color_4', $event)">
+          type="text" class="form__field form__field-material" [addTag]="false" [hideSelected]="true"
+          placeholder="матеріал 4" formControlName="color_name_4"  bindLabel="value"
+          (search)="changeMaterial($event.term)" (change)="changeIdColor(order, 'id_color_4', $event)">
         </ng-select>
-        <input type="text" class="form__field--sm" placeholder="%" formControlName="id_color_part_4">
+        <input type="text" class="form__field--sm" placeholder="%" formControlName="part_4">
       </div>
     </div>
 
     <div class="form__fields">
-      <input class="form__field--md" type="text" placeholder="ціна" formControlName="price_model">
-      <button class="save-btn forms" (click)="saveOrder(index, order)" *ngIf="order.value.isNew">
+      <input class="form__field--md" type="number" placeholder="ціна" formControlName="price">
+      <button class="action-btn forms" (click)="saveProduct(index, order)" *ngIf="order.value.isNew">
         Зберегти
       </button>
-      <button class="ok-btn" *ngIf="!order.value.isNew">
+
+      <button class="action-btn forms edit-btn" (click)="editProduct(index, order)" *ngIf="!order.value.isNew && order.value.isChange">
+        Редагувати
+      </button>
+      <button class="ok-btn" *ngIf="!order.value.isNew && !order.value.isChange">
         <img class="next-icon icon" src="./assets/img/icons/ok-btn.svg" />
       </button>
     </div>
 
     <div class="form__fields">
       <div class="form__fields--phashes">
-        <input type="text" class="form__field--ml pars" placeholder="к-сть пар" formControlName="quantity_pars_model">
-        <input type="text" class="phase" disabled formControlName="phase_1">
-        <input type="text" class="phase" disabled formControlName="phase_2">
-        <input type="text" class="phase" disabled formControlName="phase_3">
+        <input type="number" class="form__field--ml pars" placeholder="к-сть пар" formControlName="qty_pars">
+        <input type="number" class="phase" formControlName="phase_1">
+        <input type="number" class="phase" formControlName="phase_2">
+        <input type="number" class="phase" formControlName="phase_3">
       </div>
       <input type="text" class="form__field--ml sum" placeholder="сума" formControlName="sum_pars">
     </div>
 
     <div class="form__fields">
       <textarea type="text" class="form__field--textarea" placeholder="примітка"
-        formControlName="comment_model"></textarea>
+        formControlName="comment"></textarea>
     </div>
 
     <div class="form__fields">
@@ -115,173 +119,31 @@
       <div class="calendar-block">
         <input class="form-control" placeholder="yyyy-mm-dd" [minDate]="{year: 2016, month: 1, day: 1}"
           [maxDate]="{year: +todayYear, month: 12, day: 31}" [(ngModel)]="dataPlaneOrder" ngbDatepicker
-          #d="ngbDatepicker">
+          #d="ngbDatepicker" (ngModelChange)="changedate()">
         <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"><i
             class="bi bi-calendar"></i></button>
       </div>
-
     </div>
   </div>
   <div class="customer">
-    <div class="data-customer" [formGroup]="clientForm">
-      <div class="datacustomer--select data-customer-item data-customer--phone">
-        <ng-select [clearSearchOnAdd]="false" appearance="outline" [items]="clientDataItems" type="text" [addTag]="true"
-          [hideSelected]="true" placeholder="телефон" addTagText="+ новий номер телефону" formControlName="phone"
-          (search)="changeClientInfo($event.term, 4, 'ur_phone')" (change)="selectedItemClient($event, 'sl_phone')">
-        </ng-select>
-        <i *ngIf="clientForm.controls.phone.errors?.message" [ngbTooltip]="clientForm.controls.phone.errors.message"
-        class="invalid bi bi-exclamation-circle"></i>
-      </div>
-
-      <div class="data-customer-item datacustomer--select data-customer--lastname">
-        <ng-select [clearSearchOnAdd]="false" appearance="outline" [items]="clientDataItems" [addTag]="true"
-          [hideSelected]="true" bindLabel="secondName" placeholder="прізвище" addTagText="+ прізвище"
-          formControlName="second_name_client" (search)="changeClientInfo($event.term, 3, 'ur_second_name')"
-          (change)="selectedItemClient($event, 'open_id_client')">
-        </ng-select>
-        <i *ngIf="clientForm.controls.second_name_client.errors?.message" [ngbTooltip]="clientForm.controls.second_name_client.errors.message"
-        class="invalid bi bi-exclamation-circle"></i>
-      </div>
-
-      <div class="data-customer-item data-customer--firstname">
-        <input class="data-customer-item data-customer--firstname" type="text" placeholder="ім'я"
-          formControlName="first_name_client">
-          <i *ngIf="clientForm.controls.first_name_client.errors?.message" [ngbTooltip]="clientForm.controls.first_name_client.errors.message"
-          class="invalid bi bi-exclamation-circle"></i>
-        
-      </div>
-
-
-      <div class="data-customer-item datacustomer--select data-customer--city">
-        <ng-select [clearSearchOnAdd]="false" appearance="outline" [items]="clientDataItems" type="text" [addTag]="true"
-          [hideSelected]="true" placeholder="місто" addTagText="+ місто" formControlName="city"
-          (search)="changeClientInfo($event.term, 3, 'ur_sity')" (change)="clearDataClient()">
-        </ng-select>
-        <i *ngIf="clientForm.controls.city.errors?.message" [ngbTooltip]="clientForm.controls.city.errors.message"
-        class="invalid bi bi-exclamation-circle">
-      </i>
-      </div>
-      <div class="data-customer-item data-customer--post">
-        <input type="text" placeholder="№ НП" formControlName="np_number">
-        <i *ngIf="clientForm.controls.np_number.errors?.message" [ngbTooltip]="clientForm.controls.np_number.errors.message"
-        class="invalid bi bi-exclamation-circle">
-      </i>
-      </div>
-
-      <div class="data-customer-item data-customer--surname">
-        <input class="data-customer-item data-customer--surname" type="text" placeholder="по-батькові"
-          formControlName="surname">
-        <i *ngIf="clientForm.controls.surname.errors?.message" [ngbTooltip]="clientForm.controls.surname.errors.message"
-        class="invalid bi bi-exclamation-circle">
-      </i>
-      </div>
-
-
-      <div class="data-customer-item data-customer--index">
-        <input type="text" placeholder="індекс" formControlName="zip_code">
-        <i *ngIf="clientForm.controls.zip_code.errors?.message" [ngbTooltip]="clientForm.controls.zip_code.errors.message"
-          class="invalid bi bi-exclamation-circle">
-        </i>
-      </div>
-      <div class="data-customer-item data-customer--address">
-        <input type="text" placeholder="адреса" formControlName="address">
-        <i *ngIf="clientForm.controls.address.errors?.message" [ngbTooltip]="clientForm.controls.address.errors.message"
-          class="invalid bi bi-exclamation-circle">
-        </i>
-      </div>
-
-      <div class="data-customer-item datacustomer--select data-customer--team">
-        <ng-select [clearSearchOnAdd]="false" appearance="outline" [items]="clientDataItems" type="text" [addTag]="true"
-          [hideSelected]="true" placeholder="команда" addTagText="+ команда" formControlName="team"
-          (search)="changeClientInfo($event.term, 3, 'ur_team')" (change)="clearDataClient()">
-        </ng-select>
-        <i *ngIf="clientForm.controls.team.errors?.message" [ngbTooltip]="clientForm.controls.team.errors.message"
-        class="invalid bi bi-exclamation-circle">
-      </i>
-      </div>
-
-      <div class="data-customer-item datacustomer--select data-customer--coach">
-        <ng-select [clearSearchOnAdd]="false" appearance="outline" [items]="clientDataItems" type="text" [addTag]="true"
-          [hideSelected]="true" placeholder="тренер" addTagText="+ тренер" formControlName="coach"
-          (search)="changeClientInfo($event.term, 3, 'ur_coach')" (change)="clearDataClient()">
-        </ng-select>
-        {{clientForm.controls.coach.errors}}
-        <i *ngIf="clientForm.controls.coach.errors?.message" [ngbTooltip]="clientForm.controls.coach.errors.message"
-        class="invalid bi bi-exclamation-circle">
-      </i>
-      </div>
-
-      <div class="data-customer-item data-customer--comment-client">
-        <input type="text" formControlName="comment" placeholder="коментар до клієнта">
-        <i *ngIf="clientForm.controls.comment.errors?.message" [ngbTooltip]="clientForm.controls.comment.errors.message"
-        class="invalid bi bi-exclamation-circle">
-      </i>
-      </div>
-
-
-    </div>
-
+    <app-client-form [clientForm]="clientForm" [isClient]="true" (saveFormEmitter)="saveForm($event)" [isShowOk]="isSaveClient"></app-client-form>
     <div class="check-person">
       <div class="check-person-btn">
         <span class="cutomer-title">тренер</span>
         <button class="btn-icon" (click)="changeCoach(clientForm, 'coach')">
           <img class="cancel-icon icon"
-            [src]="clientForm.get('coach').value === clientForm.get('second_name_client').value ? './assets/img/icons/check.svg' : './assets/img/icons/cancel.svg'" />
+            [src]="clientForm.get('coach').value === clientForm.get('second_name').value ? './assets/img/icons/check.svg' : './assets/img/icons/cancel.svg'" />
         </button>
       </div>
       <div class="check-person-btn">
         <span class="cutomer-title">отримувач</span>
-        <button class="btn-icon" (click)="isRecipient = !isRecipient">
+        <button class="btn-icon" (click)="showRecipient()">
           <img class="cancel-icon icon"
             [src]="isRecipient ? './assets/img/icons/cancel.svg' : './assets/img/icons/check.svg'" />
         </button>
       </div>
-      <button class="mt10 save-btn save-btn--w70"  [disabled]="clientForm.invalid" *ngIf="!isSaveClient && !isEditClient" (click)="saveClient()">
-        Зберегти
-      </button>
-      <button class="mt10 save-btn edit-btn" [disabled]="clientForm.invalid" *ngIf="!isSaveClient && isEditClient" (click)="editClient()">
-        Редагувати
-      </button>
-      <button class="ok-btn forms" *ngIf="isSaveClient">
-        <img class="next-icon icon" src="./assets/img/icons/ok-btn.svg" />
-      </button>
     </div>
-    <div class="data-customer" [formGroup]="recipientForm" *ngIf="isRecipient">
-      <ng-select [clearSearchOnAdd]="false" appearance="outline" [items]="clientDataItems" type="text"
-        class="datacustomer--select data-customer--phone" [addTag]="true" [hideSelected]="true" placeholder="телефон"
-        addTagText="+ новий номер телефону" formControlName="phone_client"
-        (search)="changeClientInfo($event.term, 4, 'ur_phone')"
-        (change)="selectedItemClient($event, 'sl_phone', recipientForm, 'isSaveRecipient')">
-      </ng-select>
-
-      <ng-select [clearSearchOnAdd]="false" appearance="outline" [items]="clientDataItems"
-        class="datacustomer--select data-customer--lastname" [addTag]="true" [hideSelected]="true"
-        bindLabel="secondName" placeholder="прізвище" addTagText="+ прізвище" formControlName="second_name_client"
-        (search)="changeClientInfo($event.term, 3, 'ur_second_name')"
-        (change)="selectedItemClient($event, 'open_id_client', recipientForm, 'isSaveRecipient')">
-      </ng-select>
-      <input class="data-customer--firstname" type="text" placeholder="ім'я" formControlName="first_name_client">
-      <ng-select [clearSearchOnAdd]="false" appearance="outline" [items]="clientDataItems" type="text"
-        class="datacustomer--select data-customer--city" [addTag]="true" [hideSelected]="true" placeholder="місто"
-        addTagText="+ місто" formControlName="city" (search)="changeClientInfo($event.term, 3, 'ur_sity')"
-        (change)="clearDataClient()">
-      </ng-select>
-      <input class="data-customer--post" type="text" placeholder="№ НП" formControlName="np_number">
-      <input class="data-customer--surname" type="text" placeholder="по-батькові" formControlName="surname_client">
-      <input class="data-customer--index" type="text" placeholder="індекс" formControlName="zip_code">
-      <input class="data-customer--address" type="text" placeholder="адреса" formControlName="address">
-      <ng-select [clearSearchOnAdd]="false" appearance="outline" [items]="clientDataItems" type="text"
-        class="datacustomer--select data-customer--team" [addTag]="true" [hideSelected]="true" placeholder="команда"
-        addTagText="+ команда" formControlName="name_team" (search)="changeClientInfo($event.term, 3, 'ur_team')">
-      </ng-select>
-      <button *ngIf="!isSaveRecipient" class="data-customer--save save-btn" (click)="saveRecipient()">Зберегти</button>
-      <button class="data-customer--save save-btn ok-btn forms" *ngIf="isSaveRecipient">
-        <img class="next-icon icon" src="./assets/img/icons/ok-btn.svg" />
-      </button>
-      <input class="data-customer--comment-client" type="text" formControlName="comment_client"
-        placeholder="коментар до клієнта">
-
-    </div>
+    <app-client-form *ngIf="isRecipient"[clientForm]="recipientForm" [isClient]="false" [isShowOk]="isSaveRecipient" (saveFormEmitter)="saveForm($event)"></app-client-form>
   </div>
   <div class="finished-order">
     <textarea name="" class="finished-order--comment" [(ngModel)]="commentOrder"
@@ -289,12 +151,12 @@
   </div>
   <div class="finished-order--btns">
     <button class="finished-order--btn edit"
-      [disabled]="isNew || ((!isSaveClient || (!isSaveRecipient && isRecipient)) && dataPlaneOrder && clientForm.valid && orderForm.valid)"
+      [disabled]="isDisabledBtn('edit')"
       (click)="saveAll('edit')">Редагувати</button>
     <button class="finished-order--btn" [ngClass]="{'done': !fulfilledOrder, 'wave': fulfilledOrder}"
       (click)="makeOrderDone()">Виконано</button>
     <button class="finished-order--btn malachite" *ngIf="!doneOrder" (click)="saveAll()"
-      [disabled]="!isNew || ((!isSaveClient || (!isSaveRecipient && isRecipient)) && dataPlaneOrder && clientForm.valid && orderForm.valid && !orderForm.value.isNew)">Оформити
+      [disabled]="isDisabledBtn('new')">Оформити
       замовлення</button>
     <button class="finished-order--btn wave" *ngIf="doneOrder">Оформлено</button>
     <button class="finished-order--btn teal-blue" (click)="copyScore()">Виставити рахунок</button>

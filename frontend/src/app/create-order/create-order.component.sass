@@ -7,11 +7,11 @@
       background: #e0e0e0
   .ng-select.ng-select-single .ng-select-container .ng-value-container .ng-input
     top: 0
+    padding: 0px
   .ng-select .ng-select-container .ng-value-container
     padding-left: 3px
   .ng-select .ng-select-container
     min-height: auto !important
-    background: none
     border: none
   .ng-select.ng-select-single 
     .ng-select-container
@@ -106,7 +106,7 @@
       display: flex
       & .phase
         text-align: center
-        width: 30px
+        width: 34px
         height: 26px
         background: #FFFFFF
   &__field
@@ -127,7 +127,7 @@
       &.sum
         text-align: center
       &.pars
-        width: 80px
+        width: 68px
         text-align: center
       &:first-child
         margin-bottom: 7px
@@ -188,55 +188,10 @@
 .customer
   display: flex
   margin-top: 25px
-.data-customer
-  display: grid
-  width: 430px
-  column-gap: 9px
-  row-gap: 5px 
-  grid-template-rows: repeat(5, 1fr)
-  grid-template-columns: repeat(43, 1fr)
-  &-item
-    height: 36px
-    position: relative
-  ::ng-deep
-    .ng-select .ng-arrow-wrapper
-      display: none
-  &--phone
-    grid-area: 1 / 1 / 2 / 16
-  &--lastname
-    grid-area: 1 / 16 / 2 / 34
-  &--firstname
-    grid-area: 1 / 34 / 2 / 44
-    padding-left: 2px
-  &--city
-    grid-area: 2 / 1 / 3 / 16
-  &--post
-     grid-area: 2 / 16 / 3 / 27
-  &--surname
-     grid-area: 2 / 27 / 3 / 44
-     padding-left: 2px
-  &--index
-      grid-area: 3 / 1 / 4 / 8
-      padding-left: 2px
-  &--address
-      grid-area: 3 / 8 / 4 / 44
-      padding-left: 2px
-  &--team
-      grid-area: 4 / 1 / 5 / 16
-  &--coach
-      grid-area: 4 / 16 / 5 / 44
-  &--comment-client
-    grid-area: 5 / 1 / 6 / 44
-    padding-left: 2px
-  &--save
-    grid-area: 4 / 35 / 5 / 44
 
+.edit-btn
+  font-size: 10px
 
-  &--w70
-    width: 70px !important
-    font-size: 12px
-  &.forms
-    margin-top: 6px
 
 .ok-btn
   border: none
@@ -252,11 +207,13 @@
   flex-direction: column
   align-items: center
   margin-left: 5px
-  margin-right: 12px
+  margin-right: 5px
   &-btn
     display: flex
     flex-direction: column
     align-items: center
+    &:last-child
+      margin-top: 10px
 .finished-order
   display: flex
   justify-content: space-between
@@ -329,13 +286,10 @@ input
     border: none
     border: $border-main
 
-.invalid 
-  position: absolute
-  top: 50%
-  right: 0px
-  transform: translate(-50%, -50%)
-  color: $error-color
-  cursor: pointer
+input[type='number']::-webkit-outer-spin-button,
+input[type='number']::-webkit-inner-spin-button 
+    -webkit-appearance: none
+    
 .date-order
   position: absolute
   right: 100px
@@ -368,8 +322,6 @@ button.calendar
   .calendar-container
     width: 210px !important
   .datacustomer--select
-    .ng-select.ng-select-single .ng-select-container .ng-value-container .ng-input
-      padding-left: 2px !important
     .ng-value-container
       padding-left: 2px !important
     .ng-select-container.ng-appearance-outline

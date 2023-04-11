@@ -9,8 +9,6 @@
             <th scope="col" sortable="width" class="width">ширина </th>
             <th scope="col" sortable="babin" class="babin">бабін</th>
             <th class="quantity" scope="col" sortable="quantity_pars_model" class="clean-width">чиста вага</th>
-            <th scope="col" sortable="phase_1_model" class="model">модель</th>
-            <th scope="col" sortable="phase_2_model" class="pars">пар</th>
             <th class="epmty"></th>
             <th colspan="2" scope="col" sortable="id_order" class="mat-val ml22">мат / зміна / втулк</th>
           </tr>
@@ -25,8 +23,7 @@
               <td [class.grey]="idEdit === item.id_color" (click)="editItem(item.id_color)"> {{ item.bab_quantity_color
                 }}</td>
               <td [class.grey]="idEdit === item.id_color" (click)="editItem(item.id_color)">{{ item.weight_color}}</td>
-              <td [class.grey]="idEdit === item.id_color" (click)="editItem(item.id_color)">{{ item.model}}</td>
-              <td [class.grey]="idEdit === item.id_color" (click)="editItem(item.id_color)">{{ item.pars}}</td>
+   
               <td class="epmty"></td>
               <td class="white">
                 <input type="text" class="mat-val--intp"

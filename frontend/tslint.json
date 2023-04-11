@@ -30,7 +30,7 @@
     "max-classes-per-file": false,
     "max-line-length": [
       true,
-      140
+      14
     ],
     "member-ordering": [
       true,
@@ -51,7 +51,7 @@
       "timeEnd",
       "trace"
     ],
-    "no-empty": false,
+    "eslint 'src/**/*.ts'": false,
     "no-inferrable-types": [
       true,
       "ignore-params"

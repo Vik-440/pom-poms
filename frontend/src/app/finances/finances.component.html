@@ -52,7 +52,7 @@
         </ng-container>
       </tbody>
     </table>
-    <button class="save-btn left table-first--save" (click)="savePayment()"
+    <button class="save-btn left table-first--save action-btn" (click)="savePayment()"
       [disabled]="dataItems.controls[dataItems.controls.length - 1].invalid">Зберегти</button>
   </div>
   <div class="money">
@@ -176,7 +176,7 @@
           </ng-container>
         </tbody>
       </table>
-      <button class="save-btn left table-first--save" (click)="saveOutlay()"
+      <button class="save-btn left table-first--save action-btn" (click)="saveOutlay()"
         [disabled]="outlayData.controls[outlayData.controls.length - 1].invalid">Зберегти</button>
 
     </div>

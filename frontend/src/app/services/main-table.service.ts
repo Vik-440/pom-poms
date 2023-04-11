@@ -9,12 +9,7 @@ export class MainPageService {
     constructor(private http: HttpClient, @Inject('API_URL') private apiUrl: string) {}
 
     getListMain() { //залишати
-        return this.http.get(`http://127.0.0.1:5000/main`);
-    }
-
-
-    makeDoneOrder(params) {
-        return this.http.post(`http://127.0.0.1:5000/main_page`, params);
+        return this.http.get('http://127.0.0.1:5000/main');
     }
 
     changeFulfilled(id, params) {
@@ -30,6 +25,6 @@ export class MainPageService {
     }
 
     sendFilters(params) {
-        return this.http.get(`http://127.0.0.1:5000/main`, {params});
+        return this.http.get('http://127.0.0.1:5000/main', {params});
     }
 }

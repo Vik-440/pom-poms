@@ -4,12 +4,12 @@ import { Inject, Injectable } from '@angular/core';
     providedIn: 'root',
 })
 export class FinancesPageService {
-    url = `http://127.0.0.1:5000/finance`;
+    url = 'http://127.0.0.1:5000/finance';
 
     constructor(private http: HttpClient, @Inject('API_URL') private apiUrl: string) {}
 
     getFinances() {
-        return this.http.get(`http://127.0.0.1:5000/finance`);
+        return this.http.get('http://127.0.0.1:5000/finance');
     }
 
     getMethods() {
@@ -37,7 +37,7 @@ export class FinancesPageService {
     }
 
     savePayment(params) {
-        return this.http.post(`http://127.0.0.1:5000/finance/payment`, params);
+        return this.http.post('http://127.0.0.1:5000/finance/payment', params);
     }
 
     editOutlay(params) {
@@ -45,10 +45,10 @@ export class FinancesPageService {
     }
 
     saveOutlay(params) {
-        return this.http.post(`http://127.0.0.1:5000/finance/outlay`, params);
+        return this.http.post('http://127.0.0.1:5000/finance/outlay', params);
     }
 
     getStatistics() {
-        return this.http.post(`http://127.0.0.1:5000/finance`, { stat: 'all' });
+        return this.http.post('http://127.0.0.1:5000/finance', { stat: 'all' });
     }
 }
