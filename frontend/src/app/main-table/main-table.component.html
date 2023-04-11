@@ -47,8 +47,8 @@
     <tbody>
       <ng-container *ngFor="let order of orders; let i = index">
         <tr class="table--row">
-          <td [class.yellow]="order.comment_order" ngxTooltip [tooltipContent]="order.comment_order">
-            <a class="clickable" target="_blank" [routerLink]="['/create-order', {id: order.id_order}]">{{
+          <td [class.yellow]="order.comment_order"> 
+            <a class="clickable" target="_blank" [routerLink]="['/create-order', {id: order.id_order}]" placement="top" [ngbTooltip]="order.comment_order">{{
               order.id_order }}</a>
           </td>
           <td>{{ order.data_order | date: 'yyyy-MM-dd'}}</td>
@@ -60,8 +60,8 @@
               </div>
             </td>
             <td class="td-left">
-              <div class="bb_solid pl5" [ngStyle]="changeHeight(j, i)" ngxTooltip
-                [tooltipContent]="order.comment_model[i]" [ngClass]="checkCode(kod_model, order.comment_model[i])"
+              <div class="bb_solid pl5" [ngStyle]="changeHeight(j, i)"
+                [ngbTooltip]="order.comment_model[i]" [ngClass]="checkCode(kod_model, order.comment_model[i])"
                 *ngFor="let kod_model of order.kod_model; let j = index">
                 <a class="clickable" target="_blank"
                   [routerLink]="['/create-order', {codeModel: kod_model}]">{{kod_model}}</a>
@@ -108,9 +108,9 @@
               {{ order.kolor_model }}
             </td>
             <!-- kod_model -->
-            <td class="td-left pl5" ngxTooltip [tooltipContent]="order.comment_model"
+            <td class="td-left pl5" 
               [class]="checkCode(order.kod_model, order.comment_model)">
-              <a class="clickable" target="_blank"
+              <a class="clickable" target="_blank" [ngbTooltip]="order.comment_model"
                 [routerLink]="['/create-order', {codeModel: order.kod_model}]">{{order.kod_model}}</a>
             </td>
             <td>
@@ -140,9 +140,8 @@
               [routerLink]="['/create-order', {phoneClient: order.phone_client}]">{{order.phone_client | mask:
               '00-000-000-00-00' || '-'}}</a>
           </td>
-          <td class="td-left pl5" [class.green]="isHasCity(order.sity)" ngxTooltip
-            [tooltipContent]="tooltipCity(order)">
-            <a class="clickable" target="_blank"
+          <td class="td-left pl5" [class.green]="isHasCity(order.sity)">
+            <a class="clickable" target="_blank" [ngbTooltip]="tooltipCity(order)" placement="top" 
               [routerLink]="['/create-order', {phoneRecipient: order.phone_recipient}]">{{order.sity}}</a>
           </td>
           <td>{{ order.data_plane_order | date: 'yyyy-MM-dd'}}</td>

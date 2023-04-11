@@ -229,20 +229,11 @@ export class CreateOrderComponent implements OnInit {
               modelsData[order.value.article?.substring(0, 2)] ||
               '';
 
-            if (data <= order.value.qty_pars_default) {
-              order.patchValue({
-                sum_pars: data * order.value.price,
-                phase_1: order.value.phase_1_default,
-                phase_2: order.value.phase_2_default,
-                phase_3: order.value.phase_3_default,
-              });
-              return;
-            }
             order.patchValue({
               sum_pars: data * order.value.price,
-              phase_1: order.value.phase_1_default + (type.includes('брелок') ? +data : +(data * 2)),
-              phase_2: order.value.phase_2_default + (type.includes('брелок') ? +data : +(data * 2)),
-              phase_3: order.value.phase_3_default + +data,
+              phase_1: (type.includes('брелок') ? +data : +(data * 2)),
+              phase_2: (type.includes('брелок') ? +data : +(data * 2)),
+              phase_3: +data,
             });
           })
         )
@@ -658,8 +649,6 @@ export class CreateOrderComponent implements OnInit {
             message: Object.values(error.error)[0],
           });
         } else {
-       
-          
           form.controls[key[0]].setErrors({
             message: Object.values(error.error)[0],
           });

@@ -106,7 +106,7 @@
       display: flex
       & .phase
         text-align: center
-        width: 30px
+        width: 34px
         height: 26px
         background: #FFFFFF
   &__field
@@ -127,7 +127,7 @@
       &.sum
         text-align: center
       &.pars
-        width: 80px
+        width: 68px
         text-align: center
       &:first-child
         margin-bottom: 7px
@@ -188,9 +188,6 @@
 .customer
   display: flex
   margin-top: 25px
-  @media screen and ( max-width: 950px)
-    // flex-direction: column
-    // justify-content: center
 
 .edit-btn
   font-size: 10px
@@ -289,7 +286,10 @@ input
     border: none
     border: $border-main
 
-
+input[type='number']::-webkit-outer-spin-button,
+input[type='number']::-webkit-inner-spin-button 
+    -webkit-appearance: none
+    
 .date-order
   position: absolute
   right: 100px
