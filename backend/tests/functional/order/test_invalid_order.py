@@ -197,7 +197,7 @@ def test_order_not_str_date_plane_send(app_fixture):
         'phase_1': [6],
         'phase_2': [6],
         'phase_3': [3]}
-    response = client.post('/order', data=json.dumps(data))
+    response = client.post('/order', data=json.dumps(data), content_type='application/json')
     assert response.status_code == 400
     expected_data = {'date_plane_send': 'is not str type'}
     assert response.json == expected_data
@@ -371,7 +371,7 @@ def test_order_unreal_id_recipient(app_fixture):
     assert response.json == expected_data
 
 
-@pytest.mark.run(order=4201200)
+@pytest.mark.run(order=420120)
 def test_order_without_status_order(app_fixture):
     client = app_fixture.test_client()
     data = {

@@ -11,8 +11,8 @@ from app import engine
 
 def validate_payment(data: dict):
     """Validator payment"""
-    if not 'id_order':
-        return {"id_order":  "miss in data"}
+    if not 'id_order' in data:
+        return {'id_order': 'miss in data'}
     if not isinstance(data['id_order'], int):
             return {'id_order': 'is not int type'}
     with Session(engine) as session:
@@ -25,9 +25,9 @@ def validate_payment(data: dict):
             select(DB_orders.status_order)
             .where(DB_orders.id_order == data['id_order']))
         if session.execute(stmt).scalar():
-            return {'id_order': f'order {data["id_order"]} is closed'}
+            return {'id_order': f'ID order {data["id_order"]} is closed'}
     
-    if not 'payment':
+    if not 'payment' in data:
         return {"payment":  "miss in data"}
     if not isinstance(data['payment'], int):
         return {'payment': 'is not int type'}
