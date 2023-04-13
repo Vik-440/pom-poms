@@ -37,7 +37,7 @@ def creating_payment():
             session.add(stmt)
             session.commit()
         return jsonify({"payment": "creating_payment is excellent"}), 200
-    except Exception as e:
+    except Exception as e: # pragma: no cover
         logger.error(f'Error in function finance: {e}') # pragma: no cover
         return f'Error in function finance: {e}', 400 # pragma: no cover
     
@@ -67,7 +67,7 @@ def edit_payment(id_payment):
             session.execute(stmt)
             session.commit()
         return jsonify({"payment": "payment changing excellent"}), 200
-    except Exception as e:
+    except Exception as e: # pragma: no cover
         logger.error(f'Error in function finance: {e}') # pragma: no cover
         return f'Error in function finance: {e}', 400 # pragma: no cover
 
@@ -105,7 +105,7 @@ def payment_id_order_searching():
                                 "data_payment": str(row.data_payment)}
                     full_block.append(one_block)
             return jsonify(full_block)
-    except Exception as e:
+    except Exception as e: # pragma: no cover
         logger.error(f'Error in finance_payments_order POST: {e}') # pragma: no cover
         return f'Error in order_payments POST: {e}', 400 # pragma: no cover
 
@@ -136,6 +136,6 @@ def last_payments():
                              "data_payment": str(row.data_payment)}
                 full_block.insert(0, one_block)
         return jsonify(full_block), 200
-    except Exception as e:
+    except Exception as e: # pragma: no cover
         logger.error(f'Error in finance_payments GET: {e}')  # pragma: no cover
         return jsonify(f'Error in finance_payments GET: {e}'), 400  # pragma: no cover

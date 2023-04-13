@@ -17,18 +17,13 @@ from app.api.materials import extract_materials_data
 
 from app.api.payments import payment
 
-from app.api.outlays import (
-    last_outlays,
-    edit_outlay,
-    create_outlay,
-    search_outlay)
+from app.api.outlays import outlay
 
 from app.api.financial import (
     attributes_payments,
     statistics,
     search_payments,
-    # search_id_payment
-    )
+    search_outlay)
 
 # from app.api.clients_and_products import (
 #     all_routs_clients_products)

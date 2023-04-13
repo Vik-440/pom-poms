@@ -198,6 +198,6 @@ def autofill_fields():
 
         return jsonify({'autofill': 'request does not have searching keys'}), 400
 
-    except Exception as e:
-        logger.info(f'misstake autofill: {e}')
-        return jsonify(f'autofill: {e}'), 400
+    except Exception as e: # pragma: no cover
+        logger.info(f'misstake autofill: {e}') # pragma: no cover
+        return jsonify(f'autofill: {e}'), 400 # pragma: no cover

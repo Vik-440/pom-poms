@@ -1,9 +1,7 @@
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 from datetime import datetime
-import string, re
 
-from app.payments.models import DB_payment
 from app.orders.models import DB_orders
 from app.api.financial.attributes_payments import attributes_payments
 from app import engine

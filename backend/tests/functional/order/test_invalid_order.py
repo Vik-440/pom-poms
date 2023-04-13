@@ -1233,3 +1233,27 @@ def test_order_not_int_in_list_price_model_sell(app_fixture):
     assert response.status_code == 400
     expected_data = {'price_model_sell': '5 in price_model_sell is not int type'}
     assert response.json == expected_data
+
+
+@pytest.mark.run(order=420560)
+def test_order_not_int_id_client_put(app_fixture):
+    client = app_fixture.test_client()
+    data = {
+        'date_create': '2023-03-03',
+        'date_plane_send': '2023-03-13',
+        'id_client': '1',
+        'id_recipient': 1,
+        'status_order': False,
+        'sum_payment': 1200,
+        'discount': 0,
+        'comment': None,
+        'id_models': [1],
+        'qty_pars': [3],
+        'price_model_sell': [400],
+        'phase_1': [6],
+        'phase_2': [6],
+        'phase_3': [3]}
+    response = client.put('/order/1', data=json.dumps(data))
+    assert response.status_code == 400
+    expected_data = {'id_client': 'is not int type'}
+    assert response.json == expected_data
