@@ -4,7 +4,6 @@ import { NgbOffcanvas } from '@ng-bootstrap/ng-bootstrap';
 import * as _ from 'lodash';
 import * as moment from 'moment';
 import { MainPageService } from '../services/main-table.service';
-import { CreateOrderService } from '../services/orders.service';
 import { UsefulService } from '../services/useful.service';
 import { DataAutofill } from '../client-form/autofill';
 
@@ -36,11 +35,10 @@ export class MainTableComponent implements OnInit {
   dataFilters = [];
 
   constructor(
-    private service: MainPageService,
-    private offcanvasService: NgbOffcanvas,
-    private fb: FormBuilder,
-    private serviceOrders: CreateOrderService,
-    private generalService: UsefulService,
+    private _service: MainPageService,
+    private _offcanvasService: NgbOffcanvas,
+    private _fb: FormBuilder,
+    private _generalService: UsefulService
   ) {}
 
   ngOnInit(): void {
@@ -50,7 +48,7 @@ export class MainTableComponent implements OnInit {
 
   initForm() {
     
-    this.filtersForm = this.fb.group({
+    this.filtersForm = this._fb.group({
       dataStart: null,
       dataEnd: null,
       fulfilled: 'all',
@@ -67,7 +65,7 @@ export class MainTableComponent implements OnInit {
 
   changeFiled(event, fieldSend, minSymbols, response) {
     if (event.term.length >= DataAutofill[fieldSend]) {
-      this.generalService.getAutofill({ [fieldSend]: event.term }).subscribe((data: any) => {
+      this._generalService.getAutofill({ [fieldSend]: event.term }).subscribe((data: any) => {
         if (fieldSend === 'ur_second_name') {
           this.clearFilterData();
           data.id_client.forEach((item, i) => {
@@ -96,7 +94,7 @@ export class MainTableComponent implements OnInit {
 
   applyFilters() {
     this.isShowSpinner = true;
-    this.service.sendFilters(this.clean(_.cloneDeep(this.filtersForm.value))).subscribe(
+    this._service.sendFilters(this.clean(_.cloneDeep(this.filtersForm.value))).subscribe(
       (data: any) => {
         this.orders = data;
         this.isShowSpinner = false;
@@ -138,12 +136,12 @@ export class MainTableComponent implements OnInit {
 
   openFilterMenu(content: TemplateRef<any>) {
     this.isShowFilter = true;
-    this.offcanvasService.open(content, { position: 'top' });
+    this._offcanvasService.open(content, { position: 'top' });
   }
 
   closeFilterMenu() {
     this.isShowFilter = false;
-    this.offcanvasService.dismiss();
+    this._offcanvasService.dismiss();
     this.resetFilters();
   }
 
@@ -159,7 +157,7 @@ export class MainTableComponent implements OnInit {
   }
 
   changePhase(item, phase, event) {
-    if (event && event.type == 'click') {
+    if (event && event.type === 'click') {
       event.target.value = '';
     } else {
       this.orders.forEach((order) => {
@@ -174,7 +172,7 @@ export class MainTableComponent implements OnInit {
   }
 
   changePhases(phase, event, item) {
-    if (event && event.type == 'click') {
+    if (event && event.type === 'click') {
       event.target.value = '';
     } else {
       this.orders.forEach((order) => {
@@ -203,7 +201,7 @@ export class MainTableComponent implements OnInit {
     const params = [...order[phase]];
     params[phaseIndex] = item - event.target.value;
 
-    this.service.sendPhase(order.id_order, { [phase]: params }).subscribe((data: any) => {
+    this._service.sendPhase(order.id_order, { [phase]: params }).subscribe((data: any) => {
       this.showMessage(data.message);
       this.orders = this.orders.map((orderItem) => {
         if (orderItem.id_order === order.id_order) {
@@ -226,7 +224,7 @@ export class MainTableComponent implements OnInit {
       [phase]: [item[phase] - e.target.value],
     };
 
-    this.service.sendPhase(item.id_order, params).subscribe((data: any) => {
+    this._service.sendPhase(item.id_order, params).subscribe((data: any) => {
       this.showMessage(data.message);
       this.orders = this.orders.map((order) => {
         if (order.id_order === item.id_order) {
@@ -247,7 +245,7 @@ export class MainTableComponent implements OnInit {
 
   getAllData() {
     this.isShowSpinner = true;
-    this.service.getListMain().subscribe(
+    this._service.getListMain().subscribe(
       (data: any) => {
         this.orders = data;
         this.isShowSpinner = false;
@@ -337,7 +335,7 @@ export class MainTableComponent implements OnInit {
   }
 
   makeDone(id, fulfilledOrder, i) {
-    this.service.changeFulfilled(id, { status_order: fulfilledOrder }).subscribe((data: any) => {
+    this._service.changeFulfilled(id, { status_order: fulfilledOrder }).subscribe((data: any) => {
       this.orders.forEach((order, index) => {
         if (i === index) {
           order.fulfilled_order = !order.fulfilled_order;

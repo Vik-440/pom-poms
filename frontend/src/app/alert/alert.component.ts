@@ -6,7 +6,6 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   styleUrls: ['./alert.component.sass'],
 })
 export class AlertComponent {
-  constructor() {}
 
   @Input() type: string;
   @Input() message: string;

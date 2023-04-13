@@ -9,11 +9,11 @@ import { MaterialPageService } from '../services/materials.service';
     styleUrls: ['./reserve.component.sass'],
 })
 export class ReserveComponent implements OnInit {
-    constructor(private servieMaterial: MaterialPageService, private fb: FormBuilder) {}
+    constructor(private _serviceMaterial: MaterialPageService, private _fb: FormBuilder) {}
     materialFilter = [];
     reverseItemData: FormGroup;
     reserveItems;
-    reverseItemsCorrect = this.fb.array([]);
+    reverseItemsCorrect = this._fb.array([]);
     idEdit = null;
     isNewMaterial = false;
     idChange = [];
@@ -23,15 +23,15 @@ export class ReserveComponent implements OnInit {
     alert = {
         type: '',
         message: '',
-        isShow: false
+        isShow: false,
     };
     ngOnInit(): void {
-        this.servieMaterial.getListMaterial().subscribe((data: any) => {
+        this._serviceMaterial.getListMaterial().subscribe((data: any) => {
             this.reserveItems = data.sort((a, b) => a.name_color - b.name_color);
 
-            this.reserveItems.map((item) => {
+            this.reserveItems.map(() => {
                 this.reverseItemsCorrect.push(
-                    this.fb.group({
+                    this._fb.group({
                         bab_quantity_color: null,
                         weight_color: null,
                     })
@@ -44,7 +44,7 @@ export class ReserveComponent implements OnInit {
             { id: null, value: false, name: 'матеріали в наявності' },
         ];
 
-        this.reverseItemData = this.fb.group({
+        this.reverseItemData = this._fb.group({
             id_color: '',
             name_color: ['', Validators.required],
             width_color: ['', Validators.required],
@@ -62,7 +62,7 @@ export class ReserveComponent implements OnInit {
     editItem(id) {
         this.idEdit = id;
         this.isNewMaterial = false;
-        this.servieMaterial.getFullInfoMaterial(id).subscribe((data: any) => {
+        this._serviceMaterial.getFullInfoMaterial(id).subscribe((data: any) => {
             this.reverseItemData.patchValue({
                 id_color: data.id_color,
                 name_color: data.name_color,
@@ -105,8 +105,8 @@ export class ReserveComponent implements OnInit {
         }
         this.isShowSpinner = true;
 
-        this.servieMaterial.saveMaterial(params).subscribe(() => {
-            this.servieMaterial.getListMaterial().subscribe((data) => {
+        this._serviceMaterial.saveMaterial(params).subscribe(() => {
+            this._serviceMaterial.getListMaterial().subscribe((data) => {
                 this.isShowSpinner = false;
                 this.reserveItems = data;
                 this.reverseItemData.reset();
@@ -121,12 +121,12 @@ export class ReserveComponent implements OnInit {
     getMaterialByFilter() {
         this.isShowSpinner = true;
         if (this.filterMaterial) {
-            this.servieMaterial.getFullAllMaterial({ id_color: this.filterMaterial }).subscribe((data: any) => {
+            this._serviceMaterial.getFullAllMaterial({ id_color: this.filterMaterial }).subscribe((data: any) => {
                 this.reserveItems = data.sort((a, b) => a.name_color - b.name_color);
                 this.isShowSpinner = false;
-                this.reserveItems.map((item) => {
+                this.reserveItems.forEach(() => {
                     this.reverseItemsCorrect.push(
-                        this.fb.group({
+                        this._fb.group({
                             bab_quantity_color: null,
                             weight_color: null,
                         })
@@ -134,12 +134,12 @@ export class ReserveComponent implements OnInit {
                 });
             });
         } else {
-            this.servieMaterial.getListMaterial().subscribe((data: any) => {
+            this._serviceMaterial.getListMaterial().subscribe((data: any) => {
                 this.reserveItems = data.sort((a, b) => a.name_color - b.name_color);
                 this.isShowSpinner = false;
-                this.reserveItems.map((item) => {
+                this.reserveItems.forEach(() => {
                     this.reverseItemsCorrect.push(
-                        this.fb.group({
+                        this._fb.group({
                             bab_quantity_color: null,
                             weight_color: null,
                         })
@@ -151,7 +151,7 @@ export class ReserveComponent implements OnInit {
 
     calculateMat(form) {
         form.patchValue({
-            weight_color: this.calculateString(form.value.weight_color)
+            weight_color: this.calculateString(form.value.weight_color),
         });
 
     }
@@ -180,22 +180,22 @@ export class ReserveComponent implements OnInit {
             bab_quantity_color: +item.value.bab_quantity_color,
             weight_color: +item.value.weight_color,
         };
-        this.servieMaterial
+        this._serviceMaterial
             .saveMaterial(params)
-            .pipe(switchMap(() => this.servieMaterial.getListMaterial()))
+            .pipe(switchMap(() => this._serviceMaterial.getListMaterial()))
             .subscribe((data: any) => {
                 this.isShowSpinner = false;
                 this.idChange = this.idChange.filter((i) => i !== id);
                 this.reserveItems = data.sort((a, b) => a.name_color - b.name_color);
                 this.reverseItemData.patchValue({
                     bab_quantity_color: this.reverseItemData.value.bab_quantity_color + params.bab_quantity_color,
-                    weight_color: this.reverseItemData.value.weight_color + params.weight_color
+                    weight_color: this.reverseItemData.value.weight_color + params.weight_color,
                 });
                 this.isShowSpinner = false;
                 this.alert = {
                     isShow: true,
                     type: 'success',
-                    message: 'Дані збережено'
+                    message: 'Дані збережено',
                 };
                 setTimeout(() => {
                     this.alertChange(false);
@@ -206,7 +206,7 @@ export class ReserveComponent implements OnInit {
                 this.alert = {
                     isShow: true,
                     type: 'danger',
-                    message: 'Уппс, щось пішло не так'
+                    message: 'Уппс, щось пішло не так',
                 };
                 setTimeout(() => {
                     this.alertChange(false);

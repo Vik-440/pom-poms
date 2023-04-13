@@ -4,11 +4,11 @@ import { Inject, Injectable } from '@angular/core';
   providedIn: 'root',
 })
 export class UsefulService {
-  url = `${this.apiUrl}`;
+  url = `${this._apiUrl}`;
 
-  constructor(private http: HttpClient, @Inject('API_URL') private apiUrl: string) {}
+  constructor(private _http: HttpClient, @Inject('API_URL') private _apiUrl: string) {}
 
   getAutofill(params) {
-    return this.http.get(`${this.url}/autofill`, { params });
+    return this._http.get(`${this.url}/autofill`, { params });
   }
 }

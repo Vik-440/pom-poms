@@ -6,7 +6,7 @@ describe('ReserveComponent', () => {
     let component: ReserveComponent;
     let fixture: ComponentFixture<ReserveComponent>;
 
-    beforeEach(async () => {
+    beforeEach(async() => {
         await TestBed.configureTestingModule({
             declarations: [ReserveComponent],
         }).compileComponents();

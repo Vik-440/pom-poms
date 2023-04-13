@@ -4,20 +4,20 @@ import { Inject, Injectable } from '@angular/core';
     providedIn: 'root',
 })
 export class CreateOrderService {
-    url = `${this.apiUrl}/order`;
+    url = `${this._apiUrl}/order`;
 
-    constructor(private http: HttpClient, @Inject('API_URL') private apiUrl: string) {}
+    constructor(private _http: HttpClient, @Inject('API_URL') private _apiUrl: string) {}
 
     getOrder(id) {
-        return this.http.get(`${this.url}/${id}`);
+        return this._http.get(`${this.url}/${id}`);
     }
 
     saveOrder(params) {
-        return this.http.post(`${this.url}`, params);
+        return this._http.post(`${this.url}`, params);
     }
 
     editOrder(params, id) {
-        return this.http.put(`${this.url}/${id}`, params);
+        return this._http.put(`${this.url}/${id}`, params);
     }
 
 }

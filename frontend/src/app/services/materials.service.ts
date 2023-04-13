@@ -4,26 +4,26 @@ import { HttpClient } from '@angular/common/http';
     providedIn: 'root',
 })
 export class MaterialPageService {
-    url = `${this.apiUrl}/material`;
+    url = `${this._apiUrl}/material`;
 
-    constructor(private http: HttpClient, @Inject('API_URL') private apiUrl: string) {}
+    constructor(private _http: HttpClient, @Inject('API_URL') private _apiUrl: string) {}
 
     getListMaterial() {
-        return this.http.get(this.url);
+        return this._http.get(this.url);
     }
 
     getFullInfoMaterial(id) {
         const params = {
             id_color: id,
         };
-        return this.http.post(this.url, params);
+        return this._http.post(this.url, params);
     }
 
     getFullAllMaterial(params) {
-        return this.http.post(this.url, params);
+        return this._http.post(this.url, params);
     }
 
     saveMaterial(data) {
-        return this.http.post(this.url, data);
+        return this._http.post(this.url, data);
     }
 }

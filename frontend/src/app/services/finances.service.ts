@@ -4,51 +4,51 @@ import { Inject, Injectable } from '@angular/core';
     providedIn: 'root',
 })
 export class FinancesPageService {
-    url = `${this.apiUrl}/finance`;
+    url = `${this._apiUrl}/finance`;
 
-    constructor(private http: HttpClient, @Inject('API_URL') private apiUrl: string) {}
+    constructor(private _http: HttpClient, @Inject('API_URL') private _apiUrl: string) {}
 
     getFinances() {
-        return this.http.get(this.url);
+        return this._http.get(this.url);
     }
 
     getMethods() {
-        return this.http.get(`${this.url}/methods`);
+        return this._http.get(`${this.url}/methods`);
     }
 
     getStaticPayments(params) {
-        return this.http.post(`${this.url}/payments/statics`, params);
+        return this._http.post(`${this.url}/payments/statics`, params);
     }
 
     getFilters(params, urlEnd = '') {
-        return this.http.post(`${this.url}${urlEnd}`, params);
+        return this._http.post(`${this.url}${urlEnd}`, params);
     }
 
     getPayments() {
-        return this.http.get(`${this.url}/payments`);
+        return this._http.get(`${this.url}/payments`);
     }
 
     getOutlays() {
-        return this.http.get(`${this.url}/outlays`);
+        return this._http.get(`${this.url}/outlays`);
     }
 
     editPayment(params) {
-        return this.http.put(`${this.url}/payment/${params.id_payment}`, params);
+        return this._http.put(`${this.url}/payment/${params.id_payment}`, params);
     }
 
     savePayment(params) {
-        return this.http.post(`${this.url}/payment`, params);
+        return this._http.post(`${this.url}/payment`, params);
     }
 
     editOutlay(params) {
-        return this.http.put(`${this.url}/outlay/${params.id_outlay}`, params);
+        return this._http.put(`${this.url}/outlay/${params.id_outlay}`, params);
     }
 
     saveOutlay(params) {
-        return this.http.post(`${this.url}/outlay`, params);
+        return this._http.post(`${this.url}/outlay`, params);
     }
 
     getStatistics() {
-        return this.http.post(this.url, { stat: 'all' });
+        return this._http.post(this.url, { stat: 'all' });
     }
 }

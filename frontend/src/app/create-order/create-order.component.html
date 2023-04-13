@@ -76,7 +76,7 @@
         Зберегти
       </button>
 
-      <button class="action-btn forms edit-btn" (click)="editProduct(index, order)" *ngIf="!order.value.isNew && order.value.isChange">
+      <button class="action-btn forms edit-btn" (click)="editProduct(order)" *ngIf="!order.value.isNew && order.value.isChange">
         Редагувати
       </button>
       <button class="ok-btn" *ngIf="!order.value.isNew && !order.value.isChange">

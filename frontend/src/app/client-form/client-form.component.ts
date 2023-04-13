@@ -19,7 +19,7 @@ export class ClientFormComponent implements OnInit {
   isNewForm: Boolean = true;
   callAfterViewChecked = true;
 
-  constructor(private clientService: ClientService, private usefulService: UsefulService) {}
+  constructor(private _clientService: ClientService, private _usefulService: UsefulService) {}
 
   ngOnInit() {
     this.clientForm.valueChanges.subscribe(() => {
@@ -32,7 +32,7 @@ export class ClientFormComponent implements OnInit {
 
   changeClientInfo(query, keySend) {
     if (query.length >= DataAutofill[keySend]) {
-      this.usefulService.getAutofill({ [keySend]: query }).subscribe((data: any) => {
+      this._usefulService.getAutofill({ [keySend]: query }).subscribe((data: any) => {
         this.clientDataItems = [...data];
       });
     }
@@ -40,14 +40,14 @@ export class ClientFormComponent implements OnInit {
 
   selectItem(value, field: string) {
     if(value && value.hasOwnProperty('id_client')) {
-      this.clientService.getClient(value.id_client).subscribe((data) => {
+      this._clientService.getClient(value.id_client).subscribe((data) => {
         this.isNewForm = false;
         this.isShowOk = true;
         this.setValueForm(data);
       });
     } else if(value) {
       this.clientForm.patchValue({
-        [field]: value.value
+        [field]: value.value,
       })
     }
     this.clearDataClient();
@@ -84,7 +84,7 @@ export class ClientFormComponent implements OnInit {
   saveForm(isNew) {
     this.saveFormEmitter.emit({
       isClient: this.isClient,
-      isNew
+      isNew,
     })
   }
  }
