@@ -4,51 +4,51 @@ import { Inject, Injectable } from '@angular/core';
     providedIn: 'root',
 })
 export class FinancesPageService {
-    url = 'http://127.0.0.1:5000/finance';
+    url = `${this.apiUrl}/finance`;
 
     constructor(private http: HttpClient, @Inject('API_URL') private apiUrl: string) {}
 
     getFinances() {
-        return this.http.get('http://127.0.0.1:5000/finance');
+        return this.http.get(this.url);
     }
 
     getMethods() {
-        return this.http.get('http://127.0.0.1:5000/finance/methods');
+        return this.http.get(`${this.url}/methods`);
     }
 
     getStaticPayments(params) {
-        return this.http.post('http://127.0.0.1:5000/finance/payments/statics', params);
+        return this.http.post(`${this.url}/payments/statics`, params);
     }
 
     getFilters(params, urlEnd = '') {
-        return this.http.post(`http://127.0.0.1:5000/finance${urlEnd}`, params);
+        return this.http.post(`${this.url}${urlEnd}`, params);
     }
 
     getPayments() {
-        return this.http.get('http://127.0.0.1:5000/finance/payments');
+        return this.http.get(`${this.url}/payments`);
     }
 
     getOutlays() {
-        return this.http.get('http://127.0.0.1:5000/finance/outlays');
+        return this.http.get(`${this.url}/outlays`);
     }
 
     editPayment(params) {
-        return this.http.put(`http://127.0.0.1:5000/finance/payment/${params.id_payment}`, params);
+        return this.http.put(`${this.url}/payment/${params.id_payment}`, params);
     }
 
     savePayment(params) {
-        return this.http.post('http://127.0.0.1:5000/finance/payment', params);
+        return this.http.post(`${this.url}/payment`, params);
     }
 
     editOutlay(params) {
-        return this.http.put(`http://127.0.0.1:5000/finance/outlay/${params.id_outlay}`, params);
+        return this.http.put(`${this.url}/outlay/${params.id_outlay}`, params);
     }
 
     saveOutlay(params) {
-        return this.http.post('http://127.0.0.1:5000/finance/outlay', params);
+        return this.http.post(`${this.url}/outlay`, params);
     }
 
     getStatistics() {
-        return this.http.post('http://127.0.0.1:5000/finance', { stat: 'all' });
+        return this.http.post(this.url, { stat: 'all' });
     }
 }

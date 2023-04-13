@@ -3,11 +3,10 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 @Component({
   selector: 'app-alert',
   templateUrl: './alert.component.html',
-  styleUrls: ['./alert.component.sass']
+  styleUrls: ['./alert.component.sass'],
 })
 export class AlertComponent {
-
-  constructor() { }
+  constructor() {}
 
   @Input() type: string;
   @Input() message: string;
@@ -17,4 +16,4 @@ export class AlertComponent {
   close() {
     this.closed.emit(false);
   }
- }
+}

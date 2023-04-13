@@ -4,7 +4,7 @@ import { Inject, Injectable } from '@angular/core';
     providedIn: 'root',
 })
 export class ProductsService {
-    url = `http://127.0.0.1:5000/product`;
+    url = `${this.apiUrl}/product`;
 
     constructor(private http: HttpClient, @Inject('API_URL') private apiUrl: string) {}
 

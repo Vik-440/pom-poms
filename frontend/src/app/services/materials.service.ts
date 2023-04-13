@@ -4,26 +4,26 @@ import { HttpClient } from '@angular/common/http';
     providedIn: 'root',
 })
 export class MaterialPageService {
-    url = `${this.apiUrl}/main_page`;
+    url = `${this.apiUrl}/material`;
 
     constructor(private http: HttpClient, @Inject('API_URL') private apiUrl: string) {}
 
     getListMaterial() {
-        return this.http.get('http://127.0.0.1:5000/material');
+        return this.http.get(this.url);
     }
 
     getFullInfoMaterial(id) {
         const params = {
             id_color: id,
         };
-        return this.http.post('http://127.0.0.1:5000/material', params);
+        return this.http.post(this.url, params);
     }
 
     getFullAllMaterial(params) {
-        return this.http.post('http://127.0.0.1:5000/material', params);
+        return this.http.post(this.url, params);
     }
 
     saveMaterial(data) {
-        return this.http.post('http://127.0.0.1:5000/material', data);
+        return this.http.post(this.url, data);
     }
 }

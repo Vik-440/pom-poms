@@ -11,12 +11,12 @@ import { DataAutofill } from './autofill';
 })
 export class ClientFormComponent implements OnInit {
   @Input() clientForm: FormGroup;
-  @Input() isClient: boolean = true;
-  @Input() isShowOk: boolean = false;
+  @Input() isClient: Boolean = true;
+  @Input() isShowOk: Boolean;
   @Output() saveFormEmitter: EventEmitter<any> = new EventEmitter();
 
   clientDataItems;
-  isNewForm: boolean = true;
+  isNewForm: Boolean = true;
   callAfterViewChecked = true;
 
   constructor(private clientService: ClientService, private usefulService: UsefulService) {}

@@ -66,7 +66,10 @@
         <input type="text" class="form__field--sm" placeholder="%" formControlName="part_4">
       </div>
     </div>
-
+    <div class="form__fields">
+      <textarea type="text" class="form__field--textarea" placeholder="примітка"
+        formControlName="comment"></textarea>
+    </div>
     <div class="form__fields">
       <input class="form__field--md" type="number" placeholder="ціна" formControlName="price">
       <button class="action-btn forms" (click)="saveProduct(index, order)" *ngIf="order.value.isNew">
@@ -81,9 +84,11 @@
       </button>
     </div>
 
+
+
     <div class="form__fields">
       <div class="form__fields--phashes">
-        <input type="number" class="form__field--ml pars" placeholder="к-сть пар" formControlName="qty_pars">
+        <input type="number" class="form__field--ml pars" placeholder="к-сть" formControlName="qty_pars">
         <input type="number" class="phase" formControlName="phase_1">
         <input type="number" class="phase" formControlName="phase_2">
         <input type="number" class="phase" formControlName="phase_3">
@@ -91,10 +96,7 @@
       <input type="text" class="form__field--ml sum" placeholder="сума" formControlName="sum_pars">
     </div>
 
-    <div class="form__fields">
-      <textarea type="text" class="form__field--textarea" placeholder="примітка"
-        formControlName="comment"></textarea>
-    </div>
+
 
     <div class="form__fields">
       <button class="btn-icon" (click)="deleteOrder(index)" [disabled]="orderForm.controls.length <= 1">

@@ -99,8 +99,6 @@ export class MainTableComponent implements OnInit {
     this.service.sendFilters(this.clean(_.cloneDeep(this.filtersForm.value))).subscribe(
       (data: any) => {
         this.orders = data;
-        
-        
         this.isShowSpinner = false;
         this.closeFilterMenu();
       },

@@ -5,15 +5,15 @@ import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import locale from 'date-fns/locale/en-US';
 import * as moment from 'moment';
 import { DatepickerOptions } from 'ng2-datepicker';
-import { filter, tap } from 'rxjs';
+import { tap } from 'rxjs';
 import { modelsData } from 'src/assets/models-data/modelsData';
 import { formatNumber } from 'src/common/common';
+import { DataAutofill } from '../client-form/autofill';
 import { ClientService } from '../services/client.service';
 import { MainPageService } from '../services/main-table.service';
 import { CreateOrderService } from '../services/orders.service';
 import { ProductsService } from '../services/products.service';
 import { UsefulService } from '../services/useful.service';
-import { DataAutofill } from '../client-form/autofill';
 @Component({
   selector: 'app-create-order',
   templateUrl: './create-order.component.html',
@@ -88,25 +88,6 @@ export class CreateOrderComponent implements OnInit {
     if (this.route.snapshot.params.id) {
       this.idOrder = +this.route.snapshot.params.id;
       this.getOrder();
-    } else if (this.route.snapshot.params.codeModel) {
-      this.chooseKode(this.route.snapshot.params.codeModel, 0, false);
-    } else if (this.route.snapshot.params.phoneClient) {
-      this.selectedItemClient(
-        this.route.snapshot.params.phoneClient,
-        'sl_phone',
-        this.clientForm,
-        'isSaveClient',
-        false
-      );
-    } else if (this.route.snapshot.params.phoneRecipient) {
-      this.isRecipient = true;
-      this.selectedItemClient(
-        this.route.snapshot.params.phoneRecipient,
-        'sl_phone',
-        this.recipientForm,
-        'isSaveRecipient',
-        false
-      );
     }
   }
 
@@ -207,11 +188,7 @@ export class CreateOrderComponent implements OnInit {
       });
     });
     if (isCountDiscount) {
-      sumAllItems.push(
-        this.priceAll.value.sum_payment - this.discount,
-        this.priceAll.value.real_money,
-        this.priceAll.value.different
-      );
+      sumAllItems.push(this.priceAll.value.sum_payment - this.discount, this.priceAll.value.real_money, this.priceAll.value.different);
     } else {
       sumAllItems.push(this.priceAll.value.sum_payment, this.priceAll.value.real_money, this.priceAll.value.different);
     }
@@ -224,15 +201,12 @@ export class CreateOrderComponent implements OnInit {
         .get('qty_pars')
         .valueChanges.pipe(
           tap((data) => {
-            const type =
-              modelsData[order.value.article?.substring(0, 3)] ||
-              modelsData[order.value.article?.substring(0, 2)] ||
-              '';
+            const type = modelsData[order.value.article?.substring(0, 3)] || modelsData[order.value.article?.substring(0, 2)] || '';
 
             order.patchValue({
               sum_pars: data * order.value.price,
-              phase_1: (type.includes('брелок') ? +data : +(data * 2)),
-              phase_2: (type.includes('брелок') ? +data : +(data * 2)),
+              phase_1: type.includes('брелок') ? +data : +(data * 2),
+              phase_2: type.includes('брелок') ? +data : +(data * 2),
               phase_3: +data,
             });
           })
@@ -242,23 +216,26 @@ export class CreateOrderComponent implements OnInit {
         .get('price')
         .valueChanges.pipe(
           tap((data) => {
-            if(order.value.isNew) {
+            if (order.value.isNew) {
               order.patchValue({
                 sum_pars: data * order.value.qty_pars,
                 isNew: true,
-                isChange: false
+                isChange: false,
               });
-            } else if(!order.value.isNew) {
+            } else if (!order.value.isNew) {
               order.patchValue({
                 sum_pars: data * order.value.qty_pars,
                 isNew: false,
-                isChange: true
+                isChange: true,
               });
             }
           })
         )
         .subscribe();
 
+      order.get('comment').valueChanges.subscribe(() => {
+        this.changeStatusProduct(order);
+      });
       order.get('id_color_1').valueChanges.subscribe(() => {
         this.changeStatusProduct(order);
       });
@@ -308,24 +285,23 @@ export class CreateOrderComponent implements OnInit {
   }
 
   changeStatusProduct(product) {
-    if(product.value.isNew) {
+    if (product.value.isNew) {
       product.patchValue({
         isNew: true,
-        isChange: false
+        isChange: false,
       });
-    } else if(!product.value.isNew) {
+    } else if (!product.value.isNew) {
       product.patchValue({
         isNew: false,
-        isChange: true
+        isChange: true,
       });
     }
   }
 
-
   changeMaterial(value, field = 'name_material', isKode = false) {
     if (value.length >= DataAutofill[field]) {
       this.usefulService.getAutofill({ [field]: value }).subscribe((data: any) => {
-        !isKode ? this.materialsItems = data : this.kodItems = data;
+        !isKode ? (this.materialsItems = data) : (this.kodItems = data);
       });
     } else {
       this.materialsItems = [];
@@ -334,7 +310,7 @@ export class CreateOrderComponent implements OnInit {
   }
 
   chooseKode(value, index, ignore = true) {
-    if(value && value.hasOwnProperty('id_product')) {
+    if (value && value.hasOwnProperty('id_product')) {
       this.orderForm.controls.map((order, ind) => {
         this.productService.getProduct(value.id_product).subscribe((data: any) => {
           if (index === ind && Object.keys(data).length) {
@@ -369,67 +345,15 @@ export class CreateOrderComponent implements OnInit {
       console.log('else', value, index);
       this.orderForm.controls.map((order, ind) => {
         order.patchValue({
-          article: value.value
-        })
+          article: value.value,
+        });
       });
     }
-    // console.log(1, !this.kodItems.length, this.kodItems);
-    // if (!this.kodItems.length) {
-    //   console.log(1);
-      
-    //   this.orderForm.controls.map((order, ind) => {
-    //     if (ind === index && value) {
-    //       console.log(1);
-    //       order.patchValue({
-    //         article: value.value,
-    //       });
-    //     } else if (!value) {
-    //       console.log(1);
-    //       order.patchValue({
-    //         article: null,
-    //       });
-    //     }
-    //     return;
-    //   });
-    // }
-    // if (this.kodItems?.includes(value) || !ignore) {
-    //   console.log(1);
-    //   this.orderForm.controls.map((order, ind) => {
-    //     this.productService.getProduct(value.id_product).subscribe((data: any) => {
-    //       if (index === ind && Object.keys(data).length) {
-    //         order.patchValue(
-    //           {
-    //             id_product: data.id_product,
-    //             article: data.article,
-    //             colors: data.colors,
-    //             color_name_1: data.color_name_1 || null,
-    //             part_1: data.part_1,
-    //             id_color_1: data.id_color_1,
-    //             id_color_2: data.id_color_2,
-    //             id_color_3: data.id_color_3,
-    //             id_color_4: data.id_color_4,
-    //             color_name_2: data.color_name_2 || null,
-    //             part_2: data.part_2,
-    //             color_name_3: data.color_name_3 || null,
-    //             part_3: data.part_3,
-    //             color_name_4: data.color_name_4 || null,
-    //             part_4: data.part_4,
-    //             price: data.price,
-    //             comment: data.comment,
-    //             isNew: false,
-    //             isChange: false,
-    //           },
-    //           { emitEvent: false }
-    //         );
-    //       }
-    //     });
-    //   });
-    // }
     this.kodItems = [];
   }
 
   changeIdColor(order, field, value) {
-    if(value && value.hasOwnProperty('id_material')) {
+    if (value && value.hasOwnProperty('id_material')) {
       order.patchValue({
         [field]: value.id_material,
       });
@@ -510,7 +434,7 @@ export class CreateOrderComponent implements OnInit {
       colors: order.value.colors || null,
     };
     this.isShowSpinner = true;
-    
+
     this.productService.saveProduct(params).subscribe(
       (data: any) => {
         order.patchValue({
@@ -549,13 +473,13 @@ export class CreateOrderComponent implements OnInit {
       colors: order.value.colors || 0,
     };
     this.isShowSpinner = true;
-    
+
     this.productService.editProduct(order.value.id_product, params).subscribe(
       (data: any) => {
         order.patchValue({
           isNew: false,
           id_product: data.id_product,
-          isChange: false
+          isChange: false,
         });
         this.isShowSpinner = false;
       },
@@ -571,48 +495,8 @@ export class CreateOrderComponent implements OnInit {
         }, 3000);
       }
     );
-
-  }
-  selectedItemClient(value, keySend, form = this.clientForm, saveBtn = 'isSaveClient', ignore = true) {
-    if (value && keySend === 'open_id_client' && this.clientDataItems.includes(value)) {
-      value = value.id;
-      this.sendDataClient(value, keySend, form, saveBtn);
-    }
-    if ((value && this.clientDataItems.includes(value)) || !ignore) {
-      this.sendDataClient(value, keySend, form, saveBtn);
-    }
-
-    form.patchValue({
-      second_name: value?.secondName || value,
-    });
-    this.clientDataItems = [];
   }
 
-  sendDataClient(value, keySend, form, saveBtn) {
-    this.service
-      .getInfoForOrder({ [keySend]: value })
-      .pipe(filter(() => value))
-      .subscribe((dataClient: any) => {
-        form.setValue(
-          {
-            coach: dataClient?.coach,
-            comment: dataClient.comment,
-            first_name: dataClient.first_name,
-            id_client: dataClient.id_client,
-            team: dataClient.team,
-            phone: dataClient.phone,
-            second_name: dataClient.second_name,
-            city: dataClient.city,
-            address: dataClient.address,
-            surname: dataClient.surname_client,
-            zip_code: dataClient.zip_code,
-            np_number: dataClient.np_number,
-          },
-          { emitEvent: false }
-        );
-        this[saveBtn] = true;
-      });
-  }
   clearDataClient() {
     this.clientDataItems = [];
   }
@@ -640,7 +524,16 @@ export class CreateOrderComponent implements OnInit {
         form.patchValue({
           id_client: data.id_client,
         });
+        this.alert = {
+          isShow: true,
+          type: 'success',
+          message: 'Дані збережено',
+        };
+        setTimeout(() => {
+          this.alertChange(false);
+        }, 3000);
         this.isSaveClient = true;
+        // this.isSaveRecipient = true;
       },
       (error) => {
         const key = Object.keys(error.error);
@@ -687,6 +580,7 @@ export class CreateOrderComponent implements OnInit {
   }
 
   saveForm(event) {
+    this.isSaveClient = true;
     if (event.isNew) {
       if (event.isClient) {
         this.saveClient();
@@ -703,11 +597,20 @@ export class CreateOrderComponent implements OnInit {
   editClient(form, params) {
     this.clientService.editClient(params, form.value.id_client).subscribe(
       (data: any) => {
+        this.isSaveClient = 1 as any;
+        this.isSaveRecipient = 1 as any;
         this.isShowSpinner = false;
         form.patchValue({
           id_client: data.id_recipient || form.value.id_client,
         });
-        this.isSaveClient = true;
+        this.alert = {
+          isShow: true,
+          type: 'success',
+          message: 'Дані збережено',
+        };
+        setTimeout(() => {
+          this.alertChange(false);
+        }, 3000);
       },
       (error) => {
         const key = Object.keys(error.error);
@@ -738,20 +641,18 @@ export class CreateOrderComponent implements OnInit {
   }
 
   rewriteData(data) {
-    if(this.isEmptyObject(data)) {
+    if (this.isEmptyObject(data)) {
       return null;
     }
     const month = +data.month < 10 ? '0' + data.month : data.month;
     const day = +data.day < 10 ? '0' + data.day : data.day;
-    
-    return data
-    ? [data.year, month, day].join('-')
-    : null;
+
+    return data ? [data.year, month, day].join('-') : null;
   }
- 
+
   saveAll(mode = 'create') {
     console.log(this.clientForm.value);
-    
+
     const params = {
       date_create: this.rewriteData(this.dateToday),
       id_client: this.clientForm.value.id_client,
@@ -763,13 +664,13 @@ export class CreateOrderComponent implements OnInit {
       phase_2: this.makeArrayDataOrder('phase_2'),
       phase_3: this.makeArrayDataOrder('phase_3'),
       date_plane_send: this.rewriteData(this.dataPlaneOrder), // - прогнозована
-      discount: this.discount,
+      discount: +this.discount,
       sum_payment: +this.sumAll(false).split('/')[0].trim(),
       status_order: false,
       comment: this.commentOrder,
     };
 
-    if(mode === 'edit') {
+    if (mode === 'edit') {
       this.service.editOrder(params, +this.idOrder).subscribe((data: any) => {
         this.idOrder = +data.id_order || this.idOrder;
         // this.doneOrder = true;
@@ -801,7 +702,6 @@ export class CreateOrderComponent implements OnInit {
         }, 3000);
       });
     }
-   
   }
 
   setClientData(dataClient) {
@@ -903,14 +803,12 @@ export class CreateOrderComponent implements OnInit {
       });
   }
   getModels(data) {
-    
     data.id_models.forEach((idModel, index) => {
       if (index === 0) {
         this.orderForm.clear();
       }
 
       this.productService.getProduct(idModel).subscribe((dataModel: any) => {
-        
         this.orderForm.push(
           this.fb.group({
             id_product: dataModel.id_product,
@@ -954,19 +852,15 @@ export class CreateOrderComponent implements OnInit {
     this.orderForm.value.forEach((order, i) => {
       const type = modelsData[order.article.substring(0, 3)] || modelsData[order.article.substring(0, 2)] || '';
       copyText.push(
-        `${i + 1}. ${type}, колір ${order.colors}, код ${order.article}, кількість ${
-          order.qty_pars
-        } ${type.includes('брелок') ? 'шт' : 'пар'}, ціна ${formatNumber(order.price)} грн/${
-          type.includes('брелок') ? 'шт' : 'пара'
-        }\n`
+        `${i + 1}. ${type}, колір ${order.colors}, код ${order.article}, кількість ${order.qty_pars} ${
+          type.includes('брелок') ? 'шт' : 'пар'
+        }, ціна ${formatNumber(order.price)} грн/${type.includes('брелок') ? 'шт' : 'пара'}\n`
       );
     });
 
     copyText.push(
       `Прогнозована дата виготовлення ${
-        this.dataPlaneOrder
-          ? [this.dataPlaneOrder.year, this.dataPlaneOrder.month, this.dataPlaneOrder.day].join('-')
-          : null
+        this.dataPlaneOrder ? [this.dataPlaneOrder.year, this.dataPlaneOrder.month, this.dataPlaneOrder.day].join('-') : null
       } \n\n`
     );
     copyText.push(`**Всього до оплати ${formatNumber(sumAll)}** грн\n`);
@@ -974,9 +868,7 @@ export class CreateOrderComponent implements OnInit {
     copyText.push(
       `**Обов'язково вказуйте призначення платежу: "Рахунок П-${this.idOrder}"**, а після оплати проінформуйте нас про транзакцію.\n\n`
     );
-    copyText.push(
-      '**Якщо Вам потрібно рахунок і накладна у паперовому вигляді, попередьте нас і ми покладемо їх до замовлення.** \n'
-    );
+    copyText.push('**Якщо Вам потрібно рахунок і накладна у паперовому вигляді, попередьте нас і ми покладемо їх до замовлення.** \n');
     navigator.clipboard.writeText(copyText.join(''));
     this.isShowSpinner = false;
     this.alert = {
@@ -990,14 +882,9 @@ export class CreateOrderComponent implements OnInit {
   }
 
   makeOrderDone() {
-    this.serviceMain
-      .changeFulfilled(
-        this.idOrder,
-        { status_order: !this.fulfilledOrder }
-      )
-      .subscribe(() => {
-        this.fulfilledOrder = !this.fulfilledOrder;
-      });
+    this.serviceMain.changeFulfilled(this.idOrder, { status_order: !this.fulfilledOrder }).subscribe(() => {
+      this.fulfilledOrder = !this.fulfilledOrder;
+    });
   }
 
   alertChange(e) {
@@ -1006,22 +893,26 @@ export class CreateOrderComponent implements OnInit {
 
   changedate() {
     console.log(this.dataPlaneOrder);
-    
   }
   isEmptyObject(obj) {
-    if(obj === null) {
+    if (obj === null) {
       return true;
     }
-    return (obj && (Object.keys(obj).length === 0));
- }
+    return obj && Object.keys(obj).length === 0;
+  }
 
- isDisabledBtn(mode: string) {
-  const isClientsFormValid = this.isRecipient ? this.clientForm.valid && this.recipientForm.valid : this.clientForm.valid;
-  const isOrderValid = this.orderForm.valid;
-  // console.log(this.isNew ? (this.isNew && isClientsFormValid && isOrderValid) : true);
-  // console.log(this.isNew, isClientsFormValid, isOrderValid, this.dataPlaneOrder, this.isEmptyObject(this.dataPlaneOrder));
-  
-  return mode === 'new' ? (this.isNew ? !(this.isNew && isClientsFormValid && isOrderValid && !this.isEmptyObject(this.dataPlaneOrder)) : true) :
-  (!this.isNew ? !(!this.isNew && isClientsFormValid && isOrderValid && !this.isEmptyObject(this.dataPlaneOrder)) : true);
- }
+  isDisabledBtn(mode: string) {
+    const isClientsFormValid = this.isRecipient ? this.clientForm.valid && this.recipientForm.valid : this.clientForm.valid;
+    const isOrderValid = this.orderForm.valid;
+    // console.log(this.isNew ? (this.isNew && isClientsFormValid && isOrderValid) : true);
+    // console.log(this.isNew, isClientsFormValid, isOrderValid, this.dataPlaneOrder, this.isEmptyObject(this.dataPlaneOrder));
+
+    return mode === 'new'
+      ? this.isNew
+        ? !(this.isNew && isClientsFormValid && isOrderValid && !this.isEmptyObject(this.dataPlaneOrder))
+        : true
+      : !this.isNew
+      ? !(!this.isNew && isClientsFormValid && isOrderValid && !this.isEmptyObject(this.dataPlaneOrder))
+      : true;
+  }
 }

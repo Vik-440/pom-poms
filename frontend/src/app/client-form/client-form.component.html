@@ -100,6 +100,7 @@
       class="invalid bi bi-exclamation-circle">
     </i>
   </div>
+
   <button *ngIf="isNewForm && !isShowOk" [disabled]="clientForm.invalid" class="data-customer-item data-customer--btn action-btn" (click)="saveForm(true)">Зберегти</button>
   <button *ngIf="!isNewForm && !isShowOk" [disabled]="clientForm.invalid" class="data-customer-item data-customer--btn action-btn edit-btn" (click)="saveForm(false)">Редагувати</button>
   <button class="data-customer-item data-customer--btn action-btn ok" *ngIf="isShowOk">
