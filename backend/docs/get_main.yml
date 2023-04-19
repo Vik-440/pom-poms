@@ -52,7 +52,7 @@ parameters:
     enum: ['Клименко', 'Гнатуш', 'Куманова', 'Гаврушко', 'Пугачова', 'Хейлик']
     required: false
 
-  - name: sity
+  - name: city
     in: query
     type: string
     description: city
