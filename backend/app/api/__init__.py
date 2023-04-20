@@ -25,11 +25,8 @@ from app.api.financial import (
     search_payments,
     search_outlay)
 
-# from app.api.clients_and_products import (
-#     all_routs_clients_products)
-
 from app.api.general import (
     autofill,
     pin_pong)
 
-from app.api import errors
+# from app.api import errors

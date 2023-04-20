@@ -19,6 +19,43 @@ def validate_id_order(id_order: int):
     return
 
 
+def validate_phases(id_order: int, data: dict):
+    with Session(engine) as session:
+        stmt = (
+            select(DB_orders.id_models)
+            .where(DB_orders.id_order == id_order))
+        gty_products_in_order = session.execute(stmt).scalar()
+        qty_products_order = len(gty_products_in_order)
+        if 'phase_1' in data:
+            if len(data['phase_1']) != qty_products_order:
+                return {'phase_1': 'misstake in qty phases in data'}
+            for phase in data['phase_1']:
+                if not isinstance(phase, int):
+                    return {'phase_1': 'has data not int type'}
+        if 'phase_2' in data:
+            if len(data['phase_2']) != qty_products_order:
+                return {'phase_2': 'misstake in qty phases in data'}
+            for phase in data['phase_2']:
+                if not isinstance(phase, int):
+                    return {'phase_2': 'has data not int type'}
+        if 'phase_3' in data:
+            if len(data['phase_3']) != qty_products_order:
+                return {'phase_3': 'misstake in qty phases in data'}
+            for phase in data['phase_3']:
+                if not isinstance(phase, int):
+                    return {'phase_3': 'has data not int type'}
+    return
+
+
+def validate_status(data: dict):
+    """validate data for chenging status"""
+    if not 'status_order' in data:
+        return {'status_order': 'miss in data'}
+    if not isinstance(data['status_order'], bool):
+            return {'status_order': 'is not bool type'}
+    return
+
+
 
 def validate_create_order(data: dict):
     """Validator for create order"""

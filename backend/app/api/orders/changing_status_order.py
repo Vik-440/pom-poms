@@ -5,6 +5,7 @@ from flask import request, jsonify
 from sqlalchemy import select, update
 from sqlalchemy.orm import Session
 from app.orders.models import DB_orders
+from app.orders.validator import validate_id_order, validate_status
 from werkzeug.exceptions import BadRequest
 from app import engine
 from .. import api
@@ -22,9 +23,15 @@ def main_status_order(id_order):
     except BadRequest:
         logger.error('/status(PUT) - format json is not correct')
         return jsonify({'status(PUT)': 'json format is not correct'}), 400
-    # verification!
-    if not 'status_order' in data:
-        return {"error": "misstake in data status"}, 400
+    error_id_order = validate_id_order(id_order)
+    if error_id_order:
+        logger.error(f'{error_id_order}')
+        return jsonify(error_id_order), 400
+    error_status_data = validate_status(data)
+    if error_status_data:
+        logger.error(f'{error_status_data}')
+        return jsonify(error_status_data), 400
+    
     status_order = data['status_order']
     try:
         with Session(engine) as session:
