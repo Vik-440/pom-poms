@@ -116,3 +116,61 @@ def test_read_payments_2(app_fixture):
         'metod_payment': 'iban',
         'data_payment': '2023-03-07'}]
     assert response.json == expected_data
+
+
+@pytest.mark.run(order=500080)
+def test_search_payment_iban(app_fixture):
+    client = app_fixture.test_client()
+    data = {
+        'data_start': '2023-03-01',
+        'data_end': '2023-03-06',
+        'iban': True,
+        'cash': False}
+    response = client.post('/finance/payments', data=json.dumps(data), content_type='application/json')
+    assert response.status_code == 200
+    expected_data = [{
+        'data_payment': '2023-03-03',
+        'id_order': 1, 'id_payment': 1,
+        'method_payment': 'iban',
+        'payment': 100}]
+    assert response.json == expected_data
+
+@pytest.mark.run(order=500090)
+def test_search_payment_cash(app_fixture):
+    client = app_fixture.test_client()
+    data = {
+        'data_start': '2023-03-01',
+        'data_end': '2023-03-06',
+        'iban': False,
+        'cash': True}
+    response = client.post('/finance/payments', data=json.dumps(data), content_type='application/json')
+    assert response.status_code == 200
+    expected_data = [{
+        'data_payment': '2023-03-05',
+        'id_order': 2, 'id_payment': 2,
+        'method_payment': 'cash',
+        'payment': 222}]
+    assert response.json == expected_data
+
+@pytest.mark.run(order=500100)
+def test_search_payment_all(app_fixture):
+    client = app_fixture.test_client()
+    data = {
+        'data_start': '2023-03-05',
+        'data_end': '2023-03-09',
+        'iban': True,
+        'cash': True}
+    response = client.post('/finance/payments', data=json.dumps(data), content_type='application/json')
+    assert response.status_code == 200
+    expected_data = [{
+        'data_payment': '2023-03-05',
+        'id_order': 2, 'id_payment': 2,
+        'method_payment': 'cash',
+        'payment': 222
+        },{
+        'data_payment': '2023-03-07',
+        'id_order': 3, 'id_payment': 3,
+        'method_payment': 'iban',
+        'payment': 300}]
+    # print(response.json)
+    assert response.json == expected_data

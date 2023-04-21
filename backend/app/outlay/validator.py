@@ -34,6 +34,28 @@ def validate_outlay(data: dict):
         return {'comment_outlay': 'miss in data'}
     if not isinstance(data['comment_outlay'], str):
         return {'comment_outlay': 'is not str type'}
-
     return
 
+def validate_search_outlay(data: dict):
+    """Validator search outlay"""
+    if not 'data_start' in data:
+        return {'data_start': 'miss in data'}
+    if not isinstance(data['data_start'], str):
+        return {'data_start': 'is not str type'}
+    date_str = data['data_start']
+    try:
+        datetime.strptime(date_str, '%Y-%m-%d')
+    except ValueError:
+        return {'data_start': 'is not in format like: yyyy-mm-dd'}
+    data['data_start'] = date_str
+
+    if not 'data_end' in data:
+        return {'data_end': 'miss in data'}
+    if not isinstance(data['data_end'], str):
+        return {'data_end': 'is not str type'}
+    date_str = data['data_end']
+    try:
+        datetime.strptime(date_str, '%Y-%m-%d')
+    except ValueError:
+        return {'data_end': 'is not in format like: yyyy-mm-dd'}
+    data['data_end'] = date_str

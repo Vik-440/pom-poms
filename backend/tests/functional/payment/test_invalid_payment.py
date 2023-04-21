@@ -169,7 +169,7 @@ def test_post_metod_payment_not_valid_payment(app_fixture):
 
 
 @pytest.mark.run(order=520110)
-def test_post_without_data_payment_payment(app_fixture):
+def test_post_without_date_payment_payment(app_fixture):
     client = app_fixture.test_client()
     data = {
         'id_order': 1,
@@ -223,4 +223,151 @@ def test_post_without_id_order_payment(app_fixture):
     response = client.put('/finance/payment/1', data=json.dumps(data), content_type='application/json')
     assert response.status_code == 400
     expected_data = {'id_order': 'miss in data'}
+    assert response.json == expected_data
+
+@pytest.mark.run(order=520150)
+def test_post_without_date_start_search_payment(app_fixture):
+    client = app_fixture.test_client()
+    data = {
+        # 'data_start': '2023-03-01',
+        'data_end': '2023-03-06',
+        'iban': False,
+        'cash': True}
+    response = client.post('/finance/payments', data=json.dumps(data), content_type='application/json')
+    assert response.status_code == 400
+    expected_data = {'data_start': 'miss in data'}
+    assert response.json == expected_data
+
+
+@pytest.mark.run(order=520160)
+def test_post_date_start_search_payment_not_str(app_fixture):
+    client = app_fixture.test_client()
+    data = {
+        'data_start': ['2023-03-01'],
+        'data_end': '2023-03-06',
+        'iban': False,
+        'cash': True}
+    response = client.post('/finance/payments', data=json.dumps(data), content_type='application/json')
+    assert response.status_code == 400
+    expected_data = {'data_start': 'is not str type'}
+    assert response.json == expected_data
+
+
+@pytest.mark.run(order=520170)
+def test_post_date_start_search_payment_not_valid(app_fixture):
+    client = app_fixture.test_client()
+    data = {
+        'data_start': '2023.03.01',
+        'data_end': '2023-03-06',
+        'iban': False,
+        'cash': True}
+    response = client.post('/finance/payments', data=json.dumps(data), content_type='application/json')
+    assert response.status_code == 400
+    expected_data = {'data_start': 'is not in format like: yyyy-mm-dd'}
+    assert response.json == expected_data
+
+@pytest.mark.run(order=520180)
+def test_post_without_date_end_search_payment(app_fixture):
+    client = app_fixture.test_client()
+    data = {
+        'data_start': '2023-03-01',
+        # 'data_end': '2023-03-06',
+        'iban': False,
+        'cash': True}
+    response = client.post('/finance/payments', data=json.dumps(data), content_type='application/json')
+    assert response.status_code == 400
+    expected_data = {'data_end': 'miss in data'}
+    assert response.json == expected_data
+
+
+@pytest.mark.run(order=520190)
+def test_post_date_end_search_payment_not_str(app_fixture):
+    client = app_fixture.test_client()
+    data = {
+        'data_start': '2023-03-01',
+        'data_end': ['2023-03-06'],
+        'iban': False,
+        'cash': True}
+    response = client.post('/finance/payments', data=json.dumps(data), content_type='application/json')
+    assert response.status_code == 400
+    expected_data = {'data_end': 'is not str type'}
+    assert response.json == expected_data
+
+
+@pytest.mark.run(order=520200)
+def test_post_date_end_search_payment_not_valid(app_fixture):
+    client = app_fixture.test_client()
+    data = {
+        'data_start': '2023-03-01',
+        'data_end': '2023.03.06',
+        'iban': False,
+        'cash': True}
+    response = client.post('/finance/payments', data=json.dumps(data), content_type='application/json')
+    assert response.status_code == 400
+    expected_data = {'data_end': 'is not in format like: yyyy-mm-dd'}
+    assert response.json == expected_data
+
+
+@pytest.mark.run(order=520210)
+def test_post_search_payment_without_iban(app_fixture):
+    client = app_fixture.test_client()
+    data = {
+        'data_start': '2023-03-01',
+        'data_end': '2023-03-06',
+        # 'iban': False,
+        'cash': True}
+    response = client.post('/finance/payments', data=json.dumps(data), content_type='application/json')
+    assert response.status_code == 400
+    expected_data = {'iban': 'miss in data'}
+    assert response.json == expected_data
+
+
+@pytest.mark.run(order=520220)
+def test_post_search_payment_iban_not_bool(app_fixture):
+    client = app_fixture.test_client()
+    data = {
+        'data_start': '2023-03-01',
+        'data_end': '2023-03-06',
+        'iban': 'False',
+        'cash': True}
+    response = client.post('/finance/payments', data=json.dumps(data), content_type='application/json')
+    assert response.status_code == 400
+    expected_data = {'iban': 'is not bool type'}
+    assert response.json == expected_data
+
+@pytest.mark.run(order=520230)
+def test_post_search_payment_without_cash(app_fixture):
+    client = app_fixture.test_client()
+    data = {
+        'data_start': '2023-03-01',
+        'data_end': '2023-03-06',
+        'iban': False,
+        # 'cash': True
+        }
+    response = client.post('/finance/payments', data=json.dumps(data), content_type='application/json')
+    assert response.status_code == 400
+    expected_data = {'cash': 'miss in data'}
+    assert response.json == expected_data
+
+
+@pytest.mark.run(order=520240)
+def test_post_search_payment_cash_not_bool(app_fixture):
+    client = app_fixture.test_client()
+    data = {
+        'data_start': '2023-03-01',
+        'data_end': '2023-03-06',
+        'iban': False,
+        'cash': 'True'}
+    response = client.post('/finance/payments', data=json.dumps(data), content_type='application/json')
+    assert response.status_code == 400
+    expected_data = {'cash': 'is not bool type'}
+    assert response.json == expected_data
+
+@pytest.mark.run(order=520250)
+def test_post_json_not_correct_search_payment(app_fixture):
+    client = app_fixture.test_client()
+    data = 'this is not valid json'
+    response = client.post('/finance/payments', data=data, content_type='application/json')
+    assert response.status_code == 400
+    expected_data = {'search_payments(POST)': 'json format is not correct'}
     assert response.json == expected_data

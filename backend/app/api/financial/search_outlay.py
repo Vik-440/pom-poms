@@ -5,9 +5,11 @@ import calendar
 from flask import jsonify, request
 from sqlalchemy import func, select, update#
 from sqlalchemy.orm import Session, aliased
+from werkzeug.exceptions import BadRequest
 
 from app.outlay.models import DB_outlay
 from app.payments.models import DB_payment
+from app.outlay.validator import validate_search_outlay
 from app import engine
 from .. import api
 from log.logger import logger
@@ -29,12 +31,11 @@ def extracting_payment_statistics():
 
 def return_forecast(stat, sql_sum, sql_data):
     """module collecting info from db by data_time"""
-    ds = datetime.today()
-    dsm = ds.strftime('%Y,%m')
-    dsy = int(ds.strftime('%Y'))
-    dsm = int(ds.strftime('%m'))
-    data_start_sql = ds.strftime('%Y-%m-%d')
-    data_end_sql = ds.strftime('%Y-%m-%d')
+    ds = datetime.now()
+    dsy = ds.year
+    dsm = ds.month
+    data_start_sql = ds.isoformat()
+    data_end_sql = ds.isoformat()
     stat = return_stat(data_start_sql, data_end_sql, stat, sql_sum, sql_data)
 
     time_step = timedelta(days=1)
@@ -120,13 +121,21 @@ def outlay_searching(data):
 @api.route('/finance', methods=['POST'])
 def finance():
     try:
-        data = request.get_json()
+        data = request.get_json(force=True)
+    except BadRequest:
+        logger.error('/finance(POST) - format json is not correct')
+        return jsonify({'finance(POST)': 'json format is not correct'}), 400
+    try:
         if 'outlay_search' in data:
+            error_search_outlay = validate_search_outlay(data)
+            if error_search_outlay:
+                logger.error(f'{error_search_outlay}')
+                return jsonify(error_search_outlay), 400
             return jsonify(outlay_searching(data)), 200
         elif 'stat' in data:
             return jsonify(extracting_payment_statistics()), 200
         else:
-            return ({"message": "finance POST error"}), 400
+            return ({'message': 'finance POST error'}), 400
     except Exception as e:
         logger.error(f'Error in function finance: {e}')
         return f'Error in function finance: {e}', 400
