@@ -1,8 +1,5 @@
 import pytest
 from flask import json
-from datetime import datetime
-# from unittest.mock import MagicMock, patch, PropertyMock
-from unittest.mock import patch
 from freezegun import freeze_time
 
 

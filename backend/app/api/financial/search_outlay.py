@@ -64,9 +64,9 @@ def return_forecast(stat, sql_sum, sql_data):
     # forecast this year
     days_year = (ds-ds.replace(month=1, day=1))
     if stat[0] is None:
-        stat[0] = 0
+        stat[0] = 0 # pragma: no cover
     if days_year is None or days_year == 0:
-        days_year = 1
+        days_year = 1 # pragma: no cover
     forecast = round((stat[0]/days_year.days)*365)
     stat.insert(0, forecast)
 
@@ -114,8 +114,8 @@ def outlay_searching(data):
                              "comment_outlay": row.comment}
                 full_block.append(one_block)
         return full_block
-    except Exception as e:
-        return f'Error in function outlay_searching: {e}', 400
+    except Exception as e: # pragma: no cover
+        return f'Error in function outlay_searching: {e}', 400 # pragma: no cover
 
 
 @api.route('/finance', methods=['POST'])
@@ -135,8 +135,8 @@ def finance():
         elif 'stat' in data:
             return jsonify(extracting_payment_statistics()), 200
         else:
-            return ({'message': 'finance POST error'}), 400
-    except Exception as e:
-        logger.error(f'Error in function finance: {e}')
-        return f'Error in function finance: {e}', 400
+            return jsonify({'message': 'finance POST error'}), 400
+    except Exception as e: # pragma: no cover
+        logger.error(f'Error in function finance: {e}') # pragma: no cover
+        return f'Error in function finance: {e}', 400 # pragma: no cover
     

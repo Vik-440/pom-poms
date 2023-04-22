@@ -59,3 +59,46 @@ def validate_search_outlay(data: dict):
     except ValueError:
         return {'data_end': 'is not in format like: yyyy-mm-dd'}
     data['data_end'] = date_str
+
+
+def validate_balance(data: dict):
+    """validate request for balance"""
+    if not 'data_start' in data:
+        return {'data_start': 'miss in data'}
+    if not isinstance(data['data_start'], str):
+        return {'data_start': 'is not str type'}
+    date_str = data['data_start']
+    try:
+        datetime.strptime(date_str, '%Y-%m-%d')
+    except ValueError:
+        return {'data_start': 'is not in format like: yyyy-mm-dd'}
+    data['data_start'] = date_str
+
+    if not 'data_end' in data:
+        return {'data_end': 'miss in data'}
+    if not isinstance(data['data_end'], str):
+        return {'data_end': 'is not str type'}
+    date_str = data['data_end']
+    try:
+        datetime.strptime(date_str, '%Y-%m-%d')
+    except ValueError:
+        return {'data_end': 'is not in format like: yyyy-mm-dd'}
+    data['data_end'] = date_str
+
+    # if not 'balans' in data:
+    #     return {'balans': 'miss in data'}
+    if not isinstance(data['balans'], str):
+        return {'balans': 'is not str type'}
+    time_period_str = ['day', 'week', 'month', 'quarter', 'year']
+    if data['balans'] not in time_period_str:
+        return {'balans': 'key is not valid'}
+    
+    if not 'iban' in data:
+        return {'iban': 'miss in data'}
+    if not isinstance(data['iban'], bool):
+        return {'iban': 'is not bool type'}
+    
+    if not 'cash' in data:
+        return {'cash': 'miss in data'}
+    if not isinstance(data['cash'], bool):
+        return {'cash': 'is not bool type'}
