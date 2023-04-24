@@ -203,7 +203,7 @@
         [class.disabled]="filtersForm.value.phone_client || filtersForm.value.team || filtersForm.value.city || filtersForm.value.coach">
         <div class="filters-data--title">Прізвище клієнта</div>
         <ng-select [clearOnBackspace]="false" notFoundText="No second name founded"
-          (search)="changeFiled($event, 'second_name')" type="number" bindLabel="value" bindValue="value" bindValue="id"
+          (search)="changeFiled($event, 'second_name')" type="number" bindLabel="value" bindValue="value" bindValue="id_client"
           (change)="clearFilterData()" formControlName="id_client" [items]="dataFilters"></ng-select>
       </div>
       <div class="filters-data"
