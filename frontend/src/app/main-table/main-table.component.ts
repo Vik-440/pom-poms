@@ -83,20 +83,18 @@ export class MainTableComponent implements OnInit {
   }
 
   applyFilters() {
-    console.log(this.filtersForm);
-    
-    // this.isShowSpinner = true;
-    // this._service.sendFilters(this.cleanObject(_.cloneDeep(this.filtersForm.value))).subscribe(
-    //   (data: any) => {
-    //     this.orders = data;
-    //     this.isShowSpinner = false;
-    //     this.closeFilterMenu();
-    //   },
-    //   () => {
-    //     this.isShowSpinner = false;
-    //     this.closeFilterMenu();
-    //   }
-    // );
+    this.isShowSpinner = true;
+    this._service.sendFilters(this.cleanObject(_.cloneDeep(this.filtersForm.value))).subscribe(
+      (data: any) => {
+        this.orders = data;
+        this.isShowSpinner = false;
+        this.closeFilterMenu();
+      },
+      () => {
+        this.isShowSpinner = false;
+        this.closeFilterMenu();
+      }
+    );
   }
 
   cleanObject(obj) {
