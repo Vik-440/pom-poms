@@ -47,8 +47,9 @@
     <tbody>
       <ng-container *ngFor="let order of orders; let i = index">
         <tr class="table--row">
-          <td [class.yellow]="order.comment_order"> 
-            <a class="clickable" target="_blank" [routerLink]="['/create-order', {id: order.id_order}]" placement="top" [ngbTooltip]="order.comment_order">{{
+          <td [class.yellow]="order.comment_order">
+            <a class="clickable" target="_blank" [routerLink]="['/create-order', {id: order.id_order}]" placement="top"
+              [ngbTooltip]="order.comment_order">{{
               order.id_order }}</a>
           </td>
           <td>{{ order.data_order | date: 'yyyy-MM-dd'}}</td>
@@ -60,8 +61,8 @@
               </div>
             </td>
             <td class="td-left">
-              <div class="bb_solid pl5" [ngStyle]="changeHeight(j, i)"
-                [ngbTooltip]="order.comment_model[i]" [ngClass]="checkCode(kod_model, order.comment_model[i])"
+              <div class="bb_solid pl5" [ngStyle]="changeHeight(j, i)" [ngbTooltip]="order.comment_model[i]"
+                [ngClass]="checkCode(kod_model, order.comment_model[i])"
                 *ngFor="let kod_model of order.kod_model; let j = index">
                 <a class="clickable" target="_blank">{{kod_model}}</a>
               </div>
@@ -107,8 +108,7 @@
               {{ order.kolor_model }}
             </td>
             <!-- kod_model -->
-            <td class="td-left pl5" 
-              [class]="checkCode(order.kod_model, order.comment_model)">
+            <td class="td-left pl5" [class]="checkCode(order.kod_model, order.comment_model)">
               <a class="clickable" target="_blank" [ngbTooltip]="order.comment_model">{{order.kod_model}}</a>
             </td>
             <td>
@@ -195,55 +195,53 @@
       <div class="filters-data"
         [class.disabled]="filtersForm.value.id_client || filtersForm.value.team || filtersForm.value.city || filtersForm.value.coach">
         <div class="filters-data--title">№ телефону</div>
-        <ng-select [clearOnBackspace]="false" notFoundText="No phone founded"
-          (search)="changeFiled($event, 'phone', 4, 'phone_client')" type="number" bindLabel="value" (change)="clearFilterData()"
-          formControlName="phone_client" [items]="dataFilters"></ng-select>
+        <ng-select [clearOnBackspace]="false" notFoundText="No phone founded" (search)="changeFiled($event, 'phone')"
+          type="number" bindLabel="value" bindValue="value" (change)="clearFilterData()" formControlName="phone_client"
+          [items]="dataFilters"></ng-select>
       </div>
       <div class="filters-data"
         [class.disabled]="filtersForm.value.phone_client || filtersForm.value.team || filtersForm.value.city || filtersForm.value.coach">
         <div class="filters-data--title">Прізвище клієнта</div>
         <ng-select [clearOnBackspace]="false" notFoundText="No second name founded"
-          (search)="changeFiled($event, 'second_name', 3)" type="number" bindLabel="secondName" bindValue="id"
+          (search)="changeFiled($event, 'second_name')" type="number" bindLabel="value" bindValue="value" bindValue="id"
           (change)="clearFilterData()" formControlName="id_client" [items]="dataFilters"></ng-select>
       </div>
       <div class="filters-data"
         [class.disabled]="filtersForm.value.phone_client || filtersForm.value.coach || filtersForm.value.city || filtersForm.value.id_client">
         <div class="filters-data--title">Команда</div>
-        <ng-select [clearOnBackspace]="false" notFoundText="No phone founded"
-          (search)="changeFiled($event, 'team', 3, 'name_team')" type="number" formControlName="team"
-          (change)="clearFilterData()" [items]="dataFilters"></ng-select>
+        <ng-select [clearOnBackspace]="false" notFoundText="No team founded" bindLabel="value" bindValue="value"
+          (search)="changeFiled($event, 'team')" type="number" formControlName="team" (change)="clearFilterData()"
+          [items]="dataFilters"></ng-select>
       </div>
       <div class="filters-data"
         [class.disabled]="filtersForm.value.phone_client || filtersForm.value.team || filtersForm.value.coach || filtersForm.value.id_client">
         <div class="filters-data--title">Місто</div>
-        <ng-select [clearOnBackspace]="false" notFoundText="No phone founded"
-          (search)="changeFiled($event, 'city', 3, 'sity')" type="number" (change)="clearFilterData()"
-          formControlName="city" [items]="dataFilters"></ng-select>
+        <ng-select [clearOnBackspace]="false" notFoundText="No city founded" bindLabel="value" bindValue="value"
+          (search)="changeFiled($event, 'city')" type="number" (change)="clearFilterData()" formControlName="city"
+          [items]="dataFilters"></ng-select>
       </div>
       <div class="filters-data"
         [class.disabled]="filtersForm.value.phone_client || filtersForm.value.team || filtersForm.value.city || filtersForm.value.id_client">
         <div class="filters-data--title">Тренер</div>
-        <ng-select [clearOnBackspace]="false" notFoundText="No phone founded"
-          (search)="changeFiled($event, 'coach', 3, 'name_coach')" type="number" (change)="clearFilterData()"
-          formControlName="coach" [items]="dataFilters"></ng-select>
+        <ng-select [clearOnBackspace]="false" notFoundText="No coach founded" bindLabel="value" bindValue="value"
+          (search)="changeFiled($event, 'coach')" type="number" (change)="clearFilterData()" formControlName="coach"
+          [items]="dataFilters"></ng-select>
       </div>
       <div class="outline"></div>
       <div class="filters-data"
         [class.disabled]="filtersForm.value.kod_model_like || filtersForm.value.kolor_model_like">
         <div class="filters-data--title">Код моделі</div>
-        <ng-select [clearOnBackspace]="false" notFoundText="No phone founded"
-          (search)="changeFiled($event, 'article', 3, 'kod_model')" type="number" formControlName="kod_model"
+        <ng-select [clearOnBackspace]="false" notFoundText="No kod model founded" bindLabel="value" bindValue="value"
+          (search)="changeFiled($event, 'article')" type="number" formControlName="kod_model"
           [items]="dataFilters"></ng-select>
       </div>
       <div class="filters-data" [class.disabled]="filtersForm.value.kod_model || filtersForm.value.kolor_model_like">
         <div class="filters-data--title">Збіг у коді моделі</div>
-        <input [clearOnBackspace]="false" notFoundText="No phone founded" type="text"
-          class="filters-data--input" formControlName="kod_model_like" [items]="dataFilters">
+        <input [clearOnBackspace]="false" type="text" class="filters-data--input" formControlName="kod_model_like">
       </div>
       <div class="filters-data" [class.disabled]="filtersForm.value.kod_model || filtersForm.value.kod_model_like">
         <div class="filters-data--title">Збіг у кольорі</div>
-        <input [clearOnBackspace]="false" notFoundText="No phone founded" type="text"
-          class="filters-data--input" formControlName="kolor_model_like" [items]="dataFilters">
+        <input [clearOnBackspace]="false" type="text" class="filters-data--input" formControlName="kolor_model_like">
       </div>
     </div>
     <div class="filters-wrapper--footer">

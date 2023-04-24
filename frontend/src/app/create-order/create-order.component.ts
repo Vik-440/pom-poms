@@ -6,14 +6,15 @@ import locale from 'date-fns/locale/en-US';
 import * as moment from 'moment';
 import { DatepickerOptions } from 'ng2-datepicker';
 import { tap } from 'rxjs';
-import { modelsData } from 'src/assets/models-data/modelsData';
-import { formatNumber } from 'src/common/common';
-import { DataAutofill } from '../client-form/autofill';
+import { DataAutofillInterface } from '../interfaces/autofill-data';
 import { ClientService } from '../services/client.service';
 import { MainPageService } from '../services/main-table.service';
 import { CreateOrderService } from '../services/orders.service';
 import { ProductsService } from '../services/products.service';
 import { UsefulService } from '../services/useful.service';
+import { DataAutofill } from '../utils/autofill';
+import { formatNumber } from '../utils/formatNumber';
+import { modelsData } from '../utils/modelsData';
 @Component({
   selector: 'app-create-order',
   templateUrl: './create-order.component.html',
@@ -30,24 +31,19 @@ export class CreateOrderComponent implements OnInit {
     private _usefulService: UsefulService
   ) {}
 
-  @Input() isNew: Boolean = true;
-  displayMonths = 2;
-  isShowSpinner = false;
+  @Input() isNew: boolean = true;
+  displayMonths: number = 2;
+  isShowSpinner: boolean = false;
   model: NgbDateStruct;
-  navigation = 'select';
-  showWeekNumbers = false;
-  outsideDays = 'visible';
 
-  isEditClient = false;
   orderForm: FormArray;
   clientForm: FormGroup;
-  isGetPostR: Boolean = false;
   recipientForm: FormGroup;
   priceAll: FormGroup;
-  idOrder = 0;
-  isSaveClient: Boolean = false;
-  isSaveRecipient: Boolean;
-  fulfilledOrder: Boolean = false;
+  idOrder: number = 0;
+  isSaveClient: boolean = false;
+  isSaveRecipient: boolean = false;
+  fulfilledOrder: boolean = false;
   options: DatepickerOptions = {
     minDate: new Date(''),
     format: 'yyyy-MM-dd',
@@ -59,27 +55,22 @@ export class CreateOrderComponent implements OnInit {
     calendarClass: 'datepicker-default',
     scrollBarColor: '#dfe3e9',
   };
-
   orders = [];
-
   todayYear = new Date().getFullYear();
   dateToday = null;
   dataPlaneOrder = null;
   dateForms: FormGroup;
   isRecipient = false;
-  kodItems;
-  materialsItems;
-  clientDataItems = [];
-  coachDataItems;
-  infoForSave: any;
+  selectProductsItems = [];
   commentOrder = null;
   discount = 0;
-  doneOrder: Boolean = false;
+  doneOrder: boolean = false;
   alert = {
     type: '',
     message: '',
     isShow: false,
   };
+
   ngOnInit(): void {
     this.init();
     this.viewChanges();
@@ -98,9 +89,6 @@ export class CreateOrderComponent implements OnInit {
   }
 
   init() {
-    this.commentOrder = null;
-    this.isSaveClient = false;
-    this.isSaveRecipient = false;
     this.dateForms = this._fb.group({
       date_create: moment().format('YYYY-MM-DD'),
       date_plane_send: null,
@@ -202,7 +190,6 @@ export class CreateOrderComponent implements OnInit {
         .valueChanges.pipe(
           tap((data) => {
             const type = modelsData[order.value.article?.substring(0, 3)] || modelsData[order.value.article?.substring(0, 2)] || '';
-
             order.patchValue({
               sum_pars: data * order.value.price,
               phase_1: type.includes('брелок') ? +data : +(data * 2),
@@ -216,96 +203,34 @@ export class CreateOrderComponent implements OnInit {
         .get('price')
         .valueChanges.pipe(
           tap((data) => {
-            if (order.value.isNew) {
-              order.patchValue({
-                sum_pars: data * order.value.qty_pars,
-                isNew: true,
-                isChange: false,
-              });
-            } else if (!order.value.isNew) {
-              order.patchValue({
-                sum_pars: data * order.value.qty_pars,
-                isNew: false,
-                isChange: true,
-              });
-            }
+            order.patchValue({
+              sum_pars: data * order.value.qty_pars,
+            });
           })
         )
         .subscribe();
 
-      order.get('comment').valueChanges.subscribe(() => {
+      order.valueChanges.subscribe(() => {
         this.changeStatusProduct(order);
       });
-      order.get('id_color_1').valueChanges.subscribe(() => {
-        this.changeStatusProduct(order);
-      });
-
-      order.get('id_color_2').valueChanges.subscribe(() => {
-        this.changeStatusProduct(order);
-      });
-
-      order.get('id_color_3').valueChanges.subscribe(() => {
-        this.changeStatusProduct(order);
-      });
-
-      order.get('id_color_4').valueChanges.subscribe(() => {
-        this.changeStatusProduct(order);
-      });
-
-      order.get('article').valueChanges.subscribe(() => {
-        this.changeStatusProduct(order);
-      });
-
-      order.get('colors').valueChanges.subscribe(() => {
-        this.changeStatusProduct(order);
-      });
-
-      order.get('part_1').valueChanges.subscribe(() => {
-        this.changeStatusProduct(order);
-      });
-
-      order.get('part_2').valueChanges.subscribe(() => {
-        this.changeStatusProduct(order);
-      });
-
-      order.get('part_3').valueChanges.subscribe(() => {
-        this.changeStatusProduct(order);
-      });
-
-      order.get('part_4').valueChanges.subscribe(() => {
-        this.changeStatusProduct(order);
-      });
-    });
-
-    this.clientForm.valueChanges.subscribe(() => {
-      if (this.isSaveClient) {
-        this.isEditClient = true;
-      }
     });
   }
 
   changeStatusProduct(product) {
-    if (product.value.isNew) {
-      product.patchValue({
-        isNew: true,
-        isChange: false,
-      });
-    } else if (!product.value.isNew) {
-      product.patchValue({
-        isNew: false,
-        isChange: true,
-      });
-    }
+    product.patchValue({
+      id_product: product.value?.id_product,
+      isNew: product.value.isNew ? true : false,
+      isChange: product.value.isNew ? false : true,
+    }, { emitEvent: false });
   }
 
-  changeMaterial(value, field = 'name_material', isKode = false) {
+  changeMaterial(value, field = 'name_material') {
     if (value.length >= DataAutofill[field]) {
-      this._usefulService.getAutofill({ [field]: value }).subscribe((data: any) => {
-        !isKode ? (this.materialsItems = data) : (this.kodItems = data);
+      this._usefulService.getAutofill({ [field]: value }).subscribe((data: DataAutofillInterface[]) => {
+        this.selectProductsItems = data;
       });
     } else {
-      this.materialsItems = [];
-      this.kodItems = [];
+      this.clearProductsItems();
     }
   }
 
@@ -342,14 +267,13 @@ export class CreateOrderComponent implements OnInit {
         });
       });
     } else {
-      console.log('else', value, index);
       this.orderForm.controls.map((order) => {
         order.patchValue({
-          article: value.value,
+          article: value?.value,
         });
       });
     }
-    this.kodItems = [];
+    this.clearProductsItems();
   }
 
   changeIdColor(order, field, value) {
@@ -358,23 +282,17 @@ export class CreateOrderComponent implements OnInit {
         [field]: value.id_material,
       });
     }
-    this.resetMaterialsItems();
+    this.clearProductsItems();
   }
 
-  resetMaterialsItems() {
-    this.materialsItems = [];
+  clearProductsItems() {
+    this.selectProductsItems = [];
   }
 
   changeCoach(form, field) {
-    if (form.value[field] === form.value.second_name) {
-      form.patchValue({
-        [field]: null,
-      });
-    } else {
-      form.patchValue({
-        [field]: form.value.second_name,
-      });
-    }
+    form.patchValue({
+      [field]: form.value[field] === form.value.second_name ? null : form.value.second_name,
+    });
   }
 
   addOrder() {
@@ -418,8 +336,8 @@ export class CreateOrderComponent implements OnInit {
     this.orderForm.value.splice(index, 1);
   }
 
-  saveProduct(index, order) {
-    const params = {
+  getProductParams(order) {
+    return {
       article: order.value.article || 0,
       id_color_1: order.value.id_color_1 || null,
       part_1: +order.value.part_1 || null,
@@ -433,9 +351,11 @@ export class CreateOrderComponent implements OnInit {
       comment: order.value.comment,
       colors: order.value.colors || null,
     };
-    this.isShowSpinner = true;
+  }
 
-    this._productService.saveProduct(params).subscribe(
+  saveProduct(order) {
+    this.isShowSpinner = true;
+    this._productService.saveProduct(this.getProductParams(order)).subscribe(
       (data: any) => {
         order.patchValue({
           isNew: false,
@@ -445,60 +365,28 @@ export class CreateOrderComponent implements OnInit {
       },
       () => {
         this.isShowSpinner = false;
-        this.alert = {
-          isShow: true,
-          type: 'danger',
-          message: 'Уппс, щось пішло не так',
-        };
-        setTimeout(() => {
-          this.alertChange(false);
-        }, 3000);
+        this.showAlertError();
       }
     );
   }
 
   editProduct(order) {
-    const params = {
-      article: order.value.article || 0,
-      id_color_1: order.value.id_color_1 || null,
-      part_1: +order.value.part_1 || null,
-      id_color_2: +order.value.id_color_2 || null,
-      part_2: +order.value.part_2 || null,
-      id_color_3: +order.value.id_color_3 || null,
-      part_3: +order.value.part_3 || null,
-      id_color_4: +order.value.id_color_4 || null,
-      part_4: +order.value.part_4 || null,
-      price: +order.value.price || 0,
-      comment: order.value.comment,
-      colors: order.value.colors || 0,
-    };
     this.isShowSpinner = true;
-
-    this._productService.editProduct(order.value.id_product, params).subscribe(
+    this._productService.editProduct(order.value.id_product, this.getProductParams(order)).subscribe(
       (data: any) => {
-        order.patchValue({
+        order.setValue({
+          ...order.value,
           isNew: false,
-          id_product: data.id_product,
+          id_product: data.edit_product,
           isChange: false,
-        });
+        }, { emitEvent: false });
         this.isShowSpinner = false;
       },
       () => {
         this.isShowSpinner = false;
-        this.alert = {
-          isShow: true,
-          type: 'danger',
-          message: 'Уппс, щось пішло не так',
-        };
-        setTimeout(() => {
-          this.alertChange(false);
-        }, 3000);
+        this.showAlertError();
       }
     );
-  }
-
-  clearDataClient() {
-    this.clientDataItems = [];
   }
 
   getParamsClient() {
@@ -516,6 +404,7 @@ export class CreateOrderComponent implements OnInit {
       city: this.clientForm.value.city,
     };
   }
+
   saveClient(form = this.clientForm, params: any = this.getParamsClient()) {
     this.isShowSpinner = true;
     this._clientService.saveClient(params).subscribe(
@@ -524,16 +413,8 @@ export class CreateOrderComponent implements OnInit {
         form.patchValue({
           id_client: data.id_client,
         });
-        this.alert = {
-          isShow: true,
-          type: 'success',
-          message: 'Дані збережено',
-        };
-        setTimeout(() => {
-          this.alertChange(false);
-        }, 3000);
+        this.showAlertSave();
         this.isSaveClient = true;
-        // this.isSaveRecipient = true;
       },
       (error) => {
         const key = Object.keys(error.error);
@@ -547,14 +428,29 @@ export class CreateOrderComponent implements OnInit {
           });
         }
         this.isShowSpinner = false;
-        this.alert = {
-          isShow: true,
-          type: 'danger',
-          message: 'Уппс, щось пішло не так',
-        };
-        setTimeout(() => {
-          this.alertChange(false);
-        }, 3000);
+        this.showAlertError();
+      }
+    );
+  }
+
+  editClient(form, params) {
+    this._clientService.editClient(params, form.value.id_client).subscribe(
+      (data: any) => {
+        this.isSaveClient = 1 as any;
+        this.isSaveRecipient = 1 as any;
+        this.isShowSpinner = false;
+        form.patchValue({
+          id_client: data.id_recipient || form.value.id_client,
+        });
+        this.showAlertSave();
+      },
+      (error) => {
+        const key = Object.keys(error.error);
+        form.controls[key[0]].setErrors({
+          message: Object.values(error.error)[0],
+        });
+        this.isShowSpinner = false;
+        this.showAlertError();
       }
     );
   }
@@ -575,6 +471,7 @@ export class CreateOrderComponent implements OnInit {
       city: this.recipientForm.value.city,
     };
   }
+
   saveRecipient() {
     this.saveClient(this.recipientForm, this.getParamsRecipient());
   }
@@ -582,52 +479,12 @@ export class CreateOrderComponent implements OnInit {
   saveForm(event) {
     this.isSaveClient = true;
     if (event.isNew) {
-      if (event.isClient) {
-        this.saveClient();
-      } else if (!event.isClient) {
-        this.saveRecipient();
-      }
-    } else {
+      event.isClient ? this.saveClient() : this.saveRecipient();
+    } else {  
       const params = event.isClient ? this.getParamsClient() : this.getParamsClient();
       const form: FormGroup = event.isClient ? this.clientForm : this.recipientForm;
       this.editClient(form, params);
     }
-  }
-
-  editClient(form, params) {
-    this._clientService.editClient(params, form.value.id_client).subscribe(
-      (data: any) => {
-        this.isSaveClient = 1 as any;
-        this.isSaveRecipient = 1 as any;
-        this.isShowSpinner = false;
-        form.patchValue({
-          id_client: data.id_recipient || form.value.id_client,
-        });
-        this.alert = {
-          isShow: true,
-          type: 'success',
-          message: 'Дані збережено',
-        };
-        setTimeout(() => {
-          this.alertChange(false);
-        }, 3000);
-      },
-      (error) => {
-        const key = Object.keys(error.error);
-        form.controls[key[0]].setErrors({
-          message: Object.values(error.error)[0],
-        });
-        this.isShowSpinner = false;
-        this.alert = {
-          isShow: true,
-          type: 'danger',
-          message: 'Уппс, щось пішло не так',
-        };
-        setTimeout(() => {
-          this.alertChange(false);
-        }, 3000);
-      }
-    );
   }
 
   makeArrayDataOrder(key) {
@@ -650,10 +507,8 @@ export class CreateOrderComponent implements OnInit {
     return data ? [data.year, month, day].join('-') : null;
   }
 
-  saveAll(mode = 'create') {
-    console.log(this.clientForm.value);
-
-    const params = {
+  getParamsForForm() {
+    return {
       date_create: this.rewriteData(this.dateToday),
       id_client: this.clientForm.value.id_client,
       id_recipient: !this.isRecipient ? this.clientForm.value.id_client : this.recipientForm.value.id_client, // (2 або ід_клієнт)
@@ -669,37 +524,26 @@ export class CreateOrderComponent implements OnInit {
       status_order: false,
       comment: this.commentOrder,
     };
+  }
 
+  handleOrderSave(data) {
+    this.idOrder = +data.id_order || this.idOrder;
+    localStorage.setItem('date_plane_send', JSON.stringify(this.dataPlaneOrder));
+    localStorage.setItem('dateToday', JSON.stringify(this.dateToday));
+    this.showAlertSave();
+  }
+
+  saveAll(mode = 'create') {
+    const params = this.getParamsForForm();
     if (mode === 'edit') {
       this._service.editOrder(params, +this.idOrder).subscribe((data: any) => {
-        this.idOrder = +data.id_order || this.idOrder;
-        // this.doneOrder = true;
-        localStorage.setItem('date_plane_send', JSON.stringify(this.dataPlaneOrder));
-        localStorage.setItem('dateToday', JSON.stringify(this.dateToday));
-        this.alert = {
-          isShow: true,
-          type: 'success',
-          message: 'Дані збережено',
-        };
-        setTimeout(() => {
-          this.alertChange(false);
-        }, 3000);
+        this.handleOrderSave(data);
       });
     } else {
       this._service.saveOrder(params).subscribe((data: any) => {
-        this.idOrder = +data.id_order || this.idOrder;
         this.doneOrder = true;
         this.isNew = false;
-        localStorage.setItem('date_plane_send', JSON.stringify(this.dataPlaneOrder));
-        localStorage.setItem('dateToday', JSON.stringify(this.dateToday));
-        this.alert = {
-          isShow: true,
-          type: 'success',
-          message: 'Дані збережено',
-        };
-        setTimeout(() => {
-          this.alertChange(false);
-        }, 3000);
+        this.handleOrderSave(data);
       });
     }
   }
@@ -729,6 +573,7 @@ export class CreateOrderComponent implements OnInit {
   showRecipient() {
     this.isRecipient = !this.isRecipient;
   }
+
   setRecipientData(dataRecipient) {
     this.recipientForm.setValue(
       {
@@ -802,12 +647,12 @@ export class CreateOrderComponent implements OnInit {
         }
       });
   }
+
   getModels(data) {
     data.id_models.forEach((idModel, index) => {
       if (index === 0) {
         this.orderForm.clear();
       }
-
       this._productService.getProduct(idModel).subscribe((dataModel: any) => {
         this.orderForm.push(
           this._fb.group({
@@ -891,9 +736,28 @@ export class CreateOrderComponent implements OnInit {
     this.alert.isShow = e;
   }
 
-  changedate() {
-    console.log(this.dataPlaneOrder);
+  showAlertError() {
+    this.alert = {
+      isShow: true,
+      type: 'danger',
+      message: 'Уппс, щось пішло не так',
+    };
+    setTimeout(() => {
+      this.alertChange(false);
+    }, 3000);
   }
+
+  showAlertSave() {
+    this.alert = {
+      isShow: true,
+      type: 'success',
+      message: 'Дані збережено',
+    };
+    setTimeout(() => {
+      this.alertChange(false);
+    }, 3000);
+  }
+
   isEmptyObject(obj) {
     if (obj === null) {
       return true;
@@ -904,9 +768,6 @@ export class CreateOrderComponent implements OnInit {
   isDisabledBtn(mode: string) {
     const isClientsFormValid = this.isRecipient ? this.clientForm.valid && this.recipientForm.valid : this.clientForm.valid;
     const isOrderValid = this.orderForm.valid;
-    // console.log(this.isNew ? (this.isNew && isClientsFormValid && isOrderValid) : true);
-    // console.log(this.isNew, isClientsFormValid, isOrderValid, this.dataPlaneOrder, this.isEmptyObject(this.dataPlaneOrder));
-
     return mode === 'new'
       ? this.isNew
         ? !(this.isNew && isClientsFormValid && isOrderValid && !this.isEmptyObject(this.dataPlaneOrder))

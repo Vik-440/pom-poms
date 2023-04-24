@@ -21,7 +21,7 @@
     </div>
 
     <div class="form__fields">
-      <ng-select [clearSearchOnAdd]="false" appearance="outline" [items]="kodItems" type="text" class="form__field"
+      <ng-select [clearSearchOnAdd]="false" appearance="outline" [items]="selectProductsItems" type="text" class="form__field"
         [addTag]="true" [hideSelected]="true" placeholder="код" addTagText="+ нова модель" formControlName="article"
         (search)="changeMaterial($event.term, 'article', true)" (change)="chooseKode($event, index)" bindLabel="value">
       </ng-select>
@@ -30,7 +30,7 @@
 
     <div class="form__fields">
       <div class="flex">
-        <ng-select [clearSearchOnAdd]="false" appearance="outline" [items]="materialsItems" bindLabel="name_color"
+        <ng-select [clearSearchOnAdd]="false" appearance="outline" [items]="selectProductsItems" bindLabel="name_color"
           type="text" class="form__field form__field-material" [addTag]="false" [hideSelected]="true"
           placeholder="матеріал 1" formControlName="color_name_1"
           bindLabel="value"
@@ -39,7 +39,7 @@
         <input type="text" class="form__field--sm" placeholder="%" formControlName="part_1">
       </div>
       <div class="flex">
-        <ng-select [clearSearchOnAdd]="false" appearance="outline" [items]="materialsItems" type="text"
+        <ng-select [clearSearchOnAdd]="false" appearance="outline" [items]="selectProductsItems" type="text"
           class="form__field form__field-material" [addTag]="false" bindLabel="name_color" [hideSelected]="true"
           placeholder="матеріал 3" formControlName="color_name_3"  bindLabel="value"
           (search)="changeMaterial($event.term)" (change)="changeIdColor(order, 'id_color_3', $event)">
@@ -50,7 +50,7 @@
 
     <div class="form__fields">
       <div class="flex">
-        <ng-select [clearSearchOnAdd]="false" appearance="outline" [items]="materialsItems" bindLabel="name_color"
+        <ng-select [clearSearchOnAdd]="false" appearance="outline" [items]="selectProductsItems" bindLabel="name_color"
           type="text" class="form__field form__field-material" [addTag]="false" [hideSelected]="true"
           placeholder="матеріал 2" formControlName="color_name_2"  bindLabel="value"
           (search)="changeMaterial($event.term)" (change)="changeIdColor(order, 'id_color_2', $event)">
@@ -58,7 +58,7 @@
         <input type="text" class="form__field--sm" placeholder="%" formControlName="part_2">
       </div>
       <div class="flex">
-        <ng-select [clearSearchOnAdd]="false" appearance="outline" [items]="materialsItems" bindLabel="name_color"
+        <ng-select [clearSearchOnAdd]="false" appearance="outline" [items]="selectProductsItems" bindLabel="name_color"
           type="text" class="form__field form__field-material" [addTag]="false" [hideSelected]="true"
           placeholder="матеріал 4" formControlName="color_name_4"  bindLabel="value"
           (search)="changeMaterial($event.term)" (change)="changeIdColor(order, 'id_color_4', $event)">
@@ -72,7 +72,7 @@
     </div>
     <div class="form__fields">
       <input class="form__field--md" type="number" placeholder="ціна" formControlName="price">
-      <button class="action-btn forms" (click)="saveProduct(index, order)" *ngIf="order.value.isNew">
+      <button class="action-btn forms" (click)="saveProduct(order)" *ngIf="order.value.isNew">
         Зберегти
       </button>
 
@@ -121,7 +121,7 @@
       <div class="calendar-block">
         <input class="form-control" placeholder="yyyy-mm-dd" [minDate]="{year: 2016, month: 1, day: 1}"
           [maxDate]="{year: +todayYear, month: 12, day: 31}" [(ngModel)]="dataPlaneOrder" ngbDatepicker
-          #d="ngbDatepicker" (ngModelChange)="changedate()">
+          #d="ngbDatepicker">
         <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"><i
             class="bi bi-calendar"></i></button>
       </div>

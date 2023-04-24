@@ -3,9 +3,10 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { NgbOffcanvas } from '@ng-bootstrap/ng-bootstrap';
 import * as _ from 'lodash';
 import * as moment from 'moment';
+import { DataAutofillInterface } from '../interfaces/autofill-data';
 import { MainPageService } from '../services/main-table.service';
 import { UsefulService } from '../services/useful.service';
-import { DataAutofill } from '../client-form/autofill';
+import { DataAutofill } from '../utils/autofill';
 
 @Component({
   selector: 'app-main-table',
@@ -47,7 +48,6 @@ export class MainTableComponent implements OnInit {
   }
 
   initForm() {
-    
     this.filtersForm = this._fb.group({
       dataStart: null,
       dataEnd: null,
@@ -63,20 +63,10 @@ export class MainTableComponent implements OnInit {
     });
   }
 
-  changeFiled(event, fieldSend, minSymbols, response) {
+  changeFiled(event, fieldSend: string) {
     if (event.term.length >= DataAutofill[fieldSend]) {
-      this._generalService.getAutofill({ [fieldSend]: event.term }).subscribe((data: any) => {
-        if (fieldSend === 'ur_second_name') {
-          this.clearFilterData();
-          data.id_client.forEach((item, i) => {
-            this.dataFilters.push({
-              id: item,
-              secondName: data.second_name_client[i],
-            });
-          });
-        } else {
-          this.dataFilters = data[response];
-        }
+      this._generalService.getAutofill({ [fieldSend]: event.term }).subscribe((data: DataAutofillInterface[]) => {
+        this.dataFilters = data;
       });
     }
   }
@@ -94,7 +84,7 @@ export class MainTableComponent implements OnInit {
 
   applyFilters() {
     this.isShowSpinner = true;
-    this._service.sendFilters(this.clean(_.cloneDeep(this.filtersForm.value))).subscribe(
+    this._service.sendFilters(this.cleanObject(_.cloneDeep(this.filtersForm.value))).subscribe(
       (data: any) => {
         this.orders = data;
         this.isShowSpinner = false;
@@ -107,7 +97,7 @@ export class MainTableComponent implements OnInit {
     );
   }
 
-  clean(obj) {
+  cleanObject(obj) {
     for (var propName in obj) {
       if (obj[propName] === null || obj[propName] === undefined) {
         delete obj[propName];
@@ -310,7 +300,7 @@ export class MainTableComponent implements OnInit {
     if (commentModel) {
       return 'yellow';
     }
-    
+
     const letterModel = kodModel.split('');
     if (+letterModel[2] !== 0) {
       return 'light-pink';

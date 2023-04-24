@@ -1,8 +1,9 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+import { DataAutofillInterface } from '../interfaces/autofill-data';
 import { ClientService } from '../services/client.service';
 import { UsefulService } from '../services/useful.service';
-import { DataAutofill } from './autofill';
+import { DataAutofill } from '../utils/autofill';
 
 @Component({
   selector: 'app-client-form',
@@ -11,13 +12,13 @@ import { DataAutofill } from './autofill';
 })
 export class ClientFormComponent implements OnInit {
   @Input() clientForm: FormGroup;
-  @Input() isClient: Boolean = true;
-  @Input() isShowOk: Boolean;
+  @Input() isClient: boolean = true;
+  @Input() isShowOk: boolean;
   @Output() saveFormEmitter: EventEmitter<any> = new EventEmitter();
 
-  clientDataItems;
-  isNewForm: Boolean = true;
-  callAfterViewChecked = true;
+  clientDataItems: DataAutofillInterface[];
+  isNewForm: boolean = true;
+  callAfterViewChecked: boolean = true;
 
   constructor(private _clientService: ClientService, private _usefulService: UsefulService) {}
 
@@ -32,7 +33,7 @@ export class ClientFormComponent implements OnInit {
 
   changeClientInfo(query, keySend) {
     if (query.length >= DataAutofill[keySend]) {
-      this._usefulService.getAutofill({ [keySend]: query }).subscribe((data: any) => {
+      this._usefulService.getAutofill({ [keySend]: query }).subscribe((data: DataAutofillInterface[]) => {
         this.clientDataItems = [...data];
       });
     }
@@ -77,6 +78,7 @@ export class ClientFormComponent implements OnInit {
       }, { emitEvent: false })
     }
   }
+
   clearDataClient() {
     this.clientDataItems = [];
   }

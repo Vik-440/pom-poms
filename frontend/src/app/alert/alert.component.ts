@@ -6,13 +6,12 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   styleUrls: ['./alert.component.sass'],
 })
 export class AlertComponent {
-
   @Input() type: string;
   @Input() message: string;
-
-  @Output() closed = new EventEmitter();
+  @Output() closed: EventEmitter<boolean> = new EventEmitter();
 
   close() {
     this.closed.emit(false);
   }
 }
+  
