@@ -56,3 +56,5 @@ __pycache__/
 *.log
 alembic.ini
 .coverage
+htmlcov/
+example_for_testing.py

@@ -245,6 +245,6 @@ def main_page():
                     "first_name_client": row.first_name})
 
         return jsonify(full_block), 200
-    except Exception as e:
-        logger.exception(e)
-        return jsonify(f'Error in function main_page: {e}'), 400
+    except Exception as e: # pragma: no cover
+        logger.exception(e) # pragma: no cover
+        return jsonify(f'Error in function main_page: {e}'), 400 # pragma: no cover

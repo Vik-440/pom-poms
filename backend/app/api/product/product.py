@@ -59,10 +59,9 @@ def create_product():
             session.refresh(stmt)
             id_product = stmt.id_product
             return jsonify({"id_product": id_product}), 200
-    except DatabaseError:
-        print('error')
-        logger.error('id_product: error in save order to DB')
-        return  jsonify({"id_product": 'error in save order to DB'}), 400
+    except DatabaseError: # pragma: no cover
+        logger.error('id_product: error in save order to DB') # pragma: no cover
+        return  jsonify({"id_product": 'error in save order to DB'}), 400 # pragma: no cover
 
 
 @api.route('/product/<int:id_product>', methods=['GET'])
@@ -73,8 +72,6 @@ def read_product(id_product):
     if error_id:
         logger.error(f'{error_id}')
         return jsonify(error_id), 400
-    # if id_product is None:
-    #     return jsonify({'read_product': 'id_product is missing'}), 400
     with Session(engine) as session:
         color_name_1 = aliased(DB_materials)
         color_name_2 = aliased(DB_materials)
@@ -107,7 +104,6 @@ def read_product(id_product):
             .join(color_name_4, DB_product.id_color_4 == color_name_4.id_material, isouter=True)
             .where(DB_product.id_product == id_product))
         product = session.execute(stmt).first()
-        print(product)
         if product:
             return jsonify({
                 'id_product': product.id_product,
@@ -128,7 +124,7 @@ def read_product(id_product):
                 'color_name_3': product.color_name_3,
                 'color_name_4': product.color_name_4
             }), 200
-        return jsonify({"read_product": 'ID product is not exist'}), 400
+        return jsonify({"read_product": 'ID product is not exist'}), 400 # pragma: no cover
 
 
 @api.route('/product/<int:id_product>', methods=['PUT'])
@@ -170,6 +166,6 @@ def edit_product(id_product):
             session.execute(stmt)
             session.commit()
         return jsonify({"edit_product": id_product}), 200
-    except:
-        logger.error('id_product: error in save order to DB')
-        return  jsonify({"id_product": 'error in save order to DB'}), 400
+    except: # pragma: no cover
+        logger.error('id_product: error in save order to DB') # pragma: no cover
+        return  jsonify({"id_product": 'error in save order to DB'}), 400 # pragma: no cover

@@ -62,13 +62,13 @@ def test_edit_unreal_id_product(app_fixture):
     data = {
     "article": "190-010203",
     "id_color_1": 1,
-    "id_part_1": 33,
+    "part_1": 33,
     "id_color_2": 2,
-    "id_part_2": 33,
+    "part_2": 33,
     "id_color_3": 3,
-    "id_part_3": 33,
+    "part_3": 33,
     "id_color_4": None,
-    "id_part_4": None,
+    "part_4": None,
     "price": 430,
     "comment": None,
     "colors": "Білий + Червони + Золотий"}
@@ -85,13 +85,13 @@ def test_create_product_with_repeat_article(app_fixture):
     data = {
     "article": "190-010203",
     "id_color_1": 1,
-    "id_part_1": 33,
+    "part_1": 33,
     "id_color_2": 2,
-    "id_part_2": 33,
+    "part_2": 33,
     "id_color_3": 3,
-    "id_part_3": 33,
+    "part_3": 33,
     "id_color_4": None,
-    "id_part_4": None,
+    "part_4": None,
     "price": 400,
     "comment": None,
     "colors": "Білий + Червони + Золотий"}
@@ -107,13 +107,13 @@ def test_create_product_without_article(app_fixture):
     client = app_fixture.test_client()
     data = {
     "id_color_1": 1,
-    "id_part_1": 33,
+    "part_1": 33,
     "id_color_2": 2,
-    "id_part_2": 33,
+    "part_2": 33,
     "id_color_3": 3,
-    "id_part_3": 33,
+    "part_3": 33,
     "id_color_4": None,
-    "id_part_4": None,
+    "part_4": None,
     "price": 400,
     "comment": None,
     "colors": "Білий + Червони + Золотий"}
@@ -130,13 +130,13 @@ def test_create_product_with_not_str_article(app_fixture):
     data = {
     "article": 5,
     "id_color_1": 1,
-    "id_part_1": 33,
+    "part_1": 33,
     "id_color_2": 2,
-    "id_part_2": 33,
+    "part_2": 33,
     "id_color_3": 3,
-    "id_part_3": 33,
+    "part_3": 33,
     "id_color_4": None,
-    "id_part_4": None,
+    "part_4": None,
     "price": 400,
     "comment": None,
     "colors": "Білий + Червони + Золотий"}
@@ -153,13 +153,13 @@ def test_create_product_not_correct_article_123(app_fixture):
     data = {
     "article": "0-abc01",
     "id_color_1": 1,
-    "id_part_1": 100,
+    "part_1": 100,
     "id_color_2": None,
-    "id_part_2": None,
+    "part_2": None,
     "id_color_3": None,
-    "id_part_3": None,
+    "part_3": None,
     "id_color_4": None,
-    "id_part_4": None,
+    "part_4": None,
     "price": 400,
     "comment": None,
     "colors": "Білий"}
@@ -176,13 +176,13 @@ def test_create_product_without_colors(app_fixture):
     data = {
     "article": '190-01020',
     "id_color_1": 1,
-    "id_part_1": 33,
+    "part_1": 33,
     "id_color_2": 2,
-    "id_part_2": 33,
+    "part_2": 33,
     "id_color_3": 3,
-    "id_part_3": 33,
+    "part_3": 33,
     "id_color_4": None,
-    "id_part_4": None,
+    "part_4": None,
     "price": 400,
     "comment": ''}
     headers = {'Content-Type': 'application/json'}
@@ -198,13 +198,13 @@ def test_create_product_not_str_colors(app_fixture):
     data = {
     "article": '190-01020',
     "id_color_1": 1,
-    "id_part_1": 33,
+    "part_1": 33,
     "id_color_2": 2,
-    "id_part_2": 33,
+    "part_2": 33,
     "id_color_3": 3,
-    "id_part_3": 33,
+    "part_3": 33,
     "id_color_4": None,
-    "id_part_4": None,
+    "part_4": None,
     "price": 400,
     "comment": '',
     "colors": 123}
@@ -221,13 +221,13 @@ def test_create_product_too_short_colors(app_fixture):
     data = {
     "article": '190-01020',
     "id_color_1": 1,
-    "id_part_1": 33,
+    "part_1": 33,
     "id_color_2": 2,
-    "id_part_2": 33,
+    "part_2": 33,
     "id_color_3": 3,
-    "id_part_3": 33,
+    "part_3": 33,
     "id_color_4": None,
-    "id_part_4": None,
+    "part_4": None,
     "price": 400,
     "comment": '',
     "colors": '123'}
@@ -244,13 +244,13 @@ def test_create_product_without_comment(app_fixture):
     data = {
     "article": '190-01020',
     "id_color_1": 1,
-    "id_part_1": 33,
+    "part_1": 33,
     "id_color_2": 2,
-    "id_part_2": 33,
+    "part_2": 33,
     "id_color_3": 3,
-    "id_part_3": 33,
+    "part_3": 33,
     "id_color_4": None,
-    "id_part_4": None,
+    "part_4": None,
     "price": 400,
     "colors": 'Білий + Червони + Золотий'}
     headers = {'Content-Type': 'application/json'}
@@ -266,13 +266,13 @@ def test_create_product_not_str_comment(app_fixture):
     data = {
     "article": '190-01020',
     "id_color_1": 1,
-    "id_part_1": 33,
+    "part_1": 33,
     "id_color_2": 2,
-    "id_part_2": 33,
+    "part_2": 33,
     "id_color_3": 3,
-    "id_part_3": 33,
+    "part_3": 33,
     "id_color_4": None,
-    "id_part_4": None,
+    "part_4": None,
     "price": 400,
     "comment": [],
     "colors": 'Білий + Червони + Золотий'}
@@ -289,13 +289,13 @@ def test_create_product_without_price(app_fixture):
     data = {
     "article": '190-01020',
     "id_color_1": 1,
-    "id_part_1": 33,
+    "part_1": 33,
     "id_color_2": 2,
-    "id_part_2": 33,
+    "part_2": 33,
     "id_color_3": 3,
-    "id_part_3": 33,
+    "part_3": 33,
     "id_color_4": None,
-    "id_part_4": None,
+    "part_4": None,
     # "price": 400,
     "comment": 'some',
     "colors": 'Білий + Червони + Золотий'}
@@ -312,13 +312,13 @@ def test_create_product_not_int_price(app_fixture):
     data = {
     "article": '190-01020',
     "id_color_1": 1,
-    "id_part_1": 33,
+    "part_1": 33,
     "id_color_2": 2,
-    "id_part_2": 33,
+    "part_2": 33,
     "id_color_3": 3,
-    "id_part_3": 33,
+    "part_3": 33,
     "id_color_4": None,
-    "id_part_4": None,
+    "part_4": None,
     "price": '400',
     "comment": None,
     "colors": 'Білий + Червони + Золотий'}
@@ -335,13 +335,13 @@ def test_create_product_without_id_color_1(app_fixture):
     data = {
     "article": '190-01020',
     # "id_color_1": 1,
-    "id_part_1": 33,
+    "part_1": 33,
     "id_color_2": 2,
-    "id_part_2": 33,
+    "part_2": 33,
     "id_color_3": 3,
-    "id_part_3": 33,
+    "part_3": 33,
     "id_color_4": None,
-    "id_part_4": None,
+    "part_4": None,
     "price": 400,
     "comment": 'some',
     "colors": 'Білий + Червони + Золотий'}
@@ -358,13 +358,13 @@ def test_create_product_not_int_id_color_1(app_fixture):
     data = {
     "article": '190-01020',
     "id_color_1": '1',
-    "id_part_1": 33,
+    "part_1": 33,
     "id_color_2": 2,
-    "id_part_2": 33,
+    "part_2": 33,
     "id_color_3": 3,
-    "id_part_3": 33,
+    "part_3": 33,
     "id_color_4": None,
-    "id_part_4": None,
+    "part_4": None,
     "price": 400,
     "comment": None,
     "colors": 'Білий + Червони + Золотий'}
@@ -381,13 +381,13 @@ def test_create_product_not_real_id_color_1(app_fixture):
     data = {
     "article": '190-01020',
     "id_color_1": 10,
-    "id_part_1": 33,
+    "part_1": 33,
     "id_color_2": 2,
-    "id_part_2": 33,
+    "part_2": 33,
     "id_color_3": 3,
-    "id_part_3": 33,
+    "part_3": 33,
     "id_color_4": None,
-    "id_part_4": None,
+    "part_4": None,
     "price": 400,
     "comment": None,
     "colors": 'Білий + Червони + Золотий'}
@@ -405,20 +405,20 @@ def test_create_product_without_id_part_1(app_fixture):
     data = {
     "article": '190-01020',
     "id_color_1": 1,
-    # "id_part_1": 33,
+    # "part_1": 33,
     "id_color_2": 2,
-    "id_part_2": 33,
+    "part_2": 33,
     "id_color_3": 3,
-    "id_part_3": 33,
+    "part_3": 33,
     "id_color_4": None,
-    "id_part_4": None,
+    "part_4": None,
     "price": 400,
     "comment": 'some',
     "colors": 'Білий + Червони + Золотий'}
     headers = {'Content-Type': 'application/json'}
     response = client.post('/product', data=json.dumps(data), headers=headers)
     assert response.status_code == 400
-    expected_data = {'id_part_1': 'miss in data'}
+    expected_data = {'part_1': 'miss in data'}
     assert response.json == expected_data
 
 
@@ -428,20 +428,20 @@ def test_create_product_not_int_id_part_1(app_fixture):
     data = {
     "article": '190-01020',
     "id_color_1": 1,
-    "id_part_1": '33',
+    "part_1": '33',
     "id_color_2": 2,
-    "id_part_2": 33,
+    "part_2": 33,
     "id_color_3": 3,
-    "id_part_3": 33,
+    "part_3": 33,
     "id_color_4": None,
-    "id_part_4": None,
+    "part_4": None,
     "price": 400,
     "comment": None,
     "colors": 'Білий + Червони + Золотий'}
     headers = {'Content-Type': 'application/json'}
     response = client.post('/product', data=json.dumps(data), headers=headers)
     assert response.status_code == 400
-    expected_data = {'id_part_1': 'is not int type'}
+    expected_data = {'part_1': 'is not int type'}
     assert response.json == expected_data
 
 
@@ -451,13 +451,13 @@ def test_create_product_without_id_color_2(app_fixture):
     data = {
     "article": '190-01020',
     "id_color_1": 1,
-    "id_part_1": 33,
+    "part_1": 33,
     # "id_color_2": 2,
-    "id_part_2": 33,
+    "part_2": 33,
     "id_color_3": 3,
-    "id_part_3": 33,
+    "part_3": 33,
     "id_color_4": None,
-    "id_part_4": None,
+    "part_4": None,
     "price": 400,
     "comment": 'some',
     "colors": 'Білий + Червони + Золотий'}
@@ -474,13 +474,13 @@ def test_create_product_not_int_id_color_2(app_fixture):
     data = {
     "article": '190-01020',
     "id_color_1": 1,
-    "id_part_1": 33,
+    "part_1": 33,
     "id_color_2": '2',
-    "id_part_2": 33,
+    "part_2": 33,
     "id_color_3": 3,
-    "id_part_3": 33,
+    "part_3": 33,
     "id_color_4": None,
-    "id_part_4": None,
+    "part_4": None,
     "price": 400,
     "comment": None,
     "colors": 'Білий + Червони + Золотий'}
@@ -497,13 +497,13 @@ def test_create_product_not_real_id_color_2(app_fixture):
     data = {
     "article": '190-01020',
     "id_color_1": 1,
-    "id_part_1": 33,
+    "part_1": 33,
     "id_color_2": 10,
-    "id_part_2": 33,
+    "part_2": 33,
     "id_color_3": 3,
-    "id_part_3": 33,
+    "part_3": 33,
     "id_color_4": None,
-    "id_part_4": None,
+    "part_4": None,
     "price": 400,
     "comment": None,
     "colors": 'Білий + Червони + Золотий'}
@@ -521,20 +521,20 @@ def test_create_product_without_id_part_2(app_fixture):
     data = {
     "article": '190-01020',
     "id_color_1": 1,
-    "id_part_1": 33,
+    "part_1": 33,
     "id_color_2": 2,
-    # "id_part_2": 33,
+    # "part_2": 33,
     "id_color_3": 3,
-    "id_part_3": 33,
+    "part_3": 33,
     "id_color_4": None,
-    "id_part_4": None,
+    "part_4": None,
     "price": 400,
     "comment": 'some',
     "colors": 'Білий + Червони + Золотий'}
     headers = {'Content-Type': 'application/json'}
     response = client.post('/product', data=json.dumps(data), headers=headers)
     assert response.status_code == 400
-    expected_data = {'id_part_2': 'miss in data'}
+    expected_data = {'part_2': 'miss in data'}
     assert response.json == expected_data
 
 
@@ -544,20 +544,20 @@ def test_create_product_not_int_id_part_2(app_fixture):
     data = {
     "article": '190-01020',
     "id_color_1": 1,
-    "id_part_1": 33,
+    "part_1": 33,
     "id_color_2": 2,
-    "id_part_2": '33',
+    "part_2": '33',
     "id_color_3": 3,
-    "id_part_3": 33,
+    "part_3": 33,
     "id_color_4": None,
-    "id_part_4": None,
+    "part_4": None,
     "price": 400,
     "comment": None,
     "colors": 'Білий + Червони + Золотий'}
     headers = {'Content-Type': 'application/json'}
     response = client.post('/product', data=json.dumps(data), headers=headers)
     assert response.status_code == 400
-    expected_data = {'id_part_2': 'is not int type'}
+    expected_data = {'part_2': 'is not int type'}
     assert response.json == expected_data
 
 
@@ -567,13 +567,13 @@ def test_create_product_without_id_color_3(app_fixture):
     data = {
     "article": '190-01020',
     "id_color_1": 1,
-    "id_part_1": 33,
+    "part_1": 33,
     "id_color_2": 2,
-    "id_part_2": 33,
+    "part_2": 33,
     # "id_color_3": 3,
-    "id_part_3": 33,
+    "part_3": 33,
     "id_color_4": None,
-    "id_part_4": None,
+    "part_4": None,
     "price": 400,
     "comment": 'some',
     "colors": 'Білий + Червони + Золотий'}
@@ -590,13 +590,13 @@ def test_create_product_not_int_id_color_3(app_fixture):
     data = {
     "article": '190-01020',
     "id_color_1": 1,
-    "id_part_1": 33,
+    "part_1": 33,
     "id_color_2": 2,
-    "id_part_2": 33,
+    "part_2": 33,
     "id_color_3": '3',
-    "id_part_3": 33,
+    "part_3": 33,
     "id_color_4": None,
-    "id_part_4": None,
+    "part_4": None,
     "price": 400,
     "comment": None,
     "colors": 'Білий + Червони + Золотий'}
@@ -613,13 +613,13 @@ def test_create_product_not_real_id_color_3(app_fixture):
     data = {
     "article": '190-01020',
     "id_color_1": 1,
-    "id_part_1": 33,
+    "part_1": 33,
     "id_color_2": 2,
-    "id_part_2": 33,
+    "part_2": 33,
     "id_color_3": 10,
-    "id_part_3": 33,
+    "part_3": 33,
     "id_color_4": None,
-    "id_part_4": None,
+    "part_4": None,
     "price": 400,
     "comment": None,
     "colors": 'Білий + Червони + Золотий'}
@@ -637,20 +637,20 @@ def test_create_product_without_id_part_3(app_fixture):
     data = {
     "article": '190-01020',
     "id_color_1": 1,
-    "id_part_1": 33,
+    "part_1": 33,
     "id_color_2": 2,
-    "id_part_2": 33,
+    "part_2": 33,
     "id_color_3": 3,
-    # "id_part_3": 33,
+    # "part_3": 33,
     "id_color_4": None,
-    "id_part_4": None,
+    "part_4": None,
     "price": 400,
     "comment": 'some',
     "colors": 'Білий + Червони + Золотий'}
     headers = {'Content-Type': 'application/json'}
     response = client.post('/product', data=json.dumps(data), headers=headers)
     assert response.status_code == 400
-    expected_data = {'id_part_3': 'miss in data'}
+    expected_data = {'part_3': 'miss in data'}
     assert response.json == expected_data
 
 
@@ -660,20 +660,20 @@ def test_create_product_not_int_id_part_3(app_fixture):
     data = {
     "article": '190-01020',
     "id_color_1": 1,
-    "id_part_1": 33,
+    "part_1": 33,
     "id_color_2": 2,
-    "id_part_2": 33,
+    "part_2": 33,
     "id_color_3": 3,
-    "id_part_3": '33',
+    "part_3": '33',
     "id_color_4": None,
-    "id_part_4": None,
+    "part_4": None,
     "price": 400,
     "comment": None,
     "colors": 'Білий + Червони + Золотий'}
     headers = {'Content-Type': 'application/json'}
     response = client.post('/product', data=json.dumps(data), headers=headers)
     assert response.status_code == 400
-    expected_data = {'id_part_3': 'is not int type'}
+    expected_data = {'part_3': 'is not int type'}
     assert response.json == expected_data
 
 
@@ -683,13 +683,13 @@ def test_create_product_without_id_color_4(app_fixture):
     data = {
     "article": '190-01020',
     "id_color_1": 1,
-    "id_part_1": 33,
+    "part_1": 33,
     "id_color_2": 2,
-    "id_part_2": 33,
+    "part_2": 33,
     "id_color_3": 3,
-    "id_part_3": 33,
+    "part_3": 33,
     # "id_color_4": None,
-    "id_part_4": None,
+    "part_4": None,
     "price": 400,
     "comment": 'some',
     "colors": 'Білий + Червони + Золотий'}
@@ -706,13 +706,13 @@ def test_create_product_not_int_id_color_4(app_fixture):
     data = {
     "article": '190-01020',
     "id_color_1": 1,
-    "id_part_1": 33,
+    "part_1": 33,
     "id_color_2": 2,
-    "id_part_2": 33,
+    "part_2": 33,
     "id_color_3": 3,
-    "id_part_3": 33,
+    "part_3": 33,
     "id_color_4": '1',
-    "id_part_4": None,
+    "part_4": None,
     "price": 400,
     "comment": None,
     "colors": 'Білий + Червони + Золотий'}
@@ -729,13 +729,13 @@ def test_create_product_not_real_id_color_4(app_fixture):
     data = {
     "article": '190-01020',
     "id_color_1": 1,
-    "id_part_1": 33,
+    "part_1": 33,
     "id_color_2": 2,
-    "id_part_2": 33,
+    "part_2": 33,
     "id_color_3": 1,
-    "id_part_3": 33,
+    "part_3": 33,
     "id_color_4": 10,
-    "id_part_4": None,
+    "part_4": None,
     "price": 400,
     "comment": None,
     "colors": 'Білий + Червони + Золотий'}
@@ -753,20 +753,20 @@ def test_create_product_without_id_part_4(app_fixture):
     data = {
     "article": '190-01020',
     "id_color_1": 1,
-    "id_part_1": 33,
+    "part_1": 33,
     "id_color_2": 2,
-    "id_part_2": 33,
+    "part_2": 33,
     "id_color_3": 3,
-    "id_part_3": 33,
+    "part_3": 33,
     "id_color_4": 1,
-    # "id_part_4": None,
+    # "part_4": None,
     "price": 400,
     "comment": 'some',
     "colors": 'Білий + Червони + Золотий'}
     headers = {'Content-Type': 'application/json'}
     response = client.post('/product', data=json.dumps(data), headers=headers)
     assert response.status_code == 400
-    expected_data = {'id_part_4': 'miss in data'}
+    expected_data = {'part_4': 'miss in data'}
     assert response.json == expected_data
 
 
@@ -776,18 +776,18 @@ def test_create_product_not_int_id_part_4(app_fixture):
     data = {
     "article": '190-01020',
     "id_color_1": 1,
-    "id_part_1": 33,
+    "part_1": 33,
     "id_color_2": 2,
-    "id_part_2": 33,
+    "part_2": 33,
     "id_color_3": 3,
-    "id_part_3": 33,
+    "part_3": 33,
     "id_color_4": 1,
-    "id_part_4": 'None',
+    "part_4": 'None',
     "price": 400,
     "comment": None,
     "colors": 'Білий + Червони + Золотий'}
     headers = {'Content-Type': 'application/json'}
     response = client.post('/product', data=json.dumps(data), headers=headers)
     assert response.status_code == 400
-    expected_data = {'id_part_4': 'is not int type'}
+    expected_data = {'part_4': 'is not int type'}
     assert response.json == expected_data

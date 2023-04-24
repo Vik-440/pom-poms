@@ -4,51 +4,44 @@ from flask import request, jsonify
 from sqlalchemy.orm import Session
 from sqlalchemy import update, select
 from app.orders.models import DB_orders
+from app.orders.validator import validate_id_order, validate_phases
+from werkzeug.exceptions import BadRequest
 from app import engine
 from .. import api
 from flasgger import swag_from
-
-
-def validate_qty_phases(id_order: int, data: dict):
-    with Session(engine) as session:
-        stmt = (
-            select(DB_orders.phase_1)
-            .where(DB_orders.id_order == id_order))
-        phases1_in_order = session.execute(stmt).scalar()
-        qty_products_order = len(phases1_in_order)
-        message = None
-        if 'phase_1' in data:
-            if len(data['phase_1']) != qty_products_order:
-                message = {"error": "misstake in qty phases in data"}
-        if 'phase_2' in data:
-            if len(data['phase_2']) != qty_products_order:
-                message = {"error": "misstake in qty phases in data"}
-        if 'phase_3' in data:
-            if len(data['phase_3']) != qty_products_order:
-                message = {"error": "misstake in qty phases in data"}
-    return message
+from log.logger import logger
 
 
 @api.route('/main/phase/<int:id_order>', methods=['PUT'])
 @swag_from('/docs/put_main_phase.yml')
 def main_phase_get(id_order):
     """Module for changing phases in order"""
-    with Session(engine) as session:
-        data = request.get_json()
-        if not data:
-            return jsonify({"error": "misstake in data"}), 400
-        message = validate_qty_phases(id_order, data)
-        if message:
-            return jsonify(message), 400
-
-        phases = ['phase_1', 'phase_2', 'phase_3']
-        for phase in phases:
-            if phase in data:
-                stmt = (
-                    update(DB_orders)
-                    .where(DB_orders.id_order == id_order)
-                    .values(**{phase: data[phase]}))
-                session.execute(stmt)
-        session.commit()
-        
-    return jsonify({"message": "excellent"}), 200
+    try:
+        data = request.get_json(force=True)
+    except BadRequest:
+        logger.error('phases(PUT) - format json is not correct')
+        return jsonify({'phases(PUT)': 'json format is not correct'}), 400
+    error_id_order = validate_id_order(id_order)
+    if error_id_order:
+        logger.error(f'{error_id_order}')
+        return jsonify(error_id_order), 400
+    error_phases_data = validate_phases(id_order, data)
+    if error_phases_data:
+        logger.error(f'{error_phases_data}')
+        return jsonify(error_phases_data), 400
+    
+    try:
+        with Session(engine) as session:
+            phases = ['phase_1', 'phase_2', 'phase_3']
+            for phase in phases:
+                if phase in data:
+                    stmt = (
+                        update(DB_orders)
+                        .where(DB_orders.id_order == id_order)
+                        .values(**{phase: data[phase]}))
+                    session.execute(stmt)
+            session.commit()
+        return jsonify({"message": "excellent"}), 200
+    except Exception as e: # pragma: no cover
+        logger.error(f'Error in put_main_phases: {e}') # pragma: no cover
+        return f'Error in put_main_phases: {e}', 400 # pragma: no cover

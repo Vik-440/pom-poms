@@ -148,3 +148,28 @@ def test_create_order_2(app_fixture):
     assert response.status_code == 200
     expected_data = {'id_order': 3}
     assert response.json == expected_data
+
+
+@pytest.mark.run(order=400070)
+def test_create_order_3(app_fixture):
+    client = app_fixture.test_client()
+    data = {
+        # 'id_order': 1,
+        'date_create': '2023-03-17',
+        'date_plane_send': '2023-03-29',
+        'id_client': 2,
+        'id_recipient': 2,
+        'status_order': True,
+        'sum_payment': 11440,
+        'discount': 0,
+        'comment': 'test',
+        'id_models': [4],
+        'qty_pars': [1],
+        'price_model_sell': [450],
+        'phase_1': [2],
+        'phase_2': [2],
+        'phase_3': [1]}
+    response = client.post('/order', data=json.dumps(data), content_type='application/json')
+    assert response.status_code == 200
+    expected_data = {'id_order': 4}
+    assert response.json == expected_data

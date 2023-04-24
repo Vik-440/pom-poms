@@ -45,7 +45,7 @@ def validate_product(data: dict):
         data['article'] = re.sub(r'C', 'С', data['article'])
 
         if not 'colors' in data:
-            return {"colors":  "miss in data"}
+            return {'colors': 'miss in data'}
         if not isinstance(data['colors'], str):
             return {'colors': 'is not str type'}
         if len(data['colors']) < 5:

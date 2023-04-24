@@ -19,10 +19,48 @@ def validate_id_order(id_order: int):
     return
 
 
+def validate_phases(id_order: int, data: dict):
+    with Session(engine) as session:
+        stmt = (
+            select(DB_orders.id_models)
+            .where(DB_orders.id_order == id_order))
+        gty_products_in_order = session.execute(stmt).scalar()
+        qty_products_order = len(gty_products_in_order)
+        if 'phase_1' in data:
+            if len(data['phase_1']) != qty_products_order:
+                return {'phase_1': 'misstake in qty phases in data'}
+            for phase in data['phase_1']:
+                if not isinstance(phase, int):
+                    return {'phase_1': 'has data not int type'}
+        if 'phase_2' in data:
+            if len(data['phase_2']) != qty_products_order:
+                return {'phase_2': 'misstake in qty phases in data'}
+            for phase in data['phase_2']:
+                if not isinstance(phase, int):
+                    return {'phase_2': 'has data not int type'}
+        if 'phase_3' in data:
+            if len(data['phase_3']) != qty_products_order:
+                return {'phase_3': 'misstake in qty phases in data'}
+            for phase in data['phase_3']:
+                if not isinstance(phase, int):
+                    return {'phase_3': 'has data not int type'}
+    return
+
+
+def validate_status(data: dict):
+    """validate data for chenging status"""
+    if not 'status_order' in data:
+        return {'status_order': 'miss in data'}
+    if not isinstance(data['status_order'], bool):
+            return {'status_order': 'is not bool type'}
+    return
+
+
 
 def validate_create_order(data: dict):
     """Validator for create order"""
     qty_product_in_order = None
+    # formats_date = ['%Y-%m-%d', '%Y-%-m-%-d']
     date_today = datetime.today().strftime('%Y-%m-%d')
     with Session(engine) as session:
 
@@ -35,8 +73,10 @@ def validate_create_order(data: dict):
             datetime.strptime(date_str, '%Y-%m-%d')
         except ValueError:
             return {"date_create": 'is not in format like: yyyy-mm-dd'}
-        if data['date_create'] > date_today:
+        if date_str > date_today:
             return {"date_create": 'date future -> misstake'}
+        else:
+            data['date_create'] = date_str
 
         if not 'date_plane_send' in data:
             return {"date_plane_send": 'miss in data'}
@@ -47,6 +87,7 @@ def validate_create_order(data: dict):
             datetime.strptime(date_str, '%Y-%m-%d')
         except ValueError:
             return {"date_plane_send": 'is not in format like: yyyy-mm-dd'}
+        data['date_plane_send'] = date_str
         
         if not 'id_client' in data:
             return {'id_client': 'miss in data'}

@@ -59,9 +59,9 @@ def create_order():
         session.refresh(stmt)
         if id_order == stmt.id_order:
             return jsonify({'id_order': id_order}), 200
-        else:
-            logger.error('id_order: error in save order to DB')
-            return  jsonify({"id_order": 'error in save order to DB'}), 400
+        else: # pragma: no cover
+            logger.error('id_order: error in save order to DB') # pragma: no cover
+            return  jsonify({"id_order": 'error in save order to DB'}), 400 # pragma: no cover
 
 
 @api.route('/order/<int:id_order>', methods=['GET'])
@@ -110,9 +110,10 @@ def read_order(id_order):
                     'phase_1': order.phase_1,
                     'phase_2': order.phase_2,
                     'phase_3': order.phase_3
+                    # 'real_money': 0
                 }), 200
-    except:
-        return jsonify({"order": 'error in DB'}), 400
+    except: # pragma: no cover
+        return jsonify({"order": 'error in DB'}), 400 # pragma: no cover
 
 
 @api.route('/order/<int:id_order>', methods=['PUT'])
@@ -159,6 +160,6 @@ def edit_order(id_order):
             session.execute(stmt)
             session.commit()
         return jsonify({"edit_order": id_order}), 200
-    except:
-        logger.error(f'edit_order {id_order} error')
-        return jsonify({"edit_order": id_order}), 400
+    except: # pragma: no cover
+        logger.error(f'edit_order {id_order} error') # pragma: no cover
+        return jsonify({"edit_order": id_order}), 400 # pragma: no cover

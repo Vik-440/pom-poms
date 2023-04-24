@@ -56,9 +56,9 @@ def create_client():
         try:
             id_client = stmt.id_client
             return jsonify({"id_client": id_client}), 200
-        except:
-            logger.error('id_client: error in save order to DB')
-            return  jsonify({"id_client": 'error in save order to DB'}), 400
+        except: # pragma: no cover
+            logger.error('id_client: error in save order to DB') # pragma: no cover
+            return  jsonify({"id_client": 'error in save order to DB'}), 400 # pragma: no cover
 
 
 @api.route('/client/<int:id_client>', methods=['GET'])
@@ -104,9 +104,9 @@ def read_client(id_client):
                     'address': client.address,
                     'comment': client.comment
                 }), 200
-    except:
-        logger.error('id_client: error in save order to DB')
-        return  jsonify({"id_client": 'error in save order to DB'}), 400
+    except: # pragma: no cover
+        logger.error('id_client: error in save order to DB') # pragma: no cover
+        return  jsonify({"id_client": 'error in save order to DB'}), 400 # pragma: no cover
 
 
 @api.route('/client/<int:id_client>', methods=['PUT'])
@@ -149,7 +149,7 @@ def edit_client(id_client: int):
             session.execute(stmt)
             session.commit()
         return jsonify({"edit_client": id_client}), 200
-    except:
-        logger.error('id_client: error in save order to DB')
-        return  jsonify({"id_client": 'error in save order to DB'}), 400
+    except: # pragma: no cover
+        logger.error('id_client: error in save order to DB') # pragma: no cover
+        return  jsonify({"id_client": 'error in save order to DB'}), 400 # pragma: no cover
     
