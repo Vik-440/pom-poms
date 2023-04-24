@@ -394,3 +394,31 @@ def test_get_main_status_all_without_result(app_fixture):
     assert part_data_2 not in str(response.json)
     assert part_data_3 not in str(response.json)
     assert part_data_4 in str(response.json)
+
+@pytest.mark.run(order=700180)
+def test_get_main_client_product_mistake_key(app_fixture):
+    client = app_fixture.test_client()
+    response = client.get('/main?kod_mistake_model=190-010203&id_client=2')
+    assert response.status_code == 200
+    expected_data = [{
+        'comment_model': [None, None, None],
+        'comment_order': 'test',
+        'data_order': '2023-03-05',
+        'data_plane_order': '2023-03-25',
+        'first_name_client': 'Галина',
+        'fulfilled_order': False,
+        'id_order': 2,
+        'kod_model': ['190-0103', '190-010203', '190-АВС01'],
+        'kolor_model': ['Білий + Золотий', 'Білий + Червони + Золотий', 'Білий'],
+        'np_number': 111,
+        'phase_1': [2, 4, 2], 'phase_2': [2, 4, 2], 'phase_3': [2, 4, 1],
+        'phone_client': '1111111',
+        'phone_recipient': '1111111',
+        'quantity_pars_model': [3, 6, 1],
+        'real_money': 222,
+        'second_name_client': 'Василенко',
+        'sity': 'Київ', 'street_house_apartment': None,
+        'sum_payment': 4200, 'zip_code': None
+        }]
+    # print(response.json)
+    assert response.json == expected_data
