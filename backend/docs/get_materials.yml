@@ -1,0 +1,59 @@
+# Read materials (available or all)
+#---
+tags:
+  - Materials
+parameters:
+  - name: available
+    in: query
+    type: string
+    description: none or 'all'
+    required: false
+responses:
+  "200":
+    description: read materials in short form
+    # content:
+    #   application/json:
+    schema:
+      type: array
+      items:
+        $ref: '#/components/schemas/MaterialItem'
+    # schema:
+    #   $ref: "#/definitions/Materials"
+  "400":
+    description: '{"materials": "misstake"}'
+
+# definitions:
+#   Materials:
+#     type: object
+#     properties:
+#       answer:
+#         type: array
+#         items:
+#           $ref: '#/definitions/Materials'
+#         examples:
+#           orders: [{'Material': 1}, {'Material': 2}]
+#   Material_short:
+#     type: object
+#     properties:
+#       comment_model:
+#         type: string
+#         description: comment about product property
+#         example: handle is 11 cm
+#       comment_order:
+#         type: string
+#         description: comment about order property
+#         example: put bill to box
+components:
+  schemas:
+    MaterialItem:
+      type: object
+      properties:
+        id_material:
+          type: integer
+          example: 1
+        color:
+          type: string
+          example: red
+        qty:
+          type: integer
+          example: 5
