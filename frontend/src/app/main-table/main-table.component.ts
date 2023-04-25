@@ -59,7 +59,7 @@ export class MainTableComponent implements OnInit {
       coach: null,
       kod_model: null,
       kod_model_like: null,
-      kolor_model_like: null,
+      kolor_like: null,
     });
   }
 

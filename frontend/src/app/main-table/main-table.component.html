@@ -229,19 +229,19 @@
       </div>
       <div class="outline"></div>
       <div class="filters-data"
-        [class.disabled]="filtersForm.value.kod_model_like || filtersForm.value.kolor_model_like">
+        [class.disabled]="filtersForm.value.kod_model_like || filtersForm.value.kolor_like">
         <div class="filters-data--title">Код моделі</div>
         <ng-select [clearOnBackspace]="false" notFoundText="No kod model founded" bindLabel="value" bindValue="value"
           (search)="changeFiled($event, 'article')" type="number" formControlName="kod_model"
           [items]="dataFilters"></ng-select>
       </div>
-      <div class="filters-data" [class.disabled]="filtersForm.value.kod_model || filtersForm.value.kolor_model_like">
+      <div class="filters-data" [class.disabled]="filtersForm.value.kod_model || filtersForm.value.kolor_like">
         <div class="filters-data--title">Збіг у коді моделі</div>
         <input [clearOnBackspace]="false" type="text" class="filters-data--input" formControlName="kod_model_like">
       </div>
       <div class="filters-data" [class.disabled]="filtersForm.value.kod_model || filtersForm.value.kod_model_like">
         <div class="filters-data--title">Збіг у кольорі</div>
-        <input [clearOnBackspace]="false" type="text" class="filters-data--input" formControlName="kolor_model_like">
+        <input [clearOnBackspace]="false" type="text" class="filters-data--input" formControlName="kolor_like">
       </div>
     </div>
     <div class="filters-wrapper--footer">
