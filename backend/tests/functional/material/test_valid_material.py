@@ -139,7 +139,7 @@ def test_get_one_material(app_fixture):
         'name_color': '77/23 Білий',
         'reserve_color': 0,
         'thickness_color': 36,
-        'weight_10m_color': 126,
+        'weight_10m_color': '126',
         'weight_color': 1111,
         'width_color': 23}
     assert response.json == expected_data
@@ -185,7 +185,7 @@ def test_get_one_material_1(app_fixture):
         'name_color': '77/23 Білий',
         'reserve_color': 0,
         'thickness_color': 36,
-        'weight_10m_color': 126,
+        'weight_10m_color': '126',
         'weight_color': 5555,
         'width_color': 23}
     assert response.json == expected_data
@@ -222,7 +222,7 @@ def test_get_one_material_2(app_fixture):
         'name_color': '77/23 Білий',
         'reserve_color': 0,
         'thickness_color': 36,
-        'weight_10m_color': 126,
+        'weight_10m_color': '126',
         'weight_color': 4444,
         'width_color': 23}
     assert response.json == expected_data

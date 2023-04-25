@@ -11,49 +11,54 @@ parameters:
 responses:
   "200":
     description: read materials in short form
-    # content:
-    #   application/json:
     schema:
-      type: array
-      items:
-        $ref: '#/components/schemas/MaterialItem'
-    # schema:
-    #   $ref: "#/definitions/Materials"
-  "400":
-    description: '{"materials": "misstake"}'
-
-# definitions:
-#   Materials:
-#     type: object
-#     properties:
-#       answer:
-#         type: array
-#         items:
-#           $ref: '#/definitions/Materials'
-#         examples:
-#           orders: [{'Material': 1}, {'Material': 2}]
-#   Material_short:
-#     type: object
-#     properties:
-#       comment_model:
-#         type: string
-#         description: comment about product property
-#         example: handle is 11 cm
-#       comment_order:
-#         type: string
-#         description: comment about order property
-#         example: put bill to box
-components:
-  schemas:
-    MaterialItem:
       type: object
       properties:
+        # additionalProperties:
         id_material:
           type: integer
-          example: 1
-        color:
+        name:
           type: string
-          example: red
-        qty:
+        width: 
           type: integer
-          example: 5
+        weight:
+          type: integer
+        # thickness:
+        #   type: integer
+        spool_qty:
+          type: integer
+        spool_weight:
+          type: integer
+        # manufacturer:
+        #   type: string
+        # reserve:
+        #   type: integer
+        # weight_10m:
+        #   type: integer
+        # comment:
+        #   type: string
+      example:
+        - id_material: 1
+          name: red
+          width: 23
+          weight: 1111
+          # thickness: 36
+          spool_qty: 2
+          spool_weight: 130
+          # manufacturer: Rivne
+          # reserve: 0
+          # weight_10m: 12.34
+          # comment: none or ___
+        - id_material: 2
+          name: blue
+          width: 25
+          weight: 2222
+          # thickness: 30
+          spool_qty: 4
+          spool_weight: 140
+          # manufacturer: Devilon
+          # reserve: 0
+          # weight_10m: 15.95
+          # comment: пачкається
+  "400":
+    description: '{"materials": "discription misstake"}'
