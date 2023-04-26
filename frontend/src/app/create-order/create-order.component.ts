@@ -37,6 +37,7 @@ export class CreateOrderComponent implements OnInit {
   model: NgbDateStruct;
 
   orderForm: FormArray;
+  orderAddForm: FormArray;
   clientForm: FormGroup;
   recipientForm: FormGroup;
   priceAll: FormGroup;
@@ -118,19 +119,20 @@ export class CreateOrderComponent implements OnInit {
         id_color_4: null,
         color_name_4: null,
         part_4: null,
+        comment: null,
+        isNew: [true, this.requiredFalse()],
+        isChange: false,
         price: null,
+      }),
+    ]);
+
+    this.orderAddForm = this._fb.array([
+      this._fb.group({
         qty_pars: [null, Validators.required],
         phase_1: 0,
         phase_2: 0,
         phase_3: 0,
-        phase_1_default: 0,
-        phase_2_default: 0,
-        phase_3_default: 0,
-        qty_pars_default: null,
         sum_pars: null,
-        comment: null,
-        isNew: [true, this.requiredFalse()],
-        isChange: false,
       }),
     ]);
 
@@ -170,7 +172,7 @@ export class CreateOrderComponent implements OnInit {
     this.priceAll.patchValue({
       sum_payment: 0,
     });
-    this.orderForm.controls.map((order) => {
+    this.orderAddForm.controls.map((order) => {
       this.priceAll.patchValue({
         sum_payment: this.priceAll.value.sum_payment + order.value.sum_pars,
       });
@@ -184,14 +186,17 @@ export class CreateOrderComponent implements OnInit {
   }
 
   viewChanges() {
-    this.orderForm.controls.map((order) => {
+    this.orderAddForm.controls.forEach((order, i) => {
       order
         .get('qty_pars')
         .valueChanges.pipe(
           tap((data) => {
-            const type = modelsData[order.value.article?.substring(0, 3)] || modelsData[order.value.article?.substring(0, 2)] || '';
+            const type =
+              modelsData[this.orderForm.controls[i].value.article?.substring(0, 3)] ||
+              modelsData[this.orderForm.controls[i].value.article?.substring(0, 2)] ||
+              '';
             order.patchValue({
-              sum_pars: data * order.value.price,
+              sum_pars: data * this.orderForm.controls[i].value.price,
               phase_1: type.includes('брелок') ? +data : +(data * 2),
               phase_2: type.includes('брелок') ? +data : +(data * 2),
               phase_3: +data,
@@ -199,12 +204,15 @@ export class CreateOrderComponent implements OnInit {
           })
         )
         .subscribe();
+    });
+
+    this.orderForm.controls.forEach((order, i) => {
       order
         .get('price')
         .valueChanges.pipe(
-          tap((data) => {
-            order.patchValue({
-              sum_pars: data * order.value.qty_pars,
+          tap((data: number) => {
+            this.orderAddForm.controls[i].patchValue({
+              sum_pars: data * this.orderAddForm.controls[i].value.qty_pars,
             });
           })
         )
@@ -217,11 +225,14 @@ export class CreateOrderComponent implements OnInit {
   }
 
   changeStatusProduct(product) {
-    product.patchValue({
-      id_product: product.value?.id_product,
-      isNew: product.value.isNew ? true : false,
-      isChange: product.value.isNew ? false : true,
-    }, { emitEvent: false });
+    product.patchValue(
+      {
+        id_product: product.value?.id_product,
+        isNew: product.value.isNew ? true : false,
+        isChange: product.value.isNew ? false : true,
+      },
+      { emitEvent: false }
+    );
   }
 
   changeMaterial(value, field = 'name_material') {
@@ -239,8 +250,10 @@ export class CreateOrderComponent implements OnInit {
       this.orderForm.controls.map((order, ind) => {
         this._productService.getProduct(value.id_product).subscribe((data: any) => {
           if (index === ind && Object.keys(data).length) {
+            this.orderAddForm.controls[ind].patchValue({});
             order.patchValue(
               {
+                price: data.price,
                 id_product: data.id_product,
                 article: data.article,
                 colors: data.colors,
@@ -256,7 +269,7 @@ export class CreateOrderComponent implements OnInit {
                 part_3: data.part_3,
                 color_name_4: data.color_name_4 || null,
                 part_4: data.part_4,
-                price: data.price,
+
                 comment: data.comment,
                 isNew: false,
                 isChange: false,
@@ -314,18 +327,18 @@ export class CreateOrderComponent implements OnInit {
         id_color_4: null,
         part_4: null,
         price: null,
+        comment: null,
+        isNew: [true, this.requiredFalse()],
+        isChange: false,
+      })
+    );
+    this.orderAddForm.push(
+      this._fb.group({
         qty_pars: [null, Validators.required],
         phase_1: 0,
         phase_2: 0,
         phase_3: 0,
-        phase_1_default: 0,
-        phase_2_default: 0,
-        phase_3_default: 0,
-        qty_pars_default: null,
         sum_pars: null,
-        comment: null,
-        isNew: [true, this.requiredFalse()],
-        isChange: false,
       })
     );
     this.viewChanges();
@@ -357,10 +370,13 @@ export class CreateOrderComponent implements OnInit {
     this.isShowSpinner = true;
     this._productService.saveProduct(this.getProductParams(order)).subscribe(
       (data: any) => {
-        order.patchValue({
-          isNew: false,
-          id_product: data.id_product,
-        });
+        order.patchValue(
+          {
+            isNew: false,
+            id_product: data.id_product,
+          },
+          { emitEvent: false }
+        );
         this.isShowSpinner = false;
       },
       () => {
@@ -374,12 +390,15 @@ export class CreateOrderComponent implements OnInit {
     this.isShowSpinner = true;
     this._productService.editProduct(order.value.id_product, this.getProductParams(order)).subscribe(
       (data: any) => {
-        order.setValue({
-          ...order.value,
-          isNew: false,
-          id_product: data.edit_product,
-          isChange: false,
-        }, { emitEvent: false });
+        order.setValue(
+          {
+            ...order.value,
+            isNew: false,
+            id_product: data.edit_product,
+            isChange: false,
+          },
+          { emitEvent: false }
+        );
         this.isShowSpinner = false;
       },
       () => {
@@ -480,17 +499,17 @@ export class CreateOrderComponent implements OnInit {
     this.isSaveClient = true;
     if (event.isNew) {
       event.isClient ? this.saveClient() : this.saveRecipient();
-    } else {  
+    } else {
       const params = event.isClient ? this.getParamsClient() : this.getParamsClient();
       const form: FormGroup = event.isClient ? this.clientForm : this.recipientForm;
       this.editClient(form, params);
     }
   }
 
-  makeArrayDataOrder(key) {
+  makeArrayDataOrder(key, form = this.orderForm) {
     const result = [];
-    if (this.orderForm.value[0][key] !== undefined) {
-      this.orderForm.value.map((order) => {
+    if (form.value[0][key] !== undefined) {
+      form.value.map((order) => {
         result.push(+order[key] || 0);
       });
     }
@@ -514,10 +533,10 @@ export class CreateOrderComponent implements OnInit {
       id_recipient: !this.isRecipient ? this.clientForm.value.id_client : this.recipientForm.value.id_client, // (2 або ід_клієнт)
       id_models: this.makeArrayDataOrder('id_product'),
       price_model_sell: this.makeArrayDataOrder('price'),
-      qty_pars: this.makeArrayDataOrder('qty_pars'),
-      phase_1: this.makeArrayDataOrder('phase_1'),
-      phase_2: this.makeArrayDataOrder('phase_2'),
-      phase_3: this.makeArrayDataOrder('phase_3'),
+      qty_pars: this.makeArrayDataOrder('qty_pars', this.orderAddForm),
+      phase_1: this.makeArrayDataOrder('phase_1', this.orderAddForm),
+      phase_2: this.makeArrayDataOrder('phase_2', this.orderAddForm),
+      phase_3: this.makeArrayDataOrder('phase_3', this.orderAddForm),
       date_plane_send: this.rewriteData(this.dataPlaneOrder), // - прогнозована
       discount: +this.discount,
       sum_payment: +this.sumAll(false).split('/')[0].trim(),
@@ -672,18 +691,18 @@ export class CreateOrderComponent implements OnInit {
             color_name_4: dataModel.color_name_4 || null,
             part_4: dataModel.part_4,
             price: data.price_model_sell[index],
+            comment: dataModel.comment,
+            isNew: false,
+            isChange: false,
+          })
+        );
+        this.orderAddForm.push(
+          this._fb.group({
+            sum_pars: data.qty_pars[index] * data.price_model_sell[index],
+            qty_pars: [data.qty_pars[index], Validators.required],
             phase_1: data.phase_1[index],
             phase_2: data.phase_2[index],
             phase_3: data.phase_3[index],
-            phase_1_default: data.phase_1[index],
-            phase_2_default: data.phase_2[index],
-            phase_3_default: data.phase_3[index],
-            comment: dataModel.comment,
-            qty_pars: [data.qty_pars[index], Validators.required],
-            qty_pars_default: data.qty_pars[index],
-            sum_pars: data.qty_pars[index] * data.price_model_sell[index],
-            isNew: false,
-            isChange: false,
           })
         );
         this.viewChanges();
@@ -697,7 +716,7 @@ export class CreateOrderComponent implements OnInit {
     this.orderForm.value.forEach((order, i) => {
       const type = modelsData[order.article.substring(0, 3)] || modelsData[order.article.substring(0, 2)] || '';
       copyText.push(
-        `${i + 1}. ${type}, колір ${order.colors}, код ${order.article}, кількість ${order.qty_pars} ${
+        `${i + 1}. ${type}, колір ${order.colors}, код ${order.article}, кількість ${this.orderAddForm.controls[i].value.qty_pars} ${
           type.includes('брелок') ? 'шт' : 'пар'
         }, ціна ${formatNumber(order.price)} грн/${type.includes('брелок') ? 'шт' : 'пара'}\n`
       );
@@ -759,10 +778,7 @@ export class CreateOrderComponent implements OnInit {
   }
 
   isEmptyObject(obj) {
-    if (obj === null) {
-      return true;
-    }
-    return obj && Object.keys(obj).length === 0;
+    return obj === null ? true : obj && Object.keys(obj).length === 0;
   }
 
   isDisabledBtn(mode: string) {
