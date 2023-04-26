@@ -56,8 +56,9 @@ definitions:
         description: for future, like reserve
         example: 0
       weight_10m:
-        type: integer
-        description: with double precision
+        type: number
+        format: double
+        description: Weight per 10 meters
         example: 24.56
       comment:
         type: string

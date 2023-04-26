@@ -5,8 +5,8 @@ from app.base_model import Base
 class DB_materials(Base):
     __tablename__ = 'directory_of_color'
     id_material = Column('id_color', Integer, primary_key=True)
-    name = Column('name_color', String)
-    article = Column('kod_color', String, unique=True)
+    name = Column('name_color', String, unique=True)
+    # article = Column('kod_color', String, unique=True)
     width = Column('width_color', Integer)
     thickness = Column('thickness_color', Integer)
     spool_qty = Column('bab_quantity_color', Integer)

@@ -21,7 +21,7 @@ responses:
           type: string
         width: 
           type: integer
-        weight:
+        net_weight:
           type: integer
         # thickness:
         #   type: integer
@@ -39,23 +39,23 @@ responses:
         #   type: string
       example:
         - id_material: 1
-          name: red
+          name: 45/23-Срібний(гол)
           width: 23
-          weight: 1111
+          net_weight: 1111
           # thickness: 36
           spool_qty: 2
-          spool_weight: 130
+          # spool_weight: 130
           # manufacturer: Rivne
           # reserve: 0
           # weight_10m: 12.34
           # comment: none or ___
         - id_material: 2
-          name: blue
+          name: 72/23-Морська Хвиля
           width: 25
-          weight: 2222
+          net_weight: 2222
           # thickness: 30
           spool_qty: 4
-          spool_weight: 140
+          # spool_weight: 140
           # manufacturer: Devilon
           # reserve: 0
           # weight_10m: 15.95

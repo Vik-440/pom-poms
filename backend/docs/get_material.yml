@@ -12,16 +12,16 @@ responses:
   "200":
     description: read material
     schema:
-      $ref: "#/definitions/Material"
+      $ref: "#/definitions/Material_get"
   "400":
     description: '{"materials": "discription misstake"}'
 definitions:
-  Material:
+  Material_get:
     type: object
     properties:
       id_material:
         type: integer
-        description: number
+        description: ID material
         example: 1
       name:
         type: string

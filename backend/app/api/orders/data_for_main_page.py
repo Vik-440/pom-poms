@@ -139,8 +139,6 @@ def create_select_modul():
         .join(client_alias, DB_orders.id_client == client_alias.id_client)
         .join(recipient_alias, DB_orders.id_recipient == recipient_alias.id_client)
         .outerjoin(DB_payment, DB_orders.id_order == DB_payment.id_order))
-    
-
     return select_modul
 
 

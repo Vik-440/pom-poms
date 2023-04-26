@@ -20,7 +20,9 @@ parameters:
             type: object
 responses:
   "202":
-    description: '{"id_material": 5}'
+    description: '{
+      "spool_qty": 4,
+      "net_weight": 3561}'
   "400":
     description: '{"materials": "discription misstake"}'
 definitions:
