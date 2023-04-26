@@ -671,6 +671,7 @@ export class CreateOrderComponent implements OnInit {
     data.id_models.forEach((idModel, index) => {
       if (index === 0) {
         this.orderForm.clear();
+        this.orderAddForm.clear();
       }
       this._productService.getProduct(idModel).subscribe((dataModel: any) => {
         this.orderForm.push(

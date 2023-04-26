@@ -86,7 +86,7 @@
 
 
 
-    <div class="form__fields" *ngFor="let orderAdd of orderAddForm.controls; let index = index" [formGroup]="orderAdd">
+    <div class="form__fields" [formGroup]="orderAddForm.controls[index]">
       <div class="form__fields--phashes">
         <input type="number" class="form__field--ml pars" placeholder="к-сть" formControlName="qty_pars">
         <input type="number" class="phase" formControlName="phase_1">
