@@ -17,7 +17,7 @@ def validate_id_material(id_material: int):
 
 
 def validate_new_name_material(data: dict):
-    """Validator for article product"""
+    """Validator for name material"""
     with Session(engine) as session:
         stmt = (
             select(DB_materials.name)

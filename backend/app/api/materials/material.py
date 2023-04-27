@@ -1,10 +1,11 @@
 """Module routes with materials"""
 
 from flask import request, jsonify
-from sqlalchemy import select, update, func, or_, and_, join, table
-from sqlalchemy.orm import Session#, aliased
+from sqlalchemy import select, update, func
+from sqlalchemy.orm import Session
 from typing import List, Dict
 from werkzeug.exceptions import BadRequest
+from flasgger import swag_from
 
 from app.materials.models import DB_materials
 from app.materials.validator import (
@@ -15,7 +16,7 @@ from app.materials.validator import (
 from app import engine
 from .. import api
 from log.logger import logger
-from flasgger import swag_from
+
 
 
 @api.route('/materials', methods=['POST'])
@@ -144,7 +145,7 @@ def material_one_load(id_material: int) -> Dict:
                 'spool_weight': material.spool_weight,
                 'thickness': material.thickness,
                 'weight': material.weight,
-                'weight_10m': material.weight_10m,
+                'weight_10m': float(material.weight_10m),
                 'width': material.width}), 200
     except: # pragma: no cover
         logger.error({'materials_(GET)': 'error in DB'}) # pragma: no cover
@@ -176,7 +177,7 @@ def edit_material(id_material) -> dict:
             stmt = (
                 select(DB_materials.name)
                 .where(DB_materials.id_material == id_material))
-            if session.execute(stmt).first() != data['name']:
+            if session.execute(stmt).first()[0] != data['name']:
                 error_new_name = validate_new_name_material(data)
                 if error_new_name:
                     logger.error(f'{error_new_name}')
