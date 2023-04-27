@@ -1,0 +1,65 @@
+# Read material
+#---
+tags:
+  - Materials
+parameters:
+  - name: id_material
+    in: path
+    type: integer
+    description: ID material
+    required: true
+responses:
+  "200":
+    description: read material
+    schema:
+      $ref: "#/definitions/Material_get"
+  "400":
+    description: '{"materials": "discription misstake"}'
+definitions:
+  Material_get:
+    type: object
+    properties:
+      id_material:
+        type: integer
+        description: ID material
+        example: 1
+      name:
+        type: string
+        description: complex name material
+        example: 45/23-Срібний(гол)
+      width: 
+        type: integer
+        description: in mm
+        example: 23
+      weight:
+        type: integer
+        description: in general this material, gram
+        example: 1111
+      thickness:
+        type: integer
+        description: in mkm
+        example: 36
+      spool_qty:
+        type: integer
+        description: qty spool with this material
+        example: 5
+      spool_weight:
+        type: integer
+        description: weight spool this type, in gram
+        example: 130
+      manufacturer:
+        type: string
+        description: manufacturer
+        example: Devilon
+      reserve:
+        type: integer
+        description: for future, like reserve
+        example: 0
+      weight_10m:
+        type: integer
+        description: with double precision
+        example: 24.56
+      comment:
+        type: string
+        description: everything
+        example: гарний колір але пачкається

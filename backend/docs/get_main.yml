@@ -82,7 +82,7 @@ definitions:
   Orders:
     type: object
     properties:
-      anwer:
+      answer:
         type: array
         items:
           $ref: '#/definitions/Order'

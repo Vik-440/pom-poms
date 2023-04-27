@@ -46,7 +46,8 @@ def test_read_order_1(app_fixture):
         'price_model_sell': [400],
         'phase_1': [6],
         'phase_2': [6],
-        'phase_3': [3]}
+        'phase_3': [3],
+        'real_money': 0}
     assert response.status_code == 200
     assert response.json == expected_data
 
@@ -95,7 +96,8 @@ def test_read_order_2(app_fixture):
         'price_model_sell': [400],
         'phase_1': [6],
         'phase_2': [6],
-        'phase_3': [3]}
+        'phase_3': [3],
+        'real_money': 0}
     assert response.status_code == 200
     assert response.json == expected_data
 

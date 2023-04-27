@@ -1,0 +1,39 @@
+# Сonsumption material
+#---
+tags:
+  - Materials
+parameters:
+  - name: id_material
+    in: path
+    type: integer
+    description: ID material
+    required: true
+  - name: body data
+    in: body
+    description: Consumption material
+    required: true
+    schema:
+      $ref: '#/definitions/Material_consumption'
+    content:
+      application/json:
+          schema:
+            type: object
+responses:
+  "202":
+    description: '{
+      "spool_qty": 4,
+      "net_weight": 3561}'
+  "400":
+    description: '{"materials": "discription misstake"}'
+definitions:
+  Material_consumption:
+    type: object
+    properties:
+      edit_weight:
+        type: integer
+        description: edit material, gram
+        example: -111
+      edit_spool_qty:
+        type: integer
+        description: edit qty spool
+        example: -1

@@ -1,0 +1,64 @@
+# Read materials (available or all)
+#---
+tags:
+  - Materials
+parameters:
+  - name: available
+    in: query
+    type: string
+    description: none or 'all'
+    required: false
+responses:
+  "200":
+    description: read materials in short form
+    schema:
+      type: object
+      properties:
+        # additionalProperties:
+        id_material:
+          type: integer
+        name:
+          type: string
+        width: 
+          type: integer
+        net_weight:
+          type: integer
+        # thickness:
+        #   type: integer
+        spool_qty:
+          type: integer
+        spool_weight:
+          type: integer
+        # manufacturer:
+        #   type: string
+        # reserve:
+        #   type: integer
+        # weight_10m:
+        #   type: integer
+        # comment:
+        #   type: string
+      example:
+        - id_material: 1
+          name: 45/23-Срібний(гол)
+          width: 23
+          net_weight: 1111
+          # thickness: 36
+          spool_qty: 2
+          # spool_weight: 130
+          # manufacturer: Rivne
+          # reserve: 0
+          # weight_10m: 12.34
+          # comment: none or ___
+        - id_material: 2
+          name: 72/23-Морська Хвиля
+          width: 25
+          net_weight: 2222
+          # thickness: 30
+          spool_qty: 4
+          # spool_weight: 140
+          # manufacturer: Devilon
+          # reserve: 0
+          # weight_10m: 15.95
+          # comment: пачкається
+  "400":
+    description: '{"materials": "discription misstake"}'

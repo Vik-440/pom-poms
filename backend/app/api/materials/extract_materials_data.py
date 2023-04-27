@@ -106,7 +106,7 @@ def creating_new_material(data):
             id_new_material = ins.id_material
         else:
             return jsonify({'message': 'error in func'}) # pragma: no cover
-    return jsonify({"id_color": id_new_material})
+    return jsonify({'id_color': id_new_material})
 
 
 def changing_material_one(data):
