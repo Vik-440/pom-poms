@@ -2,6 +2,7 @@
 /node_modules
 # compiled output
 /frontend/dist
+/frontend/coverage
 /tmp
 /out-tsc
 # Only exists if Bazel was run
