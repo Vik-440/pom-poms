@@ -7,7 +7,7 @@
     "prettier-format": "prettier --config .prettierrc 'src/**/*.ts' --write",
     "build": "ng build",
     "test": "jest --verbose --coverage",
-    "test:watch": "jest --watch",
+    "test:dev": "jest --verbose --watchAll",
     "test:coverage": "jest --coverage",
     "lint": "ng lint",
     "lint:fix": "ng lint --fix",
