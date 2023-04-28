@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import * as _ from 'lodash';
-import * as moment from 'moment';
+import moment from 'moment';
 import { forkJoin } from 'rxjs';
 import { FinancesPageService } from '../services/finances.service';
 
@@ -11,15 +11,15 @@ import { FinancesPageService } from '../services/finances.service';
   styleUrls: ['./finances.component.sass'],
 })
 export class FinancesComponent implements OnInit {
-  constructor(private _service: FinancesPageService, private _fb: FormBuilder) {}
+  constructor(private _service: FinancesPageService, private _fb: UntypedFormBuilder) {}
   isShowSpinner = false;
   metodPayment = [];
   outlayClass: string[];
-  paymentFrom: FormGroup;
+  paymentFrom: UntypedFormGroup;
   spendingForm;
-  dataItems: FormArray;
+  dataItems: UntypedFormArray;
   periods: string[];
-  outlayData: FormArray;
+  outlayData: UntypedFormArray;
   statisticsPeriods;
   statisticsData;
   isShowStatistics = false;

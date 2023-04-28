@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { switchMap } from 'rxjs';
 import { MaterialPageService } from '../services/materials.service';
 
@@ -9,9 +9,9 @@ import { MaterialPageService } from '../services/materials.service';
     styleUrls: ['./reserve.component.sass'],
 })
 export class ReserveComponent implements OnInit {
-    constructor(private _serviceMaterial: MaterialPageService, private _fb: FormBuilder) {}
+    constructor(private _serviceMaterial: MaterialPageService, private _fb: UntypedFormBuilder) {}
     materialFilter = [];
-    reverseItemData: FormGroup;
+    reverseItemData: UntypedFormGroup;
     reserveItems;
     reverseItemsCorrect = this._fb.array([]);
     idEdit = null;

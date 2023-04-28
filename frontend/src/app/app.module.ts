@@ -11,7 +11,6 @@ import { ClickOutsideModule } from 'ng-click-outside';
 import { DatepickerModule } from 'ng2-datepicker';
 import { NgxMaskModule } from 'ngx-mask';
 import { NgxSpinnerModule } from 'ngx-spinner';
-import { NgToggleModule } from 'ngx-toggle-button';
 import { environment } from 'src/environments/environment';
 import { AlertComponent } from './alert/alert.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -22,7 +21,6 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { ReserveComponent } from './reserve/reserve.component';
 import { MainTableComponent } from './main-table/main-table.component';
 import { ClientFormComponent } from './client-form/client-form.component';
-import { CustomFieldDirective } from './custom-field.directive';
 @NgModule({
     declarations: [
         AppComponent,
@@ -33,10 +31,8 @@ import { CustomFieldDirective } from './custom-field.directive';
         AlertComponent,
         MainTableComponent,
         ClientFormComponent,
-        CustomFieldDirective,
     ],
     imports: [
-        NgToggleModule,
         BrowserAnimationsModule,
         NgxMaskModule.forRoot(),
         BrowserModule,
