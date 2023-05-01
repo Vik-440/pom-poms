@@ -7,6 +7,7 @@ from sqlalchemy import update, select
 from werkzeug.exceptions import BadRequest
 
 from app.orders.models import DB_orders
+from app.payments.models import DB_payment
 
 from app.orders.validator import (
     validate_create_order, validate_id_order)
@@ -75,6 +76,7 @@ def read_order(id_order):
         with Session(engine) as session:
             stmt = (
                 select(
+                    func.sum(DB_payment.payment).label('sum_paypents_order'),
                     DB_orders.id_order,
                     DB_orders.date_create,
                     DB_orders.date_plane_send,
@@ -90,9 +92,10 @@ def read_order(id_order):
                     DB_orders.phase_1,
                     DB_orders.phase_2,
                     DB_orders.phase_3)
-                .where(DB_orders.id_order == id_order))
+                .group_by(DB_orders)
+                .where(DB_orders.id_order == id_order)
+                .outerjoin(DB_payment, DB_orders.id_order == DB_payment.id_order))
             order = session.execute(stmt).first()
-            # if order:
             return jsonify({
                 'id_order': order.id_order,
                 'date_create': str(order.date_create),
@@ -109,7 +112,7 @@ def read_order(id_order):
                 'phase_1': order.phase_1,
                 'phase_2': order.phase_2,
                 'phase_3': order.phase_3,
-                'real_money': 0
+                'real_money': order.sum_paypents_order
             }), 200
     except: # pragma: no cover
         logger.error({'order_(POST)': 'error in DB'}) # pragma: no cover
