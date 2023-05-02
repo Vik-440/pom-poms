@@ -16,27 +16,26 @@
         <tbody>
           <ng-container *ngFor="let item of reserveItems; let index = index">
             <tr>
-              <td [class.grey]="idEdit === item.id_color" (click)="editItem(item.id_color)">{{ item.id_color }}</td>
-              <td [class.grey]="idEdit === item.id_color" (click)="editItem(item.id_color)" class="name-color">{{
-                item.name_color}}</td>
-              <td [class.grey]="idEdit === item.id_color" (click)="editItem(item.id_color)">{{ item.width_color}}</td>
-              <td [class.grey]="idEdit === item.id_color" (click)="editItem(item.id_color)"> {{ item.bab_quantity_color
-                }}</td>
-              <td [class.grey]="idEdit === item.id_color" (click)="editItem(item.id_color)">{{ item.weight_color}}</td>
+              <td [class.grey]="idEdit === item.id_material" (click)="editItem(item.id_material)">{{ item.id_material }}</td>
+              <td [class.grey]="idEdit === item.id_material" (click)="editItem(item.id_material)" class="name-color">{{
+                item.name }}</td>
+              <td [class.grey]="idEdit === item.id_material" (click)="editItem(item.id_material)">{{ item.width}}</td>
+              <td [class.grey]="idEdit === item.id_material" (click)="editItem(item.id_material)"> {{ item.spool_qty}}</td>
+              <td [class.grey]="idEdit === item.id_material" (click)="editItem(item.id_material)">{{ item.net_weight}}</td>
    
               <td class="epmty"></td>
               <td class="white">
-                <input type="text" class="mat-val--intp"
-                  [value]="reverseItemsCorrect.controls[index].value?.weight_color"
+                <input type="number" class="mat-val--intp"
+                  [value]="reverseItemsCorrect.controls[index].value?.edit_weight"
                   (keyup.enter)="calculateMat(reverseItemsCorrect.controls[index])"
-                  (change)="changeMaterial(reverseItemsCorrect.controls[index], $event.target.value, 'weight_color', item.id_color)">
+                  (change)="changeMaterial(reverseItemsCorrect.controls[index], $event.target.value, 'edit_weight', item.id_material)">
               </td>
-              <td class="white"><input type="text" class="mat-val--intp"
-                  [value]="reverseItemsCorrect.controls[index].value.bab_quantity_color"
-                  (change)="changeMaterial(reverseItemsCorrect.controls[index], $event.target.value, 'bab_quantity_color', item.id_color)">
+              <td class="white"><input type="number" class="mat-val--intp"
+                  [value]="reverseItemsCorrect.controls[index].value.edit_spool_qty"
+                  (change)="changeMaterial(reverseItemsCorrect.controls[index], $event.target.value, 'edit_spool_qty', item.id_material)">
               </td>
-              <button (click)="saveChangesMat(item.id_color, reverseItemsCorrect.controls[index])"
-                class="btn-icon display-none" [class.display-show]="!isHideOk && idChange.includes(item.id_color)">
+              <button (click)="saveChangesMat(item.id_material, reverseItemsCorrect.controls[index])"
+                class="btn-icon display-none" [class.display-show]="!isHideOk && idChange.includes(item.id_material)">
                 <img class="next-icon icon" src="./assets/img/icons/ok.svg" />
               </button>
             </tr>
@@ -45,69 +44,76 @@
       </table>
     </div>
 
-    <div class="materials">
-      <div class="materials-title title">Матеріали</div>
-      <div class="materials-active">
-        <p class="materials-active--title">наявність</p>
-        <ng-select bindLabel="name" [(ngModel)]="filterMaterial" [items]="materialFilter" bindValue="id">
-        </ng-select>
+    <div class="wrapper-right">
+      <div class="materials">
+        <div class="materials-title title">Матеріали</div>
+        <div class="materials-active">
+          <p class="materials-active--title">наявність</p>
+          <ng-select bindLabel="name" [(ngModel)]="filterMaterial" [items]="materialFilter" bindValue="value">
+          </ng-select>
+        </div>
+        <button class="materials-apply" (click)="getMaterialByFilter()">
+          Застосувати
+        </button>
       </div>
-      <button class="materials-apply" (click)="getMaterialByFilter()">
-        Застосувати
-      </button>
+      <div class="block-edit" [formGroup]="reverseItemData" #blockEdit>
+        <div class="edit-header">
+          <p class="title"> {{ isNewMaterial ? 'Створити' : 'Редагувати'}}</p>
+          <button (click)="createMaterial()" class="create-btn">Створити</button>
+        </div>
+        <div class="edit-table">
+          <div class="edit-table--field">
+            <input class="edit-table--field-title name-color" placeholder="назва матеріалу" formControlName="name">
+            <input type="text" class="edit-table--field-inp" formControlName="id_material">
+          </div>
+          <div class="edit-table--field">
+            <p class="edit-table--field-title">ширина, мм</p>
+            <input type="number" class="edit-table--field-inp" formControlName="width">
+          </div>
+          <div class="edit-table--field">
+            <p class="edit-table--field-title">товщина, мкм</p>
+            <input type="number" class="edit-table--field-inp" formControlName="thickness">
+          </div>
+          <div class="edit-table--field">
+            <p class="edit-table--field-title">виробник</p>
+            <input type="text" class="edit-table--field-inp" formControlName="manufacturer">
+          </div>
+          <div class="edit-table--field">
+            <p class="edit-table--field-title">вага втулки, гр</p>
+            <input type="number" class="edit-table--field-inp" formControlName="spool_weight">
+          </div>
+          <div class="edit-table--field">
+            <p class="edit-table--field-title">вага (10м), гр</p>
+            <input type="number" class="edit-table--field-inp" formControlName="weight_10m">
+          </div>
+          <div class="edit-table--field">
+            <p class="edit-table--field-title">резерв, гр</p>
+            <input type="number" class="edit-table--field-inp" formControlName="reserve">
+          </div>
+          <div class="edit-table--field">
+            <p class="edit-table--field-title">кількість бабін</p>
+            <input type="number" class="edit-table--field-inp" formControlName="spool_qty">
+          </div>
+          <div class="edit-table--field">
+            <p class="edit-table--field-title">повна вага</p>
+            <input type="number" class="edit-table--field-inp" formControlName="weight">
+          </div>
+          <div class="edit-table--field-note">
+            <textarea type="text" class="edit-table--field-note-inp" placeholder="примітка" formControlName="comment">
+            </textarea>
+          </div>
+        </div>
+        <button class="save-btn" *ngIf="isNewMaterial" (click)="saveMaterial()" [disabled]="reverseItemData.invalid">
+          Зберегти
+        </button>
+        <button class="action-btn edit-btn" *ngIf="!isNewMaterial" (click)="editMaterial()" [disabled]="reverseItemData.invalid">
+          Редагувати
+        </button>
+      </div>
     </div>
+ 
   </div>
-  <div class="block-edit" [formGroup]="reverseItemData">
-    <div class="edit-header">
-      <p class="title"> {{ isNewMaterial ? 'Створити' : 'Редагувати'}}</p>
-      <button (click)="createMaterial()" class="create-btn">Створити</button>
-    </div>
-    <div class="edit-table">
-      <div class="edit-table--field">
-        <input class="edit-table--field-title name-color" placeholder="назва матеріалу" formControlName="name_color">
-        <input type="text" class="edit-table--field-inp" formControlName="id_color">
-      </div>
-      <div class="edit-table--field">
-        <p class="edit-table--field-title">ширина, мм</p>
-        <input type="text" class="edit-table--field-inp" formControlName="width_color">
-      </div>
-      <div class="edit-table--field">
-        <p class="edit-table--field-title">товщина, мкм</p>
-        <input type="text" class="edit-table--field-inp" formControlName="thickness_color">
-      </div>
-      <div class="edit-table--field">
-        <p class="edit-table--field-title">виробник</p>
-        <input type="text" class="edit-table--field-inp" formControlName="manufacturer_color">
-      </div>
-      <div class="edit-table--field">
-        <p class="edit-table--field-title">вага втулки, гр</p>
-        <input type="text" class="edit-table--field-inp" formControlName="bab_weight_color">
-      </div>
-      <div class="edit-table--field">
-        <p class="edit-table--field-title">вага (10м), гр</p>
-        <input type="text" class="edit-table--field-inp" formControlName="weight_10m_color">
-      </div>
-      <div class="edit-table--field">
-        <p class="edit-table--field-title">резерв, гр</p>
-        <input type="text" class="edit-table--field-inp" formControlName="reserve_color">
-      </div>
-      <div class="edit-table--field">
-        <p class="edit-table--field-title">кількість бабін</p>
-        <input type="text" class="edit-table--field-inp" formControlName="bab_quantity_color">
-      </div>
-      <div class="edit-table--field">
-        <p class="edit-table--field-title">повна вага</p>
-        <input type="text" class="edit-table--field-inp" formControlName="weight_color">
-      </div>
-      <div class="edit-table--field-note">
-        <textarea type="text" class="edit-table--field-note-inp" placeholder="примітка" formControlName="comment_color">
-        </textarea>
-      </div>
-    </div>
-    <button class="save-btn" (click)="saveMaterial()" [disabled]="reverseItemData.invalid">
-      Зберегти
-    </button>
-  </div>
+
 </div>
 
 <div *ngIf="isShowSpinner" class="d-flex justify-content-center spinner-wrapper">
