@@ -208,7 +208,7 @@ export class ReserveComponent implements OnInit {
         });
         this.isShowSpinner = false;
 
-        this.showAlert('success',  'Дані збережено');
+        this.showAlert('success', 'Дані збережено');
         item.reset();
       },
       () => {
