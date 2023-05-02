@@ -145,7 +145,7 @@ def material_one_load(id_material: int) -> Dict:
                 'spool_weight': material.spool_weight,
                 'thickness': material.thickness,
                 'weight': material.weight,
-                'weight_10m': float(material.weight_10m),
+                'weight_10m': float(material.weight_10m) if material.weight_10m else 0,
                 'width': material.width}), 200
     except: # pragma: no cover
         logger.error({'materials_(GET)': 'error in DB'}) # pragma: no cover
