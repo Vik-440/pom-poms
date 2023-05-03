@@ -30,6 +30,25 @@ def validate_article_product(data: dict):
     return
 
 
+def validate_id_color_and_part(data, key_id_color, key_part):
+    with Session(engine) as session:
+        if data[key_id_color] is not None:
+            stmt = (
+                select(DB_materials.id_material)
+                .where(DB_materials.id_material == data[key_id_color]))
+            if not session.execute(stmt).first():
+                return {key_id_color: f'{key_id_color} {data[key_id_color]} is missing'}
+
+            error = validate_field(key_part, int, data)
+            if error:
+                return error
+
+            data[key_part] = min(data[key_part], 100)
+        else:
+            for key in [key_part] + [f'id_color_{i}' for i in range(int(key_id_color[-1]) + 1, 5)] + [f'part_{i}' for i in range(int(key_part[-1]) + 1, 5)]:
+                data[key] = None
+
+
 def validate_product(data: dict):
     """Validator for create product"""
     fields_to_check = [
@@ -41,8 +60,7 @@ def validate_product(data: dict):
         ('part_1', int),
         ('id_color_2', (int, type(None))),
         ('id_color_3', (int, type(None))),
-        ('id_color_4', (int, type(None))),
-    ]
+        ('id_color_4', (int, type(None)))]
     for field, field_type in fields_to_check:
         error = validate_field(field, field_type, data)
         if error:
@@ -65,58 +83,10 @@ def validate_product(data: dict):
             .where(DB_materials.id_material == data['id_color_1']))
         if not session.execute(stmt).first():
             return {'id_color_1': f'id_color_1 {data["id_color_1"]} is missing'}
-        
         data['part_1'] = min(data['part_1'], 100)
 
-        if not data['id_color_2'] is None:
-            stmt = (
-                select(DB_materials.id_material)
-                .where(DB_materials.id_material == data['id_color_2']))
-            if not session.execute(stmt).first():
-                return {'id_color_2': f'id_color_2 {data["id_color_2"]} is missing'}
-        
-            if not 'part_2' in data:
-                return {'part_2': 'miss in data'}
-            if not isinstance(data['part_2'], int):
-                return {'part_2': 'is not int type'}
-            data['part_2'] = min(data['part_2'], 100)
-        else:
-            data['part_2'] = None
-            data['id_color_3'] = None
-            data['part_3'] = None
-            data['id_color_4'] = None
-            data['part_4'] = None
-
-        if not data['id_color_3'] is None:
-            stmt = (
-                select(DB_materials.id_material)
-                .where(DB_materials.id_material == data['id_color_3']))
-            if not session.execute(stmt).first():
-                return {'id_color_3': f'id_color_3 {data["id_color_3"]} is missing'}
-        
-            if not 'part_3' in data:
-                return {'part_3': 'miss in data'}
-            if not isinstance(data['part_3'], int):
-                return {'part_3': 'is not int type'}
-            data['part_3'] = min(data['part_3'], 100)
-        else:
-            data['part_3'] = None
-            data['id_color_4'] = None
-            data['part_4'] = None
-            
-        if not data['id_color_4'] is None:
-            stmt = (
-                select(DB_materials.id_material)
-                .where(DB_materials.id_material == data['id_color_4']))
-            if not session.execute(stmt).first():
-                return {'id_color_4': f'id_color_4 {data["id_color_4"]} is missing'}
-        
-            if not 'part_4' in data:
-                return {'part_4': 'miss in data'}
-            if not isinstance(data['part_4'], int):
-                return {'part_4': 'is not int type'}
-            data['part_4'] = min(data['part_4'], 100)
-        else:
-            data['part_4'] = None
-
+        for key_id_color, key_part in [('id_color_2', 'part_2'), ('id_color_3', 'part_3'), ('id_color_4', 'part_4')]:
+            error = validate_id_color_and_part(data, key_id_color, key_part)
+            if error:
+                return error
     return 
