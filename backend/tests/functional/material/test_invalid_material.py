@@ -50,7 +50,7 @@ def test_materials_comment_not_str(app_fixture):
     headers = {'Content-Type': 'application/json'}
     response = client.post('/materials', data=json.dumps(data), headers=headers)
     assert response.status_code == 400
-    expected_data = {'comment': 'is not str type'}
+    expected_data = {'comment': 'is not str, NoneType type'}
     assert response.json == expected_data
 
 
@@ -58,7 +58,7 @@ def test_materials_comment_not_str(app_fixture):
 def test_materials_without_manufacturer(app_fixture):
     client = app_fixture.test_client()
     data = {
-        'comment': 'дуже білий',
+        'comment': None,
         # 'manufacturer': 'Ровно',
         'name': '77/23 Білий',
         'reserve': 0,
@@ -386,7 +386,7 @@ def test_materials_weight_10m_not_int(app_fixture):
     headers = {'Content-Type': 'application/json'}
     response = client.post('/materials', data=json.dumps(data), headers=headers)
     assert response.status_code == 400
-    expected_data = {'weight_10m': 'is not int or float type'}
+    expected_data = {'weight_10m': 'is not int, float type'}
     assert response.json == expected_data
 
 
@@ -516,7 +516,7 @@ def test_materials_consumption_edit_spool_qty_not_int(app_fixture):
     headers = {'Content-Type': 'application/json'}
     response = client.put('/materials/consumption/1', data=json.dumps(data), headers=headers)
     assert response.status_code == 400
-    expected_data = {'edit_spool_qty': 'is not int type'}
+    expected_data = {'edit_spool_qty': 'is not int, NoneType type'}
     assert response.json == expected_data
 
 
@@ -544,7 +544,7 @@ def test_materials_consumption_edit_weight_not_int(app_fixture):
     headers = {'Content-Type': 'application/json'}
     response = client.put('/materials/consumption/1', data=json.dumps(data), headers=headers)
     assert response.status_code == 400
-    expected_data = {'edit_weight': 'is not int type'}
+    expected_data = {'edit_weight': 'is not int, NoneType type'}
     assert response.json == expected_data
 
 

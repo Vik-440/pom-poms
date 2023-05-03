@@ -127,7 +127,7 @@ def test_client_not_str_address(app_fixture):
         'zip_code': 12345}
     response = client.post('/client', data=json.dumps(data), content_type='application/json')
     assert response.status_code == 400
-    expected_data = {'address': 'is not str type'}
+    expected_data = {'address': 'is not str, NoneType type'}
     assert response.json == expected_data
 
 
@@ -211,7 +211,7 @@ def test_client_not_str_coach(app_fixture):
         'zip_code': 12345}
     response = client.post('/client', data=json.dumps(data), content_type='application/json')
     assert response.status_code == 400
-    expected_data = {'coach': 'is not str type'}
+    expected_data = {'coach': 'is not str, NoneType type'}
     assert response.json == expected_data
 
 
@@ -253,7 +253,7 @@ def test_client_not_str_comment(app_fixture):
         'zip_code': 12345}
     response = client.post('/client', data=json.dumps(data), content_type='application/json')
     assert response.status_code == 400
-    expected_data = {'comment': 'is not str type'}
+    expected_data = {'comment': 'is not str, NoneType type'}
     assert response.json == expected_data
 
 
@@ -379,7 +379,7 @@ def test_client_not_str_surname(app_fixture):
         'zip_code': 12345}
     response = client.post('/client', data=json.dumps(data), content_type='application/json')
     assert response.status_code == 400
-    expected_data = {'surname': 'is not str type'}
+    expected_data = {'surname': 'is not str, NoneType type'}
     assert response.json == expected_data
 
 
@@ -422,7 +422,7 @@ def test_client_not_str_team(app_fixture):
         'zip_code': 12345}
     response = client.post('/client', data=json.dumps(data), content_type='application/json')
     assert response.status_code == 400
-    expected_data = {'team': 'is not str type'}
+    expected_data = {'team': 'is not str, NoneType type'}
     assert response.json == expected_data
 
 
@@ -506,7 +506,7 @@ def test_client_not_str_phone(app_fixture):
         'zip_code': 12345}
     response = client.post('/client', data=json.dumps(data), content_type='application/json')
     assert response.status_code == 400
-    expected_data = {'phone': 'is not str type'}
+    expected_data = {'phone': 'is not str, int type'}
     assert response.json == expected_data
 
 
@@ -548,7 +548,7 @@ def test_client_not_str_zip_code(app_fixture):
         'zip_code': '12345'}
     response = client.post('/client', data=json.dumps(data), content_type='application/json')
     assert response.status_code == 400
-    expected_data = {'zip_code': 'is not int type'}
+    expected_data = {'zip_code': 'is not int, NoneType type'}
     assert response.json == expected_data
 
 
@@ -569,5 +569,5 @@ def test_client_not_str_zip_code_put(app_fixture):
         'zip_code': '12345'}
     response = client.put('/client/1', data=json.dumps(data), content_type='application/json')
     assert response.status_code == 400
-    expected_data = {'zip_code': 'is not int type'}
+    expected_data = {'zip_code': 'is not int, NoneType type'}
     assert response.json == expected_data

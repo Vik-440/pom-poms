@@ -151,9 +151,9 @@ def test_chenge_one_material_full(app_fixture):
     headers = {'Content-Type': 'application/json'}
     response = client.put('/materials/1', data=json.dumps(data), headers=headers)
     assert response.status_code == 202
-    expected_data = {'message': "data_change ok"}
-    # assert response.json == expected_data
-    print(response.json)
+    expected_data = {'edit_material': 1}
+    assert response.json == expected_data
+    # print(response.json)
 
 
 @pytest.mark.run(order=100080)
@@ -185,9 +185,22 @@ def test_chenge_one_material_weight(app_fixture):
     headers = {'Content-Type': 'application/json'}
     response = client.put('/materials/consumption/1', data=json.dumps(data), headers=headers)
     assert response.status_code == 202
-    expected_data = { "spool_qty": 4, "net_weight": 3844}
+    expected_data = { 'spool_qty': 4, 'net_weight': 3844}
     assert response.json == expected_data
     # print(response.json)
+
+
+@pytest.mark.run(order=100091)
+def test_chenge_one_material_weight_with_none(app_fixture):
+    client = app_fixture.test_client()
+    data = {
+        'edit_spool_qty': -1,
+        'edit_weight': 0}
+    headers = {'Content-Type': 'application/json'}
+    response = client.put('/materials/consumption/1', data=json.dumps(data), headers=headers)
+    assert response.status_code == 202
+    expected_data = { 'spool_qty': 3, 'net_weight': 3994}
+    assert response.json == expected_data
 
 
 @pytest.mark.run(order=100100)
@@ -199,7 +212,7 @@ def test_get_one_material_2(app_fixture):
         'name': '77/23 Білий',
         'id_material': 1,
         'width': 23,
-        'spool_qty': 4,
+        'spool_qty': 3,
         'weight': 4444,
         'comment': 'дуже білий',
         'thickness': 36,

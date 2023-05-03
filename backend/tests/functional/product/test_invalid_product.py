@@ -279,7 +279,7 @@ def test_create_product_not_str_comment(app_fixture):
     headers = {'Content-Type': 'application/json'}
     response = client.post('/product', data=json.dumps(data), headers=headers)
     assert response.status_code == 400
-    expected_data = {'comment': 'is not str type'}
+    expected_data = {'comment': 'is not str, NoneType type'}
     assert response.json == expected_data
 
 
@@ -487,7 +487,7 @@ def test_create_product_not_int_id_color_2(app_fixture):
     headers = {'Content-Type': 'application/json'}
     response = client.post('/product', data=json.dumps(data), headers=headers)
     assert response.status_code == 400
-    expected_data = {'id_color_2': 'is not int type'}
+    expected_data = {'id_color_2': 'is not int, NoneType type'}
     assert response.json == expected_data
 
 
@@ -603,7 +603,7 @@ def test_create_product_not_int_id_color_3(app_fixture):
     headers = {'Content-Type': 'application/json'}
     response = client.post('/product', data=json.dumps(data), headers=headers)
     assert response.status_code == 400
-    expected_data = {'id_color_3': 'is not int type'}
+    expected_data = {'id_color_3': 'is not int, NoneType type'}
     assert response.json == expected_data
 
 
@@ -719,7 +719,7 @@ def test_create_product_not_int_id_color_4(app_fixture):
     headers = {'Content-Type': 'application/json'}
     response = client.post('/product', data=json.dumps(data), headers=headers)
     assert response.status_code == 400
-    expected_data = {'id_color_4': 'is not int type'}
+    expected_data = {'id_color_4': 'is not int, NoneType type'}
     assert response.json == expected_data
 
 

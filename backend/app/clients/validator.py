@@ -1,15 +1,20 @@
 from sqlalchemy import select
 from sqlalchemy.orm import Session
-import string, re
+import re
 
 from app.clients.models import DB_client
+from utils.validators import validate_field
 from app import engine
 
 
-def normalize(key: str, data: dict):
-    data[key] = ' '.join([word.capitalize() for word in data[key].split(' ')])
-    data[key] = re.sub(r"\'([A-Za-zА-Яа-я])", lambda m: "'" + m.group(1).lower(), data[key])
-    data[key] = re.sub(r"\-([A-Za-zА-Яа-я])", lambda m: "-" + m.group(1).capitalize(), data[key])
+def normalize_fields(data, fields_to_normalize):
+    """Normalise data for product"""
+    for field in fields_to_normalize:
+        if data[field]:
+            data[field] = ' '.join([word.capitalize() for word in data[field].split(' ')])
+            data[field] = re.sub(r"\'([A-Za-zА-Яа-я])", lambda m: "'" + m.group(1).lower(), data[field])
+            data[field] = re.sub(r"\-([A-Za-zА-Яа-я])", lambda m: "-" + m.group(1).capitalize(), data[field])
+
 
 def validate_id_client(id_client: int):
     """Validator for ID client number"""
@@ -35,73 +40,31 @@ def validate_number(data: dict):
 
 def validate_client(data: dict):
     """Validator for create client"""
-    with Session(engine) as session:
+    fields_to_check = [
+        ('address', (str, type(None))),
+        ('city', str),
+        ('coach', (str, type(None))),
+        ('comment', (str, type(None))),
+        ('first_name', str),
+        ('second_name', str),
+        ('surname', (str, type(None))),
+        ('team', (str, type(None))),
+        ('np_number', int),
+        ('phone', (str, int)),
+        ('zip_code', (int, type(None)))]
+    for field, field_type in fields_to_check:
+        error = validate_field(field, field_type, data)
+        if error:
+            return error
+    fields_to_normalize = [
+        'city',
+        'first_name',
+        'second_name',
+        'coach',
+        'surname',
+        'team']
+    normalize_fields(data, fields_to_normalize)
+    data['phone'] = str(data['phone'])
+    data['phone'] = re.sub(r'\D', '', data['phone'])
 
-        if not 'address' in data:
-            return {'address':  'miss in data'}
-        if not isinstance(data['address'], str) and not data['address'] is None:
-            return {'address': 'is not str type'}
-        
-        if not 'city' in data:
-            return {'city':  'miss in data'}
-        if not isinstance(data['city'], str):
-            return {'city': 'is not str type'}
-        if data['city']:
-            normalize('city', data)
-
-        if 'coach' not in data:
-            return {"coach":  "miss in data"}
-        if not isinstance(data['coach'], str) and data['coach'] is not None:
-            return {'coach': 'is not str type'}
-        if data['coach']:
-            normalize('coach', data)
-
-        if not 'comment' in data:
-            return {"comment":  "miss in data"}
-        if not isinstance(data['comment'], str) and not data['comment'] is None:
-            return {'comment': 'is not str type'}
-        
-        if not 'first_name' in data:
-            return {"first_name":  "miss in data"}
-        if not isinstance(data['first_name'], str):
-            return {'first_name': 'is not str type'}
-        normalize('first_name', data)
-
-        if not 'second_name' in data:
-            return {"second_name":  "miss in data"}
-        if not isinstance(data['second_name'], str):
-            return {'second_name': 'is not str type'}
-        normalize('second_name', data)
-
-        if not 'surname' in data:
-            return {"surname":  "miss in data"}
-        if not isinstance(data['surname'], str) and not data['surname'] is None:
-            return {'surname': 'is not str type'}
-        if data['surname']:
-            normalize('surname', data)
-
-        if not 'team' in data:
-            return {"team":  "miss in data"}
-        if not isinstance(data['team'], str) and not data['team'] is None:
-            return {'team': 'is not str type'}
-        if data['team']:
-            normalize('team', data)
-
-        if not 'np_number' in data:
-            return {'np_number': 'miss in data'}
-        if not isinstance(data['np_number'], int):
-            return {'np_number': 'is not int type'}
-        
-        if not 'phone' in data:
-            return {'phone': 'miss in data'}
-        if not isinstance(data['phone'], (str, int)):
-            return {'phone': 'is not str type'}
-        data['phone'] = str(data['phone'])
-        data['phone'] = re.sub(r'\D', '', data['phone'])
-        
-        if not 'zip_code' in data:
-            return {'zip_code': 'miss in data'}
-        if not isinstance(data['zip_code'], int) and not data['zip_code'] is None:
-            return {'zip_code': 'is not int type'}
-
-    return 
+    return

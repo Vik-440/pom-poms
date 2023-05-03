@@ -2,6 +2,7 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from app.materials.models import DB_materials
+from utils.validators import validate_field
 from app import engine
 
 
@@ -28,69 +29,34 @@ def validate_new_name_material(data: dict):
 
 
 def validate_material(data: dict):
-    """Validate data for create or edit material"""
-    if not 'comment' in data:
-        return {'comment':  'miss in data'}
-    if not isinstance(data['comment'], str) and not data['comment'] is None:
-        return {'comment': 'is not str type'}
-
-    if not 'manufacturer' in data:
-        return {'manufacturer':  'miss in data'}
-    if not isinstance(data['manufacturer'], str):
-        return {'manufacturer': 'is not str type'}
-    
-    if not 'name' in data:
-        return {'name':  'miss in data'}
-    if not isinstance(data['name'], str):
-        return {'name': 'is not str type'}
-    
-    if not 'reserve' in data:
-        return {'reserve': 'miss in data'}
-    if not isinstance(data['reserve'], int):
-        return {'reserve': 'is not int type'}
-
-    if not 'spool_qty' in data:
-        return {'spool_qty': 'miss in data'}
-    if not isinstance(data['spool_qty'], int):
-        return {'spool_qty': 'is not int type'}
-    
-    if not 'spool_weight' in data:
-        return {'spool_weight': 'miss in data'}
-    if not isinstance(data['spool_weight'], int):
-        return {'spool_weight': 'is not int type'}
-    
-    if not 'thickness' in data:
-        return {'thickness': 'miss in data'}
-    if not isinstance(data['thickness'], int):
-        return {'thickness': 'is not int type'}
-    
-    if not 'weight' in data:
-        return {'weight': 'miss in data'}
-    if not isinstance(data['weight'], int):
-        return {'weight': 'is not int type'}
-    
-    if not 'weight_10m' in data:
-        return {'weight_10m': 'miss in data'}
-    if not isinstance(data['weight_10m'], (int, float)):
-        return {'weight_10m': 'is not int or float type'}
+    """validate create or edit material"""
+    fields_to_check = [
+        ('comment', (str, type(None))),
+        ('manufacturer', str),
+        ('name', str),
+        ('reserve', int),
+        ('spool_qty', int),
+        ('spool_weight', int),
+        ('thickness', int),
+        ('weight', int),
+        ('weight_10m', (int, float)),
+        ('width', int)]
+    for field, field_type in fields_to_check:
+        error = validate_field(field, field_type, data)
+        if error:
+            return error
     data['weight_10m'] = round(data['weight_10m'], 2)
-
-    if not 'width' in data:
-        return {'width': 'miss in data'}
-    if not isinstance(data['width'], int):
-        return {'width': 'is not int type'}
     return
-    
+
 
 def errors_validate_consumption(data: dict):
     """validate consumption material"""
-    if not 'edit_spool_qty' in data:
-        return {'edit_spool_qty': 'miss in data'}
-    if not isinstance(data['edit_spool_qty'], int):
-        return {'edit_spool_qty': 'is not int type'}
-    
-    if not 'edit_weight' in data:
-        return {'edit_weight': 'miss in data'}
-    if not isinstance(data['edit_weight'], int):
-        return {'edit_weight': 'is not int type'}
+    for field, field_type in [
+            ('edit_spool_qty', (int, type(None))),
+            ('edit_weight', (int, type(None))),]:
+        error = validate_field(field, field_type, data)
+        if error:
+            return error
+        if data[field] is None:
+            data[field] = 0
     return

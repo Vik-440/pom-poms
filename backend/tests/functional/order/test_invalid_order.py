@@ -558,7 +558,7 @@ def test_order_not_str_none_comment(app_fixture):
         'phase_3': [3]}
     response = client.post('/order', data=json.dumps(data))
     assert response.status_code == 400
-    expected_data = {'comment': 'is not str or None type'}
+    expected_data = {'comment': 'is not str, NoneType type'}
     assert response.json == expected_data
 
 
@@ -846,7 +846,7 @@ def test_order_not_correct_phase_1(app_fixture):
         'phase_3': [3]}
     response = client.post('/order', data=json.dumps(data))
     assert response.status_code == 400
-    expected_data = {'phase_1': 'qty positions in phase_1 is not eiqual qty in id_models'}
+    expected_data = {'phase_1': 'qty positions in phase_1 is not equal qty in id_models'}
     assert response.json == expected_data
 
 
@@ -894,7 +894,7 @@ def test_order_list_phase_1_bigger_then_id_models(app_fixture):
         'phase_3': [3]}
     response = client.post('/order', data=json.dumps(data))
     assert response.status_code == 400
-    expected_data = {'phase_1': '15 in phase_1 is bigger then it is possible (qty_pars * 2)'}
+    expected_data = {'phase_1': '15 in phase_1 is bigger than it is possible (qty_pars * 2)'}
     assert response.json == expected_data
 
 
@@ -966,7 +966,7 @@ def test_order_not_correct_phase_2(app_fixture):
         'phase_3': [3]}
     response = client.post('/order', data=json.dumps(data))
     assert response.status_code == 400
-    expected_data = {'phase_2': 'qty positions in phase_2 is not eiqual qty in id_models'}
+    expected_data = {'phase_2': 'qty positions in phase_2 is not equal qty in id_models'}
     assert response.json == expected_data
 
 
@@ -1014,7 +1014,7 @@ def test_order_list_phase_2_bigger_then_id_models(app_fixture):
         'phase_3': [3]}
     response = client.post('/order', data=json.dumps(data))
     assert response.status_code == 400
-    expected_data = {'phase_2': '15 in phase_2 is bigger then it is possible (qty_pars * 2)'}
+    expected_data = {'phase_2': '15 in phase_2 is bigger than it is possible (qty_pars * 2)'}
     assert response.json == expected_data
 
 
@@ -1087,7 +1087,7 @@ def test_order_not_correct_phase_3(app_fixture):
         'phase_3': [3]}
     response = client.post('/order', data=json.dumps(data))
     assert response.status_code == 400
-    expected_data = {'phase_3': 'qty positions in phase_3 is not eiqual qty in id_models'}
+    expected_data = {'phase_3': 'qty positions in phase_3 is not equal qty in id_models'}
     assert response.json == expected_data
 
 
@@ -1135,7 +1135,7 @@ def test_order_list_phase_3_bigger_then_id_models(app_fixture):
         'phase_3': [3, 15]}
     response = client.post('/order', data=json.dumps(data))
     assert response.status_code == 400
-    expected_data = {'phase_3': '15 in phase_3 is bigger then it is possible (qty_pars)'}
+    expected_data = {'phase_3': '15 in phase_3 is bigger than it is possible (qty_pars * 1)'}
     assert response.json == expected_data
 
 
