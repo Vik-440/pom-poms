@@ -1,9 +1,8 @@
 """Module autofill fields (clients, products, materials)"""
 
 from flask import request, jsonify
-from sqlalchemy.orm import Session
 from sqlalchemy import select
-
+from sqlalchemy.orm import Session
 import re
 
 from app.products.models import DB_product
@@ -19,29 +18,27 @@ from flasgger import swag_from
 
 def search_by_phone(args):
     """search clients by phone"""
-    if not 'phone' in args:
+    if 'phone' not in args:
         return None
-    value = ('%' + str(args.get('phone')) + '%')
-    clients = []
+    
+    value = f'%{str(args.get("phone"))}%'
+
     with Session(engine) as session:
         stmt = (
             select(DB_client.id_client, DB_client.phone)
             .where(DB_client.phone.ilike(value))
             .order_by(DB_client.id_client))
-        _ = session.execute(stmt).all()
-        for client in _:
-            clients.append({
-                'id_client': client.id_client,
-                'value': client.phone})
-    return clients
+    return [{'id_client': clients.id_client, 'value': clients.phone}\
+            for clients in session.execute(stmt).all()]
 
 
 def search_by_second_name(args):
     """search clients by second_name"""
-    if not 'second_name' in args:
+    if 'second_name' not in args:
         return None
-    value = ('%' + str(args.get('second_name')) + '%')
-    clients = []
+    
+    value = f'%{str(args.get("second_name"))}%'
+
     with Session(engine) as session:
         stmt = (
             select(
@@ -50,80 +47,69 @@ def search_by_second_name(args):
                 DB_client.first_name)
             .where(DB_client.second_name.ilike(value))
             .order_by(DB_client.id_client))
-        _ = session.execute(stmt).all()
-        for client in _:
-            clients.append({
-                'id_client': client.id_client,
-                'value': f'{client.second_name} {client.first_name}'})
-    return clients
+    return [{'id_client': clients.id_client, 'value': f'{clients.second_name} {clients.first_name}'}\
+            for clients in session.execute(stmt).all()]
 
 
 def search_by_city(args):
     """search cities"""
-    if not 'city' in args:
+    if 'city' not in args:
         return None
-    value = ('%' + str(args.get('city')) + '%')
-    unique_cities = set()
+    
+    value = f'%{str(args.get("city"))}%'
+
     with Session(engine) as session:
         stmt = (
             select(DB_client.city)
             .where(DB_client.city.ilike(value))
             .order_by(DB_client.city))
-        _ = session.execute(stmt).all()
-        for city in _:
-            unique_cities.add(city.city)
-        cities = [{'value': city} for city in unique_cities]
-    return cities
+        unique_cities = {cities.city for cities in session.execute(stmt).all()}
+    return [{'value': city} for city in unique_cities]
 
 
 def search_by_team(args):
     """search teams"""
-    if not 'team' in args:
+    if 'team' not in args:
         return None
-    value = ('%' + str(args.get('team')) + '%')
-    unique_teams = set()
+    
+    value = f'%{str(args.get("team"))}%'
+
     with Session(engine) as session:
         stmt = (
             select(DB_client.team)
             .where(DB_client.team.ilike(value))
             .order_by(DB_client.team))
-        _ = session.execute(stmt).all()
-        for team in _:
-            unique_teams.add(team.team)
-        teams = [{'value': team} for team in unique_teams]
-    return teams
+        unique_teams = {teams.team for teams in session.execute(stmt).all()}
+    return [{'value': team} for team in unique_teams]
 
 
 def search_by_coach(args):
     """search coach"""
-    if not 'coach' in args:
+    if 'coach' not in args:
         return None
-    value = ('%' + str(args.get('coach')) + '%')
-    unique_coach = set()
+    
+    value = f'%{str(args.get("coach"))}%'
+
     with Session(engine) as session:
         stmt = (
             select(DB_client.coach)
             .where(DB_client.coach.ilike(value))
             .order_by(DB_client.coach))
-        _ = session.execute(stmt).all()
-        for coach in _:
-            unique_coach.add(coach.coach)
-        coachs = [{'value': coach} for coach in unique_coach]
-    return coachs
+        unique_coach = {coaches.coach for coaches in session.execute(stmt).all()}
+    return [{'value': coach} for coach in unique_coach]
 
 
 def search_by_article(args):
     """search by article products"""
-    if not 'article' in args:
+    if 'article' not in args:
         return None
     
-    value = ('%' + str(args.get('article')) + '%')
+    value = f'%{str(args.get("article"))}%'
     value = value.upper()
     value = re.sub(r'A', 'А', value)
     value = re.sub(r'B', 'В', value)
     value = re.sub(r'C', 'С', value)
 
-    products = []
     with Session(engine) as session:
         stmt = (
             select(
@@ -131,25 +117,20 @@ def search_by_article(args):
                 DB_product.article)
             .where(DB_product.article.ilike(value))
             .order_by(DB_product.id_product))
-        _ = session.execute(stmt).all()
-        for product in _:
-            products.append({
-                'id_product': product.id_product,
-                'value': product.article})
-    return products
+    return [{'id_product': products.id_product, 'value': products.article}\
+            for products in session.execute(stmt).all()]
 
 
 def search_by_name_material(args):
     """search by name material"""
-    if not 'name_material' in args:
+    if 'name_material' not in args:
         return None
     
-    value = ('%' + str(args.get('name_material')) + '%')
+    value = f'%{str(args.get("name_material"))}%'
     value = re.sub(r'A', 'А', value, flags=re.IGNORECASE)
     value = re.sub(r'B', 'В', value, flags=re.IGNORECASE)
     value = re.sub(r'C', 'С', value, flags=re.IGNORECASE)
 
-    name_materials = []
     with Session(engine) as session:
         stmt = (
             select(
@@ -157,12 +138,8 @@ def search_by_name_material(args):
                 DB_materials.name)
             .where(DB_materials.name.ilike(value))
             .order_by(DB_materials.id_material))
-        _ = session.execute(stmt).all()
-        for name_material in _:
-            name_materials.append({
-                'id_material': name_material.id_material,
-                'value': name_material.name})
-    return name_materials
+    return [{'id_material': materials.id_material, 'value': materials.name}\
+            for materials in session.execute(stmt).all()]
 
 
 @api.route('/autofill', methods=['GET'])
@@ -199,5 +176,5 @@ def autofill_fields():
         return jsonify({'autofill': 'request does not have searching keys'}), 400
 
     except Exception as e: # pragma: no cover
-        logger.info(f'misstake autofill: {e}') # pragma: no cover
-        return jsonify(f'autofill: {e}'), 400 # pragma: no cover
+        logger.info(f'mistake autofill: {e}')
+        return jsonify(f'autofill: {e}'), 400

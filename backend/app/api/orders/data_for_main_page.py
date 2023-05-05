@@ -1,4 +1,4 @@
-"""Main module for creating data for main page with or withot filters"""
+"""Main module for creating data for main page with or without filters"""
 
 from datetime import datetime
 from flask import request, jsonify
@@ -54,13 +54,13 @@ def getting_filter_clients(args: dict) -> list:
 
 def getting_filter_products(args: dict) -> list:
     """Getting orders with searching products into"""
-    fillters_products = {
+    filters_products = {
                 'kod_model': DB_product.article,
                 'kod_model_like': DB_product.article,
                 'kolor_like': DB_product.colors}            
     id_products_list = []
     with Session(engine) as session:
-        for key, value in fillters_products.items():
+        for key, value in filters_products.items():
             if key in args:
                 if key == 'kod_model':
                     stmt = (
@@ -71,19 +71,20 @@ def getting_filter_products(args: dict) -> list:
                     value = ('%' + str(args.get(key)) + '%')
                     stmt = (
                         select(DB_product.id_product)
-                        .where(fillters_products[key].ilike(value))
+                        .where(filters_products[key].ilike(value))
                         .order_by(DB_product.id_product))
                 pre_list = session.execute(stmt).scalars()
                 for id_product in pre_list:
                     id_products_list.append(id_product)
         id_orders_products = []
-        for id_model_cucle in id_products_list:
+        for id_model_cycle in id_products_list:
             stmt = (
                 select(DB_orders.id_order)
-                .where(DB_orders.id_models.any(id_model_cucle)))
+                .where(DB_orders.id_models.any(id_model_cycle)))
             pre_list = session.execute(stmt).scalars()
             for order in pre_list:
                 id_orders_products.append(order)
+            # id_orders_products = [order for order in session.execute(stmt).scalars()]
     return id_orders_products
 
 
@@ -97,20 +98,15 @@ def getting_products() -> dict:
                 DB_product.colors,
                 DB_product.comment)
             .order_by(DB_product.id_product))
-        products = {}
         models = session.execute(stmt).all()
-        for model in models:
-            products.update({
-                model.id_product: [model.article, model.colors, model.comment]
-            })
-    return products
+    return {model.id_product: [model.article, model.colors, model.comment] for model in models}
 
 
-def create_select_modul():
+def create_select_module():
     """Creating SELECT for request in DB for main table"""
     client_alias = aliased(DB_client)
     recipient_alias = aliased(DB_client)
-    select_modul = (select(
+    select_module = (select(
         func.sum(DB_payment.payment).label('my_sum'),
         DB_orders.id_order,
         DB_orders.comment,
@@ -139,7 +135,7 @@ def create_select_modul():
         .join(client_alias, DB_orders.id_client == client_alias.id_client)
         .join(recipient_alias, DB_orders.id_recipient == recipient_alias.id_client)
         .outerjoin(DB_payment, DB_orders.id_order == DB_payment.id_order))
-    return select_modul
+    return select_module
 
 
 @api.route('/main', methods=['GET'])
@@ -156,40 +152,39 @@ def main_page():
             id_orders_client = getting_filter_clients(args)
             id_orders_products = getting_filter_products(args)
             products = getting_products()
-            select_modul_without_date = create_select_modul()
-            select_modul = select_modul_without_date.where(
+            select_module_without_date = create_select_module()
+            select_module = select_module_without_date.where(
                         DB_orders.date_create >= date_start_search,
                         DB_orders.date_create <= date_finish_search)
             if id_orders_client and id_orders_products:
                 orders = list(set(id_orders_client) & set(id_orders_products))
-                # orders = [x for x in id_orders_client if x in id_orders_products]
             else:
                 orders = id_orders_client + id_orders_products
             
             if not orders and status_order == 'false':
                 stmt = (
-                    select_modul
+                    select_module
                     .where(DB_orders.status_order == status_order)
                     .order_by(DB_orders.date_plane_send, DB_orders.id_order))
             elif status_order == 'all':
                 if not orders:
                     stmt = (
-                        select_modul
+                        select_module
                         .order_by(DB_orders.id_order))
                 else:
                     stmt = (
-                        select_modul
+                        select_module
                         .where(DB_orders.id_order.in_(orders))
                         .order_by(DB_orders.id_order))
             else:
                 if not orders:
                     stmt = (
-                        select_modul
+                        select_module
                         .where(DB_orders.status_order == status_order)
                         .order_by(DB_orders.id_order))
                 else:
                     stmt = (
-                        select_modul
+                        select_module
                         .where(DB_orders.id_order.in_(orders))
                         .where(DB_orders.status_order == status_order)
                         .order_by(DB_orders.id_order))
@@ -197,7 +192,7 @@ def main_page():
 
             if not list_order:
                 subq = select(func.max(DB_orders.id_order)).scalar_subquery()
-                stmt = select_modul_without_date.where(DB_orders.id_order == subq)
+                stmt = select_module_without_date.where(DB_orders.id_order == subq)
                 list_order = session.execute(stmt).all()
 
             full_block = []
@@ -209,15 +204,6 @@ def main_page():
                     colors.append(products.get(model)[1])
                     comment_product.append(products.get(model)[2])
                 
-                qty_pars = (row.qty_pars)
-                phase_1 = row.phase_1
-                phase_2 = row.phase_2
-                phase_3 = row.phase_3
-                if len(qty_pars) == 1:
-                    qty_pars, phase_1, phase_2, phase_3, colors, article, comment_product =\
-                        qty_pars[0], phase_1[0], phase_2[0], phase_3[0],\
-                        colors[0], article[0], comment_product[0]
-                
                 full_block.append({
                     "id_order": row.id_order,
                     "comment_order": row.comment,
@@ -225,10 +211,10 @@ def main_page():
                     "kolor_model": colors,
                     "kod_model": article,
                     "comment_model": comment_product,
-                    "quantity_pars_model": qty_pars,
-                    "phase_1": phase_1,
-                    "phase_2": phase_2,
-                    "phase_3": phase_3,
+                    "quantity_pars_model": row.qty_pars,
+                    "phase_1": row.phase_1,
+                    "phase_2": row.phase_2,
+                    "phase_3": row.phase_3,
                     "sum_payment": (row.sum_payment - row.discount),
                     "real_money": row.my_sum,
                     "phone_client": row.phone_order,
@@ -244,5 +230,5 @@ def main_page():
 
         return jsonify(full_block), 200
     except Exception as e: # pragma: no cover
-        logger.exception(e) # pragma: no cover
-        return jsonify(f'Error in function main_page: {e}'), 400 # pragma: no cover
+        logger.exception(e)
+        return jsonify(f'Error in function main_page: {e}'), 400

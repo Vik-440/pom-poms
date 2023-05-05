@@ -57,6 +57,5 @@ def errors_validate_consumption(data: dict):
         error = validate_field(field, field_type, data)
         if error:
             return error
-        if data[field] is None:
-            data[field] = 0
+        data[field] = data[field] or 0
     return

@@ -191,7 +191,7 @@ def test_chenge_one_material_weight(app_fixture):
 
 
 @pytest.mark.run(order=100091)
-def test_chenge_one_material_weight_with_none(app_fixture):
+def test_change_one_material_weight_with_null(app_fixture):
     client = app_fixture.test_client()
     data = {
         'edit_spool_qty': -1,
@@ -220,4 +220,17 @@ def test_get_one_material_2(app_fixture):
         'manufacturer': 'Ровно',
         'reserve': 0,
         'weight_10m': 12.67}
+    assert response.json == expected_data
+
+
+@pytest.mark.run(order=100110)
+def test_change_one_material_weight_with_none(app_fixture):
+    client = app_fixture.test_client()
+    data = {
+        'edit_spool_qty': 0,
+        'edit_weight': None}
+    headers = {'Content-Type': 'application/json'}
+    response = client.put('/materials/consumption/1', data=json.dumps(data), headers=headers)
+    assert response.status_code == 202
+    expected_data = { 'spool_qty': 3, 'net_weight': 3994}
     assert response.json == expected_data

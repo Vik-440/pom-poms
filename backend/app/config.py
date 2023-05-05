@@ -1,6 +1,4 @@
 from dotenv import load_dotenv
-from flask_cors import CORS
-import psycopg2
 import os
 
 basedir = os.path.abspath(os.path.dirname(__file__))

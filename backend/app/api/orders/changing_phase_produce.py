@@ -2,7 +2,7 @@
 
 from flask import request, jsonify
 from sqlalchemy.orm import Session
-from sqlalchemy import update, select
+from sqlalchemy import update
 from app.orders.models import DB_orders
 from app.orders.validator import validate_id_order, validate_phases
 from werkzeug.exceptions import BadRequest
@@ -14,17 +14,19 @@ from log.logger import logger
 
 @api.route('/main/phase/<int:id_order>', methods=['PUT'])
 @swag_from('/docs/put_main_phase.yml')
-def main_phase_get(id_order):
+def change_main_phase(id_order):
     """Module for changing phases in order"""
     try:
         data = request.get_json(force=True)
     except BadRequest:
         logger.error('phases(PUT) - format json is not correct')
         return jsonify({'phases(PUT)': 'json format is not correct'}), 400
+    
     error_id_order = validate_id_order(id_order)
     if error_id_order:
         logger.error(f'{error_id_order}')
         return jsonify(error_id_order), 400
+    
     error_phases_data = validate_phases(id_order, data)
     if error_phases_data:
         logger.error(f'{error_phases_data}')
@@ -43,5 +45,5 @@ def main_phase_get(id_order):
             session.commit()
         return jsonify({"message": "excellent"}), 200
     except Exception as e: # pragma: no cover
-        logger.error(f'Error in put_main_phases: {e}') # pragma: no cover
-        return f'Error in put_main_phases: {e}', 400 # pragma: no cover
+        logger.error(f'Error in put_main_phases: {e}')
+        return f'Error in put_main_phases: {e}', 400
