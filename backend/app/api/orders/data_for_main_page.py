@@ -55,37 +55,33 @@ def getting_filter_clients(args: dict) -> list:
 def getting_filter_products(args: dict) -> list:
     """Getting orders with searching products into"""
     filters_products = {
-                'kod_model': DB_product.article,
-                'kod_model_like': DB_product.article,
-                'kolor_like': DB_product.colors}            
-    id_products_list = []
+        'kod_model': DB_product.article,
+        'kod_model_like': DB_product.article,
+        'kolor_like': DB_product.colors}
+
+    id_orders_products = set()
+
     with Session(engine) as session:
         for key, value in filters_products.items():
             if key in args:
+                stmt = select(DB_product.id_product).order_by(DB_product.id_product)
+
                 if key == 'kod_model':
-                    stmt = (
-                        select(DB_product.id_product)
-                        .where(value == args[key])
-                        .order_by(DB_product.id_product))
+                    stmt = stmt.where(value == args[key])
                 else:
-                    value = ('%' + str(args.get(key)) + '%')
-                    stmt = (
-                        select(DB_product.id_product)
-                        .where(filters_products[key].ilike(value))
-                        .order_by(DB_product.id_product))
-                pre_list = session.execute(stmt).scalars()
-                for id_product in pre_list:
-                    id_products_list.append(id_product)
-        id_orders_products = []
-        for id_model_cycle in id_products_list:
-            stmt = (
-                select(DB_orders.id_order)
-                .where(DB_orders.id_models.any(id_model_cycle)))
-            pre_list = session.execute(stmt).scalars()
-            for order in pre_list:
-                id_orders_products.append(order)
-            # id_orders_products = [order for order in session.execute(stmt).scalars()]
-    return id_orders_products
+                    search_value = f"%{args.get(key)}%"
+                    stmt = stmt.where(value.ilike(search_value))
+                result = session.execute(stmt).scalars()
+
+                id_products = [id_product for id_product in result] if result is not None else []
+
+                for id_model_cycle in id_products:
+                    stmt = select(DB_orders.id_order).where(DB_orders.id_models.any(id_model_cycle))
+                    result = session.execute(stmt).scalars()
+                    id_orders_products.update([id_order for id_order in result] if result is not None else [])
+
+    return list(id_orders_products)
+
 
 
 def getting_products() -> dict:
@@ -143,8 +139,6 @@ def create_select_module():
 def main_page():
     """Preparing main page with or without same requests"""
     args = request.args
-    # logger.info(f'Get main works in API with args: {args}')
-
     try:
         with Session(engine) as session:
             date_start_search, date_finish_search, status_order = getting_args_general(args)
@@ -156,10 +150,20 @@ def main_page():
             select_module = select_module_without_date.where(
                         DB_orders.date_create >= date_start_search,
                         DB_orders.date_create <= date_finish_search)
+            
+            # if id_orders_client and id_orders_products:
+            #     orders = list(set(id_orders_client) & set(id_orders_products))
+            # else:
+            #     orders = id_orders_client + id_orders_products
+            
+
             if id_orders_client and id_orders_products:
                 orders = list(set(id_orders_client) & set(id_orders_products))
-            else:
+            elif id_orders_client or id_orders_products:
                 orders = id_orders_client + id_orders_products
+            else:
+                orders = []
+   
             
             if not orders and status_order == 'false':
                 stmt = (
@@ -188,6 +192,7 @@ def main_page():
                         .where(DB_orders.id_order.in_(orders))
                         .where(DB_orders.status_order == status_order)
                         .order_by(DB_orders.id_order))
+            stmt = stmt.limit(100)
             list_order = session.execute(stmt).all()
 
             if not list_order:
