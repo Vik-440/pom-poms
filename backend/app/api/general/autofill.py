@@ -173,7 +173,7 @@ def autofill_fields():
             if result is not None:
                 return jsonify(result)
 
-        return jsonify({'autofill': 'request does not have searching keys'}), 400
+        return jsonify({'autofill': 'request does not have searching keys'}), 200
 
     except Exception as e: # pragma: no cover
         logger.info(f'mistake autofill: {e}')

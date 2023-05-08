@@ -2,7 +2,7 @@
 
 from datetime import datetime
 from flask import request, jsonify
-from sqlalchemy import func, select#, or_, and_, join, table
+from sqlalchemy import func, select
 from sqlalchemy.orm import Session, aliased
 
 from app.orders.models import DB_orders
@@ -46,9 +46,8 @@ def getting_filter_clients(args: dict) -> list:
                     .join(DB_client, DB_orders.id_client == DB_client.id_client)
                     .where(value == args[key])
                     .order_by(DB_client.id_client))
-                pre_list = session.execute(stmt).scalars()
-                for order in pre_list:
-                    id_orders_client.append(order)
+                result = session.execute(stmt).scalars()
+                id_orders_client = [id_client for id_client in result] if result is not None else []
     return id_orders_client
 
 
@@ -148,14 +147,7 @@ def main_page():
             products = getting_products()
             select_module_without_date = create_select_module()
             select_module = select_module_without_date.where(
-                        DB_orders.date_create >= date_start_search,
-                        DB_orders.date_create <= date_finish_search)
-            
-            # if id_orders_client and id_orders_products:
-            #     orders = list(set(id_orders_client) & set(id_orders_products))
-            # else:
-            #     orders = id_orders_client + id_orders_products
-            
+                DB_orders.date_create.between(date_start_search, date_finish_search))
 
             if id_orders_client and id_orders_products:
                 orders = list(set(id_orders_client) & set(id_orders_products))
@@ -164,7 +156,6 @@ def main_page():
             else:
                 orders = []
    
-            
             if not orders and status_order == 'false':
                 stmt = (
                     select_module
