@@ -250,7 +250,8 @@ def consumption_material(id_material) -> dict:
             session.commit()
         return jsonify({
             'spool_qty': spool_qty_result,
-            'net_weight': net_weight_result}), 202
+            'net_weight': net_weight_result,
+            'weight': material.weight,}), 202
     except: # pragma: no cover
         logger.error({'consumption_material_(PUT)': 'error in DB'}) # pragma: no cover
         return jsonify({'consumption_material': 'error in DB'}), 400 # pragma: no cover

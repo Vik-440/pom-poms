@@ -185,7 +185,7 @@ def test_chenge_one_material_weight(app_fixture):
     headers = {'Content-Type': 'application/json'}
     response = client.put('/materials/consumption/1', data=json.dumps(data), headers=headers)
     assert response.status_code == 202
-    expected_data = { 'spool_qty': 4, 'net_weight': 3844}
+    expected_data = { 'spool_qty': 4, 'net_weight': 3844, 'weight': 5555}
     assert response.json == expected_data
     # print(response.json)
 
@@ -199,7 +199,7 @@ def test_change_one_material_weight_with_null(app_fixture):
     headers = {'Content-Type': 'application/json'}
     response = client.put('/materials/consumption/1', data=json.dumps(data), headers=headers)
     assert response.status_code == 202
-    expected_data = { 'spool_qty': 3, 'net_weight': 3994}
+    expected_data = { 'spool_qty': 3, 'net_weight': 3994, 'weight': 4444}
     assert response.json == expected_data
 
 
@@ -232,5 +232,5 @@ def test_change_one_material_weight_with_none(app_fixture):
     headers = {'Content-Type': 'application/json'}
     response = client.put('/materials/consumption/1', data=json.dumps(data), headers=headers)
     assert response.status_code == 202
-    expected_data = { 'spool_qty': 3, 'net_weight': 3994}
+    expected_data = { 'spool_qty': 3, 'net_weight': 3994, 'weight': 4444}
     assert response.json == expected_data
