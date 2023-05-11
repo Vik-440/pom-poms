@@ -223,6 +223,7 @@ export class ReserveComponent implements OnInit {
         this.materialForm.patchValue({
           id_material: data.id_material,
         });
+        this.idEditMaterial = data.id_material;
         this.getAllMaterials();
         this.isNewMaterial = false;
       },
