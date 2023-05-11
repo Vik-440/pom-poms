@@ -34,14 +34,20 @@
     width: 171px
     text-align: center
     &--intp
-      width: 85px
+      width: 60px
       height: 26px
       border: none
       padding: 0 !important
       margin: 0
       background: transparent
+      &.weight 
+        width: 110px
       &:active 
         display: block
+      &:focus
+        outline: none
+        border: 2px solid #5d5d5d
+        border-radius: 0px
   &--materials
     margin: 0px 17px 0px 22px
     margin-left: 22px !important
@@ -49,6 +55,7 @@
 .name-color
   text-align: left
   padding-left: 5px
+  
 .reserve-tables
   display: flex
 
@@ -84,11 +91,11 @@
       font-size: 16px
       line-height: 12px
       color: #727272
+      margin-bottom: 5px
 
 
   ::ng-deep
     .ng-select
-      width: 185px
       height: 25px
       background: #FFFFFF
       border: 0.5px solid #727272
@@ -127,6 +134,7 @@
     &--field
       display: flex
       background: #E5E9F2
+      position: relative
       &-title
         width: 186px
         height: 26px
@@ -135,14 +143,17 @@
         border-right: $border-main
         padding-left: 16px
         box-sizing: content-box
-        &.name-color
-          border: none
-          border-bottom: $border-main
-          border-right: $border-main
-          max-width: 142px
-          &:focus
-            outline: none
+        & .name-color
+            border: none
             border-bottom: $border-main
+            border-right: $border-main
+            width: 100%
+            background: none
+            border: none
+            padding-left: 0px
+            &:focus
+              outline: none
+              border-bottom: $border-main
       &-inp
         width: 87px
         border: none
@@ -155,6 +166,8 @@
         &:focus
           outline: none
           border-bottom: $border-main
+        &:read-only
+          background: #b9b9b9
       &-note
         background: #E5E9F2
         border-top: 3px solid #203B4A
@@ -172,7 +185,12 @@
           &:focus
             outline: none
             border: none
-          
+
+.invalid 
+  right: -10px 
+  transform: translate(-50%, -50%) scale(1.8)   
+  &.invalid-name
+    right: 85px   
 .save-btn
   border: none
   background: $btn-save
@@ -200,7 +218,23 @@
   & .table th
     border: 1px solid #5d5d5d
 
+.row-btn
+  border: none
+  padding-left: 5px
+
+input[type='number']::-webkit-outer-spin-button,
+input[type='number']::-webkit-inner-spin-button 
+    -webkit-appearance: none
+button
+  &:active
+    transform: scale(0.9)  
+
 ::ng-deep .reserve-page
+  .showTooltip-default .ngd-tooltip-window
+    display: block !important
+    .default-show 
+      display: block
+      opacity: 0.9
   .table-bordered th, .table-bordered td 
     border-color: #5d5d5d
   .ng-select.ng-select-single .ng-select-container .ng-value-container .ng-input

@@ -4,40 +4,54 @@
       <table class="table table-lg table-bordered mb-0">
         <thead>
           <tr class="center-data">
-            <th scope="col" sortable="id_order" class="id">id</th>
+            <th scope="col" sortable="id_order" class="id">Ном.</th>
             <th scope="col" sortable="data_order" class="color">колір</th>
             <th scope="col" sortable="width" class="width">ширина </th>
             <th scope="col" sortable="babin" class="babin">бабін</th>
             <th class="quantity" scope="col" sortable="quantity_pars_model" class="clean-width">чиста вага</th>
             <th class="epmty"></th>
-            <th colspan="2" scope="col" sortable="id_order" class="mat-val ml22">мат / зміна / втулк</th>
+            <th colspan="2" scope="col" sortable="id_order" class="mat-val ml22">мат / втулк</th>
           </tr>
         </thead>
         <tbody>
-          <ng-container *ngFor="let item of reserveItems; let index = index">
+          <ng-container *ngFor="let material of materials; let index = index">
             <tr>
-              <td [class.grey]="idEdit === item.id_material" (click)="editItem(item.id_material)">{{ item.id_material }}</td>
-              <td [class.grey]="idEdit === item.id_material" (click)="editItem(item.id_material)" class="name-color">{{
-                item.name }}</td>
-              <td [class.grey]="idEdit === item.id_material" (click)="editItem(item.id_material)">{{ item.width}}</td>
-              <td [class.grey]="idEdit === item.id_material" (click)="editItem(item.id_material)"> {{ item.spool_qty}}</td>
-              <td [class.grey]="idEdit === item.id_material" (click)="editItem(item.id_material)">{{ item.net_weight}}</td>
+              <td [class.grey]="idEditMaterial === material.id_material" (click)="openMaterial(material.id_material)">{{ getNumberMaterial(material.name) }}</td>
+              <td [class.grey]="idEditMaterial === material.id_material" (click)="openMaterial(material.id_material)" class="name-color">{{
+                material.name }}</td>
+              <td [class.grey]="idEditMaterial === material.id_material" (click)="openMaterial(material.id_material)">{{ material.width}}</td>
+              <td [class.grey]="idEditMaterial === material.id_material" (click)="openMaterial(material.id_material)"> {{ material.spool_qty}}</td>
+              <td [class.grey]="idEditMaterial === material.id_material" (click)="openMaterial(material.id_material)">{{ material.net_weight}}</td>
    
               <td class="epmty"></td>
+              <td class="white" [class.showTooltip-default]="isShowOk && idChangeMaterial === material.id_material">
+                <input #tooltipElementWeight="ngbTooltip"     
+                  triggers=""    
+                  id="editWeight"
+                  (clickOutside)="clearChangesMaterials()"
+                  [exclude]="'#editSpoolQty, #btnOk'" 
+                  [ngbTooltip]="" type="text" class="mat-val--intp weight"
+                  [value]="material?.edit_weight"
+                  (keyup)="changeMaterial(material, $event.target.value, 'edit_weight', material.id_material, index)"
+                  (keyup.enter)="saveChangedMaterial(material, 'edit_weight', $event.target, index)">
+              </td>
               <td class="white">
-                <input type="number" class="mat-val--intp"
-                  [value]="reverseItemsCorrect.controls[index].value?.edit_weight"
-                  (keyup.enter)="calculateMat(reverseItemsCorrect.controls[index])"
-                  (change)="changeMaterial(reverseItemsCorrect.controls[index], $event.target.value, 'edit_weight', item.id_material)">
+                  <input type="text" class="mat-val--intp" id="editSpoolQty"
+                  (clickOutside)="clearChangesMaterials()" 
+                  [exclude]="'#editWeight, #btnOk'" 
+                  triggers=""
+                  [ngbTooltip]=""
+                  #tooltipElementQty="ngbTooltip"
+                  [value]="material.edit_spool_qty"
+                  (keyup)="changeMaterial(material, $event.target.value, 'edit_spool_qty', material.id_material, index)"
+                  (keyup.enter)="saveChangedMaterial(material, 'edit_spool_qty', $event.target, index)">
               </td>
-              <td class="white"><input type="number" class="mat-val--intp"
-                  [value]="reverseItemsCorrect.controls[index].value.edit_spool_qty"
-                  (change)="changeMaterial(reverseItemsCorrect.controls[index], $event.target.value, 'edit_spool_qty', item.id_material)">
+              <td class="row-btn">
+                <button data-info="btn-ok" id="btnOk" (click)="saveChangesMaterial(material)"
+                  class="btn-icon display-none" [class.display-show]="isShowOk && idChangeMaterial === material.id_material">
+                  <img class="next-icon icon" src="./assets/img/icons/ok.svg" />
+                </button>
               </td>
-              <button (click)="saveChangesMat(item.id_material, reverseItemsCorrect.controls[index])"
-                class="btn-icon display-none" [class.display-show]="!isHideOk && idChange.includes(item.id_material)">
-                <img class="next-icon icon" src="./assets/img/icons/ok.svg" />
-              </button>
             </tr>
           </ng-container>
         </tbody>
@@ -49,53 +63,73 @@
         <div class="materials-title title">Матеріали</div>
         <div class="materials-active">
           <p class="materials-active--title">наявність</p>
-          <ng-select bindLabel="name" [(ngModel)]="filterMaterial" [items]="materialFilter" bindValue="value">
+          <ng-select bindLabel="name" [(ngModel)]="availabilityData" [items]="availabilityFilters" bindValue="key" bindLabel="value">
           </ng-select>
         </div>
         <button class="materials-apply" (click)="getMaterialByFilter()">
           Застосувати
         </button>
       </div>
-      <div class="block-edit" [formGroup]="reverseItemData" #blockEdit>
+      <div class="block-edit" [formGroup]="materialForm" #blockEdit>
         <div class="edit-header">
           <p class="title"> {{ isNewMaterial ? 'Створити' : 'Редагувати'}}</p>
-          <button (click)="createMaterial()" class="create-btn">Створити</button>
+          <button (click)="startCreateMaterial()" class="create-btn">Створити</button>
         </div>
         <div class="edit-table">
           <div class="edit-table--field">
-            <input class="edit-table--field-title name-color" placeholder="назва матеріалу" formControlName="name">
-            <input type="text" class="edit-table--field-inp" formControlName="id_material">
+            <p class="edit-table--field-title">
+              <input class="name-color" placeholder="назва матеріалу" formControlName="name">
+            </p>
+            <i *ngIf="materialForm.errors?.name"
+            [ngbTooltip]="materialForm.errors.name" class="invalid invalid-name bi bi-exclamation"></i>
+            <input type="text" class="edit-table--field-inp" formControlName="id_material" [readonly]="isNewMaterial">
           </div>
           <div class="edit-table--field">
             <p class="edit-table--field-title">ширина, мм</p>
+            <i *ngIf="materialForm.errors?.width"
+            [ngbTooltip]="materialForm.errors.width" class="invalid bi bi-exclamation"></i>
             <input type="number" class="edit-table--field-inp" formControlName="width">
           </div>
           <div class="edit-table--field">
             <p class="edit-table--field-title">товщина, мкм</p>
+            <i *ngIf="materialForm.errors?.thickness"
+            [ngbTooltip]="materialForm.errors.thickness" class="invalid bi bi-exclamation"></i>
             <input type="number" class="edit-table--field-inp" formControlName="thickness">
           </div>
           <div class="edit-table--field">
             <p class="edit-table--field-title">виробник</p>
+            <i *ngIf="materialForm.errors?.manufacturer"
+            [ngbTooltip]="materialForm.errors.manufacturer" class="invalid bi bi-exclamation"></i>
             <input type="text" class="edit-table--field-inp" formControlName="manufacturer">
           </div>
           <div class="edit-table--field">
             <p class="edit-table--field-title">вага втулки, гр</p>
+            <i *ngIf="materialForm.errors?.spool_weight"
+            [ngbTooltip]="materialForm.errors.spool_weight" class="invalid bi bi-exclamation"></i>
             <input type="number" class="edit-table--field-inp" formControlName="spool_weight">
           </div>
           <div class="edit-table--field">
             <p class="edit-table--field-title">вага (10м), гр</p>
+            <i *ngIf="materialForm.errors?.weight_10m"
+            [ngbTooltip]="materialForm.errors.weight_10m" class="invalid bi bi-exclamation"></i>
             <input type="number" class="edit-table--field-inp" formControlName="weight_10m">
           </div>
           <div class="edit-table--field">
             <p class="edit-table--field-title">резерв, гр</p>
             <input type="number" class="edit-table--field-inp" formControlName="reserve">
+            <i *ngIf="materialForm.errors?.reserve"
+            [ngbTooltip]="materialForm.errors.reserve" class="invalid bi bi-exclamation"></i>
           </div>
           <div class="edit-table--field">
             <p class="edit-table--field-title">кількість бабін</p>
+            <i *ngIf="materialForm.errors?.spool_qty"
+            [ngbTooltip]="materialForm.errors.spool_qty" class="invalid bi bi-exclamation"></i>
             <input type="number" class="edit-table--field-inp" formControlName="spool_qty">
           </div>
           <div class="edit-table--field">
             <p class="edit-table--field-title">повна вага</p>
+            <i *ngIf="materialForm.errors?.weight"
+            [ngbTooltip]="materialForm.errors.weight" class="invalid bi bi-exclamation"></i>
             <input type="number" class="edit-table--field-inp" formControlName="weight">
           </div>
           <div class="edit-table--field-note">
@@ -103,10 +137,10 @@
             </textarea>
           </div>
         </div>
-        <button class="save-btn" *ngIf="isNewMaterial" (click)="saveMaterial()" [disabled]="reverseItemData.invalid">
+        <button class="save-btn" *ngIf="isNewMaterial" (click)="saveMaterial()" [disabled]="materialForm.invalid">
           Зберегти
         </button>
-        <button class="action-btn edit-btn" *ngIf="!isNewMaterial" (click)="editMaterial()" [disabled]="reverseItemData.invalid">
+        <button class="action-btn edit-btn" *ngIf="!isNewMaterial" (click)="editMaterial()" [disabled]="materialForm.invalid">
           Редагувати
         </button>
       </div>

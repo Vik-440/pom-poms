@@ -1,7 +1,11 @@
-import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { switchMap } from 'rxjs';
+import { Component, HostListener, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { MaterialPageService } from '../services/materials.service';
+import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
+import { calculateString } from '../utils/calcstring';
+import { interval, takeWhile } from 'rxjs';
+import { AlertInterface } from '../interfaces/alert';
+import { ConsumptionDataInterface, MaterialFormInterface, MaterialsItemInterface } from '../interfaces/materials';
 
 @Component({
   selector: 'app-reserve',
@@ -10,226 +14,254 @@ import { MaterialPageService } from '../services/materials.service';
 })
 export class ReserveComponent implements OnInit {
   constructor(private _serviceMaterial: MaterialPageService, private _fb: FormBuilder) {}
-  materialFilter = [];
-  reverseItemData: FormGroup;
-  reserveItems;
-  reverseItemsCorrect = this._fb.array([]);
-  idEdit = null;
-  isNewMaterial = true;
-  idChange = [];
-  isHideOk = true;
-  filterMaterial = null;
-  isShowSpinner = false;
+
+  materials: MaterialsItemInterface[] = [];
+  availabilityFilters = [
+    {
+      value: 'всі матеріали',
+      key: 'all',
+    },
+    {
+      value: 'матеріали в наявності',
+      key: null,
+    },
+  ];
+  availabilityData: string | null;
+  materialForm: FormGroup;
+  isNewMaterial: boolean = true;
+  isShowOk: boolean = false;
+  idChangeMaterial: number;
+  intervalShowTooltip;
+  isShowTooltip: boolean = false;
+  idEditMaterial: number;
+  isShowSpinner: boolean = false;
   alert = {
+    isShow: false,
     type: '',
     message: '',
-    isShow: false,
   };
+
+  @ViewChildren('tooltipElementWeight') tooltipElementWeight: QueryList<NgbTooltip>;
+  @ViewChildren('tooltipElementQty') tooltipElementQty: QueryList<NgbTooltip>;
   @ViewChild('blockEdit', { static: true }) blockEdit;
-  @HostListener('window:scroll', ['$event']) // for window scroll events
+  @HostListener('window:scroll', ['$event'])
   onScroll() {
     this.blockEdit.nativeElement.setAttribute('style', `top: ${window.scrollY}px`);
   }
 
   ngOnInit(): void {
-    this.getMaterialList();
-    this.materialFilter = [
-      { value: 'all', name: 'всі матеріали' },
-      { value: null, name: 'матеріали в наявності' },
-    ];
-    this.reverseItemData = this._fb.group({
-      id_material: '',
-      name: ['', Validators.required],
-      width: [null, Validators.required],
-      thickness: [null, Validators.required],
-      manufacturer: ['', Validators.required],
-      spool_weight: null,
-      weight_10m: [null, Validators.required],
-      reserve: [null, Validators.required],
-      spool_qty: [null, Validators.required],
-      weight: [null, Validators.required],
-      comment: '',
-    });
+    this.getAllMaterials();
+    this.createMaterialForm();
   }
 
-  getMaterialList() {
-    this._serviceMaterial.getListMaterial().subscribe(
-      (data: any) => {
-        this.prepareListMaterial(data);
-      },
-      () => {}
-    );
-  }
-
-  prepareListMaterial(data) {
-    this.reserveItems = data.sort((a, b) => a.name - b.name);
-    this.reserveItems.map(() => {
-      this.reverseItemsCorrect.push(
-        this._fb.group({
-          edit_spool_qty: null,
-          edit_weight: null,
-        })
-      );
-    });
-  }
-
-  editItem(id) {
-    this._serviceMaterial.getFullInfoMaterial(id).subscribe((data: any) => {
-      this.idEdit = id;
-      this.isNewMaterial = false;
-      this.reverseItemData.patchValue({
-        id_material: data.id_material,
-        name: data.name,
-        width: data.width,
-        thickness: data.thickness,
-        manufacturer: data.manufacturer,
-        spool_weight: data.spool_weight,
-        weight_10m: data.weight_10m,
-        reserve: data.reserve,
-        spool_qty: data.spool_qty,
-        weight: data.weight,
-        comment: data.comment,
+  getAllMaterials() {
+    this.isShowSpinner = true;
+    this._serviceMaterial.getListMaterial().subscribe((data: MaterialsItemInterface[]) => {
+      this.prepareMaterial(data);
+      this.isShowSpinner = false;
+      this.showMessageAlert({
+        isShow: true,
+        type: 'success',
+        message: 'Дані завантажено',
       });
-    }, () => {
-        this.showAlert('danger', 'Щось не так');
     });
   }
 
-  createMaterial() {
-    this.idEdit = null;
+  getNumberMaterial(name: string) {
+    if (name.includes('/') || name.includes('-')) {
+      const result = name.split('/')[0];
+      return result.length === name.length ? name.split('-')[0] : result;
+    }
+    return name;
+  }
+
+  createMaterialForm() {
+    this.materialForm = this._fb.group({
+      comment: '',
+      id_material: null,
+      manufacturer: '',
+      name: '',
+      reserve: null,
+      spool_qty: null,
+      spool_weight: null,
+      thickness: null,
+      weight: null,
+      weight_10m: null,
+      width: null,
+    });
+  }
+
+  changesMaterialForm() {
+    this.materialForm.valueChanges.subscribe(() => {});
+  }
+
+  prepareMaterial(data) {
+    this.materials = data
+      .map((material) => {
+        material.edit_spool_qty = null;
+        material.edit_weight = null;
+        return material;
+      })
+      .sort((one, two) => (one.name > two.name ? 1 : -1));
+  }
+
+  getMaterialByFilter() {
+    this.isShowSpinner = true;
+    this._serviceMaterial
+      .getListMaterial(
+        this.availabilityData
+          ? {
+              available: this.availabilityData,
+            }
+          : {}
+      )
+      .subscribe((data: MaterialsItemInterface[]) => {
+        this.isShowSpinner = false;
+        this.prepareMaterial(data);
+        this.showMessageAlert({
+          isShow: true,
+          type: 'success',
+          message: 'Дані завантажено',
+        });
+      });
+  }
+
+  openMaterial(id: number) {
+    this.idEditMaterial = id;
+    this._serviceMaterial.getFullInfoMaterial(id).subscribe((data: MaterialFormInterface) => {
+      this.materialForm = this._fb.group({
+        ...data,
+      });
+      this.isNewMaterial = false;
+      this.changesMaterialForm();
+    });
+  }
+
+  startCreateMaterial() {
+    this.createMaterialForm();
     this.isNewMaterial = true;
-    this.reverseItemData.reset();
+    this.idEditMaterial = null;
+  }
+
+  changeMaterial(item, value, field, id, index) {
+    const arrayTooltips = field === 'edit_weight' ? this.tooltipElementWeight.toArray() : this.tooltipElementQty.toArray();
+    const regex = /[+\-*/]/g;
+    const matches = value.match(regex);
+    arrayTooltips[index].close();
+    if (Number.isNaN(+value) && matches) {
+      arrayTooltips[index].ngbTooltip = Number.isNaN(calculateString(value)) ? '' : String(calculateString(value));
+      this.isShowTooltip = true;
+      interval(500)
+        .pipe(takeWhile(() => this.isShowTooltip))
+        .subscribe(() => {
+          arrayTooltips[index].open();
+        });
+      this.isShowOk = false;
+    } else if (!Number.isNaN(+value)) {
+      item[field] = value;
+
+      const valid =
+        (String(item.edit_weight).length && !Number.isNaN(+item.edit_weight)) ||
+        (String(item.edit_spool_qty).length && !Number.isNaN(+item.edit_spool_qty));
+      this.isShowOk = valid && !Number.isNaN(+value) ? true : false;
+    }
+    this.idChangeMaterial = id;
+  }
+
+  saveChangedMaterial(material, field, target, index) {
+    const value = target.value;
+    target.blur();
+    material[field] = calculateString(value);
+    this.isShowTooltip = false;
+    this.isShowOk = true;
+    field === 'edit_weight' ? this.tooltipElementWeight.toArray()[index].close() : this.tooltipElementQty.toArray()[index].close();
+  }
+
+  clearChangesMaterials() {
+    this.isShowTooltip = false;
+  }
+
+  saveChangesMaterial(material: MaterialsItemInterface) {
+    this._serviceMaterial
+      .saveConsumptionMaterial(
+        {
+          edit_spool_qty: +material.edit_spool_qty,
+          edit_weight: +material.edit_weight,
+        },
+        material.id_material
+      )
+      .subscribe((data: ConsumptionDataInterface) => {
+        material.net_weight = data.net_weight;
+        material.spool_qty = data.spool_qty;
+        material.edit_spool_qty = null;
+        material.edit_weight = null;
+        this.isShowOk = false;
+        this.showMessageAlert({
+          isShow: true,
+          type: 'success',
+          message: 'Дані збережено',
+        });
+      });
+  }
+
+  gerParamsForSaveMaterial() {
+    const params = {
+      ...this.materialForm.value,
+    };
+    delete params.id_material;
+    return params;
   }
 
   saveMaterial() {
-    this.idEdit = null;
-    const params = {
-      ...this.reverseItemData.value,
-    };
-    this.isShowSpinner = true;
-    this._serviceMaterial
-      .saveMaterial(params)
-      .pipe(
-        switchMap(() => {
-          return this._serviceMaterial.getListMaterial();
-        })
-      )
-      .subscribe(
-        (data: any[]) => {
-          this.isShowSpinner = false;
-          this.isShowSpinner = false;
-          this.prepareListMaterial(data);
-          this.reverseItemData.reset();
-        },
-        () => {
-          this.isShowSpinner = false;
-        }
-      );
+    this._serviceMaterial.saveMaterial(this.gerParamsForSaveMaterial()).subscribe(
+      (data: any) => {
+        this.showMessageAlert({
+          isShow: true,
+          type: 'success',
+          message: 'Матеріал збережено',
+        });
+        this.materialForm.patchValue({
+          id_material: data.id_material,
+        });
+        this.getAllMaterials();
+        this.isNewMaterial = false;
+      },
+      ({ error }) => {
+        this.materialForm.setErrors(error);
+        this.showMessageAlert({
+          isShow: true,
+          type: 'danger',
+          message: 'Щось пішло не так',
+        });
+      }
+    );
   }
 
   editMaterial() {
-    const params = {
-      ...this.reverseItemData.value,
-    };
-    delete params.id_material;
-    this.isShowSpinner = true;
-    this._serviceMaterial
-      .editMaterial(params, this.reverseItemData.value.id_material)
-      .pipe(
-        switchMap(() => {
-          return this._serviceMaterial.getListMaterial();
-        })
-      )
-      .subscribe(
-        (data: any[]) => {
-          this.isShowSpinner = false;
-          this.prepareListMaterial(data);
-          this.isShowSpinner = false;
-          this.reverseItemData.reset();
-        },
-        () => {
-          this.isShowSpinner = false;
-        }
-      );
-  }
-  getMaterialByFilter() {
-    this.isShowSpinner = true;
-    this._serviceMaterial.getListMaterial(this.filterMaterial ? { available: this.filterMaterial } : {}).subscribe(
-      (data: any) => {
-        this.prepareListMaterial(data);
-        this.isShowSpinner = false;
-      },
-      (err) => {
-        this.isShowSpinner = false;
-        this.reserveItems = [];
-        this.showAlert('danger', err.error.materials);
-      }
-    );
-  }
-
-  calculateMat(form) {
-    form.patchValue({
-      weight: this.calculateWeight(form.value.weight),
-    });
-  }
-
-  calculateWeight(value) {
-    let total = 0;
-    value = value.toString().match(/[+\-]*(\.\d+|\d+(\.\d+)?)/g) || [];
-    while (value.length) {
-      total += parseFloat(value.shift());
-    }
-    return total;
-  }
-
-  changeMaterial(item, value, field, id) {
-    this.idChange.push(id);
-    this.isHideOk = false;
-    item.patchValue({
-      [field]: +value,
-    });
-  }
-
-  saveChangesMat(id, item) {
-    this.isShowSpinner = true;
-    this._serviceMaterial.saveConsumptionMaterial(item.value, id).subscribe(
-      (data: any) => {
-        this.isShowSpinner = false;
-        this.idChange = this.idChange.filter((i) => i !== id);
-        this.reserveItems.forEach((item) => {
-          if (item.id_material === id) {
-            item.net_weight = data.net_weight;
-            item.spool_qty = data.spool_qty;
-          }
-        });
-        this.reverseItemData.patchValue({
-          edit_spool_qty: this.reverseItemData.value.edit_spool_qty + item.value.edit_spool_qty,
-          edit_weight: this.reverseItemData.value.edit_weight + item.value.edit_weight,
-        });
-        this.isShowSpinner = false;
-
-        this.showAlert('success', 'Дані збережено');
-        item.reset();
-      },
-      () => {
-        this.isShowSpinner = false;
-        this.showAlert('danger', 'Уппс, щось пішло не так');
-      }
-    );
-  }
-
-  showAlert(type, message) {
-    this.alert = {
+    this._serviceMaterial.editMaterial(this.gerParamsForSaveMaterial(), this.materialForm.value.id_material).subscribe((data: any) => {
+      this.showMessageAlert({
         isShow: true,
-        type: type,
-        message: message,
-      };
-      setTimeout(() => {
-        this.alertChange(false);
-      }, 3000);
+        type: 'success',
+        message: 'Матеріал збережено',
+      });
+      this.materials.forEach((material: MaterialsItemInterface) => {
+        if (material.id_material === data.edit_material) {
+          material.width = this.materialForm.value.width;
+          material.spool_qty = this.materialForm.value.spool_qty;
+          material.net_weight = this.materialForm.value.weight - this.materialForm.value.spool_weight * this.materialForm.value.spool_qty;
+        }
+      });
+    });
   }
 
-  alertChange(e) {
-    this.alert.isShow = e;
+  showMessageAlert(alert: AlertInterface) {
+    this.alert = {
+      isShow: alert.isShow,
+      type: alert.type,
+      message: alert.message,
+    };
+    setTimeout(() => {
+      this.alert.isShow = false;
+    }, 3000);
   }
 }
