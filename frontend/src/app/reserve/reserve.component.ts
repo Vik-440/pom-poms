@@ -95,6 +95,9 @@ export class ReserveComponent implements OnInit {
   changesMaterialForm() {
     this.materialForm.valueChanges.subscribe(() => {
       this.isShowJustMaterial = false;
+
+      this.isNewMaterial = false;
+        // this.isShowJustMaterial = true;
     });
   }
 
@@ -231,6 +234,8 @@ export class ReserveComponent implements OnInit {
         this.idEditMaterial = data.id_material;
         this.getAllMaterials();
         this.isNewMaterial = false;
+        this.isShowJustMaterial = true;
+        this.changesMaterialForm();
       },
       ({ error }) => {
         this.materialForm.setErrors(error);
