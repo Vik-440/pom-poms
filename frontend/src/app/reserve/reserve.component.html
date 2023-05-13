@@ -140,8 +140,11 @@
         <button class="save-btn" *ngIf="isNewMaterial" (click)="saveMaterial()" [disabled]="materialForm.invalid">
           Зберегти
         </button>
-        <button class="action-btn edit-btn" *ngIf="!isNewMaterial" (click)="editMaterial()" [disabled]="materialForm.invalid">
+        <button class="action-btn edit-btn" *ngIf="!isNewMaterial && !isShowJustMaterial" (click)="editMaterial()" [disabled]="materialForm.invalid">
           Редагувати
+        </button>
+        <button class="ok-btn" *ngIf="isShowJustMaterial">
+          <img class="next-icon icon" src="./assets/img/icons/ok-btn.svg" />
         </button>
       </div>
     </div>

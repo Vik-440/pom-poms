@@ -31,6 +31,7 @@ export class ReserveComponent implements OnInit {
   isNewMaterial: boolean = true;
   isShowOk: boolean = false;
   idChangeMaterial: number;
+  isShowJustMaterial: boolean = false;
   intervalShowTooltip;
   isShowTooltip: boolean = false;
   idEditMaterial: number;
@@ -92,7 +93,9 @@ export class ReserveComponent implements OnInit {
   }
 
   changesMaterialForm() {
-    this.materialForm.valueChanges.subscribe(() => {});
+    this.materialForm.valueChanges.subscribe(() => {
+      this.isShowJustMaterial = false;
+    });
   }
 
   prepareMaterial(data) {
@@ -133,6 +136,7 @@ export class ReserveComponent implements OnInit {
         ...data,
       });
       this.isNewMaterial = false;
+      this.isShowJustMaterial = true;
       this.changesMaterialForm();
     });
   }
@@ -141,6 +145,7 @@ export class ReserveComponent implements OnInit {
     this.createMaterialForm();
     this.isNewMaterial = true;
     this.idEditMaterial = null;
+    this.isShowJustMaterial = false;
   }
 
   changeMaterial(item, value, field, id, index) {
@@ -159,7 +164,7 @@ export class ReserveComponent implements OnInit {
       this.isShowOk = false;
     } else if (!Number.isNaN(+value)) {
       item[field] = value;
-
+      arrayTooltips[index].ngbTooltip = value;
       const valid =
         (String(item.edit_weight).length && !Number.isNaN(+item.edit_weight)) ||
         (String(item.edit_spool_qty).length && !Number.isNaN(+item.edit_spool_qty));

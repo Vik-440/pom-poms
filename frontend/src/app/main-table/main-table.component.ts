@@ -317,7 +317,7 @@ export class MainTableComponent implements OnInit {
     let sum = 0;
     this.orders.map((item) => {
       if (!item.fulfilled_order) {
-        sum += Array.isArray(item.phase_1) ? item.phase_1.reduce((partialSum, a) => partialSum + a, 0) : item.phase_1;
+        sum += Array.isArray(item.phase_2) ? item.phase_2.reduce((partialSum, a) => partialSum + a, 0) : item.phase_2;
       }
     });
     this.queue = sum / 2;

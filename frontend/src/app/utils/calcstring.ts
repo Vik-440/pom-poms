@@ -1,48 +1,20 @@
-function add(a, b) {
-  return a + b;
-}
 
-function subtract(a, b) {
-  return a - b;
-}
 
-function multiply(a, b) {
-  return a * b;
-}
+export function calculateString(str) {
+  if(!str) return '';
+  const numbers = str.split(/[-+]/).map(Number);
+  const operators = str.replace(/[0-9]/g, '').split('');
 
-function divide(a, b) {
-  return a / b;
-}
-
-export function calculateString(expression) {
-  if(!expression) return '';
-  const numbers = expression.match(/\d+/g).map(Number);
-  const operators = expression.match(/[\+\-\*\/]/g);
   let result = numbers[0];
-  if(!operators) {
-    return expression;
-  }
-  
+
   for (let i = 0; i < operators.length; i++) {
-    const operator = operators[i];
-    const number = numbers[i + 1];
-    
-    switch (operator) {
-      case '+':
-        result = add(result, number);
-        break;
-      case '-':
-        result = subtract(result, number);
-        break;
-      case '*':
-        result = multiply(result, number);
-        break;
-      case '/':
-        result = divide(result, number);
-        break;
+    if (operators[i] === '+') {
+      result += numbers[i + 1];
+    } else if (operators[i] === '-') {
+      result -= numbers[i + 1];
     }
   }
-  
   return result;
 }
+
 
