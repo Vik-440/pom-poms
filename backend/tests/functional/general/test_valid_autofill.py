@@ -4,7 +4,7 @@ import pytest
 @pytest.mark.run(order=900010)
 def test_autofill_empty(app_fixture):
     client = app_fixture.test_client()
-    expected_data = {'args': ['phone', 'second_name', 'city', 'team',\
+    expected_data = {'args': ['phone', 'second_name', 'city', 'team',
                               'coach', 'article', 'name_material']}
     response = client.get('/autofill')
     assert response.status_code == 200
@@ -72,7 +72,6 @@ def test_autofill_article(app_fixture):
     response = client.get('/autofill', query_string=params)
     assert response.status_code == 200
     assert response.json == expected_data
-
 
 
 @pytest.mark.run(order=900080)
