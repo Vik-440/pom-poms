@@ -22,7 +22,8 @@ responses:
   "202":
     description: '{
       "spool_qty": 4,
-      "net_weight": 3561}'
+      "net_weight": 3561,
+      "weight": 4444}'
   "400":
     description: '{"materials": "discription misstake"}'
 definitions:

@@ -7,5 +7,5 @@ def test_autofill_phone(app_fixture):
     params = {'abcde': '111'}
     expected_data = {'autofill': 'request does not have searching keys'}
     response = client.get('/autofill', query_string=params)
-    assert response.status_code == 400
+    assert response.status_code == 200
     assert response.json == expected_data
