@@ -112,7 +112,7 @@
     </div>
     <div class="sum-up--item sum-up--all">
       <span class="title-text">Всього </span>
-      <input type="text" [value]="sumAll()" class="form__field" placeholder="___ / ___ / ___">
+      <input disabled type="text" [value]="sumAll()" class="form__field" placeholder="___ / ___ / ___">
     </div>
   </div>
   <div class="date-order">
@@ -161,7 +161,7 @@
       [disabled]="isDisabledBtn('new')">Оформити
       замовлення</button>
     <button class="finished-order--btn wave" *ngIf="doneOrder">Оформлено</button>
-    <button class="finished-order--btn teal-blue" (click)="copyScore()">Виставити рахунок</button>
+    <button class="finished-order--btn teal-blue" (click)="copyScore()" [disabled]="isDisabledBtn('new') && isDisabledBtn('edit')">Виставити рахунок</button>
   </div>
 </div>
 

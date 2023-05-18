@@ -172,17 +172,32 @@ export class CreateOrderComponent implements OnInit {
     this.priceAll.patchValue({
       sum_payment: 0,
     });
+
     this.orderAddForm.controls.map((order) => {
       this.priceAll.patchValue({
         sum_payment: this.priceAll.value.sum_payment + order.value.sum_pars,
+        // real_money: this.orderForm.value.real_money
+        different: this.getMoney(this.priceAll.value.sum_payment - this.priceAll.value.real_money),
       });
     });
     if (isCountDiscount) {
-      sumAllItems.push(this.priceAll.value.sum_payment - this.discount, this.priceAll.value.real_money, this.priceAll.value.different);
+      sumAllItems.push(
+        this.priceAll.value.sum_payment - this.discount,
+        this.priceAll.value.real_money,
+        this.getMoney(this.priceAll.value.sum_payment - this.discount - this.priceAll.value.real_money)
+      );
     } else {
-      sumAllItems.push(this.priceAll.value.sum_payment, this.priceAll.value.real_money, this.priceAll.value.different);
+      sumAllItems.push(
+        this.priceAll.value.sum_payment,
+        this.priceAll.value.real_money,
+        this.getMoney(this.priceAll.value.sum_payment - this.priceAll.value.real_money)
+      );
     }
     return sumAllItems.join(' / ');
+  }
+
+  getMoney(sum) {
+    return Number(sum).toFixed(sum.toString().endsWith('.00') ? null : 2);
   }
 
   viewChanges() {
@@ -347,6 +362,8 @@ export class CreateOrderComponent implements OnInit {
   deleteOrder(index) {
     this.orderForm.controls.splice(index, 1);
     this.orderForm.value.splice(index, 1);
+    this.orderAddForm.controls.splice(index, 1);
+    this.orderAddForm.value.splice(index, 1);
   }
 
   getProductParams(order) {
@@ -624,47 +641,62 @@ export class CreateOrderComponent implements OnInit {
           this.isShowSpinner = true;
         })
       )
-      .subscribe((data: any) => {
-        if (Object.keys(data).length) {
-          const arrDataOrder = data.date_create.split('-');
-          const arrDataPlane = data.date_plane_send.split('-');
-          this.commentOrder = data.comment;
-          this.dateToday = { year: +arrDataOrder[0], month: +arrDataOrder[1], day: +arrDataOrder[2] };
-          this.dataPlaneOrder = { year: +arrDataPlane[0], month: +arrDataPlane[1], day: +arrDataPlane[2] };
-          this.discount = data.discount;
-          this.fulfilledOrder = data.status_order;
-          this._clientService.getClient(data.id_client).subscribe((dataClient: any) => {
-            this.isShowSpinner = false;
-            this.setClientData(dataClient);
-            if (data.id_client !== data.id_recipient) {
-              this.isRecipient = true;
-              this._clientService.getClient(data.id_recipient).subscribe((dataRecipient: any) => {
-                this.setRecipientData(dataRecipient);
-              });
-            }
-            this.getModels(data);
-          });
+      .subscribe(
+        (data: any) => {
+          if (Object.keys(data).length) {
+            const arrDataOrder = data.date_create.split('-');
+            const arrDataPlane = data.date_plane_send.split('-');
+            this.commentOrder = data.comment;
+            this.dateToday = { year: +arrDataOrder[0], month: +arrDataOrder[1], day: +arrDataOrder[2] };
+            this.dataPlaneOrder = { year: +arrDataPlane[0], month: +arrDataPlane[1], day: +arrDataPlane[2] };
+            this.discount = data.discount;
+            this.fulfilledOrder = data.status_order;
+            this._clientService.getClient(data.id_client).subscribe((dataClient: any) => {
+              this.isShowSpinner = false;
+              this.setClientData(dataClient);
+              if (data.id_client !== data.id_recipient) {
+                this.isRecipient = true;
+                this._clientService.getClient(data.id_recipient).subscribe((dataRecipient: any) => {
+                  this.setRecipientData(dataRecipient);
+                });
+              }
+              this.getModels(data);
+            });
 
-          this.priceAll.patchValue({
-            sum_payment: data.sum_payment,
-          });
-          this.isNew = false;
-        } else {
-          this.init();
-          this.viewChanges();
-          this.isNew = true;
-          this.dataPlaneOrder = null;
+            this.priceAll.patchValue({
+              sum_payment: data.sum_payment,
+              real_money: data.real_money,
+              different: this.getMoney(data.sum_payment - data.real_money),
+            });
+            this.isNew = false;
+          } else {
+            this.init();
+            this.viewChanges();
+            this.isNew = true;
+            this.dataPlaneOrder = null;
+            this.isShowSpinner = false;
+            this.alert = {
+              isShow: true,
+              type: 'warning',
+              message: 'Користувача не знайдено',
+            };
+            setTimeout(() => {
+              this.alertChange(false);
+            }, 3000);
+          }
+        },
+        ({ error }) => {
           this.isShowSpinner = false;
           this.alert = {
             isShow: true,
-            type: 'warning',
-            message: 'Користувача не знайдено',
+            type: 'danger',
+            message: error.id_order,
           };
           setTimeout(() => {
             this.alertChange(false);
           }, 3000);
         }
-      });
+      );
   }
 
   getModels(data) {

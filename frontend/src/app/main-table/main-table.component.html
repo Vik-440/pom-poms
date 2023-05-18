@@ -47,7 +47,7 @@
     <tbody>
       <ng-container *ngFor="let order of orders; let i = index">
         <tr class="table--row">
-          <td [class.yellow]="order.comment_order">
+          <td [class.yellow]="order.comment_order"  >
             <a class="clickable" target="_blank" [routerLink]="['/create-order', {id: order.id_order}]" placement="top"
               [ngbTooltip]="order.comment_order">{{
               order.id_order }}</a>
@@ -61,11 +61,11 @@
               </div>
             </td>
             <td class="td-left">
-              <div class="bb_solid pl5" [ngStyle]="changeHeight(j, i)" [ngbTooltip]="order.comment_model[i]"
-                [ngClass]="checkCode(kod_model, order.comment_model[i])"
+              <p class="bb_solid pl5" [ngbTooltip]="order.comment_model[j]" [ngStyle]="changeHeight(j, i)"
+                [ngClass]="checkCode(kod_model, order.comment_model[j])"
                 *ngFor="let kod_model of order.kod_model; let j = index">
                 <a class="clickable" target="_blank">{{kod_model}}</a>
-              </div>
+              </p>
             </td>
             <td class="pl0">
               <div class="bb_solid" [ngStyle]="changeHeight(j, i)"
@@ -82,7 +82,7 @@
                   (keyup.enter)="sendPhases(order, j, 'phase_1', $event, item)">
               </div>
             </td>
-            <td class="pl0">
+            <td class="pl0" [class.l]="j !== 3">
               <div class="bb_solid phases" [ngStyle]="changeHeight(j, i)"
                 *ngFor="let item of order.phase_2; let j = index" [class.green]="item === 0">
                 <input (clickOutside)="clickOutsidePhaseMultiply(j, 'phase_2', order, 'phase_2'+ i + j)" type="number"
@@ -108,7 +108,7 @@
               {{ order.kolor_model }}
             </td>
             <!-- kod_model -->
-            <td class="td-left pl5" [class]="checkCode(order.kod_model, order.comment_model)">
+            <td class="td-left pl5" [class]="checkCode(order.kod_model, order)">
               <a class="clickable" target="_blank" [ngbTooltip]="order.comment_model">{{order.kod_model}}</a>
             </td>
             <td>
