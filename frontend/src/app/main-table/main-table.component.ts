@@ -282,7 +282,7 @@ export class MainTableComponent implements OnInit {
     const regexPhone = /(\d{2})(\d{3})(\d{3})(\d{2})(\d{2})/g;
     const tooltip = [
       'Н.П. №' + order.np_number,
-      order.first_name_client + ' ' + order.second_name_client,
+      order.second_name_client + ' ' + order.first_name_client,
       order.phone_recipient.replace(regexPhone, '$1-' + '$2-' + '$3-' + '$4-' + '$5'),
       order.zip_code,
       order.address,

@@ -108,8 +108,8 @@
               {{ order.kolor_model }}
             </td>
             <!-- kod_model -->
-            <td class="td-left pl5" [class]="checkCode(order.kod_model, order)">
-              <a class="clickable" target="_blank" [ngbTooltip]="order.comment_model">{{order.kod_model}}</a>
+            <td class="td-left pl5" [class]="checkCode(order.kod_model, order)" [ngbTooltip]="order.comment_model">
+              11111 {{order.kod_model}}
             </td>
             <td>
               {{ order.quantity_pars_model }}
@@ -134,11 +134,10 @@
           <td class="td-left pl5" [class]="getColorForMoney(order)">{{ order.sum_payment + ' / ' +( order.real_money ||
             0) + ' / ' + getMoney((order.sum_payment - order.real_money).toFixed(2))}}</td>
           <td class="td-left pl5 phone-client">
-            <a class="clickable" target="_blank">{{order.phone_client | mask:
-              '00-000-000-00-00' || '-'}}</a>
+            {{order.phone_client | mask:'00-000-000-00-00' || '-'}}
           </td>
           <td class="td-left pl5" [class.green]="isHasCity(order.sity)">
-            <a class="clickable" target="_blank" [ngbTooltip]="tooltipCity(order)" placement="top">{{order.sity}}</a>
+            <p  [ngbTooltip]="tooltipCity(order)" placement="top">{{order.sity}}</p>
           </td>
           <td>{{ order.data_plane_order | date: 'yyyy-MM-dd'}}</td>
           <td>
