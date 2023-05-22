@@ -291,7 +291,6 @@ export class MainTableComponent implements OnInit {
   }
 
   changeHeight(j, i) {
-    
     return {
       height: `${document.querySelectorAll(`#kolorModel-${j}-${i}`)[0].clientHeight}px`,
     };

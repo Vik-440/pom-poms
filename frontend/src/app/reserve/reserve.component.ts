@@ -47,7 +47,7 @@ export class ReserveComponent implements OnInit {
   @ViewChild('blockEdit', { static: true }) blockEdit;
   @HostListener('window:scroll', ['$event'])
   onScroll() {
-    this.blockEdit.nativeElement.setAttribute('style', `top: ${window.scrollY}px`);
+    this.blockEdit.nativeElement.setAttribute('style', `top: ${window.scrollY || 150}px; bottom: ${50}px`);
   }
 
   ngOnInit(): void {

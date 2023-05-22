@@ -54,26 +54,26 @@
           </td>
           <td>{{ order.data_order | date: 'yyyy-MM-dd'}}</td>
           <ng-container *ngIf="isArray(order.kolor_model); else oneItem">
-            <td class="td-left">
+            <td class="td-left" [class.oneRow]="order.kolor_model.length === 1">
               <div [id]="'kolorModel-' + j + '-' + i" class="bb_solid pl5"
                 *ngFor="let kolor_model of order.kolor_model; let j = index">
                 {{ kolor_model }}
               </div>
             </td>
-            <td class="td-left">
-              <p class="bb_solid pl5 fx-center" [ngbTooltip]="order.comment_model[j]" [ngStyle]="changeHeight(j, i)"
+            <td class="td-left" [class.oneRow]="order.kod_model.length === 1">
+              <div class="bb_solid pl5 fx-center" [ngbTooltip]="order.comment_model[j]" [ngStyle]="changeHeight(j, i)"
                 [ngClass]="checkCode(kod_model, order.comment_model[j])"
                 *ngFor="let kod_model of order.kod_model; let j = index">
                 <a>{{kod_model}}</a>
-              </p>
+              </div>
             </td>
-            <td class="pl0">
+            <td class="pl0" [class.oneRow]="order.quantity_pars_model.length === 1">
               <div class="bb_solid fx-center jc" [ngStyle]="changeHeight(j, i)"
                 *ngFor="let quantity_pars_model of order.quantity_pars_model;  let j = index">
                 {{quantity_pars_model}}
               </div>
             </td>
-            <td class="pl0">
+            <td class="pl0" [class.oneRow]="order.phase_1.length === 1">
               <div class="bb_solid phases fx-center" [ngStyle]="changeHeight(j, i)"
                 *ngFor="let item of order.phase_1; let j = index" [class.green]="item === 0">
                 <input (clickOutside)="clickOutsidePhaseMultiply(j, 'phase_1', order, 'phase_1'+ i + j)" type="number"
@@ -82,7 +82,7 @@
                   (keyup.enter)="sendPhases(order, j, 'phase_1', $event, item)">
               </div>
             </td>
-            <td class="pl0" [class.l]="j !== 3">
+            <td class="pl0" [class.oneRow]="order.phase_2.length === 1">
               <div class="bb_solid phases fx-center" [ngStyle]="changeHeight(j, i)"
                 *ngFor="let item of order.phase_2; let j = index" [class.green]="item === 0">
                 <input (clickOutside)="clickOutsidePhaseMultiply(j, 'phase_2', order, 'phase_2'+ i + j)" type="number"
@@ -91,7 +91,7 @@
                   (keyup.enter)="sendPhases(order, j, 'phase_2', $event, item)">
               </div>
             </td>
-            <td class="pl0">
+            <td class="pl0" [class.oneRow]="order.phase_3.length === 1">
               <div class="bb_solid phases fx-center" [ngStyle]="changeHeight(j, i)"
                 *ngFor="let item of order.phase_3; let j = index" [class.green]="item === 0">
                 <input (clickOutside)="clickOutsidePhaseMultiply(j, 'phase_3', order, 'phase_3'+ i + j)" type="number"
