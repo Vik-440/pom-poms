@@ -175,22 +175,22 @@ export class CreateOrderComponent implements OnInit {
 
     this.orderAddForm.controls.map((order) => {
       this.priceAll.patchValue({
-        sum_payment: this.priceAll.value.sum_payment + order.value.sum_pars,
+        sum_payment: +this.priceAll.value.sum_payment + +order.value.sum_pars,
         // real_money: this.orderForm.value.real_money
-        different: this.getMoney(this.priceAll.value.sum_payment - this.priceAll.value.real_money),
+        different: +this.priceAll.value.sum_payment - +this.priceAll.value.real_money,
       });
     });
     if (isCountDiscount) {
       sumAllItems.push(
         this.priceAll.value.sum_payment - this.discount,
         this.priceAll.value.real_money,
-        this.getMoney(this.priceAll.value.sum_payment - this.discount - this.priceAll.value.real_money)
+        this.priceAll.value.sum_payment - this.discount - this.priceAll.value.real_money
       );
     } else {
       sumAllItems.push(
         this.priceAll.value.sum_payment,
         this.priceAll.value.real_money,
-        this.getMoney(this.priceAll.value.sum_payment - this.priceAll.value.real_money)
+        this.priceAll.value.sum_payment - this.priceAll.value.real_money
       );
     }
     return sumAllItems.join(' / ');
