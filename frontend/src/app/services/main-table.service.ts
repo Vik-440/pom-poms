@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
+import * as data from '../../../assets/config-property.json'
 @Injectable({
     providedIn: 'root',
 })
@@ -9,7 +10,11 @@ export class MainPageService {
     
     constructor(private _http: HttpClient, @Inject('API_URL') private _apiUrl: string) {}
     
-    getListMain() { //залишати
+    getConfigProperty() {
+        return data;
+    }
+
+    getListMain() {
         return this._http.get(this.url);
     }
 

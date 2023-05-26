@@ -7,7 +7,7 @@ import { DataAutofillInterface } from '../interfaces/autofill-data';
 import { MainPageService } from '../services/main-table.service';
 import { UsefulService } from '../services/useful.service';
 import { DataAutofill } from '../utils/autofill';
-
+// import * as exclusionData from '../../../config-property.json';
 @Component({
   selector: 'app-main-table',
   templateUrl: './main-table.component.html',
@@ -33,6 +33,7 @@ export class MainTableComponent implements OnInit {
     { id: 2, value: 'all', name: 'всі' },
     { id: 3, value: false, name: 'не виконані' },
   ];
+  exclusionData: string[] = [];
   dataFilters = [];
 
   constructor(
@@ -45,6 +46,8 @@ export class MainTableComponent implements OnInit {
   ngOnInit(): void {
     this.getAllData();
     this.initForm();
+
+    this.exclusionData = this.getExclusionData();
   }
 
   initForm() {
@@ -297,7 +300,6 @@ export class MainTableComponent implements OnInit {
   }
 
   checkCode(kodModel, commentModel) {
-    
     if (commentModel) {
       return 'yellow';
     }
@@ -341,10 +343,27 @@ export class MainTableComponent implements OnInit {
     this.dateDownloaded = this.addWeekdays(Number.isFinite(days) ? days : 0);
   }
 
+  getExclusionData() {
+    return this._service.getConfigProperty().exclusionData.map((data) => {
+      const rangeDates = [];
+      if (data.split('...').length === 2) {
+        const startDate = moment(data.split('...')[0]);
+        const endDate = moment(data.split('...')[1]);
+        let currentDate = startDate;
+        while(currentDate <= endDate) {
+          rangeDates.push(currentDate.format('YYYY-MM-DD'));
+          currentDate = currentDate.add(1, 'days')
+        }
+        return rangeDates
+      } else {
+        return data
+      }
+    }).flat();    
+  }
   addWeekdays(days) {
     let date = moment().add(1, 'days');
     while (days > 0) {
-      if (date.isoWeekday() !== 7) {
+      if (date.isoWeekday() !== 7 && !this.exclusionData.includes(date.format('yyyy-MM-DD'))) {
         days -= 1;
       }
       date = date.add(1, 'days');
