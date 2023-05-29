@@ -109,7 +109,7 @@
             </td>
             <!-- kod_model -->
             <td class="td-left pl5" [class]="checkCode(order.kod_model, order)" [ngbTooltip]="order.comment_model">
-              11111 {{order.kod_model}}
+              {{order.kod_model}}
             </td>
             <td>
               {{ order.quantity_pars_model }}
@@ -147,7 +147,33 @@
             </button>
           </td>
         </tr>
+        <tr *ngIf="i === orders.length - 1 " class="sum-up">
+          <td class="sum-up--data"></td>
+          <td class="sum-up--data"></td>
+          <td class="sum-up--data"></td>
+          <td class="sum-up--data"></td>
+          <td class="sum-up--data no-empty">
+            {{countAmount('quantity_pars_model')}}
+          </td>
+          <td class="sum-up--data no-empty">
+            {{ countAmount('phase_1')}}
+          </td>
+          <td class="sum-up--data no-empty">
+            {{ countAmount('phase_2')}}
+          </td>
+          <td class="sum-up--data no-empty">
+            {{ countAmount('phase_3')}}
+          </td>
+          <td class="sum-up--data no-empty">
+            {{ countAmount('money')}}
+          </td>
+          <td class="sum-up--data"></td>
+          <td class="sum-up--data"></td>
+          <td class="sum-up--data"></td>
+          <td class="sum-up--data"></td>
+        </tr>
       </ng-container>
+
     </tbody>
   </table>
 </div>

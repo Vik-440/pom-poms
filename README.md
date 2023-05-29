@@ -22,3 +22,9 @@ In this project, I'm responsible for backend part
  ``sudo docker-compose -f docker-compose.prod.yml up --build``
  cd Projects/pom-poms/
 
+
+### Config file
+__Path__: frontend/assets/config-property.json
+
+  - "weekends": вихідні дні, починаючи з понеділка, де понеділок це 1, відповідно неділя це 7;
+  - "exclusionData": дні, які не враховувати при розрахунку, вигляд дати має відповідати стилю YYYY-MM-DD, якщо це більше одної дати, тоді цей період задаємо через '...ʼ:  "2023-06-21...2023-07-01"

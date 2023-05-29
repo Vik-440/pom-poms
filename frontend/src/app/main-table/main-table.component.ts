@@ -35,6 +35,8 @@ export class MainTableComponent implements OnInit {
   ];
   exclusionData: string[] = [];
   dataFilters = [];
+  weekends: number[] = [];
+  resultsCache: { [key: string]: any } = {};
 
   constructor(
     private _service: MainPageService,
@@ -48,6 +50,7 @@ export class MainTableComponent implements OnInit {
     this.initForm();
 
     this.exclusionData = this.getExclusionData();
+    this.weekends = this._service.getConfigProperty().weekends;
   }
 
   initForm() {
@@ -92,10 +95,12 @@ export class MainTableComponent implements OnInit {
         this.orders = data;
         this.isShowSpinner = false;
         this.closeFilterMenu();
+        this.resultsCache = {};
       },
       () => {
         this.isShowSpinner = false;
         this.closeFilterMenu();
+        this.resultsCache = {};
       }
     );
   }
@@ -242,20 +247,26 @@ export class MainTableComponent implements OnInit {
       (data: any) => {
         this.orders = data;
         this.isShowSpinner = false;
+        this.resultsCache = {};
       },
       () => {
+        this.resultsCache = {};
         this.isShowSpinner = false;
       }
     );
   }
 
   getSumPhases(phase) {
+    if(this.resultsCache.hasOwnProperty(`${phase}-sum`)) {
+      return this.resultsCache[`${phase}-sum`];
+    }
     let sum = 0;
     this.orders.map((item) => {
       if (!item.fulfilled_order) {
         sum += Array.isArray(item[phase]) ? item[phase].reduce((partialSum, a) => partialSum + a, 0) : item[phase];
       }
     });
+    this.resultsCache[`${phase}-sum`] = sum;
     return sum;
   }
 
@@ -363,18 +374,45 @@ export class MainTableComponent implements OnInit {
   addWeekdays(days) {
     let date = moment().add(1, 'days');
     while (days > 0) {
-      if (date.isoWeekday() !== 7 && !this.exclusionData.includes(date.format('yyyy-MM-DD'))) {
+      if (!this.weekends.includes(date.isoWeekday()) && !this.exclusionData.includes(date.format('yyyy-MM-DD'))) {
         days -= 1;
       }
       date = date.add(1, 'days');
     }
-    return date.isoWeekday() === 7 ? date.add(1, 'days').format('YYYY-MM-DD') : date.format('YYYY-MM-DD');
+    return this.weekends.includes(date.isoWeekday()) ? date.add(1, 'days').format('YYYY-MM-DD') : date.format('YYYY-MM-DD');
   }
 
   removeData(control) {
     this.filtersForm.get(control).patchValue('');
   }
 
+  countAmount(field) {
+    if(this.resultsCache.hasOwnProperty(field)) {
+      return this.resultsCache[field]
+    }
+    if(field === 'money') {
+      const sum_payment = this.orders.reduce((a, b) => {
+        return a + b.sum_payment;
+      }, 0);
+      const real_money = this.orders.reduce((a, b) => a + b.real_money, 0);
+      const diff = sum_payment - real_money;
+      this.resultsCache = {
+        ...this.resultsCache,
+        [field]: [sum_payment, real_money, diff].join(' / '),
+      }
+      return [sum_payment, real_money, diff].join(' / ');
+    }
+    this.resultsCache = {
+      ...this.resultsCache,
+      [field]: this.orders.reduce((acc, cur) => {
+        return acc + cur[field].reduce((a, b) => a+b)
+      }, 0),
+    }
+    
+    return this.orders.reduce((acc, cur) => {
+      return acc + cur[field].reduce((a, b) => a+b)
+    }, 0)
+  }
   showMessage(message) {
     this.alert = {
       isShow: true,

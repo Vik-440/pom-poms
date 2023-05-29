@@ -80,6 +80,9 @@
   margin-top: 20px
   width: 100%
   border: 0.5px solid #111
+  border-bottom: none
+  border-left: none
+  border-right: none
   & th
     border: none
     border-right: 1px solid white
@@ -87,8 +90,16 @@
   & td
     border: 0.5px solid #111
     position: relative
+    &.sum-up--data
+      border: none
+      padding: 10px 2px 2px
+      &.no-empty
+        font-weight: 700
+        border-left: 1px solid #37363675
+        border-right: 1px solid #37363675
 
   & .center-data
+    border: 0.5px solid #111
     & .number-order
       width: 61px
       min-width: 55px
