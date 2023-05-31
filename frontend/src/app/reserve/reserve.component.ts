@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { Component, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MaterialPageService } from '../services/materials.service';
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
@@ -45,10 +45,6 @@ export class ReserveComponent implements OnInit {
   @ViewChildren('tooltipElementWeight') tooltipElementWeight: QueryList<NgbTooltip>;
   @ViewChildren('tooltipElementQty') tooltipElementQty: QueryList<NgbTooltip>;
   @ViewChild('blockEdit', { static: true }) blockEdit;
-  @HostListener('window:scroll', ['$event'])
-  onScroll() {
-    this.blockEdit.nativeElement.setAttribute('style', `top: ${window.scrollY || 150}px; bottom: ${50}px`);
-  }
 
   ngOnInit(): void {
     this.getAllMaterials();
