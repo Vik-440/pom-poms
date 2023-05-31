@@ -256,18 +256,18 @@ export class MainTableComponent implements OnInit {
     );
   }
 
-  getSumPhases(phase) {
-    if(this.resultsCache.hasOwnProperty(`${phase}-sum`)) {
-      return this.resultsCache[`${phase}-sum`];
+  countAmount(field) {
+    if(field === 'money') {
+      const sum_payment = this.orders.reduce((a, b) => {
+        return a + b.sum_payment;
+      }, 0);
+      const real_money = this.orders.reduce((a, b) => a + b.real_money, 0);
+      const diff = sum_payment - real_money;
+      return [sum_payment, real_money, diff].join(' / ');
     }
-    let sum = 0;
-    this.orders.map((item) => {
-      if (!item.fulfilled_order) {
-        sum += Array.isArray(item[phase]) ? item[phase].reduce((partialSum, a) => partialSum + a, 0) : item[phase];
-      }
-    });
-    this.resultsCache[`${phase}-sum`] = sum;
-    return sum;
+    return this.orders.reduce((acc, cur) => {
+      return acc + cur[field].reduce((a, b) => a+b)
+    }, 0)
   }
 
   isArray(array) {
@@ -386,33 +386,7 @@ export class MainTableComponent implements OnInit {
     this.filtersForm.get(control).patchValue('');
   }
 
-  countAmount(field) {
-    if(this.resultsCache.hasOwnProperty(field)) {
-      return this.resultsCache[field]
-    }
-    if(field === 'money') {
-      const sum_payment = this.orders.reduce((a, b) => {
-        return a + b.sum_payment;
-      }, 0);
-      const real_money = this.orders.reduce((a, b) => a + b.real_money, 0);
-      const diff = sum_payment - real_money;
-      this.resultsCache = {
-        ...this.resultsCache,
-        [field]: [sum_payment, real_money, diff].join(' / '),
-      }
-      return [sum_payment, real_money, diff].join(' / ');
-    }
-    this.resultsCache = {
-      ...this.resultsCache,
-      [field]: this.orders.reduce((acc, cur) => {
-        return acc + cur[field].reduce((a, b) => a+b)
-      }, 0),
-    }
-    
-    return this.orders.reduce((acc, cur) => {
-      return acc + cur[field].reduce((a, b) => a+b)
-    }, 0)
-  }
+
   showMessage(message) {
     this.alert = {
       isShow: true,

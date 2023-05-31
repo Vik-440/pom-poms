@@ -27,17 +27,21 @@
         <th scope="col" sortable="data_order" class="data-order">Дата замовлення</th>
         <th class="color" scope="col" sortable="kolor_model">Кольори </th>
         <th class="code" scope="col" sortable="kod_model">Код</th>
-        <th class="quantity" scope="col" sortable="quantity_pars_model">К-сть</th>
+        <th class="quantity" scope="col" sortable="quantity_pars_model">Qty
+          <div class="count-sum">{{countAmount('quantity_pars_model')}}</div>
+        </th>
         <th scope="col" sortable="phase_1_model" class="phase"><span>1</span>
-          <div class="phase-sum">{{ getSumPhases('phase_1') }}</div>
+          <div class="count-sum">{{ countAmount('phase_1') }}</div>
         </th>
         <th scope="col" sortable="phase_2_model" class="phase"><span>2</span>
-          <div class="phase-sum">{{ getSumPhases('phase_2') }}</div>
+          <div class="count-sum">{{ countAmount('phase_2') }}</div>
         </th>
         <th scope="col" sortable="phase_3_model" class="phase"><span>3</span>
-          <div class="phase-sum">{{ getSumPhases('phase_3') }}</div>
+          <div class="count-sum">{{ countAmount('phase_3') }}</div>
         </th>
-        <th scope="col" sortable="money" class="money">Сума, грн</th>
+        <th scope="col" sortable="money" class="money">Сума, грн
+          <div class="count-sum">{{ countAmount('money')}}</div>
+        </th>
         <th scope="col" sortable="money" class="phone">№ телефону</th>
         <th class="city" scope="col" sortable="sity">Місто</th>
         <th scope="col" sortable="data_plane_order" class="data_plane">Дата прогноз</th>
@@ -146,31 +150,6 @@
                 [src]="order.fulfilled_order ? './assets/img/icons/check.svg' : './assets/img/icons/uncheck.svg'" />
             </button>
           </td>
-        </tr>
-        <tr *ngIf="i === orders.length - 1 " class="sum-up">
-          <td class="sum-up--data"></td>
-          <td class="sum-up--data"></td>
-          <td class="sum-up--data"></td>
-          <td class="sum-up--data"></td>
-          <td class="sum-up--data no-empty">
-            {{countAmount('quantity_pars_model')}}
-          </td>
-          <td class="sum-up--data no-empty">
-            {{ countAmount('phase_1')}}
-          </td>
-          <td class="sum-up--data no-empty">
-            {{ countAmount('phase_2')}}
-          </td>
-          <td class="sum-up--data no-empty">
-            {{ countAmount('phase_3')}}
-          </td>
-          <td class="sum-up--data no-empty">
-            {{ countAmount('money')}}
-          </td>
-          <td class="sum-up--data"></td>
-          <td class="sum-up--data"></td>
-          <td class="sum-up--data"></td>
-          <td class="sum-up--data"></td>
         </tr>
       </ng-container>
 
