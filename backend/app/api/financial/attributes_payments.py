@@ -10,7 +10,7 @@ def attributes_payments():
         "metod_payment": ["iban", "cash"],
         "outlay_class": [
                 "податок", "мат. осн.", "мат. доп.",
-                "інстр.", "опл. роб.", "реклама", "інше"],
+                "інстр.", "опл. роб.", "реклама", "інше", "офіс"],
         "filter_class": [
                 "day", "week", "month", "quarter", "year"]}
     return jsonify(full_block), 200
