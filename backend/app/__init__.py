@@ -10,7 +10,9 @@ from app.base_model import Base
 
 engine = None
 
-def create_app(config_name="development"):
+
+# def create_app(config_name="development"):
+def create_app(config_name="production"):
     print(config_name)
     global engine
     app = Flask(__name__)
