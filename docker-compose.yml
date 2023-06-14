@@ -1,9 +1,17 @@
 version: "3.7"
 services:
-  flask:
-    build: ./backend
-      - "5000:5000"
-    env_file:
-      - dev.env
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
+  # flask:
+  #   build: ./backend
+  #     - "5000:5000"
+  #   env_file:
+  #     - dev.env
+  #   extra_hosts:
+  #     - "host.docker.internal:host-gateway"
+    container1:
+      image: pom-poms_flask
+      ports:
+        - "5000:5000"
+    container2:
+      image: 16596545c7a0
+      ports:
+        - "4200:80"
