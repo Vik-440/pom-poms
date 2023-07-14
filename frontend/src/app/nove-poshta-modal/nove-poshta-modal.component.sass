@@ -1,0 +1,112 @@
+.poshta-wrapper
+  height: 400px
+.header
+  padding: 7px 5px
+  background-color: #ffe6e5
+  display: flex
+  justify-content: space-between
+  align-items: center
+  &--title
+    color: #383838cd
+    font-weight: 600
+    font-size: 18px
+    margin: 0
+  .btn-close
+    background: transparent
+    border: none
+.logo 
+  width: 100px
+.carousel-caption
+  position: static
+  color: #111
+  padding: 0 5px
+  padding-top: 15px
+  &--title
+    color: #383838b0
+    font-weight: 600
+    font-size: 16px
+    text-align: left
+    display: flex
+    justify-content: space-between
+
+
+
+.form
+  &-part
+    display: flex
+    justify-content: space-between
+    margin-top: 10px
+  &-item
+    display: flex
+    flex-direction: column
+    align-items: flex-start
+    width: 265px
+    padding: 0px 3px
+    & input
+      border: 1px solid #090808
+    &.full
+      width: 100%
+    &.sm
+      width: 200px
+      & .info-select 
+        width: 100%
+    & input
+      width: 100%
+      height: 25px
+    & label
+      margin-bottom: 0 
+    &--select
+      width: 100%
+      height: 25px
+
+.description 
+  width: 100%
+  height: 30px
+.indicators
+  border-bottom: 2px solid #f9e9e9de
+  display: flex
+  justify-content: space-between
+  &-main
+    display: flex
+  & .indicator
+      margin: 0px 5px
+      padding: 0px 5px
+      border: none
+      background: #f9e9e9de
+      &.active 
+        background: #ffc8c8
+      &.create
+        background: #fd9c9cde
+        border-radius: 10px 10px 0px 0px
+
+.buttons-action
+  & .button-action
+    background: none
+    border: none
+    & .bi
+      font-size: 18px
+      color: #025b0f
+.divided
+  height: 1px
+  width: 100%
+  background: #9f9f9f
+  &.max
+    margin-bottom: 15px
+
+::ng-deep 
+  .ng-dropdown-panel .ng-dropdown-panel-items
+    max-height: 140px !important
+  .ng-select .ng-select-container
+    border: 1px solid #090808
+  .modal
+    z-index: 1080
+    &-content
+      width: 550px
+  .carousel-indicators
+    bottom: inherit
+  .carousel-inner, .carousel
+    height: 100%
+  .visually-hidden
+    display: none
+  .ng-dropdown-panel .scroll-host
+    text-align: left

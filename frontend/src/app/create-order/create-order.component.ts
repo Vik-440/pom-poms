@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDateStruct, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import locale from 'date-fns/locale/en-US';
 import * as moment from 'moment';
 import { DatepickerOptions } from 'ng2-datepicker';
@@ -28,7 +28,7 @@ export class CreateOrderComponent implements OnInit {
     private _serviceMain: MainPageService,
     private _clientService: ClientService,
     private _productService: ProductsService,
-    private _usefulService: UsefulService
+    private _usefulService: UsefulService,
   ) {}
 
   @Input() isNew: boolean = true;

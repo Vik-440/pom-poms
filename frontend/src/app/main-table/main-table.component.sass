@@ -75,7 +75,13 @@
             opacity: 1
             text-indent: 0px
 
-
+.send
+  display: flex
+  justify-content: flex-end
+  margin-top: 10px
+  .btn-send
+    border: 1px solid green
+    background-color: #b8d3bf
 .table
   margin-top: 20px
   width: 100%
@@ -83,6 +89,20 @@
   border-bottom: none
   border-left: none
   border-right: none
+  &--row
+    position: relative
+    &.selected
+        &::after
+          content: ''
+          position: absolute
+          height: 10px
+          width: 10px
+          background: #00ff00
+          left: 0px
+          top: 40%
+          border-radius: 50%
+          z-index: 1
+
   & th
     border: none
     border-right: 1px solid white
@@ -90,6 +110,7 @@
   & td
     border: 0.5px solid #111
     position: relative
+    background-clip: padding-box
     &.sum-up--data
       border: none
       padding: 10px 2px 2px
@@ -356,6 +377,10 @@ td.oneRow:has(>.light-blue)
 input[type='number']::-webkit-outer-spin-button,
 input[type='number']::-webkit-inner-spin-button 
     -webkit-appearance: none
+    margin: 0
+
+input[type="number"]
+    -moz-appearance: textfield
 .fx-center
   display: flex
   align-items: center

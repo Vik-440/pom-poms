@@ -1,0 +1,198 @@
+<div class="poshta-wrapper">
+  <div class="header">
+    <img src="../../assets/img/Nova_Poshta_logo.svg" alt="Nova Poshta logo" class="logo">
+    <h4 class="header--title">
+      Оформити накладку
+    </h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="closeModal()"><i
+        class="bi bi-x-lg"></i></button>
+  </div>
+  <div class="divided max"></div>
+  <div>
+    <div class="indicators">
+      <div class="indicators-main">
+        <div class="indicator" [class.active]="page === 1">Відправник</div>
+        <div class="indicator" [class.active]="page === 2">Отримувач</div>
+        <div class="indicator" [class.active]="page === 3">Посилка</div>
+      </div>
+      <button class="indicator create" (click)="createInternetDocument()"
+        [disabled]="dataParcel.invalid || dataSender.invalid || dataRecipient.invalid">Створити накладний
+        платіж</button>
+    </div>
+    <ng-template [ngIf]="page === 1">
+      <div class="carousel-caption" [formGroup]="dataSender">
+        <h5 class="carousel-caption--title">Інформація про відправника
+          <div class="buttons-action">
+            <button class="button-action" (click)="changePage('-')" [disabled]="page === 1"><i
+                class="bi bi-arrow-left-square"></i></button>
+            <button class="button-action" (click)="changePage('+')" [disabled]="dataSender.invalid"><i
+                class="bi bi-arrow-right-square"></i></button>
+          </div>
+        </h5>
+        <div class="divided max"></div>
+        <div class="carousel-caption--content">
+          <div class="form-part form-names">
+            <div class="form-item">
+              <label for="first_name">Ім'я*</label>
+              <input placeholder="ім'я" id="first_name" formControlName="first_name_client">
+            </div>
+            <div class="form-item">
+              <label for="second_name">Прізвище*</label>
+              <input placeholder="прізвище" id="second_name" formControlName="second_name_client">
+            </div>
+            <div class="form-item">
+              <label for="phone">Номер телефону*</label>
+              <input placeholder="ім'я" id="phone" formControlName="phone">
+            </div>
+          </div>
+          <div class="form-part address">
+            <div class="form-item full">
+              <label for="city" for="city">Місто</label>
+              <ng-select #senderCity [clearable]="false" (change)="changeCity(senderCity, 'sender')" class="form-item--select"
+                notFoundText="Міста не знайдено" bindLabel="Present" bindValue="Present" (search)="searchCity($event)"
+                type="number" formControlName="city" [items]="itemCities"></ng-select>
+            </div>
+          </div>
+          <div class="form-part">
+            <div class="form-item full">
+              <label for="np_number" for="np_number">Нова Пошта</label>
+              <ng-select #senderNP [clearable]="false" (change)="changeNP(senderNP, 'sender')" class="form-item--select" formControlName="npShow"
+                notFoundText="НП не знайдено" bindLabel="Description" bindValue="Description" (search)="searchCity($event)"
+                type="number" [items]="itemNPs"></ng-select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+    <ng-template [ngIf]="page === 2">
+      <div class="carousel-caption" [formGroup]="dataRecipient">
+        <h5 class="carousel-caption--title">Інформація про отримувача
+          <div class="buttons-action">
+            <button class="button-action" (click)="changePage('-')" [disabled]="page === 1"><i
+                class="bi bi-arrow-left-square"></i></button>
+            <button class="button-action" (click)="changePage('+')"
+              [disabled]="dataSender.invalid || dataRecipient.invalid"><i class="bi bi-arrow-right-square"></i></button>
+          </div>
+        </h5>
+
+        <div class="divided max"></div>
+        <div class="carousel-caption--content">
+          <div class="form-part form-names">
+            <div class="form-item">
+              <label for="first_name">Ім'я</label>
+              <input placeholder="ім'я" id="first_name" formControlName="first_name_client">
+            </div>
+            <div class="form-item">
+              <label for="second_name">Прізвище</label>
+              <input placeholder="прізвище" id="second_name" formControlName="second_name_client">
+            </div>
+            <div class="form-item">
+              <label for="phone">Номер телефону</label>
+              <input placeholder="ім'я" id="phone" formControlName="phone">
+            </div>
+          </div>
+          <div class="form-part address">
+            <div class="form-item full">
+              <label for="city" for="city">Місто</label>
+              <ng-select #senderCity [clearable]="false" (change)="changeCity(senderCity, 'recipient')" class="form-item--select"
+                notFoundText="Міста не знайдено" bindLabel="Present" bindValue="Present" (search)="searchCity($event)"
+                type="number" formControlName="city" [items]="itemCities"></ng-select>
+            </div>
+          </div>
+          <div class="form-part">
+            <div class="form-item full">
+              <label for="np_number" for="np_number">Нова Пошта</label>
+              <ng-select #senderNP [clearable]="false" (change)="changeNP(senderNP, 'recipient')" class="form-item--select" formControlName="npShow"
+                notFoundText="НП не знайдено" bindLabel="Description" bindValue="Description" (search)="searchCity($event)"
+                type="number" [items]="itemNPs"></ng-select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+    <ng-template [ngIf]="page === 3">
+      <div class="carousel-caption" [formGroup]="dataParcel">
+        <h5 class="carousel-caption--title">Інформація про посилку
+          <div class="buttons-action">
+            <button class="button-action" (click)="changePage('-')" [disabled]="page === 1"><i
+                class="bi bi-arrow-left-square"></i></button>
+            <button class="button-action" (click)="changePage('+')" [disabled]="page === 3"><i
+                class="bi bi-arrow-right-square"></i></button>
+          </div>
+        </h5>
+
+        <div class="divided max"></div>
+        <div class="carousel-caption--content">
+          <div class="form-part">
+            <div class="form-item sm">
+              <label for="payerType">Оплачує</label>
+              <select id="payerType" class="info-select" formControlName="payerType">
+                <option value="Sender">Відправник</option>
+                <option value="Recipient" selected>Отримувач</option>
+              </select>
+            </div>
+            <div class="form-item sm">
+              <label for="paymentMethod">Форма оплати</label>
+              <select id="paymentMethod" class="info-select" formControlName="paymentMethod">
+                <option value="Cash">Готівка</option>
+                <option value="NonCash" selected>Карта</option>
+              </select>
+            </div>
+            <div class="form-item sm">
+              <label for="cargoType">Тип вантажу</label>
+              <select name="" id="" class="info-select" formControlName="cargoType">
+                <option value="Parcel">Посилка</option>
+                <option value="Cargo">Вантаж</option>
+                <option value="Documents">Документи</option>
+              </select>
+            </div>
+            <div class="form-item">
+              <label for="serviceType">Технологія доставки</label>
+              <select name="" id="serviceType" class="info-select" formControlName="serviceType">
+                <option value="DoorsDoors">Адреса-Адреса</option>
+                <option value="DoorsWarehouse">Адреса-Відділення</option>
+                <option value="WarehouseWarehouse">Відділення-Відділення</option>
+                <option value="WarehouseDoors">Відділення-Адреса</option>
+                <option value="DoorsPostomat">Адреса-Поштомат</option>
+                <option value="WarehousePostomat">Відділення-Поштомат</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-part">
+            <div class="form-item">
+              <label for="date">Дата відправки</label>
+              <input class="filters-data--datapicker" (click)="dateTime.toggle()" formControlName="dateTime"
+                ngbDatepicker #dateTime="ngbDatepicker" [minDate]="todayDay">
+            </div>
+          </div>
+          <div class="form-part">
+            <div class="form-item">
+              <label for="weight">Вага, кг</label>
+              <input type="number" id="weight" formControlName="weight">
+            </div>
+            <div class="form-item">
+              <label for="cost">Оціночна вартість, грн</label>
+              <input type="number" id="cost" formControlName="cost">
+            </div>
+          </div>
+          <div class="form-part">
+            <div class="form-item full">
+              <label for="description">Опис</label>
+              <textarea type="number" id="description" class="description" placeholder="description*"
+                formControlName="description"></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+  </div>
+</div>
+
+<div *ngIf="isShowSpinner" class="d-flex justify-content-center spinner-wrapper">
+  <div class="spinner-grow text-danger np" role="status">
+    <span class="sr-only">Loading...</span>
+  </div>
+</div>
+
+<app-alert *ngIf="alert.isShow" [type]="alert.type" [message]="alert.message"
+  (closed)="alertChange($event)"></app-alert>

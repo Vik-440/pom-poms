@@ -1,12 +1,13 @@
 import { Component, OnInit, TemplateRef } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { NgbOffcanvas } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbOffcanvas } from '@ng-bootstrap/ng-bootstrap';
 import * as _ from 'lodash';
 import * as moment from 'moment';
 import { DataAutofillInterface } from '../interfaces/autofill-data';
 import { MainPageService } from '../services/main-table.service';
 import { UsefulService } from '../services/useful.service';
 import { DataAutofill } from '../utils/autofill';
+import { NovePoshtaModalComponent } from '../nove-poshta-modal/nove-poshta-modal.component';
 // import * as exclusionData from '../../../config-property.json';
 @Component({
   selector: 'app-main-table',
@@ -42,7 +43,8 @@ export class MainTableComponent implements OnInit {
     private _service: MainPageService,
     private _offcanvasService: NgbOffcanvas,
     private _fb: FormBuilder,
-    private _generalService: UsefulService
+    private _generalService: UsefulService,
+    private _modalService: NgbModal
   ) {}
 
   ngOnInit(): void {
@@ -51,6 +53,14 @@ export class MainTableComponent implements OnInit {
 
     this.exclusionData = this.getExclusionData();
     this.weekends = this._service.getConfigProperty().weekends;
+
+  }
+
+  openModalPoshta(order) {
+    const modal = this._modalService.open(NovePoshtaModalComponent, {
+      backdrop: 'static',
+    });
+    modal.componentInstance.data = order;
   }
 
   initForm() {
@@ -68,6 +78,7 @@ export class MainTableComponent implements OnInit {
       kolor_like: null,
     });
   }
+
 
   changeFiled(event, fieldSend: string) {
     if (event.term.length >= DataAutofill[fieldSend]) {
@@ -170,6 +181,7 @@ export class MainTableComponent implements OnInit {
   }
 
   changePhases(phase, event, item) {
+    event.stopPropagation();
     if (event && event.type === 'click') {
       event.target.value = '';
     } else {
