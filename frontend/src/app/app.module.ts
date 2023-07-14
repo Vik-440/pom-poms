@@ -5,13 +5,13 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgbCarouselModule, NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { NgSelectModule } from '@ng-select/ng-select';
+// import { NgSelectModule } from '@ng-select/ng-select';
 // import { TooltipModule, TooltipOptions } from '@teamhive/ngx-tooltip';
-import { ClickOutsideModule } from 'ng-click-outside';
+// import { ClickOutsideModule } from 'ng-click-outside';
 import { DatepickerModule } from 'ng2-datepicker';
 import { NgxMaskModule } from 'ngx-mask';
-import { NgxSpinnerModule } from 'ngx-spinner';
-import { NgToggleModule } from 'ngx-toggle-button';
+// import { NgxSpinnerModule } from 'ngx-spinner';
+// import { NgToggleModule } from 'ngx-toggle-button';
 import { environment } from 'src/environments/environment';
 import { AlertComponent } from './alert/alert.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -38,21 +38,21 @@ import { NovePoshtaModalComponent } from './nove-poshta-modal/nove-poshta-modal.
     NovePoshtaModalComponent,
   ],
   imports: [
-    NgToggleModule,
+    // NgToggleModule,
     BrowserAnimationsModule,
     NgxMaskModule.forRoot(),
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    ClickOutsideModule,
+    // ClickOutsideModule,
     NgbModule,
     CommonModule,
     DatepickerModule,
     FormsModule,
-    NgSelectModule,
-    NgxSpinnerModule,
+    // NgSelectModule,
+    // NgxSpinnerModule,
     ReactiveFormsModule,
-    NgbCarouselModule,
+    // NgbCarouselModule,
   ],
   providers: [{ provide: 'API_URL', useValue: environment.apiUrl }],
   bootstrap: [AppComponent],
