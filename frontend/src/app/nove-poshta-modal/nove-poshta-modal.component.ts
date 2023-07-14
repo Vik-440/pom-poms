@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { debounceTime, filter, from, switchMap } from 'rxjs';
 import { NovaPoshtaService } from '../services/poshta.service';
@@ -11,9 +11,9 @@ import { NovaPoshtaService } from '../services/poshta.service';
 export class NovePoshtaModalComponent implements OnInit {
   @Input() data;
 
-  dataSender: FormGroup;
-  dataRecipient: FormGroup;
-  dataParcel: FormGroup;
+  dataSender: UntypedFormGroup;
+  dataRecipient: UntypedFormGroup;
+  dataParcel: UntypedFormGroup;
   itemCities: any[];
   itemNPs: any[];
   page: number = 1;
@@ -30,7 +30,7 @@ export class NovePoshtaModalComponent implements OnInit {
     isShow: false,
   };
   pdfSrc: string;
-  constructor(private _poshaService: NovaPoshtaService, public _activeModal: NgbActiveModal, private _fb: FormBuilder) {}
+  constructor(private _poshaService: NovaPoshtaService, public _activeModal: NgbActiveModal, private _fb: UntypedFormBuilder) {}
   ngOnInit(): void {
     this.initForms();
     this.getRefs();

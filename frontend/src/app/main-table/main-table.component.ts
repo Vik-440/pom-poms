@@ -1,5 +1,5 @@
 import { Component, OnInit, TemplateRef } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { NgbModal, NgbOffcanvas } from '@ng-bootstrap/ng-bootstrap';
 import * as _ from 'lodash';
 import * as moment from 'moment';
@@ -28,7 +28,7 @@ export class MainTableComponent implements OnInit {
   speed;
   todayYear = new Date().getFullYear();
   additionalNumber: number = 0;
-  filtersForm: FormGroup;
+  filtersForm: UntypedFormGroup;
   fulfilledOrderItems = [
     { id: 1, value: true, name: 'виконані' },
     { id: 2, value: 'all', name: 'всі' },
@@ -42,7 +42,7 @@ export class MainTableComponent implements OnInit {
   constructor(
     private _service: MainPageService,
     private _offcanvasService: NgbOffcanvas,
-    private _fb: FormBuilder,
+    private _fb: UntypedFormBuilder,
     private _generalService: UsefulService,
     private _modalService: NgbModal
   ) {}

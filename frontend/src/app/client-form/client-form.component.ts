@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { DataAutofillInterface } from '../interfaces/autofill-data';
 import { ClientService } from '../services/client.service';
 import { UsefulService } from '../services/useful.service';
@@ -11,7 +11,7 @@ import { DataAutofill } from '../utils/autofill';
   styleUrls: ['./client-form.component.sass'],
 })
 export class ClientFormComponent implements OnInit {
-  @Input() clientForm: FormGroup;
+  @Input() clientForm: UntypedFormGroup;
   @Input() isClient: boolean = true;
   @Input() isShowOk: boolean;
   @Output() saveFormEmitter: EventEmitter<any> = new EventEmitter();

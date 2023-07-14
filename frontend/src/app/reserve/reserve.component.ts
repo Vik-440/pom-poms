@@ -1,5 +1,5 @@
 import { Component, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { MaterialPageService } from '../services/materials.service';
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
 import { calculateString } from '../utils/calcstring';
@@ -13,7 +13,7 @@ import { ConsumptionDataInterface, MaterialFormInterface, MaterialsItemInterface
   styleUrls: ['./reserve.component.sass'],
 })
 export class ReserveComponent implements OnInit {
-  constructor(private _serviceMaterial: MaterialPageService, private _fb: FormBuilder) {}
+  constructor(private _serviceMaterial: MaterialPageService, private _fb: UntypedFormBuilder) {}
 
   materials: MaterialsItemInterface[] = [];
   availabilityFilters = [
@@ -27,7 +27,7 @@ export class ReserveComponent implements OnInit {
     },
   ];
   availabilityData: string | null;
-  materialForm: FormGroup;
+  materialForm: UntypedFormGroup;
   isNewMaterial: boolean = true;
   isShowOk: boolean = false;
   idChangeMaterial: number;

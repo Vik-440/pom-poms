@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { NgbDateStruct, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import locale from 'date-fns/locale/en-US';
@@ -22,7 +22,7 @@ import { modelsData } from '../utils/modelsData';
 })
 export class CreateOrderComponent implements OnInit {
   constructor(
-    private _fb: FormBuilder,
+    private _fb: UntypedFormBuilder,
     private _service: CreateOrderService,
     private _route: ActivatedRoute,
     private _serviceMain: MainPageService,
@@ -36,11 +36,11 @@ export class CreateOrderComponent implements OnInit {
   isShowSpinner: boolean = false;
   model: NgbDateStruct;
 
-  orderForm: FormArray;
-  orderAddForm: FormArray;
-  clientForm: FormGroup;
-  recipientForm: FormGroup;
-  priceAll: FormGroup;
+  orderForm: UntypedFormArray;
+  orderAddForm: UntypedFormArray;
+  clientForm: UntypedFormGroup;
+  recipientForm: UntypedFormGroup;
+  priceAll: UntypedFormGroup;
   idOrder: number = 0;
   isSaveClient: boolean = false;
   isSaveRecipient: boolean = false;
@@ -60,7 +60,7 @@ export class CreateOrderComponent implements OnInit {
   todayYear = new Date().getFullYear();
   dateToday = null;
   dataPlaneOrder = null;
-  dateForms: FormGroup;
+  dateForms: UntypedFormGroup;
   isRecipient = false;
   selectProductsItems = [];
   commentOrder = null;
@@ -518,7 +518,7 @@ export class CreateOrderComponent implements OnInit {
       event.isClient ? this.saveClient() : this.saveRecipient();
     } else {
       const params = event.isClient ? this.getParamsClient() : this.getParamsClient();
-      const form: FormGroup = event.isClient ? this.clientForm : this.recipientForm;
+      const form: UntypedFormGroup = event.isClient ? this.clientForm : this.recipientForm;
       this.editClient(form, params);
     }
   }
