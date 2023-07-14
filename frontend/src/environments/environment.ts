@@ -5,7 +5,7 @@
 export const environment = {
     production: false,
     apiUrl: 'http://127.0.0.1:5000',
-    // apiKey: process.env.API_KEY_NP,
+    apiKey: process.env['AP_KEY'],
     debug: true,
 };
 console.log(environment)
