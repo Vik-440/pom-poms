@@ -109,7 +109,7 @@ export class NovaPoshtaService {
         },
       })
       .pipe(
-        switchMap((data) => {
+        switchMap(() => {
           return this._http.post(`${this.url}`, {
             apiKey: this.apiKey,
             modelName: 'ContactPerson',

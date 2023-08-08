@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormGroup, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { debounceTime, filter, from, switchMap } from 'rxjs';
 import { NovaPoshtaService } from '../services/poshta.service';
@@ -54,13 +54,13 @@ export class NovePoshtaModalComponent implements OnInit {
     this.dataSender = this._fb.group({
       city: ['Київ', Validators.required],
       cityShow: ['Київ'],
-      first_name_client: ['Дана', [Validators.required, Validators.minLength(2)]],
+      first_name_client: ['', [Validators.required, Validators.minLength(2)]],
       cityRef: '',
-      second_name_client: ['Довженко', [Validators.required, Validators.minLength(2)]],
+      second_name_client: ['', [Validators.required, Validators.minLength(2)]],
       np_number: [142, Validators.required],
       npRef: '',
       npShow: '',
-      phone: ['380991162803', [Validators.required]],
+      phone: ['', [Validators.required]],
     });
     this.dataRecipient = this._fb.group({
       city: [this.data.sity, Validators.required],
@@ -79,7 +79,7 @@ export class NovePoshtaModalComponent implements OnInit {
       dateTime: [{ 
         year: new Date().getFullYear(),
         month: +String(new Date().getMonth() + 1).padStart(2, '0'),
-        day: +String(new Date().getDate()).padStart(2, '0') 
+        day: +String(new Date().getDate()).padStart(2, '0'), 
       }, Validators.required],
       serviceType: ['WarehouseWarehouse', Validators.required],
       cargoType: ['Parcel', Validators.required],
@@ -183,6 +183,7 @@ export class NovePoshtaModalComponent implements OnInit {
     this.modalContentEl.classList.remove('small');
     this.modalDialog.classList.remove('small');
   }
+
   createInternetDocument() {
     let paramsForDoc = {
       PayerType: this.dataParcel.value.payerType,
@@ -220,7 +221,8 @@ export class NovePoshtaModalComponent implements OnInit {
 
     this._poshaService.createInternetDocument(paramsForDoc).subscribe((data: any) => {
       if (data.success) {
-        this.pdfSrc = `https://my.novaposhta.ua/orders/printMarking85x85/orders[]/${data.data[0].Ref}/type/pdf/apiKey/${this._poshaService.apiKey}`;
+        this.pdfSrc = 
+          `https://my.novaposhta.ua/orders/printMarking85x85/orders[]/${data.data[0].Ref}/type/pdf/apiKey/${this._poshaService.apiKey}`;
         window.open(this.pdfSrc, '_blank');
         this.page = 4;
         this.modalContentEl.classList.add('small');

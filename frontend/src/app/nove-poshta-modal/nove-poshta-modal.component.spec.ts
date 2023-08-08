@@ -6,9 +6,9 @@ describe('NovePoshtaModalComponent', () => {
   let component: NovePoshtaModalComponent;
   let fixture: ComponentFixture<NovePoshtaModalComponent>;
 
-  beforeEach(async () => {
+  beforeEach(async() => {
     await TestBed.configureTestingModule({
-      declarations: [ NovePoshtaModalComponent ]
+      declarations: [ NovePoshtaModalComponent ],
     })
     .compileComponents();
   });
