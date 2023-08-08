@@ -1,5 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FormGroup, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { debounceTime, filter, from, switchMap } from 'rxjs';
 import { NovaPoshtaService } from '../services/poshta.service';
@@ -10,10 +10,11 @@ import { NovaPoshtaService } from '../services/poshta.service';
 })
 export class NovePoshtaModalComponent implements OnInit {
   @Input() data;
+  @Output() closeModalNP = new EventEmitter();
 
-  dataSender: UntypedFormGroup;
-  dataRecipient: UntypedFormGroup;
-  dataParcel: UntypedFormGroup;
+  dataSender: FormGroup;
+  dataRecipient: FormGroup;
+  dataParcel: FormGroup;
   itemCities: any[];
   itemNPs: any[];
   page: number = 1;
@@ -30,16 +31,22 @@ export class NovePoshtaModalComponent implements OnInit {
     isShow: false,
   };
   pdfSrc: string;
-  constructor(private _poshaService: NovaPoshtaService, public _activeModal: NgbActiveModal, private _fb: UntypedFormBuilder) {}
+  isPackaging: boolean = false;
+  packList = [];
+  modalContentEl = document.querySelector('.modal-content');
+  modalDialog = document.querySelector('.modal-dialog');
+  constructor(private _poshaService: NovaPoshtaService, public _activeModal: NgbActiveModal, private _fb: UntypedFormBuilder) { }
   ngOnInit(): void {
     this.initForms();
     this.getRefs();
-    if(!JSON.parse(localStorage.getItem('Sender'))) {
+    this.modalContentEl = document.querySelector('.modal-content');
+    this.modalDialog = document.querySelector('.modal-dialog');
+    if (!JSON.parse(localStorage.getItem('Sender'))) {
       this.getCitiesNps();
     } else {
       this.dataSender.patchValue({
-        ...JSON.parse(localStorage.getItem('Sender'))
-      })
+        ...JSON.parse(localStorage.getItem('Sender')),
+      });
     }
   }
 
@@ -68,13 +75,21 @@ export class NovePoshtaModalComponent implements OnInit {
     });
     this.dataParcel = this._fb.group({
       payerType: 'Sender',
-      paymentMethod: 'NonCash',
-      dateTime: [null, Validators.required],
+      paymentMethod: 'Cash',
+      dateTime: [{ 
+        year: new Date().getFullYear(),
+        month: +String(new Date().getMonth() + 1).padStart(2, '0'),
+        day: +String(new Date().getDate()).padStart(2, '0') 
+      }, Validators.required],
       serviceType: ['WarehouseWarehouse', Validators.required],
       cargoType: ['Parcel', Validators.required],
       weight: [null, [Validators.required, Validators.min(0.1)]],
       cost: [null, Validators.required],
       description: ['Спортивні товари', Validators.required],
+      packing: [''],
+      volumetricHeight: [16],
+      volumetricLength: [11],
+      volumetricWidth: [10],
     });
   }
 
@@ -83,35 +98,32 @@ export class NovePoshtaModalComponent implements OnInit {
     this._poshaService.getCounterpartyRef('Recipient');
   }
 
-  getCitiesNps(form = this.dataSender, type = 'Sender') {
+  getCitiesNps(form = this.dataSender) {
     this.isShowSpinner = true;
-    console.log(form.value);
     this._poshaService
       .getCities(form.value.cityShow)
       .pipe(
         switchMap((cities: any) => {
-          console.log(this.data, form.value.cityShow);
           this.itemCities = cities.data[0].Addresses;
           form.patchValue({
             cityRef: this.itemCities[0].Ref,
             city: this.itemCities[0].Present,
-            cityShow: this.itemCities[0].MainDescription
+            cityShow: this.itemCities[0].MainDescription,
           });
           return this._poshaService.getWarehouses(form.value.cityShow);
         })
       )
       .subscribe((data: any) => {
         this.itemNPs = data.data;
+
         this.selectedNP = this.itemNPs.findIndex((item) => +item.Number === +form.value.np_number);
         this.selectedNP = this.selectedNP === -1 ? 0 : this.selectedNP;
-        console.log(data, this.itemNPs, this.selectedNP);
         form.patchValue({
-          np_number: this.itemNPs[this.selectedNP].Number,
-          npRef: this.itemNPs[this.selectedNP].Ref,
-          npShow: this.itemNPs[this.selectedNP].Description
+          np_number: this.itemNPs[this.selectedNP]?.Number,
+          npRef: this.itemNPs[this.selectedNP]?.Ref,
+          npShow: this.itemNPs[this.selectedNP]?.Description,
         });
-        localStorage.setItem('Sender', JSON.stringify(this.dataSender.value) )
-        console.log('form', form)
+        localStorage.setItem('Sender', JSON.stringify(this.dataSender.value));
         this.isShowSpinner = false;
       });
   }
@@ -120,8 +132,6 @@ export class NovePoshtaModalComponent implements OnInit {
     this.page = this.page + (action === '+' ? +1 : +'-1');
     if (this.page === 2) {
       this.getCitiesNps(this.dataRecipient);
-    } else if (this.page === 1) {
-      // this.getCitiesNps(this.dataSender);
     } else if (this.page === 3) {
       this.getAllInd();
     }
@@ -131,7 +141,7 @@ export class NovePoshtaModalComponent implements OnInit {
     const params = {
       first_name_client: this.dataRecipient.value.first_name_client,
       second_name_client: this.dataRecipient.value.second_name_client,
-      phone: (this.dataRecipient.value.phone).replaceAll("-", ''),
+      phone: this.dataRecipient.value.phone.replaceAll('-', ''),
     };
     this._poshaService.getIdentifikator(params);
   }
@@ -139,24 +149,20 @@ export class NovePoshtaModalComponent implements OnInit {
   changeCity(value, who) {
     this.isShowSpinner = true;
     const form = who === 'sender' ? this.dataSender : this.dataRecipient;
-    console.log( this.itemCities[value])
     form.patchValue({
       cityRef: value.selectedItems[0].value.Ref,
       city: value.selectedItems[0].value.Present,
-      cityShow: value.selectedItems[0].value.MainDescription
+      cityShow: value.selectedItems[0].value.MainDescription,
     });
-    console.log(this.dataSender.value)
     this._poshaService.getWarehouses(form.value.cityShow).subscribe((data: any) => {
       this.itemNPs = data.data;
-      console.log(data, this.itemNPs)
       this.selectedNP = this.itemNPs.findIndex((item) => +item.Number === +form.value.np_number);
       this.selectedNP = this.selectedNP === -1 ? 0 : this.selectedNP;
-      console.log(this.selectedNP, this.itemNPs)
-      if(this.itemNPs.length) {
+      if (this.itemNPs.length) {
         form.patchValue({
           np_number: this.itemNPs[this.selectedNP].Number,
           npRef: this.itemNPs[this.selectedNP].Ref,
-          npShow: this.itemNPs[this.selectedNP].Description
+          npShow: this.itemNPs[this.selectedNP].Description,
         });
       }
       this.isShowSpinner = false;
@@ -165,20 +171,23 @@ export class NovePoshtaModalComponent implements OnInit {
 
   changeNP(value, who) {
     const form = who === 'sender' ? this.dataSender : this.dataRecipient;
-    console.log(this.itemNPs[value], value)
     form.patchValue({
       np_number: value.selectedItems[0].value.Number,
       npRef: value.selectedItems[0].value.Ref,
-      npShow: value.selectedItems[0].value.Description
+      npShow: value.selectedItems[0].value.Description,
     });
-    console.log(form)
   }
 
+  cloneData() {
+    this.page = 3;
+    this.modalContentEl.classList.remove('small');
+    this.modalDialog.classList.remove('small');
+  }
   createInternetDocument() {
-    const paramsForDoc = {
+    let paramsForDoc = {
       PayerType: this.dataParcel.value.payerType,
       PaymentMethod: this.dataParcel.value.paymentMethod,
-      DateTime: this.editData(this.dataParcel.value.dateTime),
+      DateTime: this.editDate(this.dataParcel.value.dateTime),
       CargoType: this.dataParcel.value.cargoType,
       Weight: this.dataParcel.value.weight,
       ServiceType: this.dataParcel.value.serviceType,
@@ -191,20 +200,40 @@ export class NovePoshtaModalComponent implements OnInit {
       RecipientsPhone: this.dataRecipient.value.phone,
       SenderAddress: this.dataSender.value.npRef,
       RecipientAddress: this.dataRecipient.value.npRef,
+      OptionsSeat: null,
     };
 
+    if (this.isPackaging) {
+      paramsForDoc = {
+        ...paramsForDoc,
+        OptionsSeat: [
+          {
+            packRef: this.dataParcel.value.packing,
+            volumetricWidth: this.dataParcel.value.volumetricWidth,
+            volumetricLength: this.dataParcel.value.volumetricLength,
+            volumetricHeight: this.dataParcel.value.volumetricHeight,
+            weight: this.dataParcel.value.weight,
+          },
+        ],
+      };
+    }
+
     this._poshaService.createInternetDocument(paramsForDoc).subscribe((data: any) => {
-      if(data.success) {
+      if (data.success) {
         this.pdfSrc = `https://my.novaposhta.ua/orders/printMarking85x85/orders[]/${data.data[0].Ref}/type/pdf/apiKey/${this._poshaService.apiKey}`;
-        window.open(this.pdfSrc, "_blank");
-        this.closeModal();
+        window.open(this.pdfSrc, '_blank');
+        this.page = 4;
+        this.modalContentEl.classList.add('small');
+        this.modalDialog.classList.add('small');
       } else {
-        this.showAlertError();
+        const errors = data.errors.join(`\n`);
+        console.log(errors)
+        this.showAlertError(errors);
       }
     });
   }
 
-  editData(data) {
+  editDate(data) {
     const month = +data.month < 10 ? '0' + data.month : data.month;
     const day = +data.day < 10 ? '0' + data.day : data.day;
     return data ? [day, month, data.year].join('.') : null;
@@ -222,11 +251,29 @@ export class NovePoshtaModalComponent implements OnInit {
       });
   }
 
-  showAlertError() {
+  changePack() {
+    if (this.isPackaging) {
+      ['packing', 'volumetricWidth', 'volumetricLength', 'volumetricHeight'].forEach((control) =>
+        this.dataParcel.get(control).setValidators([Validators.required])
+      );
+    } else {
+      ['packing', 'volumetricWidth', 'volumetricLength', 'volumetricHeight'].forEach((control) =>
+        this.dataParcel.get(control).setValidators(null)
+      );
+    }
+    this.dataParcel.get('packing').updateValueAndValidity();
+    if (this.isPackaging && !this.packList.length) {
+      this._poshaService.getPackList().subscribe((data: any) => {
+        this.packList = data.data;
+      });
+    }
+  }
+
+  showAlertError(message = null) {
     this.alert = {
       isShow: true,
       type: 'danger',
-      message: 'Уппс, щось пішло не так',
+      message: message || 'Уппс, щось пішло не так',
     };
     setTimeout(() => {
       this.alertChange(false);
@@ -237,7 +284,8 @@ export class NovePoshtaModalComponent implements OnInit {
     this.alert.isShow = e;
   }
 
-  closeModal() {
+  closeModal(value) {
     this._activeModal.close();
+    this.closeModalNP.emit(value)
   }
 }

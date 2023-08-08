@@ -8,7 +8,4 @@ import { environment } from 'src/environments/environment';
 })
 export class AppComponent  {
     title = 'pompons';
-    constructor() {
-        console.log(environment)
-    }
 }

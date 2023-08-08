@@ -6,7 +6,7 @@ import { switchMap } from 'rxjs';
 })
 export class NovaPoshtaService {
   url = `https://api.novaposhta.ua/v2.0/json/`;
-  apiKey: string = '3ff516991fbfcae708a4a05e5040b841';
+  apiKey: string = this._apiKeyNP;
   CounterpartyRef: string; // Recipient
   ContactRecipientRefSender: string; // Sender
   ContactRecipientRef: string;
@@ -14,7 +14,7 @@ export class NovaPoshtaService {
   RecipientAddress: string;
   ContactSender: string;
   ContactRecipient: string;
-  constructor(private _http: HttpClient, @Inject('API_URL') private _apiUrl: string) {}
+  constructor(private _http: HttpClient, @Inject('API_KEY_NP') private _apiKeyNP: string) {}
 
   getCities(city) {
     return this._http.post(`${this.url}`, {
@@ -54,7 +54,6 @@ export class NovaPoshtaService {
       .subscribe((data: any) => {
         if (type === 'Sender') {
           this.ContactRecipientRefSender = data.data[0].Ref;
-
         } else {
           this.CounterpartyRef = data.data[0].Ref;
         }
@@ -142,5 +141,14 @@ export class NovaPoshtaService {
       .subscribe((data: any) => {
         this.ContactSender = data.data[0].Ref;
       });
+  }
+
+  getPackList() {
+    return this._http.post(`${this.url}`, {
+      apiKey: this.apiKey,
+      modelName: 'Common',
+      calledMethod: 'getPackList',
+      methodProperties: {},
+    });
   }
 }

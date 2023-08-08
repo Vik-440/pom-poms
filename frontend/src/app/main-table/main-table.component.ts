@@ -37,7 +37,7 @@ export class MainTableComponent implements OnInit {
   exclusionData: string[] = [];
   dataFilters = [];
   weekends: number[] = [];
-  resultsCache: { [key: string]: any } = {};
+  selectedOrderId = null;
 
   constructor(
     private _service: MainPageService,
@@ -45,7 +45,7 @@ export class MainTableComponent implements OnInit {
     private _fb: UntypedFormBuilder,
     private _generalService: UsefulService,
     private _modalService: NgbModal
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.getAllData();
@@ -61,6 +61,11 @@ export class MainTableComponent implements OnInit {
       backdrop: 'static',
     });
     modal.componentInstance.data = order;
+    modal.componentInstance.closeModalNP.subscribe((data: any) => {
+      if (data) {
+        this.selectedOrderId = order.id_order;
+      }
+    });
   }
 
   initForm() {
@@ -106,12 +111,10 @@ export class MainTableComponent implements OnInit {
         this.orders = data;
         this.isShowSpinner = false;
         this.closeFilterMenu();
-        this.resultsCache = {};
       },
       () => {
         this.isShowSpinner = false;
         this.closeFilterMenu();
-        this.resultsCache = {};
       }
     );
   }
@@ -259,17 +262,15 @@ export class MainTableComponent implements OnInit {
       (data: any) => {
         this.orders = data;
         this.isShowSpinner = false;
-        this.resultsCache = {};
       },
       () => {
-        this.resultsCache = {};
         this.isShowSpinner = false;
       }
     );
   }
 
   countAmount(field) {
-    if(field === 'money') {
+    if (field === 'money') {
       const sum_payment = this.orders.reduce((a, b) => {
         return a + b.sum_payment;
       }, 0);
@@ -278,7 +279,7 @@ export class MainTableComponent implements OnInit {
       return [sum_payment, real_money, diff].join(' / ');
     }
     return this.orders.reduce((acc, cur) => {
-      return acc + cur[field].reduce((a, b) => a+b)
+      return acc + cur[field].reduce((a, b) => a + b)
     }, 0)
   }
 
@@ -373,7 +374,7 @@ export class MainTableComponent implements OnInit {
         const startDate = moment(data.split('...')[0]);
         const endDate = moment(data.split('...')[1]);
         let currentDate = startDate;
-        while(currentDate <= endDate) {
+        while (currentDate <= endDate) {
           rangeDates.push(currentDate.format('YYYY-MM-DD'));
           currentDate = currentDate.add(1, 'days')
         }
@@ -381,7 +382,7 @@ export class MainTableComponent implements OnInit {
       } else {
         return data
       }
-    }).flat();    
+    }).flat();
   }
   addWeekdays(days) {
     let date = moment().add(1, 'days');

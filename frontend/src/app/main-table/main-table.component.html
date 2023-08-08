@@ -141,10 +141,10 @@
             {{order.phone_client | mask:'00-000-000-00-00' || '-'}}
           </td>
           <td class="td-left pl5" [class.green]="isHasCity(order.sity)">
-            <p  [ngbTooltip]="tooltipCity(order)" placement="top" (click)="openModalPoshta(order)">{{order.sity}}</p>
+            <p  [ngbTooltip]="tooltipCity(order)" class="city" placement="top" (click)="openModalPoshta(order)">{{order.sity}}</p>
           </td>
           <td>{{ order.data_plane_order | date: 'yyyy-MM-dd'}}</td>
-          <td>
+          <td [class.selected]="selectedOrderId === order.id_order">
             <button class="check-btn" (click)="makeDone(order.id_order, !order.fulfilled_order, i)">
               <img class="check-icon"
                 [src]="order.fulfilled_order ? './assets/img/icons/check.svg' : './assets/img/icons/uncheck.svg'" />

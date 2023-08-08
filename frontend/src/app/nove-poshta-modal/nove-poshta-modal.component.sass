@@ -1,5 +1,10 @@
+@import '../../variables'
 .poshta-wrapper
   height: 400px
+  &.big
+    height: 450px
+  &.small
+    height: 140px
 .header
   padding: 7px 5px
   background-color: #ffe6e5
@@ -35,13 +40,18 @@
   &-part
     display: flex
     justify-content: space-between
-    margin-top: 10px
+    margin-top: 15px
   &-item
     display: flex
     flex-direction: column
     align-items: flex-start
     width: 265px
     padding: 0px 3px
+    &.rows 
+      flex-direction: row
+      align-items: center
+      & .name
+        padding-left: 4px
     & input
       border: 1px solid #090808
     &.full
@@ -50,6 +60,8 @@
       width: 200px
       & .info-select 
         width: 100%
+    &.md
+      width: 720px
     & input
       width: 100%
       height: 25px
@@ -58,7 +70,30 @@
     &--select
       width: 100%
       height: 25px
-
+    & .volumetric-items
+      display: flex
+      & .volumetric-item
+        width: 85px
+.actions-btns-end
+  height: 100%
+  display: flex
+  justify-content: center
+  align-content: center
+  align-items: center
+  background-image: url(../../assets/img/Nova_Poshta_logo.svg)
+  background-color: dimgray
+  background-blend-mode: color-burn
+  & .actions-btn-end
+    margin: 3px
+    padding: 7px
+    border: none
+    height: 35px
+    border-radius: 5px
+    font-size: 14px
+    &.copy
+      background: $point-green
+    &.exit
+      background: $point-red
 .description 
   width: 100%
   height: 30px
@@ -102,6 +137,11 @@
     z-index: 1080
     &-content
       width: 550px
+      &.small
+        width: 300px
+    &-dialog
+      &.small
+        max-width: 300px
   .carousel-indicators
     bottom: inherit
   .carousel-inner, .carousel
@@ -110,3 +150,9 @@
     display: none
   .ng-dropdown-panel .scroll-host
     text-align: left
+  // .ng-toggle-switch-core
+  //   width: 35px !important 
+  //   height: 17px !important
+  // .ng-toggle-switch-button
+  //   width: 12px !important
+  //   height: 12px !important
