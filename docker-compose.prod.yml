@@ -6,7 +6,7 @@ services:
     ports:
       - "5000:5000"
     env_file:
-      - dev.env
+      - .env
     extra_hosts:
       - "host.docker.internal:host-gateway"
   angular:
