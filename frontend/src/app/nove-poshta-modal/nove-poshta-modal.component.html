@@ -16,8 +16,7 @@
         <div class="indicator" [class.active]="page === 3">Посилка</div>
       </div>
       <button class="indicator create" (click)="createInternetDocument()"
-        [disabled]="dataParcel.invalid || dataSender.invalid || dataRecipient.invalid">Створити накладний
-        платіж</button>
+        [disabled]="dataParcel.invalid || dataSender.invalid || dataRecipient.invalid">Створити ТТН</button>
     </div>
   </ng-template>
   <ng-template [ngIf]="page === 1">
@@ -43,7 +42,7 @@
           </div>
           <div class="form-item">
             <label for="phone">Номер телефону*</label>
-            <input placeholder="ім'я" id="phone" formControlName="phone">
+            <input placeholder="номер телефону" id="phone" formControlName="phone">
           </div>
         </div>
         <div class="form-part address">
@@ -89,7 +88,7 @@
           </div>
           <div class="form-item">
             <label for="phone">Номер телефону</label>
-            <input placeholder="ім'я" id="phone" formControlName="phone">
+            <input placeholder="номер телефону" id="phone" formControlName="phone">
           </div>
         </div>
         <div class="form-part address">
