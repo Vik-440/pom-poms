@@ -2,7 +2,7 @@
 .poshta-wrapper
   height: 400px
   &.big
-    height: 450px
+    height: 420px
   &.small
     height: 140px
 .header
@@ -41,15 +41,23 @@
     display: flex
     justify-content: space-between
     margin-top: 15px
+    &.sb
+      justify-content: space-between
+      align-items: flex-end
   &-item
     display: flex
     flex-direction: column
     align-items: flex-start
     width: 265px
     padding: 0px 3px
+    & .info-select 
+      height: 25px
+      border: 1px solid #090808
+      background: transparent
     &.rows 
       flex-direction: row
       align-items: center
+      justify-content: flex-end
       & .name
         padding-left: 4px
     & input
@@ -57,7 +65,7 @@
     &.full
       width: 100%
     &.sm
-      width: 200px
+      width: 175px
       & .info-select 
         width: 100%
     &.md

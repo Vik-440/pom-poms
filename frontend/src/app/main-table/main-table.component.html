@@ -65,7 +65,7 @@
               </div>
             </td>
             <td class="td-left" [class.oneRow]="order.kod_model.length === 1">
-              <div class="bb_solid pl5 fx-center" [ngbTooltip]="order.comment_model[j]" [ngStyle]="changeHeight(j, i)"
+              <div class="bb_solid pl5 fx-center kod-model" [ngbTooltip]="order.comment_model[j]" [ngStyle]="changeHeight(j, i)"
                 [ngClass]="checkCode(kod_model, order.comment_model[j])"
                 *ngFor="let kod_model of order.kod_model; let j = index">
                 <a>{{kod_model}}</a>
@@ -112,7 +112,7 @@
               {{ order.kolor_model }}
             </td>
             <!-- kod_model -->
-            <td class="td-left pl5" [class]="checkCode(order.kod_model, order)" [ngbTooltip]="order.comment_model">
+            <td class="td-left pl5 kod-model" [class]="checkCode(order.kod_model, order)" [ngbTooltip]="order.comment_model">
               {{order.kod_model}}
             </td>
             <td>

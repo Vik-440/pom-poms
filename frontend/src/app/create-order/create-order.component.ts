@@ -29,7 +29,7 @@ export class CreateOrderComponent implements OnInit {
     private _clientService: ClientService,
     private _productService: ProductsService,
     private _usefulService: UsefulService
-  ) {}
+  ) { }
 
   @Input() isNew: boolean = true;
   displayMonths: number = 2;
@@ -76,7 +76,11 @@ export class CreateOrderComponent implements OnInit {
     this.init();
     this.viewChanges();
     this.dataPlaneOrder = JSON.parse(localStorage.getItem('date_plane_send')) || null;
-    this.dateToday = JSON.parse(localStorage.getItem('dateToday')) || null;
+    this.dateToday = JSON.parse(localStorage.getItem('dateToday')) || {
+      year: new Date().getFullYear(),
+      day: new Date().getDate(),
+      month: new Date().getMonth() + 1,
+    };
     if (this._route.snapshot.params.id) {
       this.idOrder = +this._route.snapshot.params.id;
       this.getOrder();
@@ -749,15 +753,16 @@ export class CreateOrderComponent implements OnInit {
     this.orderForm.value.forEach((order, i) => {
       const type = modelsData[order.article.substring(0, 3)] || modelsData[order.article.substring(0, 2)] || '';
       copyText.push(
-        `${i + 1}. ${type}, колір ${order.colors}, код ${order.article}, кількість ${this.orderAddForm.controls[i].value.qty_pars} ${
-          type.includes('брелок') ? 'шт' : 'пар'
+        `${i + 1}. ${type}, колір ${order.colors}, код ${order.article}, кількість  
+        ${this.orderAddForm.controls[i].value.qty_pars} ${type.includes('брелок') ? 'шт' : 'пар'
         }, ціна ${formatNumber(order.price)} грн/${type.includes('брелок') ? 'шт' : 'пара'}\n`
       );
     });
 
     copyText.push(
-      `Прогнозована дата виготовлення ${
-        this.dataPlaneOrder ? [this.dataPlaneOrder.year, this.dataPlaneOrder.month, this.dataPlaneOrder.day].join('-') : null
+      `Прогнозована дата виготовлення ${this.dataPlaneOrder ?
+        [this.dataPlaneOrder.year, this.dataPlaneOrder.month, this.dataPlaneOrder.day].join('-') :
+        null
       } \n\n`
     );
     copyText.push(`**Всього до оплати ${formatNumber(sumAll)}** грн\n`);
@@ -822,7 +827,7 @@ export class CreateOrderComponent implements OnInit {
         ? !(this.isNew && isClientsFormValid && isOrderValid && !this.isEmptyObject(this.dataPlaneOrder))
         : true
       : !this.isNew
-      ? !(!this.isNew && isClientsFormValid && isOrderValid && !this.isEmptyObject(this.dataPlaneOrder))
-      : true;
+        ? !(!this.isNew && isClientsFormValid && isOrderValid && !this.isEmptyObject(this.dataPlaneOrder))
+        : true;
   }
 }

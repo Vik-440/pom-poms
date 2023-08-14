@@ -61,6 +61,7 @@ export class NovePoshtaModalComponent implements OnInit {
       npRef: '',
       npShow: '',
       phone: ['', [Validators.required]],
+      categoryOfWarehouse: '',
     });
     this.dataRecipient = this._fb.group({
       city: [this.data.sity, Validators.required],
@@ -72,9 +73,10 @@ export class NovePoshtaModalComponent implements OnInit {
       npShow: '',
       npRef: '',
       phone: [this.data.phone_client, Validators.required],
+      categoryOfWarehouse: '',
     });
     this.dataParcel = this._fb.group({
-      payerType: 'Sender',
+      payerType: 'Recipient',
       paymentMethod: 'Cash',
       dateTime: [{ 
         year: new Date().getFullYear(),
@@ -83,13 +85,13 @@ export class NovePoshtaModalComponent implements OnInit {
       }, Validators.required],
       serviceType: ['WarehouseWarehouse', Validators.required],
       cargoType: ['Parcel', Validators.required],
-      weight: [null, [Validators.required, Validators.min(0.1)]],
-      cost: [null, Validators.required],
+      weight: [1, [Validators.required, Validators.min(0.1)]],
+      cost: [this.data.sum_payment, Validators.required],
       description: ['Спортивні товари', Validators.required],
       packing: [''],
-      volumetricHeight: [16],
-      volumetricLength: [11],
-      volumetricWidth: [10],
+      volumetricHeight: [1],
+      volumetricLength: [1],
+      volumetricWidth: [1],
     });
   }
 
@@ -122,6 +124,7 @@ export class NovePoshtaModalComponent implements OnInit {
           np_number: this.itemNPs[this.selectedNP]?.Number,
           npRef: this.itemNPs[this.selectedNP]?.Ref,
           npShow: this.itemNPs[this.selectedNP]?.Description,
+          categoryOfWarehouse: this.itemNPs[this.selectedNP]?.CategoryOfWarehouse,
         });
         localStorage.setItem('Sender', JSON.stringify(this.dataSender.value));
         this.isShowSpinner = false;
@@ -133,6 +136,9 @@ export class NovePoshtaModalComponent implements OnInit {
     if (this.page === 2) {
       this.getCitiesNps(this.dataRecipient);
     } else if (this.page === 3) {
+      this.dataParcel.patchValue({
+        serviceType: this.dataRecipient.value.categoryOfWarehouse === 'Postomat' ? 'WarehousePostomat' : 'WarehouseWarehouse',
+      })
       this.getAllInd();
     }
   }
@@ -163,6 +169,7 @@ export class NovePoshtaModalComponent implements OnInit {
           np_number: this.itemNPs[this.selectedNP].Number,
           npRef: this.itemNPs[this.selectedNP].Ref,
           npShow: this.itemNPs[this.selectedNP].Description,
+          categoryOfWarehouse: this.itemNPs[this.selectedNP]?.CategoryOfWarehouse,
         });
       }
       this.isShowSpinner = false;
@@ -175,6 +182,7 @@ export class NovePoshtaModalComponent implements OnInit {
       np_number: value.selectedItems[0].value.Number,
       npRef: value.selectedItems[0].value.Ref,
       npShow: value.selectedItems[0].value.Description,
+      categoryOfWarehouse: value.selectedItems[0].value.CategoryOfWarehouse,
     });
   }
 
