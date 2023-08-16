@@ -72,7 +72,7 @@ export class NovePoshtaModalComponent implements OnInit {
       np_number: [this.data.np_number, Validators.required],
       npShow: '',
       npRef: '',
-      phone: [this.data.phone_client, Validators.required],
+      phone: [this.data.phone_recipient, Validators.required],
       categoryOfWarehouse: '',
     });
     this.dataParcel = this._fb.group({
