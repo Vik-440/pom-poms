@@ -107,11 +107,13 @@ export class NovePoshtaModalComponent implements OnInit {
       .pipe(
         switchMap((cities: any) => {
           this.itemCities = cities.data[0].Addresses;
-          form.patchValue({
-            cityRef: this.itemCities[0].Ref,
-            city: this.itemCities[0].Present,
-            cityShow: this.itemCities[0].MainDescription,
-          });
+          if(this.itemCities[0]) {
+            form.patchValue({
+              cityRef: this.itemCities[0].Ref,
+              city: this.itemCities[0].Present,
+              cityShow: this.itemCities[0].MainDescription,
+            });
+          }
           return this._poshaService.getWarehouses(form.value.cityShow);
         })
       )
