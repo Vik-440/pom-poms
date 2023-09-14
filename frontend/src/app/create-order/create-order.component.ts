@@ -753,6 +753,7 @@ export class CreateOrderComponent implements OnInit {
     this.orderForm.value.forEach((order, i) => {
       const type = modelsData[order.article.substring(0, 3)] || modelsData[order.article.substring(0, 2)] || '';
       copyText.push(
+        // eslint-disable-next-line
         `${i + 1}. ${type}, колір ${order.colors}, код ${order.article}, кількість ${this.orderAddForm.controls[i].value.qty_pars} ${type.includes('брелок') ? 'шт' : 'пар'}, ціна ${formatNumber(order.price)} грн/${type.includes('брелок') ? 'шт' : 'пара'}\n`
       );
     });

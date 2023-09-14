@@ -48,7 +48,7 @@ export class NovePoshtaModalComponent implements OnInit {
       this.dataSender.patchValue({
         ...JSON.parse(localStorage.getItem('Sender')),
       });
-    }
+    };
   }
 
   initForms() {
@@ -115,7 +115,7 @@ export class NovePoshtaModalComponent implements OnInit {
               cityRef: this.itemCities[0].Ref,
               city: this.itemCities[0].Present,
               cityShow: this.itemCities[0].MainDescription,
-              cityDelivery: this.itemCities[0].DeliveryCity
+              cityDelivery: this.itemCities[0].DeliveryCity,
             });
           }
           return this._poshaService.getWarehouses(form.value.cityDelivery);
@@ -164,7 +164,7 @@ export class NovePoshtaModalComponent implements OnInit {
       cityRef: value.selectedItems[0].value.Ref,
       city: value.selectedItems[0].value.Present,
       cityShow: value.selectedItems[0].value.MainDescription,
-      cityDelivery: value.selectedItems[0].value.DeliveryCity
+      cityDelivery: value.selectedItems[0].value.DeliveryCity,
     });
     this._poshaService.getWarehouses(form.value.cityDelivery).subscribe((data: any) => {
       this.itemNPs = data.data;
