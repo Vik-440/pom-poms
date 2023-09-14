@@ -33,8 +33,7 @@ export class NovaPoshtaService {
       modelName: 'Address',
       calledMethod: 'getWarehouses',
       methodProperties: {
-        CityName: city,
-        CategoryOfWarehouse: '',
+        CityRef: city,
       },
       apiKey: this.apiKey,
     });

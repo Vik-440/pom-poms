@@ -58,7 +58,7 @@
             <label for="np_number" for="np_number">Нова Пошта</label>
             <ng-select #senderNP [clearable]="false" (change)="changeNP(senderNP, 'sender')" class="form-item--select"
               formControlName="npShow" notFoundText="НП не знайдено" bindLabel="Description" bindValue="Description"
-              (search)="searchCity($event)" type="number" [items]="itemNPs"></ng-select>
+              type="number" [items]="itemNPs" (search)="loadNP(dataSender)" ></ng-select>
           </div>
         </div>
       </div>
@@ -104,7 +104,7 @@
             <label for="np_number" for="np_number">Нова Пошта</label>
             <ng-select #senderNP [clearable]="false" (change)="changeNP(senderNP, 'recipient')"
               class="form-item--select" formControlName="npShow" notFoundText="НП не знайдено" bindLabel="Description"
-              bindValue="Description" (search)="searchCity($event)" type="number" [items]="itemNPs"></ng-select>
+              bindValue="Description" type="number" [items]="itemNPs"></ng-select>
           </div>
         </div>
       </div>
