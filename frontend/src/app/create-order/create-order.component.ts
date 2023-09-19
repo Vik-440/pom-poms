@@ -758,12 +758,11 @@ export class CreateOrderComponent implements OnInit {
       );
     });
 
-    copyText.push(
-      `Прогнозована дата виготовлення ${this.dataPlaneOrder ?
-        [this.dataPlaneOrder.year, this.dataPlaneOrder.month, this.dataPlaneOrder.day].join('-') :
-        null
-      } \n\n`
-    );
+    if(this.dataPlaneOrder) {
+      copyText.push(
+        `Прогнозована дата виготовлення ${this.rewriteData(this.dataPlaneOrder)} \n\n`
+      );
+    }
     copyText.push(`**Всього до оплати ${formatNumber(sumAll)}** грн\n`);
     copyText.push(`Аванс від ${formatNumber(Math.floor((sumAll * 0.3) / 100) * 100)} грн \n\n`);
     copyText.push(
