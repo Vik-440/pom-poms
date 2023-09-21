@@ -191,7 +191,7 @@
         </div>
       </div>
       <div class="filters-data">
-        <div class="filters-data--title"> Готовність</div>
+        <div class="filters-data--title">Готовність</div>
         <ng-select formControlName="fulfilled" bindLabel="name" class="done" bindValue="value" [clearable]="false"
           [items]="fulfilledOrderItems"></ng-select>
       </div>
@@ -256,5 +256,9 @@
 </ng-template>
 
 <div class="blur" *ngIf="isShowFilter" (click)="closeFilterMenu()"></div>
-<app-alert *ngIf="alert.isShow" [type]="alert.type" [message]="alert.message"
-  (closed)="alertChange($event)"></app-alert>
+<app-alert 
+  *ngIf="alert.isShow" 
+  [type]="alert.type" 
+  [message]="alert.message"
+  (closed)="alertChange($event)">
+</app-alert>

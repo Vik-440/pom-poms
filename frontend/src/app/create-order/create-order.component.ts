@@ -288,7 +288,6 @@ export class CreateOrderComponent implements OnInit {
                 part_3: data.part_3,
                 color_name_4: data.color_name_4 || null,
                 part_4: data.part_4,
-
                 comment: data.comment,
                 isNew: false,
                 isChange: false,
@@ -299,10 +298,8 @@ export class CreateOrderComponent implements OnInit {
         });
       });
     } else {
-      this.orderForm.controls.map((order) => {
-        order.patchValue({
-          article: value?.value,
-        });
+      this.orderForm.controls[index].patchValue({
+        article: value?.value,
       });
     }
     this.clearProductsItems();
@@ -751,10 +748,19 @@ export class CreateOrderComponent implements OnInit {
     const copyText = [`**Замовлення № ${this.idOrder}**\n\n`];
     const sumAll = +this.sumAll(true).split('/')[0].trim();
     this.orderForm.value.forEach((order, i) => {
-      const type = modelsData[order.article.substring(0, 3)] || modelsData[order.article.substring(0, 2)] || '';
+      const type = modelsData[order.article.substring(0, 3)] || modelsData[order.article.substring(0, 2)] || null;
       copyText.push(
-        // eslint-disable-next-line
-        `${i + 1}. ${type}, колір ${order.colors}, код ${order.article}, кількість ${this.orderAddForm.controls[i].value.qty_pars} ${type.includes('брелок') ? 'шт' : 'пар'}, ціна ${formatNumber(order.price)} грн/${type.includes('брелок') ? 'шт' : 'пара'}\n`
+        [
+          `${i + 1}.`, 
+          type, 
+          `код ${order.article}`, 
+          `кількість ${this.orderAddForm.controls[i].value.qty_pars || 0} ${type && type.includes('брелок') ? 'шт' : 'пар'}`, 
+          `ціна ${formatNumber(order.price)} грн/${type && type.includes('брелок') ? 'шт' : 'пара'}\n`]
+        .filter((item) => item !== null && item !== undefined)
+        .join(', ')
+// `${i + 1}. ${type}, колір ${order.colors}, код ${order.article}, 
+// кількість ${this.orderAddForm.controls[i].value.qty_pars || 0} ${type.includes('брелок') ? 'шт' : 'пар'}, 
+// ціна ${formatNumber(order.price)} грн/${type.includes('брелок') ? 'шт' : 'пара'}\n`
       );
     });
 

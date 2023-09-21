@@ -4,10 +4,10 @@ import { NgbModal, NgbOffcanvas } from '@ng-bootstrap/ng-bootstrap';
 import * as _ from 'lodash';
 import * as moment from 'moment';
 import { DataAutofillInterface } from '../interfaces/autofill-data';
+import { NovePoshtaModalComponent } from '../nove-poshta-modal/nove-poshta-modal.component';
 import { MainPageService } from '../services/main-table.service';
 import { UsefulService } from '../services/useful.service';
 import { DataAutofill } from '../utils/autofill';
-import { NovePoshtaModalComponent } from '../nove-poshta-modal/nove-poshta-modal.component';
 // import * as exclusionData from '../../../config-property.json';
 @Component({
   selector: 'app-main-table',
@@ -387,6 +387,7 @@ export class MainTableComponent implements OnInit {
   addWeekdays(days) {
     let date = moment().add(1, 'days');
     while (days > 0) {
+      console.log(this.weekends)
       if (!this.weekends.includes(date.isoWeekday()) && !this.exclusionData.includes(date.format('yyyy-MM-DD'))) {
         days -= 1;
       }

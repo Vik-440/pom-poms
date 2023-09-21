@@ -243,7 +243,6 @@ export class NovePoshtaModalComponent implements OnInit {
         this.modalDialog.classList.add('small');
       } else {
         const errors = data.errors.join(`\n`);
-        console.log(errors)
         this.showAlertError(errors);
       }
     });
