@@ -35,37 +35,58 @@ def getting_filter_clients(args: dict) -> list:
                 'team': DB_client.team,
                 'coach': DB_client.coach,
                 'city': DB_client.city}
+    id_orders_client = []
+    with Session(engine) as session:
+        for key, value in filters_clients.items():
+            if key in args:
+                stmt1 = (
+                    select(DB_orders.id_order)
+                    .join(client_alias, DB_orders.id_client == client_alias.id_client)
+                    .join(recipient_alias, DB_orders.id_recipient == recipient_alias.id_client)
+                    .join(DB_client, DB_orders.id_client == DB_client.id_client)
+                    .where(value == args[key])
+                    .order_by(DB_orders.id_order))
+                stmt2= ( select(DB_orders.id_order)
+                    .join(client_alias, DB_orders.id_client == client_alias.id_client)
+                    .join(recipient_alias, DB_orders.id_recipient == recipient_alias.id_client)
+                    .join(DB_client, DB_orders.id_recipient == DB_client.id_client)
+                    .where(value == args[key])
+                    .order_by(DB_orders.id_order))
+                stmt = union(stmt1, stmt2).order_by(DB_orders.id_order)
     # id_orders_client = []
     # with Session(engine) as session:
     #     for key, value in filters_clients.items():
     #         if key in args:
-    #             stmt1 = (
+    #             stmt = (
     #                 select(DB_orders.id_order)
     #                 .join(client_alias, DB_orders.id_client == client_alias.id_client)
     #                 .join(recipient_alias, DB_orders.id_recipient == recipient_alias.id_client)
-    #                 .join(DB_client, DB_orders.id_client == DB_client.id_client)
+    #                 .join(DB_client, or_(DB_orders.id_client == DB_client.id_client, DB_orders.id_recipient == DB_client.id_client))
     #                 .where(value == args[key])
     #                 .order_by(DB_orders.id_order))
-    #             stmt2= ( select(DB_orders.id_order)
-    #                 .join(client_alias, DB_orders.id_client == client_alias.id_client)
-    #                 .join(recipient_alias, DB_orders.id_recipient == recipient_alias.id_client)
-    #                 .join(DB_client, DB_orders.id_recipient == DB_client.id_client)
-    #                 .where(value == args[key])
-    #                 .order_by(DB_orders.id_order))
-    #             stmt = union(stmt1, stmt2).order_by(DB_orders.id_order)
-    with Session(engine) as session:
-        conditions = [value == args[key] for key, value in filters_clients.items() if key in args]
-        stmt = (
-            select(DB_orders.id_order)
-            .join(client_alias, DB_orders.id_client == client_alias.id_client)
-            .join(recipient_alias, DB_orders.id_recipient == recipient_alias.id_client)
-            .join(DB_client, or_(DB_orders.id_client == DB_client.id_client, DB_orders.id_recipient == DB_client.id_client))
-            # .where(or_(*[value == args[key] for key, value in filters_clients.items() if key in args]))
-            .where(and_(*conditions))
-            .order_by(DB_orders.id_order)
-        )
-        result = session.execute(stmt).scalars()
-        id_orders_client = [id_client for id_client in result] if result is not None else []
+                # stmt2= ( select(DB_orders.id_order)
+                #     .join(client_alias, DB_orders.id_client == client_alias.id_client)
+                #     .join(recipient_alias, DB_orders.id_recipient == recipient_alias.id_client)
+                #     .join(DB_client, DB_orders.id_recipient == DB_client.id_client)
+                #     .where(value == args[key])
+                #     .order_by(DB_orders.id_order))
+                # stmt = union(stmt1, stmt2).order_by(DB_orders.id_order)
+                            # print(args.json())
+                            # with Session(engine) as session:
+                            #     conditions = [value == args[key] for key, value in filters_clients.items() if key in args]
+                            #     stmt = (
+                            #         select(DB_orders.id_order)
+                            #         .join(client_alias, DB_orders.id_client == client_alias.id_client)
+                            #         .join(recipient_alias, DB_orders.id_recipient == recipient_alias.id_client)
+                            #         .join(DB_client, or_(DB_orders.id_client == DB_client.id_client, DB_orders.id_recipient == DB_client.id_client))
+                            #         # .where(or_(*[value == args[key] for key, value in filters_clients.items() if key in args]))
+                            #         .where(and_(*conditions))
+                            #         .order_by(DB_orders.id_order)
+                            #     )
+                result = session.execute(stmt).scalars()
+                # print(result)
+                id_orders_client = [id_client for id_client in result] if result is not None else []
+                # print(f'id_orders_client - {id_orders_client}')
     return id_orders_client
 
 
@@ -166,6 +187,8 @@ def main_page():
             select_module_without_date = create_select_module()
             select_module = select_module_without_date.where(
                 DB_orders.date_create.between(date_start_search, date_finish_search))
+            # print(f'id_orders_client - {id_orders_client}')
+            # print(f'id_orders_products - {id_orders_products}')
 
             if id_orders_client and id_orders_products:
                 orders = list(set(id_orders_client) & set(id_orders_products))
@@ -173,7 +196,8 @@ def main_page():
                 orders = id_orders_client + id_orders_products
             else:
                 orders = []
-   
+            # print(f'orders - {orders}')
+            # print(f'status_order - {status_order}')
             if not orders and status_order == 'false':
                 stmt = (
                     select_module
