@@ -2,7 +2,7 @@
 
 from datetime import datetime
 from flask import request, jsonify
-from sqlalchemy import func, select
+from sqlalchemy import func, select, or_, union, and_
 from sqlalchemy.orm import Session, aliased
 
 from app.orders.models import DB_orders
@@ -35,19 +35,37 @@ def getting_filter_clients(args: dict) -> list:
                 'team': DB_client.team,
                 'coach': DB_client.coach,
                 'city': DB_client.city}
-    id_orders_client = []
+    # id_orders_client = []
+    # with Session(engine) as session:
+    #     for key, value in filters_clients.items():
+    #         if key in args:
+    #             stmt1 = (
+    #                 select(DB_orders.id_order)
+    #                 .join(client_alias, DB_orders.id_client == client_alias.id_client)
+    #                 .join(recipient_alias, DB_orders.id_recipient == recipient_alias.id_client)
+    #                 .join(DB_client, DB_orders.id_client == DB_client.id_client)
+    #                 .where(value == args[key])
+    #                 .order_by(DB_orders.id_order))
+    #             stmt2= ( select(DB_orders.id_order)
+    #                 .join(client_alias, DB_orders.id_client == client_alias.id_client)
+    #                 .join(recipient_alias, DB_orders.id_recipient == recipient_alias.id_client)
+    #                 .join(DB_client, DB_orders.id_recipient == DB_client.id_client)
+    #                 .where(value == args[key])
+    #                 .order_by(DB_orders.id_order))
+    #             stmt = union(stmt1, stmt2).order_by(DB_orders.id_order)
     with Session(engine) as session:
-        for key, value in filters_clients.items():
-            if key in args:
-                stmt = (
-                    select(DB_orders.id_order)
-                    .join(client_alias, DB_orders.id_client == client_alias.id_client)
-                    .join(recipient_alias, DB_orders.id_recipient == recipient_alias.id_client)
-                    .join(DB_client, DB_orders.id_client == DB_client.id_client)
-                    .where(value == args[key])
-                    .order_by(DB_client.id_client))
-                result = session.execute(stmt).scalars()
-                id_orders_client = [id_client for id_client in result] if result is not None else []
+        conditions = [value == args[key] for key, value in filters_clients.items() if key in args]
+        stmt = (
+            select(DB_orders.id_order)
+            .join(client_alias, DB_orders.id_client == client_alias.id_client)
+            .join(recipient_alias, DB_orders.id_recipient == recipient_alias.id_client)
+            .join(DB_client, or_(DB_orders.id_client == DB_client.id_client, DB_orders.id_recipient == DB_client.id_client))
+            # .where(or_(*[value == args[key] for key, value in filters_clients.items() if key in args]))
+            .where(and_(*conditions))
+            .order_by(DB_orders.id_order)
+        )
+        result = session.execute(stmt).scalars()
+        id_orders_client = [id_client for id_client in result] if result is not None else []
     return id_orders_client
 
 

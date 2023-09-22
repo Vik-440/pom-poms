@@ -36,34 +36,34 @@ parameters:
     in: query
     type: integer
     format: int16
-    description: ID of client
-    enum: [10, 100, 110, 111, 201, 250]
+    description: ID of client 
+    example: 10, 100, 110, 111, 201, 250
     required: false
   - name: team
     in: query
     type: string
-    description: name of team
-    enum: ['Джуніор', 'Торнадо', 'РедФокс', 'Peregrine (Перегрін)', 'Атлантида']
+    description: name of team 
+    example: 'Джуніор, Торнадо, РедФокс, Peregrine (Перегрін), Атлантида'
     required: false
   - name: coach
     in: query
     type: string
-    description: second name of coach
-    enum: ['Клименко', 'Гнатуш', 'Куманова', 'Гаврушко', 'Пугачова', 'Хейлик']
+    description: second name of coach 
+    example: 'Клименко, Гнатуш, Куманова, Гаврушко, Пугачова, Хейлик'
     required: false
 
   - name: city
     in: query
     type: string
-    description: city
-    enum: ['Тернопіль', 'Львів', 'Суми', 'Бар', 'Харків']
+    description: city 
+    example: 'Тернопіль, Львів, Суми, Бар, Харків'
     required: false
 
   - name: kod_model
     in: query
     type: string
     description: article of product
-    enum: ['190-77', '170-73', '230-80', '402-70']
+    example: '190-77, 170-73, 230-80, 402-70'
     required: false
 
   - name: kod_model_like
