@@ -17,7 +17,7 @@ def create_app(config_name="production"):
     global engine
     app = Flask(__name__)
     api = Api(app)
-    swagger = Swagger(app, config=get_swagger_config())
+    swagger = Swagger(app, config=get_swagger_config()) # noqa
     CORS(app)
     app.config.from_object(config[config_name])
 

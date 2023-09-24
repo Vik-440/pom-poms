@@ -30,12 +30,11 @@ def create_client():
     if error_data:
         logger.error(f'{error_data}')
         return jsonify(error_data), 400
-    
+
     error_number = validate_number(data)
     if error_number:
         logger.error(f'{error_number}')
         return jsonify(error_number), 400
-
 
     with Session(engine) as session:
         stmt = DB_client(
@@ -56,9 +55,9 @@ def create_client():
         try:
             id_client = stmt.id_client
             return jsonify({"id_client": id_client}), 200
-        except: # pragma: no cover
-            logger.error('id_client: error in save order to DB') # pragma: no cover
-            return  jsonify({"id_client": 'error in save order to DB'}), 400 # pragma: no cover
+        except Exception as e:  # pragma: no cover
+            logger.error('id_client: error in save order to DB')
+            return jsonify({"id_client": e}), 400
 
 
 @api.route('/client/<int:id_client>', methods=['GET'])

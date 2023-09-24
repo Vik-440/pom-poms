@@ -1,0 +1,36 @@
+tags:
+  - ParametersDB
+parameters:
+  - name: params
+    in: body
+    description: create new parameter
+    required: true
+    schema:
+      $ref: '#/definitions/params'
+    content:
+      application/json:
+          schema:
+            type: object
+responses:
+  "201":
+    description: '{"param_created": "OK"}'
+definitions:
+  params:
+    type: object
+    properties:
+      parameter_name:
+        type: string
+        description: name of parameter
+        example: 'weekend'
+      parameter_str:
+        type: string
+        description: string parameter or None
+        example: '[6, 7]'
+      parameter_int:
+        type: integer
+        description: integer parameter or 0
+        example: 7
+      parameter_description:
+        type: string
+        description: description of parameter
+        example: 'parameter for something'
