@@ -1,0 +1,35 @@
+# Read params
+#---
+tags:
+  - Param_DB
+parameters:
+  - name: params_names
+    in: path
+    description: list of params which asking
+    type: string
+    required: true
+responses:
+  "200":
+    description: read parameters from DB
+    schema:
+      $ref: "#/definitions/Params_obj"
+definitions:
+  Params_obj:
+    type: object
+    properties:
+      weekends:
+        type: object
+        description: name of param
+        properties:
+          parameter_str:
+            type: string
+            description: string data
+            example: '[6, 7]'
+          parameter_int:
+            type: integer
+            description: integer data
+            example: 0
+          parameter_description:
+            type: string
+            description: description
+            example: 'something important'

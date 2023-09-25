@@ -1,6 +1,11 @@
 tags:
   - Param_DB
 parameters:
+  - name: params_name
+    in: path
+    description: list of params which asking
+    type: string
+    required: true
   - name: params
     in: body
     description: create new parameter
@@ -12,7 +17,7 @@ parameters:
           schema:
             type: object
 responses:
-  "201":
+  "202":
     description: '{"param_created": "OK"}'
 definitions:
   params:

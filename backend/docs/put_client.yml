@@ -22,7 +22,7 @@ responses:
   '200':
     description: '{"edit_client": "id_client"}'
   '400':
-    description: '{"edit_client": "misstake in data"}'
+    description: '{"edit_client": "mistake in data"}'
 definitions:
   Edit_client:
     type: object

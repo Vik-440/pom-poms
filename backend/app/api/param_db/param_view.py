@@ -47,10 +47,11 @@ def parameter_db_post() -> dict:
         return jsonify({'param_created': e}), 400
 
 
-@api.route('/param/<string:parameter_keys>', methods=['GET'])
-def parameter_db_get(parameter_keys) -> Dict:
+@api.route('/param/<string:params_names>', methods=['GET'])
+@swag_from('/docs/get_param_path_db.yml')
+def parameter_db_get(params_names: str) -> Dict:
     """read data from DB by query"""
-    keys_list = parameter_keys.split(',')
+    keys_list = params_names.split(',')
     if len(keys_list) == 0:
         return jsonify({'param': 'query is empty'})
     with Session(engine) as session:
@@ -77,10 +78,13 @@ def parameter_db_get(parameter_keys) -> Dict:
         for item in params_list:
             if list(item.keys())[0] in keys_list:
                 parameters_answer.update(item)
+        for key in keys_list:
+            if key not in list(parameters_answer.keys()):
+                parameters_answer.update({key: 'not existed'})
         return jsonify(parameters_answer)
 
 
-@api.route('/param/', methods=['GET'])
+@api.route('/param', methods=['GET'])
 @swag_from('/docs/get_param_db.yml')
 def parameter_db_get_all() -> Dict:
     """read data from DB by query"""
@@ -96,16 +100,16 @@ def parameter_db_get_all() -> Dict:
         return jsonify(params_list)
 
 
-@api.route('/param/<parameter_name>', methods=['DELETE'])
-@swag_from('/docs/get_param_db.yml')
-def parameter_db_delete(parameter_name) -> Dict:
+@api.route('/param/<string:params_name>', methods=['DELETE'])
+@swag_from('/docs/del_param_db.yml')
+def parameter_db_delete(params_name) -> Dict:
     """delete parameter from DB by query"""
 
     with Session(engine) as session:
         try:
             stmt = (
                 delete(ParamDb)
-                .where(ParamDb.parameter_name == parameter_name)
+                .where(ParamDb.parameter_name == params_name)
             )
             session.execute(stmt)
             session.commit()
@@ -115,9 +119,9 @@ def parameter_db_delete(parameter_name) -> Dict:
             return {'param_deleted': 'error', 'message': str(e)}, 400
 
 
-@api.route('/param/<parameter_name>', methods=['PATCH'])
-# @swag_from('/docs/get_param_db.yml')
-def parameter_db_patch(parameter_name) -> Dict:
+@api.route('/param/<string:params_name>', methods=['PATCH'])
+@swag_from('/docs/patch_param_db.yml')
+def parameter_db_patch(params_name) -> Dict:
     """patch parameter from DB by query"""
     try:
         data = request.get_json(force=True)
@@ -131,15 +135,15 @@ def parameter_db_patch(parameter_name) -> Dict:
         try:
             stmt = (
                     select(ParamDb.parameter_name)
-                    .where(ParamDb.parameter_name == parameter_name)
+                    .where(ParamDb.parameter_name == params_name)
                 )
             res = session.execute(stmt).first()
             if res is None:
-                return {parameter_name: 'is not existed'}
+                return {params_name: 'is not existed'}
 
             stmt = (
                 update(ParamDb)
-                .where(ParamDb.parameter_name == parameter_name)
+                .where(ParamDb.parameter_name == params_name)
                 .values(
                     parameter_str=data.get('parameter_str', None),
                     parameter_int=data.get('parameter_int', 0),
@@ -149,7 +153,7 @@ def parameter_db_patch(parameter_name) -> Dict:
             )
             session.execute(stmt)
             session.commit()
-            return jsonify({'param_updated': 'OK'}), 202
+            return jsonify({'params_updated': 'OK'}), 202
         except Exception as e:
             session.rollback()
-            return {'param_patch': 'error', 'message': str(e)}, 400
+            return {'params_patch': 'error', 'message': str(e)}, 400

@@ -28,7 +28,7 @@ def create_order():
     except BadRequest:
         logger.error('/order(POST) - format json is not correct')
         return jsonify({'order': 'json format is not correct'}), 400
-    
+
     errors_validate = validate_create_order(data)
     if errors_validate:
         logger.error(f'{errors_validate}')
@@ -59,9 +59,9 @@ def create_order():
         session.refresh(stmt)
         if id_order == stmt.id_order:
             return jsonify({'id_order': id_order}), 200
-        else: # pragma: no cover
-            logger.error('id_order: error in save order to DB') # pragma: no cover
-            return  jsonify({"id_order": 'error in save order to DB'}), 400 # pragma: no cover
+        else:  # pragma: no cover
+            logger.error('id_order: error in save order to DB')
+            return jsonify({"id_order": 'error in save order to DB'}), 400
 
 
 @api.route('/order/<int:id_order>', methods=['GET'])
@@ -76,7 +76,7 @@ def read_order(id_order):
         with Session(engine) as session:
             stmt = (
                 select(
-                    func.sum(DB_payment.payment).label('sum_paypents_order'),
+                    func.sum(DB_payment.payment).label('sum_payments_order'),
                     DB_orders.id_order,
                     DB_orders.date_create,
                     DB_orders.date_plane_send,
@@ -94,7 +94,8 @@ def read_order(id_order):
                     DB_orders.phase_3)
                 .group_by(DB_orders)
                 .where(DB_orders.id_order == id_order)
-                .outerjoin(DB_payment, DB_orders.id_order == DB_payment.id_order))
+                .outerjoin(
+                    DB_payment, DB_orders.id_order == DB_payment.id_order))
             order = session.execute(stmt).first()
             return jsonify({
                 'id_order': order.id_order,
@@ -112,23 +113,23 @@ def read_order(id_order):
                 'phase_1': order.phase_1,
                 'phase_2': order.phase_2,
                 'phase_3': order.phase_3,
-                'real_money': order.sum_paypents_order
+                'real_money': order.sum_payments_order
             }), 200
-    except: # pragma: no cover
-        logger.error({'order_(POST)': 'error in DB'}) # pragma: no cover
-        return jsonify({'order': 'error in DB'}), 400 # pragma: no cover
+    except Exception as e:
+        logger.error({'order_(POST)': e})
+        return jsonify({'order': e}), 400
 
 
 @api.route('/order/<int:id_order>', methods=['PUT'])
 @swag_from('/docs/put_order.yml')
 def edit_order(id_order):
     """Edit order"""
-    
+
     error_id_order = validate_id_order(id_order)
     if error_id_order:
         logger.error(f'{error_id_order}')
         return jsonify(error_id_order), 400
-    
+
     try:
         data = request.get_json(force=True)
     except BadRequest:
@@ -163,6 +164,6 @@ def edit_order(id_order):
             session.execute(stmt)
             session.commit()
         return jsonify({"edit_order": id_order}), 200
-    except: # pragma: no cover
-        logger.error(f'edit_order {id_order} error') # pragma: no cover
-        return jsonify({"edit_order": id_order}), 400 # pragma: no cover
+    except Exception as e:
+        logger.error(f'edit_order {id_order} - {e}')
+        return jsonify({"error": e}), 400

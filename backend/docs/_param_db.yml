@@ -1,0 +1,46 @@
+tags:
+  - Param_DB
+paths:
+  /params:
+    get:
+      responses:
+        "200":
+          description: read parameters from DB
+          schema:
+            type: array
+            items:
+              type: string
+            example: "['exclusionData', 'weekends']"
+  /params/{params_names}:
+    get:
+      parameters:
+        - name: params_names
+          in: path
+          description: list of params which asking
+          type: string
+          required: true
+      responses:
+        "200":
+          description: read parameters from DB
+          schema:
+            $ref: "#/definitions/Params_obj"
+      definitions:
+        Params_obj:
+          type: object
+          properties:
+            weekends:
+              type: object
+              description: name of param
+              properties:
+                parameter_str:
+                  type: string
+                  description: string data
+                  example: '[6, 7]'
+                parameter_int:
+                  type: integer
+                  description: integer data
+                  example: 0
+                parameter_description:
+                  type: string
+                  description: description
+                  example: 'something important'

@@ -1,21 +1,10 @@
 tags:
-  - ParametersDB
-parameters:
-  - name: parameters_list
-    in: path
-    type: string
-    # enum: ["weekend", "days", "qty"]
-    required: false
+  - Param_DB
 responses:
   "200":
     description: read parameters from DB
-#   schema:
-#     $ref: "#/definitions/params_get"
-# definitions:
-#   params_get:
-#     type: object
-#     properties:
-#       list_params:
-#         type: string
-#         description: parameters separated come without space
-#         example: "weekends,days,qty"
+    schema:
+      type: array
+      items:
+        type: string
+      example: "['exclusionData', 'weekends']"

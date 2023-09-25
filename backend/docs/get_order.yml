@@ -14,7 +14,7 @@ responses:
     schema:
       $ref: "#/definitions/Order"
   "400":
-    description: '{"read_order": "misstake in data"}'
+    description: '{"read_order": "mistake in data"}'
 definitions:
   Order:
     type: object
@@ -83,7 +83,7 @@ definitions:
       discount:
         type: integer
         format: int32
-        description: (old name - "discont_order") discount for this order
+        description: (old name - "discount_order") discount for this order
         example: 0
       sum_payment:
         type: integer

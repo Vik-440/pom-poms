@@ -1,0 +1,11 @@
+tags:
+  - Param_DB
+parameters:
+  - name: params_name
+    in: path
+    description: name of param which delete
+    type: string
+    required: true
+responses:
+  "204":
+    description: delete parameter from DB by name
