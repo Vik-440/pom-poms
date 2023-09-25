@@ -750,17 +750,11 @@ export class CreateOrderComponent implements OnInit {
     this.orderForm.value.forEach((order, i) => {
       const type = modelsData[order.article.substring(0, 3)] || modelsData[order.article.substring(0, 2)] || null;
       copyText.push(
-        [
-          `${i + 1}.`, 
-          type, 
-          `код ${order.article}`, 
-          `кількість ${this.orderAddForm.controls[i].value.qty_pars || 0} ${type && type.includes('брелок') ? 'шт' : 'пар'}`, 
-          `ціна ${formatNumber(order.price)} грн/${type && type.includes('брелок') ? 'шт' : 'пара'}\n`]
-        .filter((item) => item !== null && item !== undefined)
-        .join(', ')
-// `${i + 1}. ${type}, колір ${order.colors}, код ${order.article}, 
-// кількість ${this.orderAddForm.controls[i].value.qty_pars || 0} ${type.includes('брелок') ? 'шт' : 'пар'}, 
-// ціна ${formatNumber(order.price)} грн/${type.includes('брелок') ? 'шт' : 'пара'}\n`
+        `${i + 1}. ${type},` 
+        + `колір ${order.colors},` 
+        + `код ${order.article},` 
+        + `кількість ${this.orderAddForm.controls[i].value.qty_pars || 0} ${type.includes('брелок') ? 'шт' : 'пар'},` 
+        + `ціна ${formatNumber(order.price)} грн/${type.includes('брелок') ? 'шт' : 'пара'}\n`
       );
     });
 
