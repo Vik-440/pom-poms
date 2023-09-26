@@ -6,7 +6,8 @@ from flask import json
 def test_post_json_not_correct_materials(app_fixture):
     client = app_fixture.test_client()
     data = 'this is not valid json'
-    response = client.post('/materials', data=data)
+    response = client.post(
+        '/materials', data=data)
     assert response.status_code == 400
     expected_data = {'materials': 'json format is not correct'}
     assert response.json == expected_data
@@ -27,7 +28,8 @@ def test_materials_without_comment(app_fixture):
         'weight_10m': 12.623,
         'weight': 1111}
     headers = {'Content-Type': 'application/json'}
-    response = client.post('/materials', data=json.dumps(data), headers=headers)
+    response = client.post(
+        '/materials', data=json.dumps(data), headers=headers)
     assert response.status_code == 400
     expected_data = {'comment':  'miss in data'}
     assert response.json == expected_data
@@ -48,7 +50,8 @@ def test_materials_comment_not_str(app_fixture):
         'weight_10m': 12.623,
         'weight': 1111}
     headers = {'Content-Type': 'application/json'}
-    response = client.post('/materials', data=json.dumps(data), headers=headers)
+    response = client.post(
+        '/materials', data=json.dumps(data), headers=headers)
     assert response.status_code == 400
     expected_data = {'comment': 'is not str, NoneType type'}
     assert response.json == expected_data
@@ -69,7 +72,8 @@ def test_materials_without_manufacturer(app_fixture):
         'weight_10m': 12.623,
         'weight': 1111}
     headers = {'Content-Type': 'application/json'}
-    response = client.post('/materials', data=json.dumps(data), headers=headers)
+    response = client.post(
+        '/materials', data=json.dumps(data), headers=headers)
     assert response.status_code == 400
     expected_data = {'manufacturer':  'miss in data'}
     assert response.json == expected_data
@@ -90,7 +94,8 @@ def test_materials_manufacturer_not_str(app_fixture):
         'weight_10m': 12.623,
         'weight': 1111}
     headers = {'Content-Type': 'application/json'}
-    response = client.post('/materials', data=json.dumps(data), headers=headers)
+    response = client.post(
+        '/materials', data=json.dumps(data), headers=headers)
     assert response.status_code == 400
     expected_data = {'manufacturer': 'is not str type'}
     assert response.json == expected_data
@@ -111,7 +116,8 @@ def test_materials_without_name(app_fixture):
         'weight_10m': 12.623,
         'weight': 1111}
     headers = {'Content-Type': 'application/json'}
-    response = client.post('/materials', data=json.dumps(data), headers=headers)
+    response = client.post(
+        '/materials', data=json.dumps(data), headers=headers)
     assert response.status_code == 400
     expected_data = {'name':  'miss in data'}
     assert response.json == expected_data
@@ -132,7 +138,8 @@ def test_materials_name_not_str(app_fixture):
         'weight_10m': 12.623,
         'weight': 1111}
     headers = {'Content-Type': 'application/json'}
-    response = client.post('/materials', data=json.dumps(data), headers=headers)
+    response = client.post(
+        '/materials', data=json.dumps(data), headers=headers)
     assert response.status_code == 400
     expected_data = {'name': 'is not str type'}
     assert response.json == expected_data
@@ -153,7 +160,8 @@ def test_materials_without_reserve(app_fixture):
         'weight_10m': 12.623,
         'weight': 1111}
     headers = {'Content-Type': 'application/json'}
-    response = client.post('/materials', data=json.dumps(data), headers=headers)
+    response = client.post(
+        '/materials', data=json.dumps(data), headers=headers)
     assert response.status_code == 400
     expected_data = {'reserve':  'miss in data'}
     assert response.json == expected_data
@@ -174,7 +182,8 @@ def test_materials_reserve_not_int(app_fixture):
         'weight_10m': 12.623,
         'weight': 1111}
     headers = {'Content-Type': 'application/json'}
-    response = client.post('/materials', data=json.dumps(data), headers=headers)
+    response = client.post(
+        '/materials', data=json.dumps(data), headers=headers)
     assert response.status_code == 400
     expected_data = {'reserve': 'is not int type'}
     assert response.json == expected_data
@@ -195,7 +204,8 @@ def test_materials_without_spool_qty(app_fixture):
         'weight_10m': 12.623,
         'weight': 1111}
     headers = {'Content-Type': 'application/json'}
-    response = client.post('/materials', data=json.dumps(data), headers=headers)
+    response = client.post(
+        '/materials', data=json.dumps(data), headers=headers)
     assert response.status_code == 400
     expected_data = {'spool_qty':  'miss in data'}
     assert response.json == expected_data
@@ -216,7 +226,8 @@ def test_materials_spool_qty_not_int(app_fixture):
         'weight_10m': 12.623,
         'weight': 1111}
     headers = {'Content-Type': 'application/json'}
-    response = client.post('/materials', data=json.dumps(data), headers=headers)
+    response = client.post(
+        '/materials', data=json.dumps(data), headers=headers)
     assert response.status_code == 400
     expected_data = {'spool_qty': 'is not int type'}
     assert response.json == expected_data
@@ -237,7 +248,8 @@ def test_materials_without_spool_weight(app_fixture):
         'weight_10m': 12.623,
         'weight': 1111}
     headers = {'Content-Type': 'application/json'}
-    response = client.post('/materials', data=json.dumps(data), headers=headers)
+    response = client.post(
+        '/materials', data=json.dumps(data), headers=headers)
     assert response.status_code == 400
     expected_data = {'spool_weight':  'miss in data'}
     assert response.json == expected_data
@@ -258,7 +270,8 @@ def test_materials_spool_weight_not_int(app_fixture):
         'weight_10m': 12.623,
         'weight': 1111}
     headers = {'Content-Type': 'application/json'}
-    response = client.post('/materials', data=json.dumps(data), headers=headers)
+    response = client.post(
+        '/materials', data=json.dumps(data), headers=headers)
     assert response.status_code == 400
     expected_data = {'spool_weight': 'is not int type'}
     assert response.json == expected_data
@@ -279,7 +292,8 @@ def test_materials_without_thickness(app_fixture):
         'weight_10m': 12.623,
         'weight': 1111}
     headers = {'Content-Type': 'application/json'}
-    response = client.post('/materials', data=json.dumps(data), headers=headers)
+    response = client.post(
+        '/materials', data=json.dumps(data), headers=headers)
     assert response.status_code == 400
     expected_data = {'thickness':  'miss in data'}
     assert response.json == expected_data
@@ -300,7 +314,8 @@ def test_materials_thickness_not_int(app_fixture):
         'weight_10m': 12.623,
         'weight': 1111}
     headers = {'Content-Type': 'application/json'}
-    response = client.post('/materials', data=json.dumps(data), headers=headers)
+    response = client.post(
+        '/materials', data=json.dumps(data), headers=headers)
     assert response.status_code == 400
     expected_data = {'thickness': 'is not int type'}
     assert response.json == expected_data
@@ -321,7 +336,8 @@ def test_materials_without_width(app_fixture):
         'weight_10m': 12.623,
         'weight': 1111}
     headers = {'Content-Type': 'application/json'}
-    response = client.post('/materials', data=json.dumps(data), headers=headers)
+    response = client.post(
+        '/materials', data=json.dumps(data), headers=headers)
     assert response.status_code == 400
     expected_data = {'width':  'miss in data'}
     assert response.json == expected_data
@@ -342,7 +358,8 @@ def test_materials_width_not_int(app_fixture):
         'weight_10m': 12.623,
         'weight': 1111}
     headers = {'Content-Type': 'application/json'}
-    response = client.post('/materials', data=json.dumps(data), headers=headers)
+    response = client.post(
+        '/materials', data=json.dumps(data), headers=headers)
     assert response.status_code == 400
     expected_data = {'width': 'is not int type'}
     assert response.json == expected_data
@@ -363,7 +380,8 @@ def test_materials_without_weight_10m(app_fixture):
         # 'weight_10m': 12.623,
         'weight': 1111}
     headers = {'Content-Type': 'application/json'}
-    response = client.post('/materials', data=json.dumps(data), headers=headers)
+    response = client.post(
+        '/materials', data=json.dumps(data), headers=headers)
     assert response.status_code == 400
     expected_data = {'weight_10m':  'miss in data'}
     assert response.json == expected_data
@@ -384,7 +402,8 @@ def test_materials_weight_10m_not_int(app_fixture):
         'weight_10m': '12.623',
         'weight': 1111}
     headers = {'Content-Type': 'application/json'}
-    response = client.post('/materials', data=json.dumps(data), headers=headers)
+    response = client.post(
+        '/materials', data=json.dumps(data), headers=headers)
     assert response.status_code == 400
     expected_data = {'weight_10m': 'is not int, float type'}
     assert response.json == expected_data
@@ -406,7 +425,8 @@ def test_materials_without_weight(app_fixture):
         # 'weight': 1111
         }
     headers = {'Content-Type': 'application/json'}
-    response = client.post('/materials', data=json.dumps(data), headers=headers)
+    response = client.post(
+        '/materials', data=json.dumps(data), headers=headers)
     assert response.status_code == 400
     expected_data = {'weight':  'miss in data'}
     assert response.json == expected_data
@@ -427,7 +447,8 @@ def test_materials_weight_not_int(app_fixture):
         'weight_10m': 12.623,
         'weight': [1111]}
     headers = {'Content-Type': 'application/json'}
-    response = client.post('/materials', data=json.dumps(data), headers=headers)
+    response = client.post(
+        '/materials', data=json.dumps(data), headers=headers)
     assert response.status_code == 400
     expected_data = {'weight': 'is not int type'}
     assert response.json == expected_data
@@ -448,18 +469,19 @@ def test_materials_new_name_already_exits(app_fixture):
         'weight_10m': 12.623,
         'weight': 1111}
     headers = {'Content-Type': 'application/json'}
-    response = client.post('/materials', data=json.dumps(data), headers=headers)
+    response = client.post(
+        '/materials', data=json.dumps(data), headers=headers)
     assert response.status_code == 400
-    expected_data = {'name': f'name 77/23 Білий already exists'}
+    expected_data = {'name': 'name 77/23 Білий already exists'}
     assert response.json == expected_data
 
 
 @pytest.mark.run(order=120230)
 def test_materials_get_args_unreal(app_fixture):
     client = app_fixture.test_client()
-    response = client.get('/materials?available=misstake')
+    response = client.get('/materials?available=mistake')
     assert response.status_code == 400
-    expected_data = {'materials': 'misstake in args'}
+    expected_data = {'materials': 'mistake in args'}
     assert response.json == expected_data
 
 
@@ -468,7 +490,7 @@ def test_materials_get_unreal_id(app_fixture):
     client = app_fixture.test_client()
     response = client.get('/materials/111')
     assert response.status_code == 400
-    expected_data = {'id_material': f'ID product 111 is invalid'}
+    expected_data = {'id_material': 'ID product 111 is invalid'}
     assert response.json == expected_data
 
 
@@ -476,7 +498,8 @@ def test_materials_get_unreal_id(app_fixture):
 def test_put_json_not_correct_materials(app_fixture):
     client = app_fixture.test_client()
     data = 'this is not valid json'
-    response = client.put('/materials/1', data=data)
+    response = client.put(
+        '/materials/1', data=data)
     assert response.status_code == 400
     expected_data = {'materials': 'json format is not correct'}
     assert response.json == expected_data
@@ -486,7 +509,8 @@ def test_put_json_not_correct_materials(app_fixture):
 def test_put_json_not_correct_materials_consumption(app_fixture):
     client = app_fixture.test_client()
     data = 'this is not valid json'
-    response = client.put('/materials/consumption/1', data=data)
+    response = client.put(
+        '/materials/consumption/1', data=data)
     assert response.status_code == 400
     expected_data = {'materials': 'json format is not correct'}
     assert response.json == expected_data
@@ -500,7 +524,8 @@ def test_materials_consumption_without_edit_spool_qty(app_fixture):
         'edit_weight': -1111
         }
     headers = {'Content-Type': 'application/json'}
-    response = client.put('/materials/consumption/1', data=json.dumps(data), headers=headers)
+    response = client.put(
+        '/materials/consumption/1', data=json.dumps(data), headers=headers)
     assert response.status_code == 400
     expected_data = {'edit_spool_qty':  'miss in data'}
     assert response.json == expected_data
@@ -514,7 +539,8 @@ def test_materials_consumption_edit_spool_qty_not_int(app_fixture):
         'edit_weight': -1111
         }
     headers = {'Content-Type': 'application/json'}
-    response = client.put('/materials/consumption/1', data=json.dumps(data), headers=headers)
+    response = client.put(
+        '/materials/consumption/1', data=json.dumps(data), headers=headers)
     assert response.status_code == 400
     expected_data = {'edit_spool_qty': 'is not int, NoneType type'}
     assert response.json == expected_data
@@ -528,7 +554,8 @@ def test_materials_consumption_without_edit_weight(app_fixture):
         # 'edit_weight': -1111
         }
     headers = {'Content-Type': 'application/json'}
-    response = client.put('/materials/consumption/1', data=json.dumps(data), headers=headers)
+    response = client.put(
+        '/materials/consumption/1', data=json.dumps(data), headers=headers)
     assert response.status_code == 400
     expected_data = {'edit_weight':  'miss in data'}
     assert response.json == expected_data
@@ -542,7 +569,8 @@ def test_materials_consumption_edit_weight_not_int(app_fixture):
         'edit_weight': [-1111]
         }
     headers = {'Content-Type': 'application/json'}
-    response = client.put('/materials/consumption/1', data=json.dumps(data), headers=headers)
+    response = client.put(
+        '/materials/consumption/1', data=json.dumps(data), headers=headers)
     assert response.status_code == 400
     expected_data = {'edit_weight': 'is not int, NoneType type'}
     assert response.json == expected_data
@@ -563,7 +591,8 @@ def test_materials_weight_not_int_put(app_fixture):
         'weight_10m': 12.623,
         'weight': [1111]}
     headers = {'Content-Type': 'application/json'}
-    response = client.put('/materials/1', data=json.dumps(data), headers=headers)
+    response = client.put(
+        '/materials/1', data=json.dumps(data), headers=headers)
     assert response.status_code == 400
     expected_data = {'weight': 'is not int type'}
     assert response.json == expected_data
@@ -584,9 +613,10 @@ def test_materials_not_real_id_material_put(app_fixture):
         'weight_10m': 12.623,
         'weight': 1111}
     headers = {'Content-Type': 'application/json'}
-    response = client.put('/materials/111', data=json.dumps(data), headers=headers)
+    response = client.put(
+        '/materials/111', data=json.dumps(data), headers=headers)
     assert response.status_code == 400
-    expected_data = {'id_material': f'ID product 111 is invalid'}
+    expected_data = {'id_material': 'ID product 111 is invalid'}
     assert response.json == expected_data
 
 
@@ -605,9 +635,10 @@ def test_materials_new_name_already_exits_put(app_fixture):
         'weight_10m': 12.623,
         'weight': 1111}
     headers = {'Content-Type': 'application/json'}
-    response = client.put('/materials/1', data=json.dumps(data), headers=headers)
+    response = client.put(
+        '/materials/1', data=json.dumps(data), headers=headers)
     assert response.status_code == 400
-    expected_data = {'name': f'name 75/23 Золотий already exists'}
+    expected_data = {'name': 'name 75/23 Золотий already exists'}
     assert response.json == expected_data
 
 
@@ -626,7 +657,8 @@ def test_materials_not_real_id_material_put_consumption(app_fixture):
         'weight_10m': 12.623,
         'weight': 1111}
     headers = {'Content-Type': 'application/json'}
-    response = client.put('/materials/consumption/111', data=json.dumps(data), headers=headers)
+    response = client.put(
+        '/materials/consumption/111', data=json.dumps(data), headers=headers)
     assert response.status_code == 400
-    expected_data = {'id_material': f'ID product 111 is invalid'}
+    expected_data = {'id_material': 'ID product 111 is invalid'}
     assert response.json == expected_data

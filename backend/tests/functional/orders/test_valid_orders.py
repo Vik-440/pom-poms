@@ -222,7 +222,7 @@ def test_get_main_city(app_fixture):
     part_data_4 = "'id_order': 4"
     assert part_data_1 not in str(response.json)
     assert part_data_2 in str(response.json)
-    assert part_data_3 not in str(response.json)
+    assert part_data_3 in str(response.json)
     assert part_data_4 in str(response.json)
     # print(response.json)
 
@@ -395,6 +395,7 @@ def test_get_main_status_all_without_result(app_fixture):
     assert part_data_3 not in str(response.json)
     assert part_data_4 in str(response.json)
 
+
 @pytest.mark.run(order=700180)
 def test_get_main_client_product_mistake_key(app_fixture):
     client = app_fixture.test_client()
@@ -419,6 +420,34 @@ def test_get_main_client_product_mistake_key(app_fixture):
         'second_name_client': 'Василенко',
         'sity': 'Київ', 'street_house_apartment': None,
         'sum_payment': 4200, 'zip_code': None
-        }]
+        },
+        {'comment_model': [None, None],
+         'comment_order': 'test',
+         'data_order': '2023-03-07',
+         'data_plane_order': '2023-03-27',
+         'first_name_client': 'Галина',
+         'fulfilled_order': False,
+         'id_order': 3,
+         'kod_model': ['190-03',
+                       '190-03023'],
+         'kolor_model': ['Золотий',
+                         'Золотий'],
+         'np_number': 111,
+         'phase_1': [22,
+                     44],
+         'phase_2': [22,
+                     44],
+         'phase_3': [11,
+                     22],
+         'phone_client': '2222222',
+         'phone_recipient': '1111111',
+         'quantity_pars_model': [11,
+                                 22],
+         'real_money': 300,
+         'second_name_client': 'Василенко',
+         'sity': 'Київ',
+         'street_house_apartment': None,
+         'sum_payment': 11440,
+         'zip_code': None}]
     # print(response.json)
     assert response.json == expected_data

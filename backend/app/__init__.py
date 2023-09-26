@@ -21,8 +21,12 @@ def create_app(config_name="production"):
     CORS(app)
     app.config.from_object(config[config_name])
 
-    engine = create_engine(app.config['SQLALCHEMY_DATABASE_URI'], future=True)
-    Base.metadata.create_all(engine)
+    with app.app_context():
+        engine = create_engine(
+            app.config['SQLALCHEMY_DATABASE_URI'],
+            future=True
+        )
+        Base.metadata.create_all(engine)
 
     from app.api import api
 
