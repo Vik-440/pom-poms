@@ -25,6 +25,9 @@ import { ClientFormComponent } from './client-form/client-form.component';
 import { CustomFieldDirective } from './custom-field.directive';
 import { NovePoshtaModalComponent } from './nove-poshta-modal/nove-poshta-modal.component';
 import { NgToggleModule } from 'ng-toggle-button';
+import { SettingsComponent } from './settings/settings.component';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
 @NgModule({
   declarations: [
     AppComponent,
@@ -37,6 +40,7 @@ import { NgToggleModule } from 'ng-toggle-button';
     ClientFormComponent,
     CustomFieldDirective,
     NovePoshtaModalComponent,
+    SettingsComponent,
   ],
   imports: [
     // NgToggleModule,
@@ -54,6 +58,8 @@ import { NgToggleModule } from 'ng-toggle-button';
     // NgxSpinnerModule,
     ReactiveFormsModule,
     // NgbCarouselModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
   ],
   providers: [
     { provide: 'API_URL', useValue: environment.apiUrl },

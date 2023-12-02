@@ -119,7 +119,7 @@ def parameter_db_delete(params_name) -> Dict:
             return {'param_deleted': 'error', 'message': str(e)}, 400
 
 
-@api.route('/param/<string:params_name>', methods=['PATCH'])
+@api.route('/param/<string:params_name>', methods=['PUT'])
 @swag_from('/docs/patch_param_db.yml')
 def parameter_db_patch(params_name) -> Dict:
     """patch parameter from DB by query"""

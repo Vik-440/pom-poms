@@ -26,7 +26,6 @@ export class MainTableComponent implements OnInit {
   queue = 0;
   dateDownloaded;
   speed;
-  todayYear = new Date().getFullYear();
   additionalNumber: number = 0;
   filtersForm: UntypedFormGroup;
   fulfilledOrderItems = [

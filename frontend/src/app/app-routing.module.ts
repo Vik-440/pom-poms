@@ -4,12 +4,14 @@ import { CreateOrderComponent } from './create-order/create-order.component';
 import { FinancesComponent } from './finances/finances.component';
 import { MainTableComponent } from './main-table/main-table.component';
 import { ReserveComponent } from './reserve/reserve.component';
+import { SettingsComponent } from './settings/settings.component';
 
 const routes: Routes = [
   { path: '', component: MainTableComponent },
   { path: 'create-order', component: CreateOrderComponent },
   { path: 'materials', component: ReserveComponent },
   { path: 'finances-page', component: FinancesComponent },
+  { path: 'settings', component: SettingsComponent },
 ];
 
 @NgModule({
