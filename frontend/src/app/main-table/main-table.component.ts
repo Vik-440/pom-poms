@@ -17,7 +17,6 @@ import { DataAutofill } from '../utils/autofill';
 export class MainTableComponent implements OnInit {
   orders = [];
   isShowSpinner = false;
-  isShowFilter = false;
   alert = {
     type: '',
     message: '',
@@ -146,12 +145,10 @@ export class MainTableComponent implements OnInit {
   }
 
   openFilterMenu(content: TemplateRef<any>) {
-    this.isShowFilter = true;
-    this._offcanvasService.open(content, { position: 'top' });
+    this._offcanvasService.open(content, { position: 'end' });
   }
 
   closeFilterMenu() {
-    this.isShowFilter = false;
     this._offcanvasService.dismiss();
     this.resetFilters();
   }

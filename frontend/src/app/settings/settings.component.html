@@ -32,11 +32,18 @@
     </div>
 
     <ng-template #modelsDataNo>
-      <div class="input-group input-group-sm mb-3">
-        <span class="input-group-text" id="inputGroup-sizing-sm">Опис</span>
-        <input type="text" placeholder="Опис до моделей" #inputDescriptionModel class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+      <div class="create-setting mb-3">
+        <div class="input-group input-group-sm mb-1">
+          <span class="input-group-text" id="inputGroup-sizing-sm">Опис</span>
+          <input type="text" placeholder="Опис до моделей" #inputDescriptionModel class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+        </div>
+        <button 
+          class="btn btn-dark btn-create-setting" 
+          [disabled]="inputDescriptionModel.value.length" 
+          (click)="createSettings('modelsData', inputDescriptionModel)">
+          Створити налаштування моделей
+        </button>
       </div>
-      <button class="btn btn-dark btn-create-setting" [disabled]="inputDescriptionModel.value.length" (click)="createSettings('modelsData', inputDescriptionModel)">Створити налаштування моделей</button>
     </ng-template>
     <div class="settings-other">
       <ng-container *ngIf="paramsInfo?.hasOwnProperty('weekends'); else weekendsDataNo">
@@ -59,18 +66,25 @@
         </div>
       </ng-container>
       <ng-template #weekendsDataNo>
-        <div class="input-group input-group-sm mb-3">
-          <span class="input-group-text" id="inputGroup-sizing-sm">Опис</span>
-          <input type="text" placeholder="Опис до вихідних" #inputDescriptionWeekend class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+        <div class="create-setting mb-3">
+          <div class="input-group input-group-sm mb-1">
+            <span class="input-group-text" id="inputGroup-sizing-sm">Опис</span>
+            <input type="text" placeholder="Опис до вихідних" #inputDescriptionWeekend class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+          </div>
+          <button 
+            class="btn btn-dark btn-create-setting" 
+            [disabled]="inputDescriptionWeekend.value.length" 
+            (click)="createSettings('weekends', inputDescriptionWeekend)">
+            Створити налаштування вихідних
+          </button>
         </div>
-        <button class="btn btn-dark btn-create-setting" [disabled]="inputDescriptionWeekend.value.length" (click)="createSettings('weekends', inputDescriptionWeekend)">Створити налаштування вихідних</button>
       </ng-template>
 
       <ng-container *ngIf="paramsInfo?.hasOwnProperty('exclusionData'); else exclusionDataNo">
         <div class="settings-other--block">
           <p class="settings-title">Неробочі дні</p>
           <div class="calendar-block">
-            <mat-calendar #calendar ></mat-calendar>
+            <mat-calendar #calendar (selectedChange)="select($event,calendar)" [dateClass]="isSelected"></mat-calendar>
             <!-- <ejs-calendar [(ngModel)]='paramsInfo.exclusionData.parameter_str' [isMultiSelection]='true'></ejs-calendar> -->
           </div>
           <div class="settings-other--btns">
@@ -79,11 +93,18 @@
         </div>
       </ng-container>
       <ng-template #exclusionDataNo>
-        <div class="input-group input-group-sm mb-3">
-          <span class="input-group-text" id="inputGroup-sizing-sm">Опис</span>
-          <input type="text" placeholder="Опис до неробочих днів" #inputDescription class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+        <div class="create-setting mb-3">
+          <div class="input-group input-group-sm mb-1">
+            <span class="input-group-text" id="inputGroup-sizing-sm">Опис</span>
+            <input type="text" placeholder="Опис до неробочих днів" #inputDescription class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+          </div>
+          <button 
+            class="btn btn-dark btn-create-setting" 
+            [disabled]="inputDescription.value.length" 
+            (click)="createSettings('exclusionData', inputDescription)">
+            Створити налаштування неробочих днів
+          </button>
         </div>
-        <button class="btn btn-dark btn-create-setting" [disabled]="inputDescription.value.length" (click)="createSettings('exclusionData', inputDescription)">Створити налаштування неробочих днів</button>
       </ng-template>
     </div>
   </div>

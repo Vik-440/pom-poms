@@ -50,6 +50,7 @@ export class SettingsComponent implements OnInit {
   paramsInfo: any;
   isAddNewModel = false;
   newModel: FormGroup;
+  dates: moment.Moment[] = []
   public dateValues: Date[] = [new Date('1/12/2023'), new Date('1/15/2023'), new Date('1/3/2023'), new Date('1/25/2023')];
   ngOnInit(): void {
     this._settingsService.getAppSettings().pipe(
@@ -94,13 +95,29 @@ export class SettingsComponent implements OnInit {
           parameter_description: 'Моделі',
           'parameter_name': setting,
           'parameter_int': 0,
-          'parameter_str': JSON.stringify([]),
+          'parameter_str': '',
         },
       }
+
+      console.log(this.paramsInfo)
     })
   }
 
+  isSelected = (event: any) => {
+    const date = event as moment.Moment
+    
+    return (this.dates.find(x => x.isSame(date))) ? 'selected' : null;
+  };
+  
+  select(event: any, calendar: any) {
+    // const date: moment.Moment = event
 
+    // const index = this.dates.findIndex(x => x?.isSame(date));
+    // if (index < 0) this.dates.push(date);
+    // else this.dates.splice(index, 1);
+
+    calendar.updateTodaysDate();
+  }
   updateSetting(setting) {
     if (setting === 'modelsData') {
       this.paramsInfo[setting].parameter_str = {
