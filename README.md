@@ -22,6 +22,13 @@ In this project, I'm responsible for backend part
  ``sudo docker-compose -f docker-compose.prod.yml up --build``
  cd Projects/pom-poms/
 
+ create tar:
+ docker save -o pompoms02.tar pom_back pom_front
+
+ install in new pc:
+ docker load -i pompoms02.tar
+ docker-compose -f docker-compose_np.yml up
+
 
 ### Config file
 __Path__: frontend/assets/config-property.json
