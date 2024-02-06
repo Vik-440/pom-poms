@@ -91,7 +91,7 @@ export class NovePoshtaModalComponent implements OnInit {
       weight: [1, [Validators.required, Validators.min(0.1)]],
       cost: [this.data.sum_payment, Validators.required],
       description: ['Спортивні товари', Validators.required],
-      packing: [''],
+      packing: [null],
       volumetricHeight: [1],
       volumetricLength: [1],
       volumetricWidth: [1],
@@ -215,7 +215,15 @@ export class NovePoshtaModalComponent implements OnInit {
       RecipientsPhone: this.dataRecipient.value.phone,
       SenderAddress: this.dataSender.value.npRef,
       RecipientAddress: this.dataRecipient.value.npRef,
-      OptionsSeat: null,
+      OptionsSeat: [
+        {
+          packRef: null,
+          volumetricWidth: +this.dataParcel.value.volumetricWidth,
+          volumetricLength: +this.dataParcel.value.volumetricLength,
+          volumetricHeight: +this.dataParcel.value.volumetricHeight,
+          weight: this.dataParcel.value.weight,
+        },
+      ],
     };
 
     if (this.isPackaging) {

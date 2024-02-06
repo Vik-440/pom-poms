@@ -1,4 +1,4 @@
-<div class="poshta-wrapper" [class.big]="page === 3" [class.small]="page === 4">
+<div class="poshta-wrapper" [class.big]="page === 3" [class.small]="page === 4" [class.bigger]="isPackaging && page === 3">
   <ng-template [ngIf]="page !== 4">
     <div class="header">
       <img src="../../assets/img/Nova_Poshta_logo.svg" alt="Nova Poshta logo" class="logo">
@@ -149,7 +149,7 @@
           </div>
         </div>
         <div class="form-part sb">
-          <div class="form-item sm">
+          <div class="form-item">
             <label for="cost">Оціночна вартість, грн</label>
             <input type="number" id="cost" formControlName="cost">
           </div>
@@ -166,10 +166,28 @@
         <div class="form-part" *ngIf="isPackaging">
           <div class="form-item md">
             <ng-select [clearable]="false" class="form-item--select" formControlName="packing"
-              notFoundText="Пакування не знайдено" bindLabel="Description" bindValue="Ref" type="number"
+              notFoundText="Пакування не знайдено" placeholder="Пакування" bindLabel="Description" bindValue="Ref" type="number"
               [items]="packList"></ng-select>
           </div>
         </div>
+
+        <div class="form-part">
+          <div class="form-item">
+            <label for="width">Ширина</label>
+            <input placeholder="ширина" id="width" formControlName="volumetricWidth">
+          </div>
+
+          <div class="form-item">
+            <label for="height">Висота</label>
+            <input placeholder="висота" id="height" formControlName="volumetricHeight">
+          </div>
+
+          <div class="form-item">
+            <label for="length">Довжина</label>
+            <input placeholder="довжина" id="length" formControlName="volumetricLength">
+          </div>
+        </div>
+        
         <div class="form-part">
           <div class="form-item full">
             <label for="description">Опис</label>
