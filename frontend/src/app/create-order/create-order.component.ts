@@ -748,9 +748,9 @@ export class CreateOrderComponent implements OnInit {
     const copyText = [`**Замовлення № ${this.idOrder}**\n\n`];
     const sumAll = +this.sumAll(true).split('/')[0].trim();
     this.orderForm.value.forEach((order, i) => {
-      const type = modelsData[order.article.substring(0, 3)] || modelsData[order.article.substring(0, 2)] || null;
+      const type = modelsData[order.article.substring(0, 3)] || modelsData[order.article.substring(0, 2)] || '';
       copyText.push(
-        `${i + 1}. ${type}, ` 
+        `${i + 1}. ${type || '__'}, ` 
         + `колір ${order.colors.trim()}, ` 
         + `код ${order.article}, ` 
         + `кількість ${this.orderAddForm.controls[i].value.qty_pars || 0} ${type.includes('брелок') ? 'шт' : 'пар'}, ` 
@@ -778,7 +778,7 @@ export class CreateOrderComponent implements OnInit {
     };
     setTimeout(() => {
       this.alertChange(false);
-    }, 3000);
+    }, 30000);
   }
 
   makeOrderDone() {
