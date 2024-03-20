@@ -748,13 +748,14 @@ export class CreateOrderComponent implements OnInit {
     const copyText = [`**Замовлення № ${this.idOrder}**\n\n`];
     const sumAll = +this.sumAll(true).split('/')[0].trim();
     this.orderForm.value.forEach((order, i) => {
+      const code: string = order.article.slice(0, order.article.indexOf('-'));
       const type = modelsData[order.article.substring(0, 3)] || modelsData[order.article.substring(0, 2)] || '';
       copyText.push(
         `${i + 1}. ${type || '__'}, ` 
         + `колір ${order.colors.trim()}, ` 
-        + `код ${order.article}, ` 
-        + `кількість ${this.orderAddForm.controls[i].value.qty_pars || 0} ${type.includes('брелок') ? 'шт' : 'пар'}, ` 
-        + `ціна ${formatNumber(order.price)} грн/${type.includes('брелок') ? 'шт' : 'пара'}\n`
+        + `артикул ${order.article}, ` 
+        + `кількість ${this.orderAddForm.controls[i].value.qty_pars || 0} ${code.startsWith('099') ? 'шт' : 'пар'}, ` 
+        + `ціна ${formatNumber(order.price)} грн/${code.startsWith('099') ? 'шт' : 'пара'}\n`
       );
     });
 
@@ -768,7 +769,6 @@ export class CreateOrderComponent implements OnInit {
     copyText.push(
       `**Обов'язково вказуйте призначення платежу: "Рахунок П-${this.idOrder}"**, а після оплати проінформуйте нас про транзакцію.\n\n`
     );
-    copyText.push('**Якщо Вам потрібно рахунок і накладна у паперовому вигляді, попередьте нас і ми покладемо їх до замовлення.** \n');
     navigator.clipboard.writeText(copyText.join(''));
     this.isShowSpinner = false;
     this.alert = {
